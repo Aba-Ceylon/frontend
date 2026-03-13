@@ -177,19 +177,19 @@ export default function InteractiveMap() {
         </div>
       )}
       
-      <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/60 to-transparent p-8 pointer-events-none">
+      <div className="absolute top-0 left-0 right-0 z-10 bg-linear-to-b from-black/60 to-transparent p-8 pointer-events-none">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-3">
+          <h2 className="text-4xl md:text-5xl font-bold mb-3 font-cinzel text-[#EED9B9]">
             Explore Sri Lanka
           </h2>
-          <p className="text-lg text-white/90 max-w-2xl">
+          <p className="text-lg text-white/90 max-w-2xl font-cinzel">
             Discover the island&#39;s most captivating destinations. Click on any location to learn more.
           </p>
         </div>
       </div>
 
       <div className="absolute bottom-8 left-8 z-10 bg-white rounded-lg shadow-xl p-4">
-        <h3 className="font-semibold text-sm mb-3 text-gray-800">Destination Types</h3>
+        <h3 className="font-semibold text-sm mb-3 text-gray-800 font-cinzel">Destination Types</h3>
         <div className="space-y-2">
           {[
             { category: 'Heritage', color: '#D97706', icon: '🏛️' },
@@ -204,7 +204,7 @@ export default function InteractiveMap() {
               >
                 {icon}
               </div>
-              <span className="text-sm text-gray-700">{category}</span>
+              <span className="text-sm text-gray-700 font-cinzel">{category}</span>
             </div>
           ))}
         </div>

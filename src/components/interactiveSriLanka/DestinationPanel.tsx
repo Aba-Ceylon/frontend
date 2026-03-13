@@ -56,11 +56,11 @@ export default function DestinationPanel({ destination, onClose }: DestinationPa
             </button>
             
             <div className="pr-12">
-              <div className="inline-block px-3 py-1 bg-white/20 rounded-full text-sm font-medium mb-3">
+              <div className="inline-block px-3 py-1 bg-white/20 rounded-full text-sm font-medium mb-3 font-cinzel">
                 {destination.category}
               </div>
-              <h2 className="text-3xl font-bold mb-2">{destination.name}</h2>
-              <p className="text-white/90 text-lg">{destination.summary}</p>
+              <h2 className="text-3xl font-bold mb-2 font-cinzel">{destination.name}</h2>
+              <p className="text-white/90 text-lg font-cinzel">{destination.summary}</p>
             </div>
           </div>
 
@@ -68,13 +68,13 @@ export default function DestinationPanel({ destination, onClose }: DestinationPa
           <div className="p-6 overflow-y-auto max-h-[calc(85vh-180px)]">
             {/* Description */}
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">About</h3>
-              <p className="text-gray-700 leading-relaxed">{destination.description}</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 font-cinzel">About</h3>
+              <p className="text-gray-700 leading-relaxed font-cinzel">{destination.description}</p>
             </div>
 
             {/* Highlights */}
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Key Highlights</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3 font-cinzel">Key Highlights</h3>
               <ul className="space-y-2">
                 {destination.highlights.map((highlight, index) => (
                   <li key={index} className="flex items-start gap-3">
@@ -83,7 +83,7 @@ export default function DestinationPanel({ destination, onClose }: DestinationPa
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                     </span>
-                    <span className="text-gray-700">{highlight}</span>
+                    <span className="text-gray-700 font-cinzel">{highlight}</span>
                   </li>
                 ))}
               </ul>
@@ -91,24 +91,24 @@ export default function DestinationPanel({ destination, onClose }: DestinationPa
 
             {/* Best Time to Visit */}
             <div className="mb-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-              <h3 className="text-sm font-semibold text-blue-900 mb-1 flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-blue-900 mb-1 flex items-center gap-2 font-cinzel">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 Best Time to Visit
               </h3>
-              <p className="text-blue-800">{destination.bestTimeToVisit}</p>
+              <p className="text-blue-800 font-cinzel">{destination.bestTimeToVisit}</p>
             </div>
 
             {/* Why Visit */}
             <div className={`p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border-l-4 ${categoryBorders[destination.category]}`}>
-              <h3 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2 font-cinzel">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
                 Why Visit This Place
               </h3>
-              <p className="text-gray-700 leading-relaxed">{destination.whyVisit}</p>
+              <p className="text-gray-700 leading-relaxed font-cinzel">{destination.whyVisit}</p>
             </div>
           </div>
 
@@ -116,12 +116,12 @@ export default function DestinationPanel({ destination, onClose }: DestinationPa
           <div className="p-6 bg-gray-50 border-t border-gray-200 flex gap-3">
             <button
               onClick={onClose}
-              className="flex-1 px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+              className="flex-1 px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors font-cinzel"
             >
               Close
             </button>
             <button
-              className={`flex-1 px-6 py-3 ${categoryColors[destination.category]} text-white rounded-lg font-medium hover:opacity-90 transition-opacity`}
+              className={`flex-1 px-6 py-3 ${categoryColors[destination.category]} text-white rounded-lg font-medium hover:opacity-90 transition-opacity font-cinzel`}
             >
               Add to Planner
             </button>
