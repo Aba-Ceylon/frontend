@@ -1,7 +1,16 @@
+export type DestinationCategory = 'Heritage' | 'Nature' | 'Adventure' | 'Coastal';
+
 export interface Destination {
   id: string;
   name: string;
   slug: string;
+  category: DestinationCategory;
+  coordinates: [number, number]; // [longitude, latitude]
+  summary: string;
+  description: string;
+  highlights: string[];
+  bestTimeToVisit: string;
+  whyVisit: string;
 }
 
 export interface Package {
