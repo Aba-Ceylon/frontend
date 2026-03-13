@@ -36,7 +36,7 @@ export default function HeroSection() {
       ease: 'power2.out',
       scrollTrigger: {
         trigger: heroRef.current,
-        start: 'top top',
+        start: 'center top',
         end: 'bottom top',
         scrub: true
       }
@@ -85,9 +85,12 @@ export default function HeroSection() {
       {/* Background with Parallax */}
       <div 
         ref={backgroundRef}
-        className="absolute inset-0 w-full h-[120%] bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 w-full h-[120%]"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)), url('/images/heritage/Hero1.jpg')`
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)), url('/images/heritage/Hero1.jpg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
         }}
       />
 
