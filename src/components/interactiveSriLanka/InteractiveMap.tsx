@@ -3,16 +3,57 @@
 import { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { destinations } from '@/data/destinations';
 import { Destination } from '@/types/destination';
 import DestinationPanel from './DestinationPanel';
 
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
 export default function InteractiveMap() {
   const mapContainer = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const legendRef = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const markersRef = useRef<maplibregl.Marker[]>([]);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    const ctx = gsap.context(() => {
+      // Header fade in on scroll
+      gsap.from(headerRef.current, {
+        y: -50,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%',
+          end: 'top 50%',
+          scrub: 1
+        }
+      });
+
+      // Legend slide in
+      gsap.from(legendRef.current, {
+        x: -100,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 70%',
+          end: 'top 40%',
+          scrub: 1
+        }
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
@@ -37,6 +78,13 @@ export default function InteractiveMap() {
             }
           },
           layers: [
+            {
+              id: 'background',
+              type: 'background',
+              paint: {
+                'background-color': '#000000'
+              }
+            },
             {
               id: 'osm-layer',
               type: 'raster',
@@ -161,7 +209,7 @@ export default function InteractiveMap() {
   };
 
   return (
-    <section className="relative w-full h-screen bg-slate-50">
+    <section ref={sectionRef} className="relative w-full h-screen bg-slate-50">
       <div 
         ref={mapContainer} 
         className="absolute inset-0 z-0"
@@ -169,42 +217,62 @@ export default function InteractiveMap() {
       />
       
       {!mapLoaded && (
-        <div className="absolute inset-0 z-5 flex items-center justify-center bg-slate-100">
+        <div className="absolute inset-0 z-5 flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-amber-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading map...</p>
+            <div className="animate-spin rounded-full h-20 w-20 border-4 border-amber-500 border-t-transparent mx-auto mb-6"></div>
+            <p className="text-amber-100 font-cinzel text-lg tracking-wider">Loading Heritage Map...</p>
           </div>
         </div>
       )}
       
-      <div className="absolute top-0 left-0 right-0 z-10 bg-linear-to-b from-black/60 to-transparent p-8 pointer-events-none">
+      <div 
+        ref={headerRef}
+        className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/70 via-black/50 to-transparent p-8 md:p-12 pointer-events-none"
+      >
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold mb-3 font-cinzel text-[#EED9B9]">
+          {/* Decorative Top */}
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-12 h-px bg-amber-400"></div>
+            <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
+            <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
+          </div>
+          
+          <h2 className="text-4xl md:text-6xl font-medium mb-4 font-cinzel text-amber-100 drop-shadow-2xl tracking-wide">
             Explore Sri Lanka
           </h2>
-          <p className="text-lg text-white/90 max-w-2xl font-cinzel">
-            Discover the island&#39;s most captivating destinations. Click on any location to learn more.
+          <p className="text-lg md:text-xl text-amber-50/90 max-w-2xl font-light tracking-wide leading-relaxed">
+            Discover the island's most captivating destinations. Click on any location to learn more.
           </p>
+          
+          {/* Decorative Bottom */}
+          <div className="flex items-center gap-2 mt-4">
+            <div className="w-1 h-1 bg-amber-400 rounded-full"></div>
+            <div className="w-1 h-1 bg-amber-400 rounded-full"></div>
+            <div className="w-8 h-px bg-amber-400"></div>
+          </div>
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-8 z-10 bg-white rounded-lg shadow-xl p-4">
-        <h3 className="font-semibold text-sm mb-3 text-gray-800 font-cinzel">Destination Types</h3>
-        <div className="space-y-2">
+      <div 
+        ref={legendRef}
+        className="absolute bottom-8 left-8 z-10 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-amber-400/20"
+      >
+        <h3 className="font-medium text-base mb-4 text-amber-400 font-cinzel tracking-wider">Destination Types</h3>
+        <div className="space-y-3">
           {[
             { category: 'Heritage', color: '#D97706', icon: '🏛️' },
             { category: 'Nature', color: '#059669', icon: '🌿' },
             { category: 'Adventure', color: '#DC2626', icon: '🦁' },
             { category: 'Coastal', color: '#0284C7', icon: '🏖️' }
           ].map(({ category, color, icon }) => (
-            <div key={category} className="flex items-center gap-2">
+            <div key={category} className="flex items-center gap-3 group cursor-pointer">
               <div 
-                className="w-6 h-6 rounded-full border-2 border-white shadow-md flex items-center justify-center text-xs"
+                className="w-8 h-8 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-sm transition-transform group-hover:scale-110"
                 style={{ background: color }}
               >
                 {icon}
               </div>
-              <span className="text-sm text-gray-700 font-cinzel">{category}</span>
+              <span className="text-sm text-amber-50 font-cinzel tracking-wide group-hover:text-amber-400 transition-colors">{category}</span>
             </div>
           ))}
         </div>
