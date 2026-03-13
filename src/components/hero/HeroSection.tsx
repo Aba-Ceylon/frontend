@@ -223,9 +223,8 @@ export default function HeroSection() {
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-          <button className="relative overflow-hidden group bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-black px-12 py-4 text-lg shadow-2xl hover:shadow-amber-500/50 transition-all duration-300 transform hover:scale-105">
+          <button className="relative overflow-hidden group bg-amber-400/60 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)] backdrop-blur-2xl text-white px-12 py-4 text-lg shadow-2xl transition-all duration-300 transform hover:scale-105">
             <span className="relative z-10 font-cinzel tracking-wide">View Our Packages</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-amber-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
           
           <button className="relative overflow-hidden group border-2 border-amber-400/60 text-white px-12 py-4 text-lg backdrop-blur-xl bg-white/5 hover:bg-white/10 hover:border-amber-400 transition-all duration-300 transform hover:scale-105 shadow-2xl">
@@ -239,10 +238,10 @@ export default function HeroSection() {
         ref={scrollIndicatorRef}
         className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-amber-100 flex flex-col items-center cursor-pointer z-20"
       >
-        <div className="w-7 h-12 border-2 border-amber-400 rounded-full flex justify-center mb-2 backdrop-blur-sm bg-black/20">
+        <div className="w-7 h-12 border-2  rounded-full flex justify-center mb-2 backdrop-blur-sm bg-black/20">
           <div className="w-1.5 h-4 bg-amber-400 rounded-full mt-2 animate-pulse shadow-lg shadow-amber-400/50"></div>
         </div>
-        <span className="text-xs font-cinzel font-semibold tracking-[0.3em] text-amber-400">SCROLL</span>
+        <span className="text-xs font-cinzel font-semibold tracking-[0.3em] text-white">SCROLL</span>
       </div>
 
 
