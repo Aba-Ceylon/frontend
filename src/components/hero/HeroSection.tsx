@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Image from 'next/image';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -191,6 +192,7 @@ export default function HeroSection() {
         ref={contentRef}
         className="relative z-10 text-center text-white px-4 max-w-6xl mx-auto"
       >
+
         {/* Decorative Top Border */}
         <div className="flex items-center justify-center mb-8 gap-4">
           <div className="w-16 h-px bg-gradient-to-r from-transparent to-amber-400"></div>
@@ -200,8 +202,6 @@ export default function HeroSection() {
 
         {/* Main Headline */}
         <h1 className="hero-headline font-cinzel text-5xl md:text-7xl lg:text-8xl font-medium mb-6 tracking-wider leading-tight drop-shadow-2xl">
-          Welcome to
-          <br />
           <span className="text-amber-400 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)]">Aba Ceylon</span>
           <br />
           Tours and Travels
@@ -217,7 +217,7 @@ export default function HeroSection() {
         </div>
 
         {/* Subheadline */}
-        <p className="hero-subheadline text-lg md:text-xl lg:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed font-light tracking-wide text-amber-50/90">
+        <p className="hero-subheadline text-lg md:text-2xl lg:text-3xl mb-12 max-w-3xl mx-auto leading-relaxed font-light tracking-wide text-amber-50/90">
           The Ultimate Heritage Experience
         </p>
 
@@ -236,14 +236,13 @@ export default function HeroSection() {
       {/* Scroll Indicator */}
       <div 
         ref={scrollIndicatorRef}
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-amber-100 flex flex-col items-center cursor-pointer z-20"
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-amber-100 md:flex flex-col items-center cursor-pointer z-20 hidden"
       >
         <div className="w-7 h-12 border-2  rounded-full flex justify-center mb-2 backdrop-blur-sm bg-black/20">
           <div className="w-1.5 h-4 bg-amber-400 rounded-full mt-2 animate-pulse shadow-lg shadow-amber-400/50"></div>
         </div>
         <span className="text-xs font-cinzel font-semibold tracking-[0.3em] text-white">SCROLL</span>
       </div>
-
 
     </section>
   );
