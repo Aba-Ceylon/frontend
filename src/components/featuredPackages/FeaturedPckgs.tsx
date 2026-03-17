@@ -11,7 +11,9 @@ const GAP = 32;
 
 function getVisible() {
   if (typeof window === "undefined") return 3;
-  return window.innerWidth < 768 ? 1 : 3;
+  if (window.innerWidth < 820) return 1;
+  if (window.innerWidth < 1180) return 2;
+  return 3;
 }
 
 export default function FeaturedPckgs() {
@@ -87,7 +89,7 @@ export default function FeaturedPckgs() {
 
   return (
     <section className="py-24 bg-[#F8F4ED]">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-medium font-cinzel text-neutral-900 mb-4">
             Curated Journeys
@@ -98,39 +100,41 @@ export default function FeaturedPckgs() {
           </p>
         </div>
 
-        <div ref={containerRef} className="relative overflow-hidden">
-          <div ref={stripRef} className="flex" style={{ gap: GAP, willChange: "transform" }}>
-            {cloned.map((pkg, i) => (
-              <div key={i} className="flex-shrink-0" style={{ width: cardWidth }}>
-                <PackageCard pkg={pkg} />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex justify-center gap-4 mt-8">
+        <div className="flex items-center gap-4">
           <button
             onClick={() => slideTo(-1)}
-            className="px-5 py-2 font-cinzel rounded-lg border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer"
+            className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer text-lg"
           >
-            ← Prev
+            &#8249;
           </button>
-          <div className="flex gap-2 self-center">
-            {packages.map((_, i) => (
-              <span
-                key={i}
-                className={`w-2.5 h-2.5 rounded-full transition-all ${
-                  i === dotIndex ? "bg-neutral-800 scale-125" : "bg-neutral-300"
-                }`}
-              />
-            ))}
+
+          <div ref={containerRef} className="relative overflow-hidden flex-1">
+            <div ref={stripRef} className="flex" style={{ gap: GAP, willChange: "transform" }}>
+              {cloned.map((pkg, i) => (
+                <div key={i} className="flex-shrink-0" style={{ width: cardWidth }}>
+                  <PackageCard pkg={pkg} />
+                </div>
+              ))}
+            </div>
           </div>
+
           <button
             onClick={() => slideTo(1)}
-            className="px-5 py-2 font-cinzel rounded-lg border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer"
+            className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer text-lg"
           >
-            Next →
+            &#8250;
           </button>
+        </div>
+
+        <div className="flex justify-center gap-2 mt-6">
+          {packages.map((_, i) => (
+            <span
+              key={i}
+              className={`w-2.5 h-2.5 rounded-full transition-all ${
+                i === dotIndex ? "bg-neutral-800 scale-125" : "bg-neutral-300"
+              }`}
+            />
+          ))}
         </div>
       </div>
     </section>
