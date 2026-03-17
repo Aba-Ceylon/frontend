@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import PackageCard from "@/features/packages/PackageCard";
 import { packages } from "@/data/packages";
+import { LucideArrowLeft, LucideArrowRight } from "lucide-react";
 
 const LEN = packages.length;
 const cloned = [...packages, ...packages, ...packages];
@@ -21,6 +22,7 @@ export default function FeaturedPckgs() {
   const stripRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const animating = useRef(false);
+  const dragStartX = useRef<number | null>(null);
   const [dotIndex, setDotIndex] = useState(0);
   const [visible, setVisible] = useState(3);
 
@@ -56,19 +58,26 @@ export default function FeaturedPckgs() {
     });
   };
 
+  const onPointerDown = (e: React.PointerEvent) => {
+    dragStartX.current = e.clientX;
+  };
+
+  const onPointerUp = (e: React.PointerEvent) => {
+    if (dragStartX.current === null) return;
+    const diff = dragStartX.current - e.clientX;
+    dragStartX.current = null;
+    if (Math.abs(diff) > 50) slideTo(diff > 0 ? 1 : -1);
+  };
+
   // Init + handle resize
   useEffect(() => {
-    const init = () => {
-      const vis = getVisible();
-      setVisible(vis);
+    const raf = requestAnimationFrame(() => {
+      setVisible(getVisible());
       snapToOffset(LEN);
-    };
-
-    const raf = requestAnimationFrame(init);
+    });
 
     const onResize = () => {
-      const vis = getVisible();
-      setVisible(vis);
+      setVisible(getVisible());
       snapToOffset(offset.current);
     };
 
@@ -103,12 +112,17 @@ export default function FeaturedPckgs() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => slideTo(-1)}
-            className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer text-lg"
+            className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer"
           >
-            &#8249;
+            <LucideArrowLeft size={16} />
           </button>
 
-          <div ref={containerRef} className="relative overflow-hidden flex-1">
+          <div
+            ref={containerRef}
+            className="relative overflow-hidden flex-1 cursor-grab active:cursor-grabbing select-none"
+            onPointerDown={onPointerDown}
+            onPointerUp={onPointerUp}
+          >
             <div ref={stripRef} className="flex" style={{ gap: GAP, willChange: "transform" }}>
               {cloned.map((pkg, i) => (
                 <div key={i} className="flex-shrink-0" style={{ width: cardWidth }}>
@@ -120,9 +134,9 @@ export default function FeaturedPckgs() {
 
           <button
             onClick={() => slideTo(1)}
-            className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer text-lg"
+            className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer"
           >
-            &#8250;
+            <LucideArrowRight size={16} />
           </button>
         </div>
 
