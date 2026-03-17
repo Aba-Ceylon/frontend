@@ -46,7 +46,7 @@ export default function PackageCard({ pkg }: PackageCardProps) {
 
         <p className="text-xs sm:text-sm text-neutral-700 leading-5 sm:leading-6 mb-3 sm:mb-5">{pkg.summary}</p>
 
-        <div className="flex gap-2 sm:gap-3">
+        <div className="flex gap-2 sm:gap-3 flex-col xl:flex-row">
           <button
             onClick={() => setSelectedPackage(pkg)}
             className="text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 font-cinzel rounded-lg bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-md text-white hover:bg-amber-700 transition cursor-pointer"
