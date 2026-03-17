@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import PackageCard from "@/features/packages/PackageCard";
 import { packages } from "@/data/packages";
+import Link from "next/link";
 import { LucideArrowLeft, LucideArrowRight } from "lucide-react";
 
 const LEN = packages.length;
@@ -149,6 +150,14 @@ export default function FeaturedPckgs() {
               }`}
             />
           ))}
+        </div>
+        <div className="text-center mt-8">
+          <Link
+            href="/packages"
+            className="inline-flex items-center px-6 py-3 font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)] hover:text-black transition"
+          >
+            View Available Packages <LucideArrowRight size={16} className="ml-2" />
+          </Link>
         </div>
       </div>
     </section>
