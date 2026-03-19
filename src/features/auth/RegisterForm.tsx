@@ -15,9 +15,14 @@ const signUpAppearance = {
 
 export default function RegisterForm() {
   return (
-    <main className="min-h-screen bg-white px-4 py-10">
-      <div className="mx-auto flex w-full max-w-md items-center justify-center">
-        <SignUp appearance={signUpAppearance} routing="path" path="/sign-up" />
+    <main
+      style={{ fontFamily: 'Switzer, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
+      className="min-h-screen bg-white px-4 py-8 sm:py-12"
+    >
+      <div className="mx-auto w-full max-w-md px-4 sm:px-6">
+        <div className="bg-white rounded-xl p-6 sm:p-8 shadow-sm">
+          <SignUp appearance={signUpAppearance} routing="path" path="/sign-up" />
+        </div>
       </div>
     </main>
   );
