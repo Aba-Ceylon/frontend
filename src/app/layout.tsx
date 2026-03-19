@@ -33,7 +33,7 @@ export default function RootLayout({
       >
         <ClerkProvider>
           <NavBar />
-          <main className="pt-20">
+          <main>
             {children}
           </main>
         </ClerkProvider>
