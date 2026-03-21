@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\" && eslint --fix . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.0.5",
@@ -31,6 +32,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4.2.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "prettier": "^3.9.0"
   }
 }
