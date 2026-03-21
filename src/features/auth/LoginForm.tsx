@@ -2,13 +2,14 @@ import { SignIn } from "@clerk/nextjs";
 
 const signInAppearance = {
   elements: {
-    card: "bg-white border border-slate-200 shadow-none",
-    rootBox: "w-full",
+    rootBox: "w-full flex justify-center",
+    cardBox: "w-full",
+    card: "w-full max-w-md bg-white shadow-2xl rounded-2xl md:border md:border-slate-200",
     formButtonPrimary:
-      "bg-slate-900 hover:bg-slate-800 text-white shadow-none rounded-md",
+      "bg-amber-600 hover:bg-amber-700 text-white shadow-none rounded-md transition-colors",
     formFieldInput:
-      "bg-white border border-slate-300 text-slate-900 rounded-md focus:ring-2 focus:ring-slate-300",
-    headerTitle: "text-slate-900",
+      "bg-white border border-slate-300 text-slate-900 rounded-md focus:ring-2 focus:ring-amber-500",
+    headerTitle: "text-slate-900 font-bold",
     headerSubtitle: "text-slate-600",
   },
 };
@@ -16,14 +17,64 @@ const signInAppearance = {
 export default function LoginForm() {
   return (
     <main
-      style={{ fontFamily: 'Switzer, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
-      className="min-h-screen bg-white px-4 py-8 sm:py-12"
+      style={{ fontFamily: 'Switzer, system-ui, sans-serif' }}
+      className="relative flex min-h-dvh w-full flex-col md:flex-row"
     >
-      <div className="mx-auto w-full max-w-md px-4 sm:px-6">
-        <div className="bg-white rounded-xl p-6 sm:p-8 shadow-sm">
+      {/* Mobile Background Elements */}
+      <div
+        className="fixed inset-0 -z-20 md:hidden"
+        style={{
+          backgroundImage: "url('/images/heritage/sigiriya-login.webp')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+      <div className="fixed inset-0 -z-10 bg-slate-950/75 md:hidden" />
+
+      {/* Desktop Left Side - Image & Copy */}
+      <section className="relative hidden w-1/2 flex-col justify-end p-12 lg:p-16 md:flex">
+        <div
+          className="absolute inset-0 -z-20"
+          style={{
+            backgroundImage: "url('/images/heritage/sigiriya-login.webp')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent" />
+        
+        <div className="max-w-xl text-white">
+          <h1 className="mb-4 text-4xl lg:text-5xl font-bold leading-tight">
+            Your journey through paradise begins here.
+          </h1>
+          <p className="mb-6 text-lg text-slate-200">
+            From golden beaches to misty hill country, ancient temples to vibrant city life, Sri Lanka is a story waiting to be explored.
+          </p>
+          <p className="text-sm font-medium text-amber-400">
+            Sign in to discover hidden gems, plan unforgettable experiences, and travel smarter across every corner of the island.
+          </p>
+        </div>
+      </section>
+
+      {/* Right Side / Mobile Full - Form & Mobile Text */}
+      <section className="flex w-full flex-col items-center justify-center px-4 py-12 md:w-1/2 md:bg-slate-50">
+        
+        {/* Mobile Hook Text */}
+        <div className="mb-8 text-center md:hidden mt-8">
+          <h1 className="text-3xl font-bold text-white mb-2">
+            Your journey begins here.
+          </h1>
+          <p className="text-sm text-slate-200">
+            Sign in to discover hidden gems and travel smarter.
+          </p>
+        </div>
+
+        {/* Clerk Form */}
+        <div className="w-full max-w-md">
           <SignIn appearance={signInAppearance} routing="path" path="/sign-in" />
         </div>
-      </div>
+        
+      </section>
     </main>
   );
 }
