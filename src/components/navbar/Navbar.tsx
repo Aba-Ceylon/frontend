@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Show, UserButton } from '@clerk/nextjs';
-import { Menu, X } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Show, UserButton } from "@clerk/nextjs";
+import { Menu, X } from "lucide-react";
 
 export default function NavBar() {
   const pathname = usePathname();
@@ -13,37 +13,37 @@ export default function NavBar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isAuthPage =
-    pathname.startsWith('/sign-in') ||
-    pathname.startsWith('/sign-up') ||
-    pathname.startsWith('/login') ||
-    pathname.startsWith('/register') ||
-    pathname.startsWith('/forgot-password');
+    pathname.startsWith("/sign-in") ||
+    pathname.startsWith("/sign-up") ||
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/register") ||
+    pathname.startsWith("/forgot-password");
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navLinks = [
-    { label: 'Holiday Packages', href: '/packages' },
-    { label: 'Customize Tour', href: '/customize-tour' },
-    { label: 'Fleet', href: '/fleet' },
-    { label: 'Stays', href: '/stays' },
+    { label: "Holiday Packages", href: "/packages" },
+    { label: "Customize Tour", href: "/customize-tour" },
+    { label: "Fleet", href: "/fleet" },
+    { label: "Stays", href: "/stays" },
   ];
 
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'shadow-lg py-3' : 'py-4'
+        isScrolled ? "shadow-lg py-3" : "py-4"
       }`}
       style={{
         fontFamily: 'Switzer, system-ui, -apple-system, "Segoe UI"',
-        backgroundColor: isScrolled ? '#1A2238' : 'transparent',
-        transition: 'background-color 300ms ease',
+        backgroundColor: isScrolled ? "#1A2238" : "transparent",
+        transition: "background-color 300ms ease",
       }}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -123,7 +123,7 @@ export default function NavBar() {
         {isMobileMenuOpen && (
           <div
             className={`lg:hidden mt-4 pb-4 border-t ${
-              isScrolled ? 'border-white/20' : 'border-white/30'
+              isScrolled ? "border-white/20" : "border-white/30"
             }`}
           >
             <div className="flex flex-col gap-3 pt-4">

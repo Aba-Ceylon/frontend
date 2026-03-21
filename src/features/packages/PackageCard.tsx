@@ -40,11 +40,17 @@ export default function PackageCard({ pkg }: PackageCardProps) {
           {pkg.title}
         </h3>
 
-        <p className="text-xs sm:text-sm text-neutral-600 mb-2 sm:mb-3">{pkg.route.join(" • ")}</p>
+        <p className="text-xs sm:text-sm text-neutral-600 mb-2 sm:mb-3">
+          {pkg.route.join(" • ")}
+        </p>
 
-        <p className="text-xs sm:text-sm text-neutral-600 mb-2 sm:mb-3">{pkg.km} KM</p>
+        <p className="text-xs sm:text-sm text-neutral-600 mb-2 sm:mb-3">
+          {pkg.km} KM
+        </p>
 
-        <p className="text-xs sm:text-sm text-neutral-700 leading-5 sm:leading-6 mb-3 sm:mb-5">{pkg.summary}</p>
+        <p className="text-xs sm:text-sm text-neutral-700 leading-5 sm:leading-6 mb-3 sm:mb-5">
+          {pkg.summary}
+        </p>
 
         <div className="flex gap-2 sm:gap-3 flex-col xl:flex-row">
           <button

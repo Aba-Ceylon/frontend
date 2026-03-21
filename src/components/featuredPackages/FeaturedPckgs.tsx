@@ -108,8 +108,8 @@ export default function FeaturedPckgs() {
             Curated Journeys
           </h2>
           <p className="text-lg font-cinzel text-neutral-600 max-w-2xl mx-auto">
-            Explore handcrafted travel experiences across Sri Lanka&apos;s heritage,
-            hills, and coastlines.
+            Explore handcrafted travel experiences across Sri Lanka&apos;s
+            heritage, hills, and coastlines.
           </p>
         </div>
 
@@ -127,7 +127,11 @@ export default function FeaturedPckgs() {
             onPointerDown={onPointerDown}
             onPointerUp={onPointerUp}
           >
-            <div ref={stripRef} className="flex" style={{ gap: GAP, willChange: "transform" }}>
+            <div
+              ref={stripRef}
+              className="flex"
+              style={{ gap: GAP, willChange: "transform" }}
+            >
               {cloned.map((pkg, i) => (
                 <div key={i} className="shrink-0" style={{ width: cardWidth }}>
                   <PackageCard pkg={pkg} />
@@ -159,7 +163,8 @@ export default function FeaturedPckgs() {
             href="/packages"
             className="inline-flex items-center px-6 py-3 font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)] hover:text-black transition"
           >
-            View Available Packages <LucideArrowRight size={16} className="ml-2" />
+            View Available Packages{" "}
+            <LucideArrowRight size={16} className="ml-2" />
           </Link>
         </div>
       </div>

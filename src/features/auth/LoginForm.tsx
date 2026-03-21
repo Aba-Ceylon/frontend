@@ -17,7 +17,7 @@ const signInAppearance = {
 export default function LoginForm() {
   return (
     <main
-      style={{ fontFamily: 'Switzer, system-ui, sans-serif' }}
+      style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
       className="relative flex min-h-dvh w-full flex-col md:flex-row"
     >
       <div
@@ -40,16 +40,18 @@ export default function LoginForm() {
           }}
         />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent" />
-        
+
         <div className="max-w-xl text-white">
           <h1 className="mb-4 text-4xl lg:text-5xl font-bold leading-tight">
             Your journey through paradise begins here.
           </h1>
           <p className="mb-6 text-lg text-slate-200">
-            From golden beaches to misty hill country, ancient temples to vibrant city life, Sri Lanka is a story waiting to be explored.
+            From golden beaches to misty hill country, ancient temples to
+            vibrant city life, Sri Lanka is a story waiting to be explored.
           </p>
           <p className="text-sm font-medium text-amber-400">
-            Sign in to discover hidden gems, plan unforgettable experiences, and travel smarter across every corner of the island.
+            Sign in to discover hidden gems, plan unforgettable experiences, and
+            travel smarter across every corner of the island.
           </p>
         </div>
       </section>

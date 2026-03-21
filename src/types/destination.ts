@@ -1,4 +1,8 @@
-export type DestinationCategory = 'Heritage' | 'Nature' | 'Adventure' | 'Coastal';
+export type DestinationCategory =
+  | "Heritage"
+  | "Nature"
+  | "Adventure"
+  | "Coastal";
 
 export interface Destination {
   id: string;

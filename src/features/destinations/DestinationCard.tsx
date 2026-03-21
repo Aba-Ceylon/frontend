@@ -3,7 +3,7 @@ export default function DestinationCard() {
   return <div>Destination Card</div>;
 }
 
-// DestinationGrid.tsx  
+// DestinationGrid.tsx
 export function DestinationGrid() {
   return <div>Destination Grid</div>;
 }

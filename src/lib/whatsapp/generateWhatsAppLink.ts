@@ -1,3 +1,3 @@
 export function generateWhatsAppLink() {
-  return '';
+  return "";
 }
