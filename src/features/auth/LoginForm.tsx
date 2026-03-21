@@ -2,9 +2,9 @@ import { SignIn } from "@clerk/nextjs";
 
 const signInAppearance = {
   elements: {
-    rootBox: "w-full flex justify-center",
-    cardBox: "w-full",
-    card: "w-full max-w-md bg-white shadow-2xl rounded-2xl md:border md:border-slate-200",
+    rootBox: "w-full mx-auto flex justify-center",
+    cardBox: "w-full mx-auto flex justify-center",
+    card: "w-full max-w-[calc(100vw-2rem)] sm:max-w-md mx-auto bg-white shadow-2xl rounded-2xl md:border md:border-slate-200",
     formButtonPrimary:
       "bg-amber-600 hover:bg-amber-700 text-white shadow-none rounded-md transition-colors",
     formFieldInput:
@@ -20,7 +20,6 @@ export default function LoginForm() {
       style={{ fontFamily: 'Switzer, system-ui, sans-serif' }}
       className="relative flex min-h-dvh w-full flex-col md:flex-row"
     >
-      {/* Mobile Background Elements */}
       <div
         className="fixed inset-0 -z-20 md:hidden"
         style={{
@@ -31,7 +30,6 @@ export default function LoginForm() {
       />
       <div className="fixed inset-0 -z-10 bg-slate-950/75 md:hidden" />
 
-      {/* Desktop Left Side - Image & Copy */}
       <section className="relative hidden w-1/2 flex-col justify-end p-12 lg:p-16 md:flex">
         <div
           className="absolute inset-0 -z-20"
@@ -56,11 +54,8 @@ export default function LoginForm() {
         </div>
       </section>
 
-      {/* Right Side / Mobile Full - Form & Mobile Text */}
-      <section className="flex w-full flex-col items-center justify-center px-4 py-12 md:w-1/2 md:bg-slate-50">
-        
-        {/* Mobile Hook Text */}
-        <div className="mb-8 text-center md:hidden mt-8">
+      <section className="flex w-full flex-col items-center justify-center py-12 md:w-1/2 md:bg-slate-50 md:px-4">
+        <div className="mb-8 px-4 text-center md:hidden mt-8">
           <h1 className="text-3xl font-bold text-white mb-2">
             Your journey begins here.
           </h1>
@@ -69,11 +64,7 @@ export default function LoginForm() {
           </p>
         </div>
 
-        {/* Clerk Form */}
-        <div className="w-full max-w-md">
-          <SignIn appearance={signInAppearance} routing="path" path="/sign-in" />
-        </div>
-        
+        <SignIn appearance={signInAppearance} routing="path" path="/sign-in" />
       </section>
     </main>
   );
