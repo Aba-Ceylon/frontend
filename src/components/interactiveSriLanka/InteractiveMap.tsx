@@ -217,7 +217,7 @@ export default function InteractiveMap() {
       />
       
       {!mapLoaded && (
-        <div className="absolute inset-0 z-5 flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
+        <div className="absolute inset-0 z-5 flex items-center justify-center bg-linear-to-br from-slate-900 to-slate-800">
           <div className="text-center">
             <div className="animate-spin rounded-full h-20 w-20 border-4 border-amber-500 border-t-transparent mx-auto mb-6"></div>
             <p className="text-amber-100 font-cinzel text-lg tracking-wider">Loading Heritage Map...</p>
@@ -227,7 +227,7 @@ export default function InteractiveMap() {
       
       <div 
         ref={headerRef}
-        className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/70 via-black/50 to-transparent p-8 md:p-12 pointer-events-none"
+        className="absolute top-0 left-0 right-0 z-10 bg-linear-to-b from-black/70 via-black/50 to-transparent p-8 md:p-12 pointer-events-none"
       >
         <div className="max-w-7xl mx-auto">
           {/* Decorative Top */}
@@ -241,7 +241,7 @@ export default function InteractiveMap() {
             Explore Sri Lanka
           </h2>
           <p className="text-lg md:text-xl text-amber-50/90 max-w-2xl font-light tracking-wide leading-relaxed">
-            Discover the island's most captivating destinations. Click on any location to learn more.
+            Discover the island&apos;s most captivating destinations. Click on any location to learn more.
           </p>
           
           {/* Decorative Bottom */}
@@ -255,7 +255,7 @@ export default function InteractiveMap() {
 
       <div 
         ref={legendRef}
-        className="absolute bottom-8 left-8 z-10 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-amber-400/20"
+        className="absolute bottom-8 left-8 z-10 bg-linear-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-amber-400/20"
       >
         <h3 className="font-medium text-base mb-4 text-amber-400 font-cinzel tracking-wider">Destination Types</h3>
         <div className="space-y-3">

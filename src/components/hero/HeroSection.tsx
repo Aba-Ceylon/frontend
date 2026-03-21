@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Image from 'next/image';
+// Image not used in this component
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -156,7 +156,7 @@ export default function HeroSection() {
       {/* Gradient Overlay */}
       <div 
         ref={overlayRef}
-        className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"
+        className="absolute inset-0 bg-linear-to-b from-black/60 via-black/40 to-black/70"
         style={{ opacity: 0.5 }}
       />
 
@@ -173,7 +173,7 @@ export default function HeroSection() {
         <div className="w-20 h-20 border-2 border-amber-400/30 rounded-full flex items-center justify-center">
           <div className="w-3 h-3 bg-amber-400 rounded-full"></div>
         </div>
-        <div className="w-px h-24 bg-gradient-to-b from-amber-400/50 to-transparent mx-auto mt-4"></div>
+        <div className="w-px h-24 bg-linear-to-b from-amber-400/50 to-transparent mx-auto mt-4"></div>
       </div>
 
       {/* Ornamental Right */}
@@ -181,7 +181,7 @@ export default function HeroSection() {
         ref={ornamentRightRef}
         className="ornament absolute bottom-1/4 right-8 lg:right-16 hidden lg:block"
       >
-        <div className="w-px h-24 bg-gradient-to-t from-amber-400/50 to-transparent mx-auto mb-4"></div>
+        <div className="w-px h-24 bg-linear-to-t from-amber-400/50 to-transparent mx-auto mb-4"></div>
         <div className="w-20 h-20 border-2 border-amber-400/30 rounded-full flex items-center justify-center">
           <div className="w-3 h-3 bg-amber-400 rounded-full"></div>
         </div>
@@ -195,9 +195,9 @@ export default function HeroSection() {
 
         {/* Decorative Top Border */}
         <div className="flex items-center justify-center mb-8 gap-4">
-          <div className="w-16 h-px bg-gradient-to-r from-transparent to-amber-400"></div>
+          <div className="w-16 h-px bg-linear-to-r from-transparent to-amber-400"></div>
           <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
-          <div className="w-16 h-px bg-gradient-to-l from-transparent to-amber-400"></div>
+          <div className="w-16 h-px bg-linear-to-l from-transparent to-amber-400"></div>
         </div>
 
         {/* Main Headline */}
