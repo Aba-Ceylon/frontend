@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import HeroSection from '@/components/hero/HeroSection';
-import InteractiveMap from '@/components/interactiveSriLanka/InteractiveMap';
-import FeaturedPckgs from '@/components/featuredPackages/FeaturedPckgs';
+import { useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import HeroSection from "@/components/hero/HeroSection";
+import InteractiveMap from "@/components/interactiveSriLanka/InteractiveMap";
+import FeaturedPckgs from "@/components/featuredPackages/FeaturedPckgs";
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 

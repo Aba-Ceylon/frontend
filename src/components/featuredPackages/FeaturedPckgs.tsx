@@ -87,12 +87,15 @@ export default function FeaturedPckgs() {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Auto-play
   useEffect(() => {
     const timer = setInterval(() => slideTo(1), 3000);
     return () => clearInterval(timer);
+    // slideTo is stable enough for this autoplay; ignore exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const cardWidth = `calc((100% - ${GAP * (visible - 1)}px) / ${visible})`;
@@ -105,15 +108,15 @@ export default function FeaturedPckgs() {
             Curated Journeys
           </h2>
           <p className="text-lg font-cinzel text-neutral-600 max-w-2xl mx-auto">
-            Explore handcrafted travel experiences across Sri Lanka's heritage,
-            hills, and coastlines.
+            Explore handcrafted travel experiences across Sri Lanka&apos;s
+            heritage, hills, and coastlines.
           </p>
         </div>
 
         <div className="flex items-center gap-4">
           <button
             onClick={() => slideTo(-1)}
-            className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer"
+            className="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer"
           >
             <LucideArrowLeft size={16} />
           </button>
@@ -124,9 +127,13 @@ export default function FeaturedPckgs() {
             onPointerDown={onPointerDown}
             onPointerUp={onPointerUp}
           >
-            <div ref={stripRef} className="flex" style={{ gap: GAP, willChange: "transform" }}>
+            <div
+              ref={stripRef}
+              className="flex"
+              style={{ gap: GAP, willChange: "transform" }}
+            >
               {cloned.map((pkg, i) => (
-                <div key={i} className="flex-shrink-0" style={{ width: cardWidth }}>
+                <div key={i} className="shrink-0" style={{ width: cardWidth }}>
                   <PackageCard pkg={pkg} />
                 </div>
               ))}
@@ -135,7 +142,7 @@ export default function FeaturedPckgs() {
 
           <button
             onClick={() => slideTo(1)}
-            className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer"
+            className="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer"
           >
             <LucideArrowRight size={16} />
           </button>
@@ -156,7 +163,8 @@ export default function FeaturedPckgs() {
             href="/packages"
             className="inline-flex items-center px-6 py-3 font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)] hover:text-black transition"
           >
-            View Available Packages <LucideArrowRight size={16} className="ml-2" />
+            View Available Packages{" "}
+            <LucideArrowRight size={16} className="ml-2" />
           </Link>
         </div>
       </div>
