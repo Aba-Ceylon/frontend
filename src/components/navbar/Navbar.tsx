@@ -3,12 +3,21 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Show, UserButton } from '@clerk/nextjs';
 import { Menu, X } from 'lucide-react';
 
 export default function NavBar() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const isAuthPage =
+    pathname.startsWith('/sign-in') ||
+    pathname.startsWith('/sign-up') ||
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/register') ||
+    pathname.startsWith('/forgot-password');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,7 +49,7 @@ export default function NavBar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
+          <Link href="/" className="shrink-0">
             <div className="relative w-12 h-12 sm:w-14 sm:h-14">
               <Image
                 src="/LOGO.jpeg"
@@ -53,44 +62,48 @@ export default function NavBar() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-white text-sm font-medium transition-colors duration-300 hover:text-[#B8860B]"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
+          {!isAuthPage && (
+            <div className="hidden lg:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-white text-sm font-medium transition-colors duration-300 hover:text-[#B8860B]"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          )}
 
           {/* Desktop CTA & Auth Buttons */}
-          <div className="hidden lg:flex items-center gap-4">
-            <Show when="signed-out">
+          {!isAuthPage && (
+            <div className="hidden lg:flex items-center gap-4">
+              <Show when="signed-out">
+                <Link
+                  href="/sign-in"
+                  className="text-white text-sm font-medium px-4 py-2 transition-colors duration-300 hover:text-[#B8860B]"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className="text-white text-sm font-medium px-4 py-2 transition-colors duration-300 hover:text-[#B8860B]"
+                >
+                  Sign Up
+                </Link>
+              </Show>
+              <Show when="signed-in">
+                <UserButton />
+              </Show>
               <Link
-                href="/sign-in"
-                className="text-white text-sm font-medium px-4 py-2 transition-colors duration-300 hover:text-[#B8860B]"
+                href="/planner"
+                className="bg-[#B8860B] hover:bg-[#9A7309] text-white px-6 py-2 rounded-md text-sm font-semibold transition-colors duration-300"
               >
-                Sign In
+                Plan Your Journey
               </Link>
-              <Link
-                href="/sign-up"
-                className="text-white text-sm font-medium px-4 py-2 transition-colors duration-300 hover:text-[#B8860B]"
-              >
-                Sign Up
-              </Link>
-            </Show>
-            <Show when="signed-in">
-              <UserButton />
-            </Show>
-            <Link
-              href="/planner"
-              className="bg-[#B8860B] hover:bg-[#9A7309] text-white px-6 py-2 rounded-md text-sm font-semibold transition-colors duration-300"
-            >
-              Plan Your Journey
-            </Link>
-          </div>
+            </div>
+          )}
 
           {/* Mobile Hamburger Menu */}
           <button
