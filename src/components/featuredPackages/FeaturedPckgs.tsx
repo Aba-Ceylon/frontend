@@ -101,7 +101,7 @@ export default function FeaturedPckgs() {
   const cardWidth = `calc((100% - ${GAP * (visible - 1)}px) / ${visible})`;
 
   return (
-    <section className="py-24 bg-[#F8F4ED]">
+    <section className="py-24 bg-[#F5F2ED]">
       <div className="mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-medium font-cinzel text-neutral-900 mb-4">

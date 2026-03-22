@@ -1,14 +1,7 @@
 import { create } from "zustand";
+import { PackageItem } from "@/types/package";
 
-export type PackageItem = {
-  id: string;
-  title: string;
-  duration: string;
-  route: string[];
-  summary: string;
-  km: number;
-  image: string;
-};
+export type { PackageItem };
 
 type PackageStore = {
   selectedPackage: PackageItem | null;
