@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { PackageItem, usePackageStore } from "@/store/PackageStore";
 import Image from "next/image";
 
@@ -60,9 +61,12 @@ export default function PackageCard({ pkg }: PackageCardProps) {
             {isSelected ? "Requested" : "Request Package"}
           </button>
 
-          <button className="font-cinzel text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-neutral-300 text-neutral-800 hover:bg-neutral-50 transition cursor-pointer">
+          <Link
+            href={`/packages/${pkg.id}`}
+            className="font-cinzel text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-neutral-300 text-neutral-800 hover:bg-neutral-50 transition text-center"
+          >
             View Package
-          </button>
+          </Link>
         </div>
       </div>
     </div>
