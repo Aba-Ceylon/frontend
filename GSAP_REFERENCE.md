@@ -1,13 +1,18 @@
 # GSAP Animation Quick Reference
 
 ## Import
+
 ```typescript
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { fadeInUp, parallaxScroll, staggerFadeIn } from '@/lib/animations/gsapAnimations';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  fadeInUp,
+  parallaxScroll,
+  staggerFadeIn,
+} from "@/lib/animations/gsapAnimations";
 
 // Register plugin
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 ```
@@ -15,11 +20,12 @@ if (typeof window !== 'undefined') {
 ## Basic Usage in Components
 
 ### 1. Setup with Context (Recommended)
+
 ```typescript
 useEffect(() => {
   const ctx = gsap.context(() => {
     // Your animations here
-    gsap.from('.element', { y: 100, opacity: 0 });
+    gsap.from(".element", { y: 100, opacity: 0 });
   });
 
   return () => ctx.revert(); // Cleanup
@@ -27,44 +33,48 @@ useEffect(() => {
 ```
 
 ### 2. Parallax Background
+
 ```typescript
 gsap.to(backgroundRef.current, {
   yPercent: 30,
-  ease: 'none',
+  ease: "none",
   scrollTrigger: {
     trigger: sectionRef.current,
-    start: 'top top',
-    end: 'bottom top',
-    scrub: 1.5
-  }
+    start: "top top",
+    end: "bottom top",
+    scrub: 1.5,
+  },
 });
 ```
 
 ### 3. Fade Out on Scroll
+
 ```typescript
 gsap.to(contentRef.current, {
   opacity: 0,
   y: -150,
   scrollTrigger: {
     trigger: sectionRef.current,
-    start: 'top top',
-    end: 'bottom top',
-    scrub: 1
-  }
+    start: "top top",
+    end: "bottom top",
+    scrub: 1,
+  },
 });
 ```
 
 ### 4. Entrance Animations
+
 ```typescript
 const tl = gsap.timeline();
-tl.from('.headline', { y: 100, opacity: 0, duration: 1.2 })
-  .from('.subheadline', { y: 50, opacity: 0, duration: 1 }, '-=0.8')
-  .from('.button', { y: 30, opacity: 0, stagger: 0.2 }, '-=0.6');
+tl.from(".headline", { y: 100, opacity: 0, duration: 1.2 })
+  .from(".subheadline", { y: 50, opacity: 0, duration: 1 }, "-=0.8")
+  .from(".button", { y: 30, opacity: 0, stagger: 0.2 }, "-=0.6");
 ```
 
 ## ScrollTrigger Options
 
 ### Common Configurations
+
 ```typescript
 scrollTrigger: {
   trigger: element,           // Element to watch
@@ -78,6 +88,7 @@ scrollTrigger: {
 ```
 
 ### Start/End Positions
+
 - `'top top'` - Element top hits viewport top
 - `'top center'` - Element top hits viewport center
 - `'top bottom'` - Element top hits viewport bottom
@@ -87,54 +98,58 @@ scrollTrigger: {
 ## Easing Functions
 
 ```typescript
-ease: 'none'              // Linear
-ease: 'power1.out'        // Gentle
-ease: 'power2.out'        // Medium
-ease: 'power3.out'        // Strong (recommended)
-ease: 'power4.out'        // Very strong
-ease: 'back.out(1.7)'     // Overshoot effect
-ease: 'elastic.out(1, 0.3)' // Bounce effect
+ease: "none"; // Linear
+ease: "power1.out"; // Gentle
+ease: "power2.out"; // Medium
+ease: "power3.out"; // Strong (recommended)
+ease: "power4.out"; // Very strong
+ease: "back.out(1.7)"; // Overshoot effect
+ease: "elastic.out(1, 0.3)"; // Bounce effect
 ```
 
 ## Common Patterns
 
 ### Fade In on Scroll
+
 ```typescript
-gsap.from('.element', {
+gsap.from(".element", {
   opacity: 0,
   y: 50,
   scrollTrigger: {
-    trigger: '.element',
-    start: 'top 80%',
-    end: 'top 50%',
-    scrub: 1
-  }
+    trigger: ".element",
+    start: "top 80%",
+    end: "top 50%",
+    scrub: 1,
+  },
 });
 ```
 
 ### Stagger Animation
+
 ```typescript
-gsap.from('.items', {
+gsap.from(".items", {
   y: 50,
   opacity: 0,
   stagger: 0.2,
   duration: 1,
-  ease: 'power3.out'
+  ease: "power3.out",
 });
 ```
 
 ### Infinite Loop
+
 ```typescript
-gsap.to('.element', {
+gsap.to(".element", {
   y: 10,
   duration: 1.5,
   repeat: -1,
   yoyo: true,
-  ease: 'power2.inOut'
+  ease: "power2.inOut",
 });
 ```
 
 ### Scale on Hover (CSS Alternative)
+
 ```css
 .element {
   transition: transform 0.3s ease;
@@ -147,8 +162,11 @@ gsap.to('.element', {
 ## Performance Tips
 
 1. **Use `will-change`** for animated elements:
+
    ```css
-   .animated { will-change: transform, opacity; }
+   .animated {
+     will-change: transform, opacity;
+   }
    ```
 
 2. **Prefer transforms** over position properties:
@@ -183,31 +201,34 @@ ScrollTrigger.getAll().forEach(t => t.kill());
 ## Royal Theme Animations
 
 ### Gold Glow Effect
+
 ```typescript
-gsap.to('.element', {
-  textShadow: '0 0 20px rgba(212, 175, 55, 0.8)',
+gsap.to(".element", {
+  textShadow: "0 0 20px rgba(212, 175, 55, 0.8)",
   duration: 2,
   repeat: -1,
-  yoyo: true
+  yoyo: true,
 });
 ```
 
 ### Ornament Entrance
+
 ```typescript
-gsap.from('.ornament', {
+gsap.from(".ornament", {
   scale: 0,
   rotation: 180,
   opacity: 0,
   duration: 1.5,
-  ease: 'back.out(1.7)'
+  ease: "back.out(1.7)",
 });
 ```
 
 ### Parallax Layers (Multiple Speeds)
+
 ```typescript
-gsap.to('.layer-1', { yPercent: 20, scrollTrigger: { scrub: 1 } });
-gsap.to('.layer-2', { yPercent: 40, scrollTrigger: { scrub: 1.5 } });
-gsap.to('.layer-3', { yPercent: 60, scrollTrigger: { scrub: 2 } });
+gsap.to(".layer-1", { yPercent: 20, scrollTrigger: { scrub: 1 } });
+gsap.to(".layer-2", { yPercent: 40, scrollTrigger: { scrub: 1.5 } });
+gsap.to(".layer-3", { yPercent: 60, scrollTrigger: { scrub: 2 } });
 ```
 
 ---
