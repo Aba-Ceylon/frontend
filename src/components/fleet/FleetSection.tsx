@@ -162,9 +162,9 @@ export default function FleetSection() {
                           ))}
                         </div>
 
-                        <div className="mt-auto pt-2">
-                          <span className="inline-flex items-center px-5 py-2 rounded-full font-cinzel text-sm bg-amber-400 text-[#0b2545] hover:opacity-95 transition">
-                            Plan Your Journey
+                        <div className="mt-auto pt-4 flex justify-center">
+                          <span className="inline-flex w-full max-w-xs justify-center px-6 py-3 rounded-full font-cinzel text-sm bg-amber-400 text-[#0b2545] hover:opacity-95 transition">
+                            View More Details
                           </span>
                         </div>
                       </div>
