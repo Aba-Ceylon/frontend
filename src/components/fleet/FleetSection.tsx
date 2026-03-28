@@ -7,6 +7,7 @@ import Container from "@/components/layout/Container";
 import vehicles from "@/data/vehicles";
 import Image from "next/image";
 import { Users, Briefcase } from "lucide-react";
+import Link from "next/link";
 
 export default function FleetSection() {
   const containerRef = useRef<HTMLElement | null>(null);
@@ -76,53 +77,54 @@ export default function FleetSection() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {vehicles.map((v, i) => (
-            <article
-              key={v.id}
-              ref={(el) => (cardsRef.current[i] = el)}
-              className="bg-white rounded-xl shadow-sm overflow-hidden border transform-gpu"
-              style={{ willChange: "transform" }}
-            >
-              <div className="relative h-48 w-full bg-gray-100 overflow-hidden">
-                <Image
-                  src={v.imageUrl}
-                  alt={v.name}
-                  fill
-                  className="object-cover transition-transform duration-500"
-                  placeholder="empty"
-                />
-              </div>
+            <Link key={v.id} href={`/fleet/${v.id}`} className="block">
+              <article
+                ref={(el) => (cardsRef.current[i] = el)}
+                className="bg-white rounded-xl shadow-sm overflow-hidden border transform-gpu"
+                style={{ willChange: "transform" }}
+              >
+                <div className="relative h-48 w-full bg-gray-100 overflow-hidden">
+                  <Image
+                    src={v.imageUrl}
+                    alt={v.name}
+                    fill
+                    className="object-cover transition-transform duration-500"
+                    placeholder="empty"
+                  />
+                </div>
 
-              <div className="p-5">
-                <h3 className="font-cinzel text-xl text-[#0b2545] mb-2">{v.name}</h3>
-                <p className="text-neutral-700 text-sm mb-4">{v.shortDescription}</p>
+                <div className="p-5">
+                  <h3 className="font-cinzel text-xl text-[#0b2545] mb-2">{v.name}</h3>
+                  <p className="text-neutral-700 text-sm mb-4">{v.shortDescription}</p>
 
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="flex items-center gap-2 text-neutral-700">
-                    <Users size={18} className="text-[#0b2545]" />
-                    <span className="text-sm">{v.passengerCapacity} pax</span>
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="flex items-center gap-2 text-neutral-700">
+                      <Users size={18} className="text-[#0b2545]" />
+                      <span className="text-sm">{v.passengerCapacity} pax</span>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-neutral-700">
+                      <Briefcase size={18} className="text-[#0b2545]" />
+                      <span className="text-sm">{v.luggageCapacity} bags</span>
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-2 text-neutral-700">
-                    <Briefcase size={18} className="text-[#0b2545]" />
-                    <span className="text-sm">{v.luggageCapacity} bags</span>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {v.features.slice(0, 3).map((f) => (
+                      <span key={f} className="text-xs text-neutral-600 bg-gray-50 px-2 py-1 rounded">
+                        {f}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="mt-4">
+                    <button className="px-5 py-2 rounded-full font-cinzel text-sm bg-amber-400 text-[#0b2545] hover:opacity-95 transition">
+                      Plan Your Journey
+                    </button>
                   </div>
                 </div>
-
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {v.features.slice(0, 3).map((f) => (
-                    <span key={f} className="text-xs text-neutral-600 bg-gray-50 px-2 py-1 rounded">
-                      {f}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-4">
-                  <button className="px-5 py-2 rounded-full font-cinzel text-sm bg-amber-400 text-[#0b2545] hover:opacity-95 transition">
-                    Plan Your Journey
-                  </button>
-                </div>
-              </div>
-            </article>
+              </article>
+            </Link>
           ))}
         </div>
       </Container>
