@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import vehicles from "@/data/vehicles";
+import FleetDetailModal from "./FleetDetailModal";
 import Image from "next/image";
 import { Users, Briefcase } from "lucide-react";
 import Link from "next/link";
@@ -27,6 +28,7 @@ export default function FleetSection() {
   const dragStartX = useRef<number | null>(null);
   const [dotIndex, setDotIndex] = useState(0);
   const [visible, setVisible] = useState(3);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const getStep = () => {
     const w = containerRef.current?.offsetWidth ?? 0;
@@ -132,6 +134,8 @@ export default function FleetSection() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Inline modal logic removed — FleetDetailModal handles its own animations and keyboard
+
   return (
     <section id="fleet" className="py-24 bg-[#1A2238] overflow-hidden">
       <div className="mx-auto px-6">
@@ -198,9 +202,17 @@ export default function FleetSection() {
                         </div>
 
                         <div className="mt-auto pt-4 flex justify-center">
-                          <span className="fleet-cta inline-flex w-full max-w-full md:max-w-xs justify-center px-6 py-3 rounded-full font-cinzel text-sm bg-amber-400 text-[#0b2545] hover:opacity-95 transition">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              setSelectedId(v.id);
+                            }}
+                            className="fleet-cta inline-flex w-full max-w-full md:max-w-xs justify-center px-6 py-3 rounded-full font-cinzel text-sm bg-amber-400 text-[#0b2545] hover:opacity-95 transition"
+                            aria-expanded={!!selectedId}
+                          >
                             View More Details
-                          </span>
+                          </button>
                         </div>
                       </div>
                     </article>
@@ -239,6 +251,8 @@ export default function FleetSection() {
           </Link>
         </div>
       </div>
+
+      {selectedId && <FleetDetailModal id={selectedId} onClose={() => setSelectedId(null)} />}
     </section>
   );
 }
