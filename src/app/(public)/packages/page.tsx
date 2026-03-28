@@ -81,7 +81,7 @@ export default function PackagesPage() {
             Explore Our Curated Travel Packages
           </h1>
           <p className="font-cinzel text-sm sm:text-base text-white/80 max-w-lg">
-            Handcrafted journeys across Sri Lanka's heritage, hills, wildlife, and coastlines.
+            Handcrafted journeys across Sri LankaDon&apos;s heritage, hills, wildlife, and coastlines.
           </p>
           <div className="mt-6 w-16 h-px bg-amber-400" />
         </div>
