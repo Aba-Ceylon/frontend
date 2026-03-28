@@ -147,7 +147,7 @@ export default function FleetSection() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => slideTo(-1)}
-            className="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-amber-400/30 text-amber-400 hover:bg-amber-400/10 transition cursor-pointer"
+            className="shrink-0 hidden md:flex w-10 h-10 items-center justify-center rounded-full border border-amber-400/30 text-amber-400 hover:bg-amber-400/10 transition cursor-pointer"
           >
             <LucideArrowLeft size={16} />
           </button>
@@ -162,8 +162,8 @@ export default function FleetSection() {
               {cloned.map((v, i) => (
                 <div key={`${v.id}-${i}`} className="shrink-0" style={{ width: cardWidth }}>
                   <Link href={`/fleet/${v.id}`} className="block h-full">
-                    <article className="h-full min-h-105 bg-white rounded-xl shadow-sm overflow-hidden border border-white/30 flex flex-col">
-                      <div className="relative h-52 w-full bg-gray-100 overflow-hidden">
+                    <article className="h-full md:min-h-105 min-h-75 bg-white rounded-xl shadow-sm overflow-hidden border border-white/30 flex flex-col">
+                      <div className="relative h-44 md:h-52 w-full bg-gray-100 overflow-hidden">
                         <Image
                           src={v.imageUrl}
                           alt={v.name}
@@ -174,7 +174,7 @@ export default function FleetSection() {
                       </div>
 
                       <div className="p-5 flex flex-col flex-1">
-                        <h3 className="font-cinzel text-xl text-[#0b2545] mb-2">{v.name}</h3>
+                        <h3 className="font-cinzel text-lg md:text-xl text-[#0b2545] mb-2">{v.name}</h3>
                         <p className="text-neutral-700 text-sm mb-4 line-clamp-2">{v.shortDescription}</p>
 
                         <div className="flex items-center gap-4 mb-4">
@@ -198,7 +198,7 @@ export default function FleetSection() {
                         </div>
 
                         <div className="mt-auto pt-4 flex justify-center">
-                          <span className="fleet-cta inline-flex w-full max-w-xs justify-center px-6 py-3 rounded-full font-cinzel text-sm bg-amber-400 text-[#0b2545] hover:opacity-95 transition">
+                          <span className="fleet-cta inline-flex w-full max-w-full md:max-w-xs justify-center px-6 py-3 rounded-full font-cinzel text-sm bg-amber-400 text-[#0b2545] hover:opacity-95 transition">
                             View More Details
                           </span>
                         </div>
@@ -212,7 +212,7 @@ export default function FleetSection() {
 
           <button
             onClick={() => slideTo(1)}
-            className="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-amber-400/30 text-amber-400 hover:bg-amber-400/10 transition cursor-pointer"
+            className="shrink-0 hidden md:flex w-10 h-10 items-center justify-center rounded-full border border-amber-400/30 text-amber-400 hover:bg-amber-400/10 transition cursor-pointer"
           >
             <LucideArrowRight size={16} />
           </button>
