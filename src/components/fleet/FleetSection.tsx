@@ -98,7 +98,7 @@ export default function FleetSection() {
   const cardWidth = `calc((100% - ${GAP * (visible - 1)}px) / ${visible})`;
 
   return (
-    <section className="py-24 bg-[#1A2238] overflow-hidden">
+    <section id="fleet" className="py-24 bg-[#1A2238] overflow-hidden">
       <div className="mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-medium font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)] mb-4">
