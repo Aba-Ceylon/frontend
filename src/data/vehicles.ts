@@ -26,7 +26,7 @@ export const vehicles: PremiumVehicle[] = [
 		],
 		shortDescription:
 			"Comfortable executive sedan ideal for airport transfers and city tours.",
-		imageUrl: "/images/vehicles/premium-sedan.jpg",
+		imageUrl: "/images/fleet/sedan.jpg",
 	},
 	{
 		id: "pv-002",
@@ -43,7 +43,7 @@ export const vehicles: PremiumVehicle[] = [
 		],
 		shortDescription:
 			"Premium SUV perfect for family travel and journeys into the hill country.",
-		imageUrl: "/images/vehicles/luxury-suv.jpg",
+		imageUrl: "/images/fleet/suv.jpg",
 	},
 	{
 		id: "pv-003",
@@ -60,7 +60,7 @@ export const vehicles: PremiumVehicle[] = [
 		],
 		shortDescription:
 			"Spacious executive van tailored for small groups and private transfers.",
-		imageUrl: "/images/vehicles/executive-van.jpg",
+		imageUrl: "/images/fleet/van.jpg",
 	},
 	{
 		id: "pv-004",
@@ -77,7 +77,7 @@ export const vehicles: PremiumVehicle[] = [
 		],
 		shortDescription:
 			"Stylish convertible for coastal drives and special occasion transfers.",
-		imageUrl: "/images/vehicles/convertible.jpg",
+		imageUrl: "/images/fleet/convertible.jpg",
 	},
 ];
 
