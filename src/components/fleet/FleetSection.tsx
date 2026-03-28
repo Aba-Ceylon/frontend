@@ -131,7 +131,6 @@ export default function FleetSection() {
       listeners.forEach((fn) => fn());
       tls.forEach((t) => t.kill());
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Inline modal logic removed — FleetDetailModal handles its own animations and keyboard
