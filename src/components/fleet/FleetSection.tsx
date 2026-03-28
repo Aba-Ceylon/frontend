@@ -97,6 +97,41 @@ export default function FleetSection() {
 
   const cardWidth = `calc((100% - ${GAP * (visible - 1)}px) / ${visible})`;
 
+  // Hover animations for the CTA using GSAP
+  useEffect(() => {
+    const strip = stripRef.current;
+    if (!strip) return;
+
+    const ctas = Array.from(strip.querySelectorAll(".fleet-cta")) as HTMLElement[];
+    const listeners: Array<() => void> = [];
+    const tls: gsap.core.Timeline[] = [];
+
+    ctas.forEach((el) => {
+      const tl = gsap.timeline({ paused: true });
+      tl.to(el, { backgroundColor: "#0b2545", color: "#ffffff", scale: 1.03, duration: 0.28, ease: "power2.out" }, 0);
+
+      const onEnter = () => tl.play();
+      const onLeave = () => tl.reverse();
+
+      el.addEventListener("mouseenter", onEnter);
+      el.addEventListener("mouseleave", onLeave);
+
+      listeners.push(() => {
+        el.removeEventListener("mouseenter", onEnter);
+        el.removeEventListener("mouseleave", onLeave);
+        tl.kill();
+      });
+
+      tls.push(tl);
+    });
+
+    return () => {
+      listeners.forEach((fn) => fn());
+      tls.forEach((t) => t.kill());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <section id="fleet" className="py-24 bg-[#1A2238] overflow-hidden">
       <div className="mx-auto px-6">
@@ -163,7 +198,7 @@ export default function FleetSection() {
                         </div>
 
                         <div className="mt-auto pt-4 flex justify-center">
-                          <span className="inline-flex w-full max-w-xs justify-center px-6 py-3 rounded-full font-cinzel text-sm bg-amber-400 text-[#0b2545] hover:opacity-95 transition">
+                          <span className="fleet-cta inline-flex w-full max-w-xs justify-center px-6 py-3 rounded-full font-cinzel text-sm bg-amber-400 text-[#0b2545] hover:opacity-95 transition">
                             View More Details
                           </span>
                         </div>
