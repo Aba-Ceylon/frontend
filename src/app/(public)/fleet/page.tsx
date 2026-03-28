@@ -102,7 +102,7 @@ export default function FleetPage() {
       <div className="relative h-[52vh] sm:h-[58vh] overflow-hidden">
         <div ref={heroImgRef} className="absolute inset-0 scale-110">
           <Image
-            src="/images/fleet/van.jpg"
+            src="/images/fleet/fleets.png"
             alt="Premium fleet vehicles"
             fill
             className="object-cover"
