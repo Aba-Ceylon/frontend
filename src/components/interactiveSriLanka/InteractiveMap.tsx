@@ -123,25 +123,33 @@ export default function InteractiveMap() {
           el.style.height = "40px";
           el.style.cursor = "pointer";
 
-          const categoryColors = {
+          const categoryColors: Record<string, string> = {
             Heritage: "#D97706",
             Nature: "#059669",
             Adventure: "#DC2626",
             Coastal: "#0284C7",
+            Wildlife: "#7C3AED",
+            City: "#475569",
+            Beach: "#0891B2",
+            Unique: "#DB2777",
           };
 
-          const categoryIcons = {
+          const categoryIcons: Record<string, string> = {
             Heritage: "🏛️",
             Nature: "🌿",
             Adventure: "🦁",
             Coastal: "🏖️",
+            Wildlife: "🐘",
+            City: "🏙️",
+            Beach: "🌊",
+            Unique: "✨",
           };
 
           el.innerHTML = `
             <div class="marker-pin" style="
               width: 40px;
               height: 40px;
-              background: ${categoryColors[destination.category]};
+              background: ${categoryColors[destination.category] ?? "#6B7280"};
               border: 3px solid white;
               border-radius: 50%;
               box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -267,8 +275,12 @@ export default function InteractiveMap() {
           {[
             { category: "Heritage", color: "#D97706", icon: "🏛️" },
             { category: "Nature", color: "#059669", icon: "🌿" },
+            { category: "Wildlife", color: "#7C3AED", icon: "🐘" },
+            { category: "Beach", color: "#0891B2", icon: "🌊" },
             { category: "Adventure", color: "#DC2626", icon: "🦁" },
             { category: "Coastal", color: "#0284C7", icon: "🏖️" },
+            { category: "City", color: "#475569", icon: "🏙️" },
+            { category: "Unique", color: "#DB2777", icon: "✨" },
           ].map(({ category, color, icon }) => (
             <div
               key={category}

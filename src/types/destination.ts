@@ -2,13 +2,29 @@ export type DestinationCategory =
   | "Heritage"
   | "Nature"
   | "Adventure"
-  | "Coastal";
+  | "Coastal"
+  | "Wildlife"
+  | "City"
+  | "Beach"
+  | "Unique";
+
+export type DestinationRegion =
+  | "Cultural Triangle"
+  | "Hill Country"
+  | "South Coast"
+  | "East Coast"
+  | "Wildlife Belt"
+  | "Northern Sri Lanka"
+  | "West Coast";
 
 export interface Destination {
   id: string;
   name: string;
   slug: string;
   category: DestinationCategory;
+  region: DestinationRegion;
+  province: string;
+  district: string;
   coordinates: [number, number]; // [longitude, latitude]
   summary: string;
   description: string;

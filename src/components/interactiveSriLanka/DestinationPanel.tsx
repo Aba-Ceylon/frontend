@@ -21,18 +21,26 @@ export default function DestinationPanel({
     return () => window.removeEventListener("keydown", handleEscape);
   }, [onClose]);
 
-  const categoryColors = {
+  const categoryColors: Record<string, string> = {
     Heritage: "bg-amber-600",
     Nature: "bg-emerald-600",
     Adventure: "bg-red-600",
     Coastal: "bg-sky-600",
+    Wildlife: "bg-violet-600",
+    City: "bg-slate-600",
+    Beach: "bg-cyan-600",
+    Unique: "bg-pink-600",
   };
 
-  const categoryBorders = {
+  const categoryBorders: Record<string, string> = {
     Heritage: "border-amber-600",
     Nature: "border-emerald-600",
     Adventure: "border-red-600",
     Coastal: "border-sky-600",
+    Wildlife: "border-violet-600",
+    City: "border-slate-600",
+    Beach: "border-cyan-600",
+    Unique: "border-pink-600",
   };
 
   return (
@@ -48,7 +56,7 @@ export default function DestinationPanel({
         <div className="bg-white rounded-2xl shadow-2xl mx-4 overflow-hidden animate-slideUp">
           {/* Header */}
           <div
-            className={`${categoryColors[destination.category]} p-6 text-white relative`}
+            className={`${categoryColors[destination.category] ?? "bg-slate-600"} p-6 text-white relative`}
           >
             <button
               onClick={onClose}
@@ -104,7 +112,7 @@ export default function DestinationPanel({
                 {destination.highlights.map((highlight, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <span
-                      className={`${categoryColors[destination.category]} w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5`}
+                      className={`${categoryColors[destination.category] ?? "bg-slate-600"} w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5`}
                     >
                       <svg
                         className="w-4 h-4 text-white"
@@ -153,7 +161,7 @@ export default function DestinationPanel({
 
             {/* Why Visit */}
             <div
-              className={`p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border-l-4 ${categoryBorders[destination.category]}`}
+              className={`p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border-l-4 ${categoryBorders[destination.category] ?? "border-slate-600"}`}
             >
               <h3 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2 font-cinzel">
                 <svg
@@ -186,7 +194,7 @@ export default function DestinationPanel({
               Close
             </button>
             <button
-              className={`flex-1 px-6 py-3 ${categoryColors[destination.category]} text-white rounded-lg font-medium hover:opacity-90 transition-opacity font-cinzel`}
+              className={`flex-1 px-6 py-3 ${categoryColors[destination.category] ?? "bg-slate-600"} text-white rounded-lg font-medium hover:opacity-90 transition-opacity font-cinzel`}
             >
               Add to Planner
             </button>
