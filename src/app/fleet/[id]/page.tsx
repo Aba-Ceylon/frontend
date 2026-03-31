@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import vehicles from "@/data/vehicles";
 import { Users, Briefcase } from "lucide-react";
 import Container from "@/components/layout/Container";
+import { fetchVehicleById } from "@/services/fleetService";
 
-export default function VehiclePage({ params }: { params: { id: string } }) {
-  const id = params.id;
-  const vehicle = vehicles.find((v) => v.id === id);
+export default async function VehiclePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const vehicle = await fetchVehicleById(id);
 
   if (!vehicle) return notFound();
 

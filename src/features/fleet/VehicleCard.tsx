@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Users, Briefcase } from "lucide-react";
-import type { PremiumVehicle } from "@/data/vehicles";
+import type { FleetVehicle } from "@/types/vehicle";
 
 type VehicleCardProps = {
-  vehicle: PremiumVehicle;
+  vehicle: FleetVehicle;
 };
 
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
