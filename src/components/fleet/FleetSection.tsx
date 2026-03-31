@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
-import vehicles from "@/data/vehicles";
 import FleetDetailModal from "./FleetDetailModal";
 import Image from "next/image";
 import { Users, Briefcase } from "lucide-react";
 import Link from "next/link";
 import { LucideArrowLeft, LucideArrowRight } from "lucide-react";
+import type { FleetVehicle } from "@/types/vehicle";
+import { fetchVehiclesPage } from "@/services/fleetService";
 
-const LEN = vehicles.length;
-const cloned = [...vehicles, ...vehicles, ...vehicles];
 const GAP = 24;
+const HOME_FLEET_ITEMS = 8;
 
 function getVisible() {
   if (typeof window === "undefined") return 3;
@@ -21,14 +21,20 @@ function getVisible() {
 }
 
 export default function FleetSection() {
-  const offset = useRef(LEN);
+  const [fleetVehicles, setFleetVehicles] = useState<FleetVehicle[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const stripRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const offset = useRef(0);
   const animating = useRef(false);
   const dragStartX = useRef<number | null>(null);
   const [dotIndex, setDotIndex] = useState(0);
   const [visible, setVisible] = useState(3);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  const len = fleetVehicles.length;
+  const cloned = useMemo(() => [...fleetVehicles, ...fleetVehicles, ...fleetVehicles], [fleetVehicles]);
 
   const getStep = () => {
     const w = containerRef.current?.offsetWidth ?? 0;
@@ -41,10 +47,11 @@ export default function FleetSection() {
   };
 
   const slideTo = (direction: 1 | -1) => {
+    if (len <= 1) return;
     if (animating.current) return;
     animating.current = true;
     offset.current += direction;
-    setDotIndex(((offset.current % LEN) + LEN) % LEN);
+    setDotIndex(((offset.current % len) + len) % len);
 
     gsap.to(stripRef.current, {
       x: -(offset.current * getStep()),
@@ -52,8 +59,8 @@ export default function FleetSection() {
       ease: "power2.inOut",
       onComplete: () => {
         animating.current = false;
-        if (offset.current <= 0 || offset.current >= LEN * 2) {
-          offset.current = LEN + (((offset.current % LEN) + LEN) % LEN);
+        if (offset.current <= 0 || offset.current >= len * 2) {
+          offset.current = len + (((offset.current % len) + len) % len);
           snapToOffset(offset.current);
         }
       },
@@ -72,9 +79,51 @@ export default function FleetSection() {
   };
 
   useEffect(() => {
+    let active = true;
+
+    async function loadHomeFleet() {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const { vehicles } = await fetchVehiclesPage(1, HOME_FLEET_ITEMS);
+        if (!active) {
+          return;
+        }
+
+        setFleetVehicles(vehicles);
+        setDotIndex(0);
+      } catch (err) {
+        if (!active) {
+          return;
+        }
+        const message = err instanceof Error ? err.message : "Failed to load fleet section.";
+        setError(message);
+        setFleetVehicles([]);
+      } finally {
+        if (active) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadHomeFleet();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!len) {
+      offset.current = 0;
+      return;
+    }
+
+    offset.current = len;
     const raf = requestAnimationFrame(() => {
       setVisible(getVisible());
-      snapToOffset(LEN);
+      snapToOffset(offset.current);
     });
 
     const onResize = () => {
@@ -88,14 +137,15 @@ export default function FleetSection() {
       window.removeEventListener("resize", onResize);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [len]);
 
   useEffect(() => {
+    if (len <= 1) return;
     // Slower autoplay than Curated Journeys for a calmer horizontal motion.
     const timer = setInterval(() => slideTo(1), 5200);
     return () => clearInterval(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [len]);
 
   const cardWidth = `calc((100% - ${GAP * (visible - 1)}px) / ${visible})`;
 
@@ -150,6 +200,7 @@ export default function FleetSection() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => slideTo(-1)}
+            disabled={len <= 1}
             className="shrink-0 hidden md:flex w-10 h-10 items-center justify-center rounded-full border border-amber-400/30 text-amber-400 hover:bg-amber-400/10 transition cursor-pointer"
           >
             <LucideArrowLeft size={16} />
@@ -223,14 +274,19 @@ export default function FleetSection() {
 
           <button
             onClick={() => slideTo(1)}
+            disabled={len <= 1}
             className="shrink-0 hidden md:flex w-10 h-10 items-center justify-center rounded-full border border-amber-400/30 text-amber-400 hover:bg-amber-400/10 transition cursor-pointer"
           >
             <LucideArrowRight size={16} />
           </button>
         </div>
 
+        {isLoading && <p className="mt-6 text-center text-sm text-amber-50/70">Loading fleet...</p>}
+        {!isLoading && error && <p className="mt-6 text-center text-sm text-red-300">{error}</p>}
+        {!isLoading && !error && len === 0 && <p className="mt-6 text-center text-sm text-amber-50/70">No fleet vehicles available right now.</p>}
+
         <div className="flex justify-center gap-2 mt-6">
-          {vehicles.map((_, i) => (
+          {fleetVehicles.map((_, i) => (
             <span
               key={i}
               className={`w-2.5 h-2.5 rounded-full transition-all ${
