@@ -1,28 +1,29 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
-import vehicles from "@/data/vehicles";
 import VehicleCard from "@/features/fleet/VehicleCard";
+import PaginationControls from "@/components/ui/PaginationControls";
+import type { FleetVehicle } from "@/types/vehicle";
+import { fetchVehiclesPage } from "@/services/fleetService";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 6;
 
 export default function FleetPage() {
   const heroTextRef = useRef<HTMLDivElement>(null);
   const heroImgRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(1);
+  const [fleetVehicles, setFleetVehicles] = useState<FleetVehicle[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const totalPages = Math.max(1, Math.ceil(vehicles.length / ITEMS_PER_PAGE));
-
-  const paginatedVehicles = useMemo(() => {
-    const start = (page - 1) * ITEMS_PER_PAGE;
-    return vehicles.slice(start, start + ITEMS_PER_PAGE);
-  }, [page]);
+  const totalPages = Math.max(1, Math.ceil(totalCount / ITEMS_PER_PAGE));
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -46,6 +47,43 @@ export default function FleetPage() {
 
     return () => ctx.revert();
   }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadVehicles() {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const { vehicles, totalCount: count } = await fetchVehiclesPage(page, ITEMS_PER_PAGE);
+        if (!active) {
+          return;
+        }
+
+        setFleetVehicles(vehicles);
+        setTotalCount(count);
+      } catch (err) {
+        if (!active) {
+          return;
+        }
+
+        const message = err instanceof Error ? err.message : "Failed to load fleet vehicles.";
+        setError(message);
+        setFleetVehicles([]);
+      } finally {
+        if (active) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadVehicles();
+
+    return () => {
+      active = false;
+    };
+  }, [page]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -95,7 +133,7 @@ export default function FleetPage() {
     }, gridRef);
 
     return () => ctx.revert();
-  }, [paginatedVehicles]);
+  }, [fleetVehicles]);
 
   return (
     <div className="bg-noise bg-[#F5F2ED] min-h-screen">
@@ -127,47 +165,24 @@ export default function FleetPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {paginatedVehicles.map((vehicle) => (
+          {fleetVehicles.map((vehicle) => (
             <VehicleCard key={vehicle.id} vehicle={vehicle} />
           ))}
         </div>
 
-        <div className="mt-10 flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
-          <button
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={page === 1}
-            className="px-4 py-2 rounded-full border border-[#0b2545]/20 text-[#0b2545] font-cinzel disabled:opacity-45 disabled:cursor-not-allowed hover:bg-[#0b2545] hover:text-white transition"
-          >
-            Prev
-          </button>
+        {!isLoading && error && (
+          <p className="mt-8 text-center text-sm text-red-700">{error}</p>
+        )}
 
-          {Array.from({ length: totalPages }).map((_, index) => {
-            const pageNumber = index + 1;
-            const active = pageNumber === page;
-            return (
-              <button
-                key={pageNumber}
-                onClick={() => setPage(pageNumber)}
-                aria-current={active ? "page" : undefined}
-                className={`w-10 h-10 rounded-full font-cinzel transition ${
-                  active
-                    ? "bg-[#0b2545] text-white"
-                    : "border border-[#0b2545]/20 text-[#0b2545] hover:bg-[#0b2545] hover:text-white"
-                }`}
-              >
-                {pageNumber}
-              </button>
-            );
-          })}
+        {!isLoading && !error && fleetVehicles.length === 0 && (
+          <p className="mt-8 text-center text-sm text-neutral-700">No fleet vehicles are available right now.</p>
+        )}
 
-          <button
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            disabled={page === totalPages}
-            className="px-4 py-2 rounded-full border border-[#0b2545]/20 text-[#0b2545] font-cinzel disabled:opacity-45 disabled:cursor-not-allowed hover:bg-[#0b2545] hover:text-white transition"
-          >
-            Next
-          </button>
-        </div>
+        {isLoading && (
+          <p className="mt-8 text-center text-sm text-neutral-700">Loading fleet vehicles...</p>
+        )}
+
+        <PaginationControls currentPage={page} totalPages={totalPages} onPageChange={setPage} />
       </div>
     </div>
   );

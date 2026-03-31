@@ -1,18 +1,29 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import PackageCard from "@/features/packages/PackageCard";
 import { packages } from "@/data/packages";
+import PaginationControls from "@/components/ui/PaginationControls";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const ITEMS_PER_PAGE = 6;
 
 export default function PackagesPage() {
   const heroTextRef = useRef<HTMLDivElement>(null);
   const heroImgRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  const [page, setPage] = useState(1);
+
+  const totalPages = Math.max(1, Math.ceil(packages.length / ITEMS_PER_PAGE));
+
+  const paginatedPackages = useMemo(() => {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    return packages.slice(start, start + ITEMS_PER_PAGE);
+  }, [page]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -35,27 +46,29 @@ export default function PackagesPage() {
         },
       });
 
-      // Cards stagger in on scroll
-      const cards = gridRef.current ? Array.from(gridRef.current.children) : [];
-      if (cards.length) {
-        gsap.set(cards, { opacity: 0, y: 40 });
-        gsap.to(cards, {
-          opacity: 1,
-          y: 0,
-          duration: 0.65,
-          stagger: 0.09,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: gridRef.current,
-            start: "top 85%",
-            toggleActions: "play none none none",
-          },
-        });
-      }
     });
 
     return () => ctx.revert();
   }, []);
+
+  useEffect(() => {
+    const cards = gridRef.current ? Array.from(gridRef.current.children) : [];
+    if (!cards.length) {
+      return;
+    }
+
+    gsap.fromTo(
+      cards,
+      { opacity: 0, y: 32 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power2.out",
+      }
+    );
+  }, [paginatedPackages]);
 
   return (
     <div className="bg-noise bg-[#F5F2ED] min-h-screen">
@@ -71,7 +84,7 @@ export default function PackagesPage() {
             priority
           />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/50 via-black/30 to-black/60" />
 
         <div ref={heroTextRef} className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
           <p className="font-cinzel text-amber-400 text-xs sm:text-sm tracking-[0.3em] uppercase mb-4">
@@ -90,10 +103,11 @@ export default function PackagesPage() {
       {/* Cards Grid */}
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {packages.map((pkg) => (
+          {paginatedPackages.map((pkg) => (
             <PackageCard key={pkg.id} pkg={pkg} />
           ))}
         </div>
+        <PaginationControls currentPage={page} totalPages={totalPages} onPageChange={setPage} />
       </div>
 
     </div>
