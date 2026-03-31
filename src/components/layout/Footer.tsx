@@ -36,12 +36,11 @@ export default function Footer() {
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      // Smooth parallax for the big brand text
       gsap.fromTo(
         bigTextRef.current,
-        { y: 50, opacity: 0 },
+        { y: 30, opacity: 0 },
         {
-          y: -20,
+          y: -10,
           opacity: 1,
           ease: "none",
           scrollTrigger: {
@@ -53,19 +52,18 @@ export default function Footer() {
         }
       );
 
-      // Elegant reveal for footer content
       gsap.fromTo(
         "[data-f-reveal]",
-        { opacity: 0, y: 30 },
+        { opacity: 0, y: 20 },
         {
           opacity: 1,
           y: 0,
-          duration: 1.2,
+          duration: 1,
           stagger: 0.1,
-          ease: "expo.out",
+          ease: "power2.out",
           scrollTrigger: {
             trigger: footerRef.current,
-            start: "top 85%",
+            start: "top 90%",
           },
         }
       );
@@ -77,101 +75,106 @@ export default function Footer() {
   return (
     <footer
       ref={footerRef}
-      className="relative overflow-hidden bg-[#05070A] pt-14 md:pt-24 pb-8 text-white/90"
+      className="relative overflow-hidden bg-[#05070A] pt-16 md:pt-24 pb-8 text-white/90"
     >
-      {/* 1. FIXED BACKGROUND TEXT: Uses clamp to prevent "N" clipping and responsive sizing */}
+      {/* 1. BACKGROUND TEXT: Scaled down on mobile to prevent clipping */}
       <div 
         ref={bigTextRef}
         className="absolute bottom-[-1%] left-0 w-full pointer-events-none select-none overflow-hidden"
       >
-        <h2 className="font-cinzel text-[18vw] md:text-[16vw] lg:text-[15vw] leading-none text-white/3 whitespace-nowrap text-center uppercase tracking-tight w-full">
+        <h2 className="font-cinzel text-[12vw] md:text-[16vw] lg:text-[15vw] leading-none text-white/[0.03] whitespace-nowrap text-center uppercase tracking-tighter w-full">
           Aba Ceylon
         </h2>
       </div>
 
-      {/* 2. ATMOSPHERIC GRADIENTS */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-10%,#111827_0%,transparent_60%)]" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-12 lg:gap-8 border-b border-white/5 pb-14 md:pb-16">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 border-b border-white/5 pb-12 md:pb-16">
           
-          {/* LEFT: Branding & CTA */}
-          <div className="lg:col-span-6 xl:col-span-5" data-f-reveal>
-            <span className="font-cinzel text-[10px] tracking-[0.28em] md:tracking-[0.4em] uppercase text-[#D4AF37] block mb-4 md:mb-6">
+          {/* LEFT: Branding - Centered on mobile, Left on Desktop */}
+          <div className="lg:col-span-6 xl:col-span-5 text-center md:text-left" data-f-reveal>
+            <span className="font-cinzel text-[10px] tracking-[0.3em] md:tracking-[0.4em] uppercase text-[#D4AF37] block mb-4 md:mb-6">
               Establishment of Excellence
             </span>
-            <h3 className="font-cinzel text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl text-white leading-[1.08] mb-7 md:mb-8 wrap-break-word">
-              THE FINEST WAY <br />
-              TO <span className="italic text-[#D4AF37] font-serif lowercase">experience</span> <br />
+            <h3 className="font-cinzel text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-[1.1] mb-8">
+              THE FINEST WAY <br className="hidden sm:block" />
+              TO <span className="italic text-[#D4AF37] font-serif lowercase">experience</span> <br className="hidden sm:block" />
               THE ISLAND.
             </h3>
             
-            <Link 
-              href="/planner"
-              className="group relative inline-flex items-center gap-4 py-3 md:py-4 pr-8 border-b border-[#D4AF37]/30 hover:border-[#D4AF37] transition-all duration-500"
-            >
-              <span className="font-cinzel text-sm sm:text-base md:text-lg text-[#D4AF37] uppercase tracking-[0.18em] sm:tracking-widest">Curate Your Journey</span>
-              <div className="relative overflow-hidden h-5 w-5">
-                <ArrowUpRight className="text-[#D4AF37] absolute inset-0 transition-transform duration-500 group-hover:translate-x-5 group-hover:-translate-y-5" />
-                <ArrowUpRight className="text-[#D4AF37] absolute inset-0 -translate-x-5 translate-y-5 transition-transform duration-500 group-hover:translate-x-0 group-hover:translate-y-0" />
-              </div>
-            </Link>
+            <div className="flex justify-center md:justify-start">
+              <Link 
+                href="/planner"
+                className="group relative inline-flex items-center gap-4 py-3 md:py-4 pr-6 md:pr-8 border-b border-[#D4AF37]/30 hover:border-[#D4AF37] transition-all duration-500"
+              >
+                <span className="font-cinzel text-sm md:text-lg text-[#D4AF37] uppercase tracking-widest">Curate Your Journey</span>
+                <div className="relative overflow-hidden h-5 w-5">
+                  <ArrowUpRight className="text-[#D4AF37] absolute inset-0 transition-transform duration-500 group-hover:translate-x-5 group-hover:-translate-y-5" />
+                  <ArrowUpRight className="text-[#D4AF37] absolute inset-0 -translate-x-5 translate-y-5 transition-transform duration-500 group-hover:translate-x-0 group-hover:translate-y-0" />
+                </div>
+              </Link>
+            </div>
           </div>
 
-          {/* RIGHT: Directory Links (Responsive Grid) */}
-          <div className="lg:col-span-6 xl:col-span-7 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-8">
-            {footerLinks.map((group) => (
-              <div key={group.title} data-f-reveal>
-                <h4 className="font-cinzel text-[11px] tracking-[0.2em] uppercase text-[#D4AF37]/80 mb-5 md:mb-8">
-                  {group.title}
-                </h4>
-                <ul className="space-y-3 md:space-y-4">
-                  {group.links.map((link) => (
-                    <li key={link.label}>
-                      <Link
-                        href={link.href}
-                        className="text-sm font-light text-white/60 hover:text-[#D4AF37] transition-colors duration-300 flex items-center group/link"
-                      >
-                        <span className="w-0 group-hover/link:w-3 h-px bg-[#D4AF37] mr-0 group-hover/link:mr-2 transition-all duration-300" />
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          {/* RIGHT: Responsive Link Directory */}
+          <div className="lg:col-span-6 xl:col-span-7">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-4 md:gap-8">
+              {footerLinks.map((group) => (
+                <div key={group.title} data-f-reveal className="col-span-1">
+                  <h4 className="font-cinzel text-[11px] tracking-[0.25em] uppercase text-[#D4AF37]/80 mb-6 md:mb-8">
+                    {group.title}
+                  </h4>
+                  <ul className="space-y-3 md:space-y-4">
+                    {group.links.map((link) => (
+                      <li key={link.label}>
+                        <Link
+                          href={link.href}
+                          className="text-sm font-light text-white/60 hover:text-[#D4AF37] transition-colors duration-300 flex items-center group/link"
+                        >
+                          <span className="w-0 group-hover/link:w-3 h-[1px] bg-[#D4AF37] mr-0 group-hover/link:mr-2 transition-all duration-300" />
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
 
-            {/* Contact Info */}
-            <div data-f-reveal>
-              <h4 className="font-cinzel text-[11px] tracking-[0.2em] uppercase text-[#D4AF37]/80 mb-5 md:mb-8">
-                Headquarters
-              </h4>
-              <address className="not-italic text-sm font-light space-y-4 leading-relaxed text-white/60">
-                <p className="flex gap-3 items-start"><MapPin size={16} className="shrink-0 text-[#D4AF37]/70" /> Colombo, Sri Lanka</p>
-                <p className="flex gap-3 items-start"><Phone size={16} className="shrink-0 text-[#D4AF37]/70" /> +94 77 000 0000</p>
-                <p className="flex gap-3 items-start"><Mail size={16} className="shrink-0 text-[#D4AF37]/70" /> hello@abaceylon.com</p>
-              </address>
-              
-              <div className="flex gap-5 mt-8">
-                <Link href="#" className="text-white/40 hover:text-[#D4AF37] transition-colors"><Instagram size={20} /></Link>
-                <Link href="#" className="text-white/40 hover:text-[#D4AF37] transition-colors"><Facebook size={20} /></Link>
+              {/* Headquarters - Full width on smallest mobile to prevent email clipping */}
+              <div data-f-reveal className="col-span-2 md:col-span-1 pt-4 md:pt-0 border-t border-white/5 md:border-none">
+                <h4 className="font-cinzel text-[11px] tracking-[0.25em] uppercase text-[#D4AF37]/80 mb-6 md:mb-8">
+                  Headquarters
+                </h4>
+                <address className="not-italic text-sm font-light space-y-4 leading-relaxed text-white/60">
+                  <p className="flex gap-3 items-start"><MapPin size={16} className="shrink-0 text-[#D4AF37]/70" /> Colombo, Sri Lanka</p>
+                  <p className="flex gap-3 items-start"><Phone size={16} className="shrink-0 text-[#D4AF37]/70" /> +94 77 000 0000</p>
+                  <p className="flex gap-3 items-start break-all md:break-normal">
+                    <Mail size={16} className="shrink-0 text-[#D4AF37]/70" /> hello@abaceylon.com
+                  </p>
+                </address>
+                
+                <div className="flex gap-5 mt-8">
+                  <Link href="#" className="text-white/40 hover:text-[#D4AF37] transition-colors"><Instagram size={20} /></Link>
+                  <Link href="#" className="text-white/40 hover:text-[#D4AF37] transition-colors"><Facebook size={20} /></Link>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* BOTTOM BAR: Minimalist & Clean */}
-        <div className="mt-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 md:gap-6" data-f-reveal>
-          <div className="text-[9px] md:text-[10px] tracking-[0.12em] md:tracking-[0.2em] uppercase text-white/30">
+        {/* BOTTOM BAR: Responsive Stacking */}
+        <div className="mt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-center" data-f-reveal>
+          <div className="text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
             © {year} Aba Ceylon Tours & Travels
           </div>
           
-          <div className="flex flex-wrap gap-x-6 gap-y-2 text-[9px] md:text-[10px] tracking-[0.12em] md:tracking-[0.2em] uppercase text-white/30">
+          <div className="flex gap-6 md:gap-8 text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
           </div>
 
-          <div className="text-[9px] md:text-[10px] tracking-[0.12em] md:tracking-[0.2em] uppercase text-white/30">
+          <div className="text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
             Design by <a href="https://vernoxlabs.com" className="text-[#D4AF37]/60 hover:text-[#D4AF37] transition-colors">Vernox Labs</a>
           </div>
         </div>
