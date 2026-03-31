@@ -77,14 +77,14 @@ export default function Footer() {
   return (
     <footer
       ref={footerRef}
-      className="relative overflow-hidden bg-[#05070A] pt-16 md:pt-24 pb-8 text-white/90"
+      className="relative overflow-hidden bg-[#05070A] pt-14 md:pt-24 pb-8 text-white/90"
     >
       {/* 1. FIXED BACKGROUND TEXT: Uses clamp to prevent "N" clipping and responsive sizing */}
       <div 
         ref={bigTextRef}
-        className="absolute bottom-[-2%] left-0 w-full pointer-events-none select-none overflow-hidden"
+        className="absolute bottom-[-1%] left-0 w-full pointer-events-none select-none overflow-hidden"
       >
-        <h2 className="font-cinzel text-[14vw] md:text-[16vw] lg:text-[15vw] leading-none text-white/[0.03] whitespace-nowrap text-center uppercase tracking-tighter w-full">
+        <h2 className="font-cinzel text-[18vw] md:text-[16vw] lg:text-[15vw] leading-none text-white/3 whitespace-nowrap text-center uppercase tracking-tight w-full">
           Aba Ceylon
         </h2>
       </div>
@@ -92,15 +92,15 @@ export default function Footer() {
       {/* 2. ATMOSPHERIC GRADIENTS */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-10%,#111827_0%,transparent_60%)]" />
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 border-b border-white/5 pb-16">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-12 lg:gap-8 border-b border-white/5 pb-14 md:pb-16">
           
           {/* LEFT: Branding & CTA */}
           <div className="lg:col-span-6 xl:col-span-5" data-f-reveal>
-            <span className="font-cinzel text-[10px] tracking-[0.4em] uppercase text-[#D4AF37] block mb-4 md:mb-6">
+            <span className="font-cinzel text-[10px] tracking-[0.28em] md:tracking-[0.4em] uppercase text-[#D4AF37] block mb-4 md:mb-6">
               Establishment of Excellence
             </span>
-            <h3 className="font-cinzel text-3xl md:text-5xl lg:text-6xl text-white leading-[1.1] mb-8">
+            <h3 className="font-cinzel text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl text-white leading-[1.08] mb-7 md:mb-8 wrap-break-word">
               THE FINEST WAY <br />
               TO <span className="italic text-[#D4AF37] font-serif lowercase">experience</span> <br />
               THE ISLAND.
@@ -110,7 +110,7 @@ export default function Footer() {
               href="/planner"
               className="group relative inline-flex items-center gap-4 py-3 md:py-4 pr-8 border-b border-[#D4AF37]/30 hover:border-[#D4AF37] transition-all duration-500"
             >
-              <span className="font-cinzel text-base md:text-lg text-[#D4AF37] uppercase tracking-widest">Curate Your Journey</span>
+              <span className="font-cinzel text-sm sm:text-base md:text-lg text-[#D4AF37] uppercase tracking-[0.18em] sm:tracking-widest">Curate Your Journey</span>
               <div className="relative overflow-hidden h-5 w-5">
                 <ArrowUpRight className="text-[#D4AF37] absolute inset-0 transition-transform duration-500 group-hover:translate-x-5 group-hover:-translate-y-5" />
                 <ArrowUpRight className="text-[#D4AF37] absolute inset-0 -translate-x-5 translate-y-5 transition-transform duration-500 group-hover:translate-x-0 group-hover:translate-y-0" />
@@ -119,10 +119,10 @@ export default function Footer() {
           </div>
 
           {/* RIGHT: Directory Links (Responsive Grid) */}
-          <div className="lg:col-span-6 xl:col-span-7 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 md:gap-8">
+          <div className="lg:col-span-6 xl:col-span-7 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-8">
             {footerLinks.map((group) => (
               <div key={group.title} data-f-reveal>
-                <h4 className="font-cinzel text-[11px] tracking-[0.25em] uppercase text-[#D4AF37]/80 mb-6 md:mb-8">
+                <h4 className="font-cinzel text-[11px] tracking-[0.2em] uppercase text-[#D4AF37]/80 mb-5 md:mb-8">
                   {group.title}
                 </h4>
                 <ul className="space-y-3 md:space-y-4">
@@ -132,7 +132,7 @@ export default function Footer() {
                         href={link.href}
                         className="text-sm font-light text-white/60 hover:text-[#D4AF37] transition-colors duration-300 flex items-center group/link"
                       >
-                        <span className="w-0 group-hover/link:w-3 h-[1px] bg-[#D4AF37] mr-0 group-hover/link:mr-2 transition-all duration-300" />
+                        <span className="w-0 group-hover/link:w-3 h-px bg-[#D4AF37] mr-0 group-hover/link:mr-2 transition-all duration-300" />
                         {link.label}
                       </Link>
                     </li>
@@ -143,7 +143,7 @@ export default function Footer() {
 
             {/* Contact Info */}
             <div data-f-reveal>
-              <h4 className="font-cinzel text-[11px] tracking-[0.25em] uppercase text-[#D4AF37]/80 mb-6 md:mb-8">
+              <h4 className="font-cinzel text-[11px] tracking-[0.2em] uppercase text-[#D4AF37]/80 mb-5 md:mb-8">
                 Headquarters
               </h4>
               <address className="not-italic text-sm font-light space-y-4 leading-relaxed text-white/60">
@@ -161,17 +161,17 @@ export default function Footer() {
         </div>
 
         {/* BOTTOM BAR: Minimalist & Clean */}
-        <div className="mt-10 flex flex-col md:flex-row justify-between items-center gap-6" data-f-reveal>
-          <div className="text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
+        <div className="mt-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 md:gap-6" data-f-reveal>
+          <div className="text-[9px] md:text-[10px] tracking-[0.12em] md:tracking-[0.2em] uppercase text-white/30">
             © {year} Aba Ceylon Tours & Travels
           </div>
           
-          <div className="flex gap-8 text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-[9px] md:text-[10px] tracking-[0.12em] md:tracking-[0.2em] uppercase text-white/30">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
           </div>
 
-          <div className="text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
+          <div className="text-[9px] md:text-[10px] tracking-[0.12em] md:tracking-[0.2em] uppercase text-white/30">
             Design by <a href="https://vernoxlabs.com" className="text-[#D4AF37]/60 hover:text-[#D4AF37] transition-colors">Vernox Labs</a>
           </div>
         </div>
