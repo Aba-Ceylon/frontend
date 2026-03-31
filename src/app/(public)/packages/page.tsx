@@ -10,7 +10,7 @@ import PaginationControls from "@/components/ui/PaginationControls";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 6;
 
 export default function PackagesPage() {
   const heroTextRef = useRef<HTMLDivElement>(null);
