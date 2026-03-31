@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import vehicles from "@/data/vehicles";
 import VehicleCard from "@/features/fleet/VehicleCard";
+import PaginationControls from "@/components/ui/PaginationControls";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -132,42 +133,7 @@ export default function FleetPage() {
           ))}
         </div>
 
-        <div className="mt-10 flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
-          <button
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={page === 1}
-            className="px-4 py-2 rounded-full border border-[#0b2545]/20 text-[#0b2545] font-cinzel disabled:opacity-45 disabled:cursor-not-allowed hover:bg-[#0b2545] hover:text-white transition"
-          >
-            Prev
-          </button>
-
-          {Array.from({ length: totalPages }).map((_, index) => {
-            const pageNumber = index + 1;
-            const active = pageNumber === page;
-            return (
-              <button
-                key={pageNumber}
-                onClick={() => setPage(pageNumber)}
-                aria-current={active ? "page" : undefined}
-                className={`w-10 h-10 rounded-full font-cinzel transition ${
-                  active
-                    ? "bg-[#0b2545] text-white"
-                    : "border border-[#0b2545]/20 text-[#0b2545] hover:bg-[#0b2545] hover:text-white"
-                }`}
-              >
-                {pageNumber}
-              </button>
-            );
-          })}
-
-          <button
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            disabled={page === totalPages}
-            className="px-4 py-2 rounded-full border border-[#0b2545]/20 text-[#0b2545] font-cinzel disabled:opacity-45 disabled:cursor-not-allowed hover:bg-[#0b2545] hover:text-white transition"
-          >
-            Next
-          </button>
-        </div>
+        <PaginationControls currentPage={page} totalPages={totalPages} onPageChange={setPage} />
       </div>
     </div>
   );
