@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Image from "next/image";
-import vehicles from "@/data/vehicles";
+import type { FleetVehicle } from "@/types/vehicle";
+import { fetchVehicleById } from "@/services/fleetService";
 
 type Props = {
   id: string;
@@ -13,8 +14,36 @@ type Props = {
 export default function FleetDetailModal({ id, onClose }: Props) {
   const modalRef = useRef<HTMLDivElement | null>(null);
   const reqBtnRef = useRef<HTMLButtonElement | null>(null);
+  const [vehicle, setVehicle] = useState<FleetVehicle | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const vehicle = vehicles.find((v) => v.id === id) ?? null;
+  useEffect(() => {
+    let active = true;
+
+    async function loadVehicle() {
+      setIsLoading(true);
+      try {
+        const data = await fetchVehicleById(id);
+        if (active) {
+          setVehicle(data);
+        }
+      } catch {
+        if (active) {
+          setVehicle(null);
+        }
+      } finally {
+        if (active) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadVehicle();
+
+    return () => {
+      active = false;
+    };
+  }, [id]);
 
   useEffect(() => {
     const el = modalRef.current;
@@ -50,7 +79,7 @@ export default function FleetDetailModal({ id, onClose }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  if (!vehicle) return null;
+  if (!vehicle && !isLoading) return null;
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true" onClick={onClose}>
@@ -58,23 +87,33 @@ export default function FleetDetailModal({ id, onClose }: Props) {
       <div ref={modalRef} onClick={(e) => e.stopPropagation()} className="relative z-70 max-w-3xl w-full bg-white rounded-lg shadow-xl overflow-hidden">
         <div className="md:flex">
           <div className="relative md:w-1/2 h-52 md:h-auto">
-            <Image src={vehicle.imageUrl} alt={vehicle.name} fill className="object-cover" />
+            {vehicle ? (
+              <Image src={vehicle.imageUrl} alt={vehicle.name} fill className="object-cover" />
+            ) : (
+              <div className="h-full w-full bg-neutral-200" />
+            )}
           </div>
           <div className="p-6 md:w-1/2">
-            <h3 className="text-2xl font-cinzel text-[#0b2545] mb-2">{vehicle.name}</h3>
-            <p className="text-sm text-neutral-700 mb-3">{vehicle.shortDescription}</p>
+            {isLoading || !vehicle ? (
+              <p className="text-sm text-neutral-700">Loading vehicle details...</p>
+            ) : (
+              <>
+                <h3 className="text-2xl font-cinzel text-[#0b2545] mb-2">{vehicle.name}</h3>
+                <p className="text-sm text-neutral-700 mb-3">{vehicle.shortDescription}</p>
 
-            <div className="flex gap-4 mb-3 text-sm text-neutral-700">
-              <div>Type: <strong className="text-neutral-900">{vehicle.type}</strong></div>
-              <div>Passengers: <strong className="text-neutral-900">{vehicle.passengerCapacity}</strong></div>
-              <div>Luggage: <strong className="text-neutral-900">{vehicle.luggageCapacity}</strong></div>
-            </div>
+                <div className="flex gap-4 mb-3 text-sm text-neutral-700">
+                  <div>Type: <strong className="text-neutral-900">{vehicle.type}</strong></div>
+                  <div>Passengers: <strong className="text-neutral-900">{vehicle.passengerCapacity}</strong></div>
+                  <div>Luggage: <strong className="text-neutral-900">{vehicle.luggageCapacity}</strong></div>
+                </div>
 
-            <ul className="list-disc pl-5 mb-4 text-sm text-neutral-700">
-              {vehicle.features.map((f) => (
-                <li key={f}>{f}</li>
-              ))}
-            </ul>
+                <ul className="list-disc pl-5 mb-4 text-sm text-neutral-700">
+                  {vehicle.features.map((f) => (
+                    <li key={f}>{f}</li>
+                  ))}
+                </ul>
+              </>
+            )}
 
             <div className="flex gap-3 items-center">
               <button
