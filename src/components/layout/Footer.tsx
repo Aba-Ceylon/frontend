@@ -1,139 +1,179 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { Mail, MapPin, Phone, ArrowUpRight } from "lucide-react";
+import { MapPin, Phone, Mail, Instagram, Facebook, ArrowUpRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const quickLinks = [
-  { label: "Holiday Packages", href: "/packages" },
-  { label: "Fleet", href: "/fleet" },
-  { label: "Stays", href: "/stays" },
-  { label: "Activities", href: "/activities" },
-];
-
-const companyLinks = [
-  { label: "About", href: "/about" },
-  { label: "Destinations", href: "/destinations" },
-  { label: "Contact", href: "/contact" },
-  { label: "Plan Your Journey", href: "/planner" },
+const footerLinks = [
+  {
+    title: "Curation",
+    links: [
+      { label: "Holiday Packages", href: "/packages" },
+      { label: "Stays & Retreats", href: "/stays" },
+      { label: "Private Fleet", href: "/fleet" },
+      { label: "Bespoke Activities", href: "/activities" },
+    ],
+  },
+  {
+    title: "Heritage",
+    links: [
+      { label: "Our Story", href: "/about" },
+      { label: "Destinations", href: "/destinations" },
+      { label: "Sustainability", href: "/sustainability" },
+      { label: "Contact", href: "/contact" },
+    ],
+  },
 ];
 
 export default function Footer() {
+  const footerRef = useRef<HTMLElement>(null);
+  const bigTextRef = useRef<HTMLDivElement>(null);
   const year = new Date().getFullYear();
 
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      // Smooth parallax for the big brand text
+      gsap.fromTo(
+        bigTextRef.current,
+        { y: 50, opacity: 0 },
+        {
+          y: -20,
+          opacity: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        }
+      );
+
+      // Elegant reveal for footer content
+      gsap.fromTo(
+        "[data-f-reveal]",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          stagger: 0.1,
+          ease: "expo.out",
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: "top 85%",
+          },
+        }
+      );
+    }, footerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <footer className="relative overflow-hidden bg-[#06090F] border-t border-amber-400/20">
-      <div className="absolute inset-0 bg-linear-to-b from-[#0A1324] via-[#070A11] to-[#040507]" />
-      <div className="absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-amber-400/12 blur-3xl" />
-      <div className="absolute inset-0 opacity-20 pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 1px 1px, rgba(212,175,55,0.22) 1px, transparent 0)",
-          backgroundSize: "24px 24px",
-        }}
-      />
+    <footer
+      ref={footerRef}
+      className="relative overflow-hidden bg-[#05070A] pt-16 md:pt-24 pb-8 text-white/90"
+    >
+      {/* 1. FIXED BACKGROUND TEXT: Uses clamp to prevent "N" clipping and responsive sizing */}
+      <div 
+        ref={bigTextRef}
+        className="absolute bottom-[-2%] left-0 w-full pointer-events-none select-none overflow-hidden"
+      >
+        <h2 className="font-cinzel text-[14vw] md:text-[16vw] lg:text-[15vw] leading-none text-white/[0.03] whitespace-nowrap text-center uppercase tracking-tighter w-full">
+          Aba Ceylon
+        </h2>
+      </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pt-18 pb-8">
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-10 lg:gap-14">
-          <div className="xl:col-span-5">
-            <p className="font-cinzel text-xs tracking-[0.28em] uppercase text-amber-400/90 mb-4">
-              Aba Ceylon Tours & Travels
-            </p>
+      {/* 2. ATMOSPHERIC GRADIENTS */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-10%,#111827_0%,transparent_60%)]" />
 
-            <h2 className="font-cinzel text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
-              Journey Through Sri Lanka
-              <span className="block text-amber-400 mt-1">With Heritage-Led Luxury.</span>
-            </h2>
-
-            <p className="mt-5 text-amber-50/75 max-w-xl text-base sm:text-lg leading-relaxed">
-              Curated routes, trusted chauffeurs, and memorable stays crafted to feel timeless from arrival to farewell.
-            </p>
-
-            <div className="mt-7 space-y-3 text-sm text-amber-100/80">
-              <p className="flex items-center gap-3">
-                <MapPin className="h-4 w-4 text-amber-400" />
-                Sri Lanka | Island-wide coverage
-              </p>
-              <p className="flex items-center gap-3">
-                <Phone className="h-4 w-4 text-amber-400" />
-                +94 77 000 0000
-              </p>
-              <p className="flex items-center gap-3">
-                <Mail className="h-4 w-4 text-amber-400" />
-                hello@abaceylon.com
-              </p>
-            </div>
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 border-b border-white/5 pb-16">
+          
+          {/* LEFT: Branding & CTA */}
+          <div className="lg:col-span-6 xl:col-span-5" data-f-reveal>
+            <span className="font-cinzel text-[10px] tracking-[0.4em] uppercase text-[#D4AF37] block mb-4 md:mb-6">
+              Establishment of Excellence
+            </span>
+            <h3 className="font-cinzel text-3xl md:text-5xl lg:text-6xl text-white leading-[1.1] mb-8">
+              THE FINEST WAY <br />
+              TO <span className="italic text-[#D4AF37] font-serif lowercase">experience</span> <br />
+              THE ISLAND.
+            </h3>
+            
+            <Link 
+              href="/planner"
+              className="group relative inline-flex items-center gap-4 py-3 md:py-4 pr-8 border-b border-[#D4AF37]/30 hover:border-[#D4AF37] transition-all duration-500"
+            >
+              <span className="font-cinzel text-base md:text-lg text-[#D4AF37] uppercase tracking-widest">Curate Your Journey</span>
+              <div className="relative overflow-hidden h-5 w-5">
+                <ArrowUpRight className="text-[#D4AF37] absolute inset-0 transition-transform duration-500 group-hover:translate-x-5 group-hover:-translate-y-5" />
+                <ArrowUpRight className="text-[#D4AF37] absolute inset-0 -translate-x-5 translate-y-5 transition-transform duration-500 group-hover:translate-x-0 group-hover:translate-y-0" />
+              </div>
+            </Link>
           </div>
 
-          <div className="xl:col-span-7 grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div>
-              <h3 className="font-cinzel text-lg text-amber-300 mb-4">Explore</h3>
-              <ul className="space-y-3">
-                {quickLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="group inline-flex items-center gap-2 text-amber-50/80 hover:text-amber-300 transition-colors duration-300"
-                    >
-                      <span>{link.label}</span>
-                      <ArrowUpRight className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {/* RIGHT: Directory Links (Responsive Grid) */}
+          <div className="lg:col-span-6 xl:col-span-7 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 md:gap-8">
+            {footerLinks.map((group) => (
+              <div key={group.title} data-f-reveal>
+                <h4 className="font-cinzel text-[11px] tracking-[0.25em] uppercase text-[#D4AF37]/80 mb-6 md:mb-8">
+                  {group.title}
+                </h4>
+                <ul className="space-y-3 md:space-y-4">
+                  {group.links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="text-sm font-light text-white/60 hover:text-[#D4AF37] transition-colors duration-300 flex items-center group/link"
+                      >
+                        <span className="w-0 group-hover/link:w-3 h-[1px] bg-[#D4AF37] mr-0 group-hover/link:mr-2 transition-all duration-300" />
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
 
-            <div>
-              <h3 className="font-cinzel text-lg text-amber-300 mb-4">Company</h3>
-              <ul className="space-y-3">
-                {companyLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="group inline-flex items-center gap-2 text-amber-50/80 hover:text-amber-300 transition-colors duration-300"
-                    >
-                      <span>{link.label}</span>
-                      <ArrowUpRight className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-cinzel text-lg text-amber-300 mb-4">Plan With Us</h3>
-
-              <p className="text-amber-50/75 text-sm leading-relaxed mb-4">
-                Share your travel month and we will craft a tailored itinerary.
-              </p>
-
-              <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="w-full rounded-full border border-amber-300/30 bg-white/5 px-4 py-2.5 text-sm text-amber-50 placeholder:text-amber-100/50 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20"
-                />
-                <Link
-                  href="/planner"
-                  className="inline-flex w-full items-center justify-center rounded-full bg-amber-400 px-5 py-2.5 text-sm font-cinzel text-[#0B2545] hover:bg-amber-300 transition-colors duration-300"
-                >
-                  Start Your Journey
-                </Link>
-              </form>
+            {/* Contact Info */}
+            <div data-f-reveal>
+              <h4 className="font-cinzel text-[11px] tracking-[0.25em] uppercase text-[#D4AF37]/80 mb-6 md:mb-8">
+                Headquarters
+              </h4>
+              <address className="not-italic text-sm font-light space-y-4 leading-relaxed text-white/60">
+                <p className="flex gap-3 items-start"><MapPin size={16} className="shrink-0 text-[#D4AF37]/70" /> Colombo, Sri Lanka</p>
+                <p className="flex gap-3 items-start"><Phone size={16} className="shrink-0 text-[#D4AF37]/70" /> +94 77 000 0000</p>
+                <p className="flex gap-3 items-start"><Mail size={16} className="shrink-0 text-[#D4AF37]/70" /> hello@abaceylon.com</p>
+              </address>
+              
+              <div className="flex gap-5 mt-8">
+                <Link href="#" className="text-white/40 hover:text-[#D4AF37] transition-colors"><Instagram size={20} /></Link>
+                <Link href="#" className="text-white/40 hover:text-[#D4AF37] transition-colors"><Facebook size={20} /></Link>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-12 border-t border-amber-400/20 pt-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-sm text-amber-50/65">
-          <p>© {year} Aba Ceylon Tours & Travels. All rights reserved.</p>
-          <p>
-            Developed by{" "}
-            <a
-              href="https://vernoxlabs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-amber-300 hover:text-amber-200 transition-colors duration-300"
-            >
-              Vernox Labs
-            </a>
-          </p>
+        {/* BOTTOM BAR: Minimalist & Clean */}
+        <div className="mt-10 flex flex-col md:flex-row justify-between items-center gap-6" data-f-reveal>
+          <div className="text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
+            © {year} Aba Ceylon Tours & Travels
+          </div>
+          
+          <div className="flex gap-8 text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
+          </div>
+
+          <div className="text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
+            Design by <a href="https://vernoxlabs.com" className="text-[#D4AF37]/60 hover:text-[#D4AF37] transition-colors">Vernox Labs</a>
+          </div>
         </div>
       </div>
     </footer>
