@@ -94,6 +94,12 @@ export default function NavBar() {
                 </Link>
               </Show>
               <Show when="signed-in">
+                <Link
+                  href="/feedback"
+                  className="text-white text-sm font-medium px-4 py-2 transition-colors duration-300 hover:text-[#B8860B]"
+                >
+                  Feedback
+                </Link>
                 <UserButton />
               </Show>
               <Link
@@ -156,6 +162,13 @@ export default function NavBar() {
                   </Link>
                 </Show>
                 <Show when="signed-in">
+                  <Link
+                    href="/feedback"
+                    className="text-white text-sm font-medium py-2 transition-colors duration-300 hover:text-[#B8860B]"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Feedback
+                  </Link>
                   <div className="py-2">
                     <UserButton />
                   </div>
