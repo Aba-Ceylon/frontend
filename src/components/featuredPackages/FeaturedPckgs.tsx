@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
-import PackageCard from "@/features/packages/PackageCard";
-import { packages } from "@/data/packages";
 import Link from "next/link";
 import { LucideArrowLeft, LucideArrowRight } from "lucide-react";
+import { packages as fallbackPackages } from "@/data/packages";
+import PackageCard from "@/features/packages/PackageCard";
+import { fetchPackages } from "@/services/packageService";
+import type { PackageItem } from "@/types/package";
 
-const LEN = packages.length;
-const cloned = [...packages, ...packages, ...packages];
 const GAP = 32;
 
 function getVisible() {
@@ -19,62 +19,117 @@ function getVisible() {
 }
 
 export default function FeaturedPckgs() {
-  const offset = useRef(LEN);
   const stripRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const offset = useRef(fallbackPackages.length);
   const animating = useRef(false);
   const dragStartX = useRef<number | null>(null);
+  const [packageItems, setPackageItems] =
+    useState<PackageItem[]>(fallbackPackages);
   const [dotIndex, setDotIndex] = useState(0);
   const [visible, setVisible] = useState(3);
 
+  const totalPackages = packageItems.length;
+  const clonedPackages = useMemo(
+    () => [...packageItems, ...packageItems, ...packageItems],
+    [packageItems],
+  );
+
   const getStep = () => {
     const containerWidth = containerRef.current?.offsetWidth ?? 0;
-    const vis = getVisible();
-    return (containerWidth - GAP * (vis - 1)) / vis + GAP;
+    const visibleCards = getVisible();
+
+    return (containerWidth - GAP * (visibleCards - 1)) / visibleCards + GAP;
   };
 
-  const snapToOffset = (off: number) => {
-    gsap.set(stripRef.current, { x: -(off * getStep()) });
+  const snapToOffset = useCallback((nextOffset: number) => {
+    gsap.set(stripRef.current, { x: -(nextOffset * getStep()) });
+  }, []);
+
+  const slideTo = useCallback(
+    (direction: 1 | -1) => {
+      if (!totalPackages || animating.current) {
+        return;
+      }
+
+      animating.current = true;
+
+      const step = getStep();
+      offset.current += direction;
+      setDotIndex(
+        ((offset.current % totalPackages) + totalPackages) % totalPackages,
+      );
+
+      gsap.to(stripRef.current, {
+        x: -(offset.current * step),
+        duration: 0.7,
+        ease: "power2.inOut",
+        onComplete: () => {
+          animating.current = false;
+
+          if (offset.current <= 0 || offset.current >= totalPackages * 2) {
+            offset.current =
+              totalPackages +
+              (((offset.current % totalPackages) + totalPackages) %
+                totalPackages);
+            snapToOffset(offset.current);
+          }
+        },
+      });
+    },
+    [snapToOffset, totalPackages],
+  );
+
+  const onPointerDown = (event: React.PointerEvent) => {
+    dragStartX.current = event.clientX;
   };
 
-  const slideTo = (direction: 1 | -1) => {
-    if (animating.current) return;
-    animating.current = true;
+  const onPointerUp = (event: React.PointerEvent) => {
+    if (dragStartX.current === null) {
+      return;
+    }
 
-    const step = getStep();
-    offset.current += direction;
-    setDotIndex(((offset.current % LEN) + LEN) % LEN);
-
-    gsap.to(stripRef.current, {
-      x: -(offset.current * step),
-      duration: 0.7,
-      ease: "power2.inOut",
-      onComplete: () => {
-        animating.current = false;
-        if (offset.current <= 0 || offset.current >= LEN * 2) {
-          offset.current = LEN + (((offset.current % LEN) + LEN) % LEN);
-          snapToOffset(offset.current);
-        }
-      },
-    });
-  };
-
-  const onPointerDown = (e: React.PointerEvent) => {
-    dragStartX.current = e.clientX;
-  };
-
-  const onPointerUp = (e: React.PointerEvent) => {
-    if (dragStartX.current === null) return;
-    const diff = dragStartX.current - e.clientX;
+    const difference = dragStartX.current - event.clientX;
     dragStartX.current = null;
-    if (Math.abs(diff) > 50) slideTo(diff > 0 ? 1 : -1);
+
+    if (Math.abs(difference) > 50) {
+      slideTo(difference > 0 ? 1 : -1);
+    }
   };
 
-  // Init + handle resize
   useEffect(() => {
-    const raf = requestAnimationFrame(() => {
+    let active = true;
+
+    void fetchPackages().then((loadedPackages) => {
+      if (!active || !loadedPackages.length) {
+        return;
+      }
+
+      setDotIndex(0);
+      setPackageItems(loadedPackages);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    offset.current = totalPackages;
+
+    const animationFrame = requestAnimationFrame(() => {
+      snapToOffset(totalPackages);
+    });
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+    };
+  }, [snapToOffset, totalPackages]);
+
+  useEffect(() => {
+    const animationFrame = requestAnimationFrame(() => {
       setVisible(getVisible());
-      snapToOffset(LEN);
+      snapToOffset(offset.current);
     });
 
     const onResize = () => {
@@ -83,20 +138,24 @@ export default function FeaturedPckgs() {
     };
 
     window.addEventListener("resize", onResize);
+
     return () => {
-      cancelAnimationFrame(raf);
+      cancelAnimationFrame(animationFrame);
       window.removeEventListener("resize", onResize);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [snapToOffset]);
 
-  // Auto-play
   useEffect(() => {
+    if (!totalPackages) {
+      return;
+    }
+
     const timer = setInterval(() => slideTo(1), 3000);
-    return () => clearInterval(timer);
-    // slideTo is stable enough for this autoplay; ignore exhaustive-deps
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [slideTo, totalPackages]);
 
   const cardWidth = `calc((100% - ${GAP * (visible - 1)}px) / ${visible})`;
 
@@ -132,8 +191,12 @@ export default function FeaturedPckgs() {
               className="flex"
               style={{ gap: GAP, willChange: "transform" }}
             >
-              {cloned.map((pkg, i) => (
-                <div key={i} className="shrink-0" style={{ width: cardWidth }}>
+              {clonedPackages.map((pkg, index) => (
+                <div
+                  key={`${pkg.id}-${index}`}
+                  className="shrink-0"
+                  style={{ width: cardWidth }}
+                >
                   <PackageCard pkg={pkg} />
                 </div>
               ))}
@@ -149,11 +212,13 @@ export default function FeaturedPckgs() {
         </div>
 
         <div className="flex justify-center gap-2 mt-6">
-          {packages.map((_, i) => (
+          {packageItems.map((pkg, index) => (
             <span
-              key={i}
+              key={pkg.id}
               className={`w-2.5 h-2.5 rounded-full transition-all ${
-                i === dotIndex ? "bg-neutral-800 scale-125" : "bg-neutral-300"
+                index === dotIndex
+                  ? "bg-neutral-800 scale-125"
+                  : "bg-neutral-300"
               }`}
             />
           ))}
@@ -163,7 +228,7 @@ export default function FeaturedPckgs() {
             href="/packages"
             className="inline-flex items-center px-6 py-3 font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)] hover:text-black transition"
           >
-            View Available Packages{" "}
+            View Available Packages
             <LucideArrowRight size={16} className="ml-2" />
           </Link>
         </div>

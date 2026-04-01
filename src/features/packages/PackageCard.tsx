@@ -15,6 +15,9 @@ export default function PackageCard({ pkg }: PackageCardProps) {
   );
 
   const isSelected = selectedPackage?.id === pkg.id;
+  const packageLabel = pkg.packageId
+    ? `Package ${String(pkg.packageId).padStart(2, "0")}`
+    : "Curated Package";
 
   return (
     <div
@@ -30,7 +33,7 @@ export default function PackageCard({ pkg }: PackageCardProps) {
 
       <div className="p-3 sm:p-4 md:p-5">
         <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-cinzel text-neutral-900 mb-1 sm:mb-2">
-          {pkg.id.toUpperCase()}
+          {packageLabel}
         </h3>
 
         <p className="font-cinzel text-xs sm:text-sm text-amber-700 font-medium mb-1 sm:mb-2">
@@ -42,7 +45,7 @@ export default function PackageCard({ pkg }: PackageCardProps) {
         </h3>
 
         <p className="text-xs sm:text-sm text-neutral-600 mb-2 sm:mb-3">
-          {pkg.route.join(" • ")}
+          {pkg.route.join(" | ")}
         </p>
 
         <p className="text-xs sm:text-sm text-neutral-600 mb-2 sm:mb-3">
