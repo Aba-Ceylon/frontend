@@ -28,6 +28,10 @@ function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
 }
 
 export default function StayCard({ stay }: { stay: Stay }) {
+  const stayLabel = stay.accommodationId
+    ? `Stay ${String(stay.accommodationId).padStart(2, "0")}`
+    : stay.category;
+
   return (
     <div className="animate-card group relative rounded-sm overflow-hidden aspect-[3/4]">
       {/* Layer 1: Image */}
@@ -39,11 +43,15 @@ export default function StayCard({ stay }: { stay: Stay }) {
       {/* Layer 3: Content */}
       <div className="absolute inset-0 flex flex-col justify-end p-6 gap-1">
         <p className="font-cinzel text-amber-400 text-xs tracking-widest uppercase">
-          {stay.location}
+          {stayLabel}
+        </p>
+        <p className="font-cinzel text-amber-50/85 text-[11px] tracking-[0.24em] uppercase">
+          {stay.category}
         </p>
         <h3 className="font-cinzel text-2xl text-white leading-snug mb-3">
           {stay.name}
         </h3>
+        <p className="text-white/75 text-sm mb-3">{stay.location}</p>
         <Link
           href={`/stays/${stay.id}`}
           className="self-start font-cinzel rounded-md text-sm px-4 py-2 border border-amber-400/60 text-amber-400 hover:bg-amber-400 hover:text-black transition-colors duration-300"
