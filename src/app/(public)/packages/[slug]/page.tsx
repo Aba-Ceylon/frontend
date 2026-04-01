@@ -1,14 +1,18 @@
-import { packages } from "@/data/packages";
 import PackageDetails from "@/features/packages/PackageDetails";
+import { fetchPackageBySlug } from "@/services/packageService";
 import { notFound } from "next/navigation";
 
-export function generateStaticParams() {
-  return packages.map((pkg) => ({ slug: pkg.id }));
-}
+export const dynamic = "force-dynamic";
 
-export default async function PackagePage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function PackagePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
-  const pkg = packages.find((p) => p.id === slug);
+
+  const pkg = await fetchPackageBySlug(slug);
+
   if (!pkg) notFound();
   return <PackageDetails pkg={pkg} />;
 }
