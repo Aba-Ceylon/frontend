@@ -1,8 +1,15 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { MapPin, Phone, Mail, Instagram, Facebook, ArrowUpRight } from "lucide-react";
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Instagram,
+  Facebook,
+  ArrowUpRight,
+} from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -30,7 +37,6 @@ const footerLinks = [
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
   const bigTextRef = useRef<HTMLDivElement>(null);
-  const year = new Date().getFullYear();
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -49,7 +55,7 @@ export default function Footer() {
             end: "bottom top",
             scrub: true,
           },
-        }
+        },
       );
 
       gsap.fromTo(
@@ -65,7 +71,7 @@ export default function Footer() {
             trigger: footerRef.current,
             start: "top 90%",
           },
-        }
+        },
       );
     }, footerRef);
 
@@ -78,7 +84,7 @@ export default function Footer() {
       className="relative overflow-hidden bg-[#05070A] pt-16 md:pt-24 pb-8 text-white/90"
     >
       {/* 1. BACKGROUND TEXT: Scaled down on mobile to prevent clipping */}
-      <div 
+      <div
         ref={bigTextRef}
         className="absolute bottom-[-1%] left-0 w-full pointer-events-none select-none overflow-hidden"
       >
@@ -91,24 +97,32 @@ export default function Footer() {
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 border-b border-white/5 pb-12 md:pb-16">
-          
           {/* LEFT: Branding - Centered on mobile, Left on Desktop */}
-          <div className="lg:col-span-6 xl:col-span-5 text-center md:text-left" data-f-reveal>
+          <div
+            className="lg:col-span-6 xl:col-span-5 text-center md:text-left"
+            data-f-reveal
+          >
             <span className="font-cinzel text-[10px] tracking-[0.3em] md:tracking-[0.4em] uppercase text-[#D4AF37] block mb-4 md:mb-6">
               Establishment of Excellence
             </span>
             <h3 className="font-cinzel text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-[1.1] mb-8">
               THE FINEST WAY <br className="hidden sm:block" />
-              TO <span className="italic text-[#D4AF37] font-serif lowercase">experience</span> <br className="hidden sm:block" />
+              TO{" "}
+              <span className="italic text-[#D4AF37] font-serif lowercase">
+                experience
+              </span>{" "}
+              <br className="hidden sm:block" />
               THE ISLAND.
             </h3>
-            
+
             <div className="flex justify-center md:justify-start">
-              <Link 
+              <Link
                 href="/planner"
                 className="group relative inline-flex items-center gap-4 py-3 md:py-4 pr-6 md:pr-8 border-b border-[#D4AF37]/30 hover:border-[#D4AF37] transition-all duration-500"
               >
-                <span className="font-cinzel text-sm md:text-lg text-[#D4AF37] uppercase tracking-widest">Curate Your Journey</span>
+                <span className="font-cinzel text-sm md:text-lg text-[#D4AF37] uppercase tracking-widest">
+                  Curate Your Journey
+                </span>
                 <div className="relative overflow-hidden h-5 w-5">
                   <ArrowUpRight className="text-[#D4AF37] absolute inset-0 transition-transform duration-500 group-hover:translate-x-5 group-hover:-translate-y-5" />
                   <ArrowUpRight className="text-[#D4AF37] absolute inset-0 -translate-x-5 translate-y-5 transition-transform duration-500 group-hover:translate-x-0 group-hover:translate-y-0" />
@@ -142,21 +156,41 @@ export default function Footer() {
               ))}
 
               {/* Headquarters - Full width on smallest mobile to prevent email clipping */}
-              <div data-f-reveal className="col-span-2 md:col-span-1 pt-4 md:pt-0 border-t border-white/5 md:border-none">
+              <div
+                data-f-reveal
+                className="col-span-2 md:col-span-1 pt-4 md:pt-0 border-t border-white/5 md:border-none"
+              >
                 <h4 className="font-cinzel text-[11px] tracking-[0.25em] uppercase text-[#D4AF37]/80 mb-6 md:mb-8">
                   Headquarters
                 </h4>
                 <address className="not-italic text-sm font-light space-y-4 leading-relaxed text-white/60">
-                  <p className="flex gap-3 items-start"><MapPin size={16} className="shrink-0 text-[#D4AF37]/70" /> Colombo, Sri Lanka</p>
-                  <p className="flex gap-3 items-start"><Phone size={16} className="shrink-0 text-[#D4AF37]/70" /> +94 77 000 0000</p>
+                  <p className="flex gap-3 items-start">
+                    <MapPin size={16} className="shrink-0 text-[#D4AF37]/70" />{" "}
+                    Colombo, Sri Lanka
+                  </p>
+                  <p className="flex gap-3 items-start">
+                    <Phone size={16} className="shrink-0 text-[#D4AF37]/70" />{" "}
+                    +94 77 000 0000
+                  </p>
                   <p className="flex gap-3 items-start break-all md:break-normal">
-                    <Mail size={16} className="shrink-0 text-[#D4AF37]/70" /> hello@abaceylon.com
+                    <Mail size={16} className="shrink-0 text-[#D4AF37]/70" />{" "}
+                    hello@abaceylon.com
                   </p>
                 </address>
-                
+
                 <div className="flex gap-5 mt-8">
-                  <Link href="#" className="text-white/40 hover:text-[#D4AF37] transition-colors"><Instagram size={20} /></Link>
-                  <Link href="#" className="text-white/40 hover:text-[#D4AF37] transition-colors"><Facebook size={20} /></Link>
+                  <Link
+                    href="#"
+                    className="text-white/40 hover:text-[#D4AF37] transition-colors"
+                  >
+                    <Instagram size={20} />
+                  </Link>
+                  <Link
+                    href="#"
+                    className="text-white/40 hover:text-[#D4AF37] transition-colors"
+                  >
+                    <Facebook size={20} />
+                  </Link>
                 </div>
               </div>
             </div>
@@ -164,18 +198,37 @@ export default function Footer() {
         </div>
 
         {/* BOTTOM BAR: Responsive Stacking */}
-        <div className="mt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-center" data-f-reveal>
-          <div className="text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
-            © {year} Aba Ceylon Tours & Travels
-          </div>
-          
-          <div className="flex gap-6 md:gap-8 text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
-            <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
-            <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
+        <div
+          className="mt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-center"
+          data-f-reveal
+        >
+          <div className="font-cinzel text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
+            &copy; 2026 Aba Ceylon Travels & Tours
           </div>
 
-          <div className="text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
-            Design by <a href="https://vernoxlabs.com" className="text-[#D4AF37]/60 hover:text-[#D4AF37] transition-colors">Vernox Labs</a>
+          <div className="flex gap-6 md:gap-8 text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
+            <Link
+              href="/privacy"
+              className="font-cinzel hover:text-white transition-colors"
+            >
+              Privacy
+            </Link>
+            <Link
+              href="/terms"
+              className="font-cinzel hover:text-white transition-colors"
+            >
+              Terms
+            </Link>
+          </div>
+
+          <div className="font-cinzel text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
+            Developed by{" "}
+            <a
+              href="https://vernoxlabs.com"
+              className="text-[#D4AF37]/60 hover:text-[#D4AF37] transition-colors"
+            >
+              Vernox Labs Sri Lanka
+            </a>
           </div>
         </div>
       </div>
