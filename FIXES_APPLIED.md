@@ -3,14 +3,16 @@
 ## Issues Fixed
 
 ### 1. ✅ GSAP Scrolling Animations
+
 - **Fixed**: Properly configured ScrollTrigger with correct start/end points
 - **Added**: gsap.context() for proper cleanup
 - **Enhanced**: Multiple parallax layers with different scroll speeds
 - **Improved**: Smooth scrubbing with optimized scrub values (1-2)
 
 ### 2. ✅ Hero Section Buttons Visibility
+
 - **Fixed**: Buttons now have high contrast with enhanced styling
-- **Added**: 
+- **Added**:
   - Gradient backgrounds with glow effects
   - Border styling for better definition
   - Hover states with scale and shadow animations
@@ -18,6 +20,7 @@
   - Z-index layering for proper stacking
 
 ### 3. ✅ Parallax Effects
+
 - **Background**: Moves at 30% speed (slower than scroll)
 - **Overlay**: Darkens progressively on scroll
 - **Content**: Fades and scales down while moving up
@@ -25,7 +28,9 @@
 - **Scroll Indicator**: Fades out early in scroll
 
 ### 4. ✅ Royal/Antique Vibe
+
 **Visual Enhancements:**
+
 - Royal gold color scheme (#d4af37, #cd7f32, #d97706)
 - Cinzel font for headlines (serif, elegant)
 - Cormorant Garamond for body text
@@ -39,6 +44,7 @@
 - Border glow animations
 
 **Color Palette:**
+
 - Primary: Royal Gold (#d4af37)
 - Secondary: Antique Bronze (#cd7f32)
 - Accent: Heritage Amber (#d97706)
@@ -47,6 +53,7 @@
 ## New Features Added
 
 ### Enhanced Hero Section
+
 1. Multi-layer parallax (background, overlay, content, ornaments)
 2. Ornamental circles on left and right sides
 3. Decorative corner brackets
@@ -56,6 +63,7 @@
 7. Decorative dividers and borders
 
 ### Enhanced Interactive Map
+
 1. Scroll-triggered animations for header and legend
 2. Royal-themed loading screen
 3. Enhanced legend styling with hover effects
@@ -63,6 +71,7 @@
 5. Better visual hierarchy
 
 ### Global Styling
+
 1. Custom scrollbar with gold gradient
 2. Royal color CSS variables
 3. Additional font imports (Cormorant Garamond)
@@ -71,7 +80,9 @@
 6. Fade-in-scroll utilities
 
 ### GSAP Utilities
+
 Created reusable animation functions:
+
 - `fadeInUp()` - Fade and slide up
 - `parallaxScroll()` - Parallax scrolling
 - `staggerFadeIn()` - Staggered animations
