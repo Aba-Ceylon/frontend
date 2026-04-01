@@ -8,6 +8,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { destinations } from "@/data/destinations";
 import { Destination } from "@/types/destination";
 import DestinationPanel from "./DestinationPanel";
+import {
+  getMapLegendCategory,
+  mapCategoryStyles,
+  mapLegendItems,
+} from "./mapCategoryUtils";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -117,21 +122,21 @@ export default function InteractiveMap() {
 
         // Add markers for each destination
         destinations.forEach((destination) => {
+          const categoryStyle =
+            mapCategoryStyles[getMapLegendCategory(destination)];
           const el = document.createElement("div");
           el.className = "custom-marker";
           el.style.width = "40px";
           el.style.height = "40px";
           el.style.cursor = "pointer";
+          const displayCategory = getMapLegendCategory(destination);
 
           const categoryColors: Record<string, string> = {
             Heritage: "#D97706",
             Nature: "#059669",
-            Adventure: "#DC2626",
             Coastal: "#0284C7",
-            Wildlife: "#7C3AED",
+            Adventure: "#DC2626",
             City: "#475569",
-            Beach: "#0891B2",
-            Unique: "#DB2777",
           };
 
           const categoryIcons: Record<string, string> = {
@@ -144,12 +149,14 @@ export default function InteractiveMap() {
             Beach: "🌊",
             Unique: "✨",
           };
+          const markerIcon =
+            categoryStyle.markerIcon || categoryIcons[displayCategory];
 
           el.innerHTML = `
             <div class="marker-pin" style="
               width: 40px;
               height: 40px;
-              background: ${categoryColors[destination.category] ?? "#6B7280"};
+              background: ${categoryColors[displayCategory] ?? "#6B7280"};
               border: 3px solid white;
               border-radius: 50%;
               box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -159,8 +166,8 @@ export default function InteractiveMap() {
               transition: all 0.3s ease;
               transform-origin: center center;
             ">
-              <span style="color: white; font-size: 20px; font-weight: bold;">
-                ${categoryIcons[destination.category]}
+              <span style="color: white; font-size: 18px; line-height: 1;">
+                ${markerIcon}
               </span>
             </div>
           `;
@@ -237,7 +244,7 @@ export default function InteractiveMap() {
 
       <div
         ref={headerRef}
-        className="absolute top-0 left-0 right-0 z-10 bg-linear-to-b from-black/70 via-black/50 to-transparent p-8 md:p-12 pointer-events-none"
+        className="absolute top-0 left-0 right-0 z-10 bg-linear-to-b from-black/70 via-black/50 to-transparent p-4 sm:p-6 md:p-12 pointer-events-none"
       >
         <div className="max-w-7xl mx-auto">
           {/* Decorative Top */}
@@ -247,10 +254,10 @@ export default function InteractiveMap() {
             <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
           </div>
 
-          <h2 className="text-4xl md:text-6xl font-medium mb-4 font-cinzel text-amber-100 drop-shadow-2xl tracking-wide">
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-medium mb-3 sm:mb-4 font-cinzel text-amber-100 drop-shadow-2xl tracking-wide">
             Explore Sri Lanka
           </h2>
-          <p className="text-lg md:text-xl text-amber-50/90 max-w-2xl font-light tracking-wide leading-relaxed">
+          <p className="text-sm sm:text-base md:text-xl text-amber-50/90 max-w-2xl font-light tracking-wide leading-6 md:leading-relaxed pr-4 sm:pr-0">
             Discover the island&apos;s most captivating destinations. Click on
             any location to learn more.
           </p>
@@ -266,12 +273,39 @@ export default function InteractiveMap() {
 
       <div
         ref={legendRef}
-        className="absolute bottom-8 left-8 z-10 bg-linear-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-amber-400/20"
+        className="absolute bottom-4 left-1/2 z-10 w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 bg-linear-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-md rounded-2xl shadow-2xl p-4 border border-amber-400/20 sm:bottom-8 sm:left-8 sm:w-auto sm:max-w-none sm:translate-x-0 sm:p-6"
       >
         <h3 className="font-medium text-base mb-4 text-amber-400 font-cinzel tracking-wider">
-          Destination Types
+          Legends
         </h3>
-        <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-1">
+          {mapLegendItems.map(({ category, description }) => {
+            const categoryStyle = mapCategoryStyles[category];
+
+            return (
+              <div
+                key={category}
+                className="flex items-start gap-3 rounded-xl border border-white/8 bg-white/4 p-3"
+              >
+                <div
+                  className="w-8 h-8 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-sm text-white"
+                  style={{ background: categoryStyle.markerColor }}
+                >
+                  <span aria-hidden="true">{categoryStyle.markerIcon}</span>
+                </div>
+                <div className="min-w-0">
+                  <span className="block text-sm text-amber-50 font-cinzel tracking-wide">
+                    {category}
+                  </span>
+                  <span className="block text-xs leading-5 text-amber-50/65">
+                    {description}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="hidden">
           {[
             { category: "Heritage", color: "#D97706", icon: "🏛️" },
             { category: "Nature", color: "#059669", icon: "🌿" },

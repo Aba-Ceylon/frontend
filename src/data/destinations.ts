@@ -1042,26 +1042,6 @@ const destinationSeeds: Omit<Destination, "id">[] = [
       "It is the strongest surf destination in Sri Lanka and one of the anchors of the east coast season.",
   },
   {
-    name: "Gal Oya Eco Park",
-    slug: "gal-oya-eco-park",
-    category: "Unique",
-    region: "East Coast",
-    province: "Eastern Province",
-    district: "Ampara",
-    coordinates: [81.575, 7.225],
-    summary: "Remote eco-park experience of boat safaris, islands, and reservoir wilderness",
-    description:
-      "Gal Oya Eco Park is a low-crowd eastern wilderness experience centered on boat safaris across Senanayake Samudraya, birdlife, and forest-fringed shorelines.",
-    highlights: [
-      "Boat safaris and island sightings",
-      "Quiet eco-tourism atmosphere",
-      "Wildlife and birdlife without heavy crowds",
-    ],
-    bestTimeToVisit: "May to September",
-    whyVisit:
-      "It is ideal for travelers who want a softer, more nature-led safari experience than the classic jeep-park circuit.",
-  },
-  {
     name: "Jaffna",
     slug: "jaffna",
     category: "City",
