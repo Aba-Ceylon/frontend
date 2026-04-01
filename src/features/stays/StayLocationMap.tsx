@@ -5,7 +5,7 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Stay } from "@/types/stay";
 
-const OSM_STYLE = {
+const OSM_STYLE: maplibregl.StyleSpecification = {
   version: 8,
   sources: {
     "osm-tiles": {
@@ -36,7 +36,7 @@ const OSM_STYLE = {
       maxzoom: 22,
     },
   ],
-} as const;
+};
 
 function formatCoordinate(value: number) {
   return Number(value).toFixed(4);

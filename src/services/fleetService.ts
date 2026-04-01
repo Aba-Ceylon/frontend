@@ -1,3 +1,4 @@
+import { vehicles as fallbackVehicles } from "@/data/vehicles";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import type { FleetVehicle, SupabaseVehicleRow } from "@/types/vehicle";
 
@@ -30,46 +31,114 @@ function mapVehicleRow(row: SupabaseVehicleRow): FleetVehicle {
   };
 }
 
-export async function fetchVehiclesPage(page: number, pageSize: number) {
-  const supabase = getSupabaseClient();
-
-  const from = (page - 1) * pageSize;
-  const to = from + pageSize - 1;
-
-  const { data, error, count } = await supabase
-    .from("vehicles")
-    .select("*", { count: "exact" })
-    .order("vehicle_id", { ascending: true })
-    .range(from, to);
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  const rows = (data ?? []) as SupabaseVehicleRow[];
-
+function mapFallbackVehicle(
+  vehicle: (typeof fallbackVehicles)[number],
+): FleetVehicle {
   return {
-    vehicles: rows.map(mapVehicleRow),
-    totalCount: count ?? rows.length,
+    id: vehicle.id,
+    name: vehicle.name,
+    type: vehicle.type,
+    brandName: vehicle.models[0] || vehicle.name,
+    vehicleNumber: "Available on request",
+    passengerCapacity: vehicle.passengerCapacity,
+    ownerName: "ABA Ceylon",
+    ownerWhatsAppNumber: "+94770000000",
+    availabilityStatus: "Available",
+    images: [vehicle.imageUrl],
+    imageUrl: vehicle.imageUrl,
+    shortDescription: vehicle.shortDescription,
+    luggageCapacity: vehicle.luggageCapacity,
+    models: vehicle.models,
+    features: vehicle.features,
   };
 }
 
+function getFallbackFleetVehicles() {
+  return fallbackVehicles.map(mapFallbackVehicle);
+}
+
+export async function fetchVehiclesPage(page: number, pageSize: number) {
+  try {
+    const supabase = getSupabaseClient();
+
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+
+    const { data, error, count } = await supabase
+      .from("vehicles")
+      .select("*", { count: "exact" })
+      .order("vehicle_id", { ascending: true })
+      .range(from, to);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    const rows = (data ?? []) as SupabaseVehicleRow[];
+
+    return {
+      vehicles: rows.map(mapVehicleRow),
+      totalCount: count ?? rows.length,
+    };
+  } catch {
+    const fallback = getFallbackFleetVehicles();
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize;
+
+    return {
+      vehicles: fallback.slice(from, to),
+      totalCount: fallback.length,
+    };
+  }
+}
+
+export async function fetchAllVehicles() {
+  try {
+    const supabase = getSupabaseClient();
+
+    const { data, error } = await supabase
+      .from("vehicles")
+      .select("*")
+      .order("vehicle_id", { ascending: true });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    const rows = (data ?? []) as SupabaseVehicleRow[];
+
+    if (!rows.length) {
+      return getFallbackFleetVehicles();
+    }
+
+    return rows.map(mapVehicleRow);
+  } catch {
+    return getFallbackFleetVehicles();
+  }
+}
+
 export async function fetchVehicleById(id: string) {
-  const supabase = getSupabaseClient();
+  try {
+    const supabase = getSupabaseClient();
 
-  const { data, error } = await supabase
-    .from("vehicles")
-    .select("*")
-    .eq("vehicle_id", Number(id))
-    .maybeSingle();
+    const { data, error } = await supabase
+      .from("vehicles")
+      .select("*")
+      .eq("vehicle_id", Number(id))
+      .maybeSingle();
 
-  if (error) {
-    throw new Error(error.message);
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (!data) {
+      return null;
+    }
+
+    return mapVehicleRow(data as SupabaseVehicleRow);
+  } catch {
+    return (
+      getFallbackFleetVehicles().find((vehicle) => vehicle.id === id) || null
+    );
   }
-
-  if (!data) {
-    return null;
-  }
-
-  return mapVehicleRow(data as SupabaseVehicleRow);
 }

@@ -30,7 +30,7 @@ export default function NavBar() {
 
   const navLinks = [
     { label: "Holiday Packages", href: "/packages" },
-    { label: "Customize Tour", href: "/customize-tour" },
+    { label: "Customize Tour", href: "/#custom-planner" },
     { label: "Fleet", href: "/fleet" },
     { label: "Stays", href: "/stays" },
   ];
