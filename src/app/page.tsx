@@ -10,6 +10,7 @@ import FeaturedStays from "@/components/featuredStays/FeaturedStays";
 import Testimonials from "@/components/testimonials/Testimonials";
 import BuddhaLotus from "@/components/buddhaLotus/BuddhaLotus";
 import FleetSection from "@/components/fleet/FleetSection";
+import CustomPlannerSection from "@/components/customPlanner/CustomPlannerSection";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -29,8 +30,8 @@ export default function Home() {
       <FeaturedStays />
       <Testimonials />
       <FleetSection />
+      <CustomPlannerSection />
       <BuddhaLotus />
-      
     </div>
   );
 }
