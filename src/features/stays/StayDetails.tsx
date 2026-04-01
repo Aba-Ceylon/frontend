@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Stay } from "@/types/stay";
 import { CheckCircle, MapPin, Phone, Tag, User } from "lucide-react";
+import StayLocationMap from "./StayLocationMap";
 
 export default function StayDetails({ stay }: { stay: Stay }) {
   const mapsHref = stay.coordinates
@@ -37,16 +38,7 @@ export default function StayDetails({ stay }: { stay: Stay }) {
 
       <div className="max-w-5xl mx-auto px-6 py-12 space-y-12">
         {/* Quick stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          <div className="flex items-center gap-3 bg-white rounded p-4 shadow-sm">
-            <MapPin size={18} className="text-amber-700" />
-            <div>
-              <p className="text-xs text-[#1A2238] font-cinzel">Location</p>
-              <p className="text-sm text-[#1A2238] font-medium font-cinzel">
-                {stay.location}
-              </p>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex items-center gap-3 bg-white rounded p-4 shadow-sm">
             <Tag size={18} className="text-amber-700" />
             <div>
@@ -56,7 +48,7 @@ export default function StayDetails({ stay }: { stay: Stay }) {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3 bg-white rounded p-4 shadow-sm col-span-2 sm:col-span-1">
+          <div className="flex items-center gap-3 bg-white rounded p-4 shadow-sm">
             <User size={18} className="text-amber-700" />
             <div>
               <p className="text-xs text-[#1A2238] font-cinzel">Owner</p>
@@ -66,6 +58,8 @@ export default function StayDetails({ stay }: { stay: Stay }) {
             </div>
           </div>
         </div>
+
+        <StayLocationMap stay={stay} />
 
         {/* Description */}
         <section>
