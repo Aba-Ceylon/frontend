@@ -11,6 +11,7 @@ interface VehicleSelectorProps {
   selectedComfortLevel: ComfortLevel | "";
   selectedVehicleId: string;
   selectedVehicleType: string;
+  validationIssues: string[];
   vehicleTypes: string[];
   onComfortChange: (comfortLevel: ComfortLevel) => void;
   onVehicleSelect: (vehicleId: string) => void;
@@ -23,6 +24,7 @@ export default function VehicleSelector({
   selectedComfortLevel,
   selectedVehicleId,
   selectedVehicleType,
+  validationIssues,
   vehicleTypes,
   onComfortChange,
   onVehicleSelect,
@@ -38,6 +40,19 @@ export default function VehicleSelector({
           Select Vehicle Type & Comfort
         </h2>
       </div>
+
+      {validationIssues.length ? (
+        <div className="rounded-3xl border border-red-200 bg-red-50 p-5">
+          <p className="font-cinzel text-lg text-red-900 mb-3">
+            Required Detail
+          </p>
+          <ul className="space-y-2 text-sm text-red-700">
+            {validationIssues.map((issue) => (
+              <li key={issue}>{issue}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
 
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="rounded-3xl border border-neutral-200 bg-white p-6">

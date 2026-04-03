@@ -19,10 +19,11 @@ export type DestinationRegion =
 
 export interface Destination {
   id: string;
+  destinationId?: number;
   name: string;
   slug: string;
-  category: DestinationCategory;
-  region: DestinationRegion;
+  category: DestinationCategory | string;
+  region: DestinationRegion | string;
   province: string;
   district: string;
   coordinates: [number, number]; // [longitude, latitude]
@@ -31,6 +32,16 @@ export interface Destination {
   highlights: string[];
   bestTimeToVisit: string;
   whyVisit: string;
+  images?: string[];
+}
+
+export interface SupabaseDestinationRow {
+  destination_id: number;
+  name: string | null;
+  latitude: number | string | null;
+  longitude: number | string | null;
+  description: string | null;
+  images: string[] | null;
 }
 
 export interface Package {

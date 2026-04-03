@@ -200,6 +200,49 @@ export function validateTripDetails(details: PlannerTripDetails) {
   return issues;
 }
 
+export function validateDestinationSelection(selectedDestinationIds: string[]) {
+  const issues: string[] = [];
+
+  if (!selectedDestinationIds.length) {
+    issues.push("Select at least one destination for your custom route.");
+  }
+
+  return issues;
+}
+
+export function validateVehicleSelection(input: {
+  comfortLevel: ComfortLevel | "";
+  filteredVehicleCount: number;
+  selectedVehicleId: string;
+  vehicleType: string;
+}) {
+  const issues: string[] = [];
+
+  if (!input.vehicleType) {
+    issues.push("Select a vehicle type.");
+  }
+
+  if (!input.comfortLevel) {
+    issues.push("Select a comfort level.");
+  }
+
+  if (
+    input.vehicleType &&
+    input.comfortLevel &&
+    input.filteredVehicleCount === 0
+  ) {
+    issues.push(
+      "No vehicles match the selected type and comfort level right now.",
+    );
+  }
+
+  if (!input.selectedVehicleId) {
+    issues.push("Choose the exact vehicle you want for this journey.");
+  }
+
+  return issues;
+}
+
 export function recommendStaysForDestinations(
   stays: Stay[],
   destinations: Destination[],
@@ -314,6 +357,55 @@ export function validateStayPlan(
   }
 
   return true;
+}
+
+export function validateAccommodationMode(
+  accommodationMode: "own" | "recommended" | "",
+) {
+  const issues: string[] = [];
+
+  if (!accommodationMode) {
+    issues.push("Choose how you want us to handle accommodation.");
+  }
+
+  return issues;
+}
+
+export function validateRecommendedStaySelection(input: {
+  accommodationMode: "own" | "recommended" | "";
+  details: PlannerTripDetails;
+  recommendedStaysCount: number;
+  selectedStayPlans: PlannerStaySelection[];
+}) {
+  const issues: string[] = [];
+
+  if (input.accommodationMode !== "recommended") {
+    return issues;
+  }
+
+  if (!input.recommendedStaysCount) {
+    issues.push(
+      "No recommended stays are available for this route yet. Choose your own accommodation or adjust the route.",
+    );
+  }
+
+  if (!input.selectedStayPlans.length) {
+    issues.push(
+      "Select at least one stay for the recommended accommodation option.",
+    );
+  }
+
+  if (
+    input.selectedStayPlans.some(
+      (plan) => !validateStayPlan(plan, input.details),
+    )
+  ) {
+    issues.push(
+      "Review stay dates so they fit within your selected travel window.",
+    );
+  }
+
+  return issues;
 }
 
 export function buildAccommodationNote(
