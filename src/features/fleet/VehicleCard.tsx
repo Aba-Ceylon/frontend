@@ -9,7 +9,11 @@ type VehicleCardProps = {
 
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
   return (
-    <Link href={`/fleet/${vehicle.id}`} className="group block h-full" data-fleet-card>
+    <Link
+      href={`/fleet/${vehicle.id}`}
+      className="group block h-full"
+      data-fleet-card
+    >
       <article className="h-full min-h-75 md:min-h-105 bg-white rounded-xl shadow-sm overflow-hidden border border-[#0b2545]/10 flex flex-col">
         <div className="relative h-44 md:h-52 w-full bg-gray-100 overflow-hidden">
           <Image
@@ -22,8 +26,12 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         </div>
 
         <div className="p-5 flex flex-col flex-1">
-          <h3 className="font-cinzel text-lg md:text-xl text-[#0b2545] mb-2">{vehicle.name}</h3>
-          <p className="text-neutral-700 text-sm mb-4 line-clamp-2">{vehicle.shortDescription}</p>
+          <h3 className="font-cinzel text-lg md:text-xl text-[#0b2545] mb-2">
+            {vehicle.name}
+          </h3>
+          <p className="text-neutral-700 text-sm mb-4 line-clamp-2">
+            {vehicle.shortDescription}
+          </p>
 
           <div className="flex items-center gap-4 mb-4">
             <div className="flex items-center gap-2 text-neutral-700">
@@ -39,7 +47,10 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
 
           <div className="flex flex-wrap gap-2 mb-4">
             {vehicle.features.slice(0, 3).map((feature) => (
-              <span key={feature} className="text-xs text-neutral-600 bg-gray-50 px-2 py-1 rounded">
+              <span
+                key={feature}
+                className="text-xs text-neutral-600 bg-gray-50 px-2 py-1 rounded"
+              >
                 {feature}
               </span>
             ))}

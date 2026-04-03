@@ -28,7 +28,7 @@ export default function AccommodationChoice({
           onClick={() => onModeChange("own")}
           className={`rounded-3xl border p-6 text-left transition ${
             accommodationMode === "own"
-              ? "border-amber-500 bg-amber-50 shadow-[0_20px_50px_rgba(217,119,6,0.16)]"
+              ? "border-amber-500 bg-amber-50 shadow-[0_20px_50px_rgba(201,154,43,0.16)]"
               : "border-neutral-200 bg-white hover:border-amber-200"
           }`}
         >
@@ -46,7 +46,7 @@ export default function AccommodationChoice({
           onClick={() => onModeChange("recommended")}
           className={`rounded-3xl border p-6 text-left transition ${
             accommodationMode === "recommended"
-              ? "border-amber-500 bg-amber-50 shadow-[0_20px_50px_rgba(217,119,6,0.16)]"
+              ? "border-amber-500 bg-amber-50 shadow-[0_20px_50px_rgba(201,154,43,0.16)]"
               : "border-neutral-200 bg-white hover:border-amber-200"
           }`}
         >

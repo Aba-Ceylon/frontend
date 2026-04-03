@@ -16,7 +16,9 @@ export default function PaginationControls({
   }
 
   return (
-    <div className={`mt-10 flex items-center justify-center gap-2 sm:gap-3 flex-wrap ${className}`}>
+    <div
+      className={`mt-10 flex items-center justify-center gap-2 sm:gap-3 flex-wrap ${className}`}
+    >
       <button
         onClick={() => onPageChange(Math.max(1, currentPage - 1))}
         disabled={currentPage === 1}

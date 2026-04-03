@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
@@ -102,13 +102,13 @@ export default function Footer() {
             className="lg:col-span-6 xl:col-span-5 text-center md:text-left"
             data-f-reveal
           >
-            <span className="font-cinzel text-[10px] tracking-[0.3em] md:tracking-[0.4em] uppercase text-[#D4AF37] block mb-4 md:mb-6">
+            <span className="font-cinzel text-[10px] tracking-[0.3em] md:tracking-[0.4em] uppercase text-[#C99A2B] block mb-4 md:mb-6">
               Establishment of Excellence
             </span>
             <h3 className="font-cinzel text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-[1.1] mb-8">
               THE FINEST WAY <br className="hidden sm:block" />
               TO{" "}
-              <span className="italic text-[#D4AF37] font-serif lowercase">
+              <span className="italic text-[#C99A2B] font-serif lowercase">
                 experience
               </span>{" "}
               <br className="hidden sm:block" />
@@ -118,14 +118,14 @@ export default function Footer() {
             <div className="flex justify-center md:justify-start">
               <Link
                 href="/planner"
-                className="group relative inline-flex items-center gap-4 py-3 md:py-4 pr-6 md:pr-8 border-b border-[#D4AF37]/30 hover:border-[#D4AF37] transition-all duration-500"
+                className="group relative inline-flex items-center gap-4 py-3 md:py-4 pr-6 md:pr-8 border-b border-[#C99A2B]/30 hover:border-[#C99A2B] transition-all duration-500"
               >
-                <span className="font-cinzel text-sm md:text-lg text-[#D4AF37] uppercase tracking-widest">
+                <span className="font-cinzel text-sm md:text-lg text-[#C99A2B] uppercase tracking-widest">
                   Curate Your Journey
                 </span>
                 <div className="relative overflow-hidden h-5 w-5">
-                  <ArrowUpRight className="text-[#D4AF37] absolute inset-0 transition-transform duration-500 group-hover:translate-x-5 group-hover:-translate-y-5" />
-                  <ArrowUpRight className="text-[#D4AF37] absolute inset-0 -translate-x-5 translate-y-5 transition-transform duration-500 group-hover:translate-x-0 group-hover:translate-y-0" />
+                  <ArrowUpRight className="text-[#C99A2B] absolute inset-0 transition-transform duration-500 group-hover:translate-x-5 group-hover:-translate-y-5" />
+                  <ArrowUpRight className="text-[#C99A2B] absolute inset-0 -translate-x-5 translate-y-5 transition-transform duration-500 group-hover:translate-x-0 group-hover:translate-y-0" />
                 </div>
               </Link>
             </div>
@@ -136,7 +136,7 @@ export default function Footer() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-4 md:gap-8">
               {footerLinks.map((group) => (
                 <div key={group.title} data-f-reveal className="col-span-1">
-                  <h4 className="font-cinzel text-[11px] tracking-[0.25em] uppercase text-[#D4AF37]/80 mb-6 md:mb-8">
+                  <h4 className="font-cinzel text-[11px] tracking-[0.25em] uppercase text-[#C99A2B]/80 mb-6 md:mb-8">
                     {group.title}
                   </h4>
                   <ul className="space-y-3 md:space-y-4">
@@ -144,9 +144,9 @@ export default function Footer() {
                       <li key={link.label}>
                         <Link
                           href={link.href}
-                          className="text-sm font-light text-white/60 hover:text-[#D4AF37] transition-colors duration-300 flex items-center group/link"
+                          className="text-sm font-light text-white/60 hover:text-[#C99A2B] transition-colors duration-300 flex items-center group/link"
                         >
-                          <span className="w-0 group-hover/link:w-3 h-[1px] bg-[#D4AF37] mr-0 group-hover/link:mr-2 transition-all duration-300" />
+                          <span className="w-0 group-hover/link:w-3 h-[1px] bg-[#C99A2B] mr-0 group-hover/link:mr-2 transition-all duration-300" />
                           {link.label}
                         </Link>
                       </li>
@@ -160,20 +160,20 @@ export default function Footer() {
                 data-f-reveal
                 className="col-span-2 md:col-span-1 pt-4 md:pt-0 border-t border-white/5 md:border-none"
               >
-                <h4 className="font-cinzel text-[11px] tracking-[0.25em] uppercase text-[#D4AF37]/80 mb-6 md:mb-8">
+                <h4 className="font-cinzel text-[11px] tracking-[0.25em] uppercase text-[#C99A2B]/80 mb-6 md:mb-8">
                   Headquarters
                 </h4>
                 <address className="not-italic text-sm font-light space-y-4 leading-relaxed text-white/60">
                   <p className="flex gap-3 items-start">
-                    <MapPin size={16} className="shrink-0 text-[#D4AF37]/70" />{" "}
+                    <MapPin size={16} className="shrink-0 text-[#C99A2B]/70" />{" "}
                     Colombo, Sri Lanka
                   </p>
                   <p className="flex gap-3 items-start">
-                    <Phone size={16} className="shrink-0 text-[#D4AF37]/70" />{" "}
+                    <Phone size={16} className="shrink-0 text-[#C99A2B]/70" />{" "}
                     +94 77 000 0000
                   </p>
                   <p className="flex gap-3 items-start break-all md:break-normal">
-                    <Mail size={16} className="shrink-0 text-[#D4AF37]/70" />{" "}
+                    <Mail size={16} className="shrink-0 text-[#C99A2B]/70" />{" "}
                     hello@abaceylon.com
                   </p>
                 </address>
@@ -181,13 +181,13 @@ export default function Footer() {
                 <div className="flex gap-5 mt-8">
                   <Link
                     href="#"
-                    className="text-white/40 hover:text-[#D4AF37] transition-colors"
+                    className="text-white/40 hover:text-[#C99A2B] transition-colors"
                   >
                     <Instagram size={20} />
                   </Link>
                   <Link
                     href="#"
-                    className="text-white/40 hover:text-[#D4AF37] transition-colors"
+                    className="text-white/40 hover:text-[#C99A2B] transition-colors"
                   >
                     <Facebook size={20} />
                   </Link>
@@ -225,7 +225,7 @@ export default function Footer() {
             Developed by{" "}
             <a
               href="https://vernoxlabs.com"
-              className="text-[#D4AF37]/60 hover:text-[#D4AF37] transition-colors"
+              className="text-[#C99A2B]/60 hover:text-[#C99A2B] transition-colors"
             >
               Vernox Labs Sri Lanka
             </a>

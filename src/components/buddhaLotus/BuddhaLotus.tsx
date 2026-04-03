@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -29,7 +29,7 @@ const LAYER_DEFS = [
     path: PETAL_PATH,
     offset: 18,
     zIndex: 4,
-    from: "#D4AF37",
+    from: "#C99A2B",
     to: "#F5E090",
   },
   {
@@ -203,7 +203,7 @@ export default function BuddhaLotus() {
         },
       });
 
-      // 0–100%: background darkens, glass blur intensifies
+      // 0Ã¢â‚¬â€œ100%: background darkens, glass blur intensifies
       tl.to(bgOverlayRef.current, { opacity: 1, duration: 1 }, 0);
       tl.to(
         glassRef.current,
@@ -230,7 +230,7 @@ export default function BuddhaLotus() {
         0.32,
       );
 
-      // 0–55%: lotus grows small → large
+      // 0Ã¢â‚¬â€œ55%: lotus grows small Ã¢â€ â€™ large
       tl.to(
         lotusRef.current,
         {
@@ -242,7 +242,7 @@ export default function BuddhaLotus() {
         0,
       );
 
-      // 2–50%: petals bloom layer by layer
+      // 2Ã¢â‚¬â€œ50%: petals bloom layer by layer
       layerPetals.forEach((petals, li) => {
         const layerStart = 0.02 + li * 0.11;
         petals.forEach((petal, pi) => {
@@ -254,7 +254,7 @@ export default function BuddhaLotus() {
         });
       });
 
-      // 55–70%: lotus settles, side panels slide in
+      // 55Ã¢â‚¬â€œ70%: lotus settles, side panels slide in
       tl.to(
         lotusRef.current,
         {
@@ -268,7 +268,7 @@ export default function BuddhaLotus() {
       tl.to(leftPanelRef.current, { opacity: 1, x: 0, duration: 0.12 }, 0.52);
       tl.to(rightPanelRef.current, { opacity: 1, x: 0, duration: 0.12 }, 0.52);
 
-      // 45–65%: mandala + rings, glow shifts gold → rose
+      // 45Ã¢â‚¬â€œ65%: mandala + rings, glow shifts gold Ã¢â€ â€™ rose
       tl.to(
         mandalaRef.current,
         { scale: 1, opacity: 1, duration: 0.15, ease: "power2.out" },
@@ -279,7 +279,7 @@ export default function BuddhaLotus() {
       tl.to(glowRef.current, { opacity: 0, scale: 1.3, duration: 0.2 }, 0.46);
       tl.to(glowRoseRef.current, { scale: 1, opacity: 1, duration: 0.2 }, 0.46);
 
-      // 48–68%: color shift outer layers → white
+      // 48Ã¢â‚¬â€œ68%: color shift outer layers Ã¢â€ â€™ white
       layerPetals.slice(2).forEach((petals, li) => {
         const shiftStart = 0.48 + li * 0.05;
         const colorTo = LAYER_DEFS[li + 2].to;
@@ -294,7 +294,7 @@ export default function BuddhaLotus() {
         });
       });
 
-      // 65–85%: text fades in
+      // 65Ã¢â‚¬â€œ85%: text fades in
       tl.to(topBadgeRef.current, { opacity: 1, y: 0, duration: 0.08 }, 0.65);
       tl.to(quoteRef.current, { opacity: 1, y: 0, duration: 0.14 }, 0.65);
       tl.to(attributesRef.current, { opacity: 1, y: 0, duration: 0.1 }, 0.74);
@@ -361,14 +361,14 @@ export default function BuddhaLotus() {
             <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
               <path
                 d="M4 4 L4 20 M4 4 L20 4"
-                stroke="#B8860B"
+                stroke="#C99A2B"
                 strokeWidth="1.5"
                 strokeLinecap="round"
               />
-              <circle cx="4" cy="4" r="2" fill="#B8860B" />
+              <circle cx="4" cy="4" r="2" fill="#C99A2B" />
               <path
                 d="M14 14 L14 24 M14 14 L24 14"
-                stroke="#B8860B"
+                stroke="#C99A2B"
                 strokeWidth="0.8"
                 strokeLinecap="round"
                 opacity="0.6"
@@ -383,12 +383,14 @@ export default function BuddhaLotus() {
           className="absolute top-5 sm:top-8 left-0 right-0 flex flex-col items-center pointer-events-none z-[3] px-4"
         >
           <p className="font-cinzel text-[10px] tracking-[0.5em] uppercase text-amber-400/80 mb-3">
-            Aba Ceylon · Heritage Journeys
+            Aba Ceylon Ã‚Â· Heritage Journeys
           </p>
           <div className="flex items-center gap-3">
             <div className="w-24 h-px bg-gradient-to-r from-transparent to-amber-400/50" />
             <div className="w-1.5 h-1.5 rounded-full bg-amber-500/60" />
-            <span className="font-cinzel text-amber-600/50 text-xs">✦</span>
+            <span className="font-cinzel text-amber-600/50 text-xs">
+              Ã¢Å“Â¦
+            </span>
             <div className="w-1.5 h-1.5 rounded-full bg-amber-500/60" />
             <div className="w-24 h-px bg-gradient-to-l from-transparent to-amber-400/50" />
           </div>
@@ -400,15 +402,15 @@ export default function BuddhaLotus() {
           className="absolute left-1/2 top-10 sm:top-16 -translate-x-1/2 flex flex-col items-center gap-3 pointer-events-none z-[8]"
         >
           <div className="rounded-full border border-amber-100/85 bg-slate-950/90 px-6 py-3 shadow-[0_18px_55px_rgba(0,0,0,0.48)] backdrop-blur-md">
-            <p className="font-cinzel text-xs sm:text-sm tracking-[0.34em] uppercase text-amber-50 whitespace-nowrap drop-shadow-[0_0_18px_rgba(251,191,36,0.35)]">
+            <p className="font-cinzel text-xs sm:text-sm tracking-[0.34em] uppercase text-amber-50 whitespace-nowrap drop-shadow-[0_0_18px_rgba(201,154,43,0.35)]">
               Scroll Down to Reveal
             </p>
           </div>
-          <div className="flex flex-col items-center gap-3 rounded-[2rem] border border-amber-100/45 bg-slate-950/58 px-5 py-4 shadow-[0_0_40px_rgba(217,119,6,0.28)] backdrop-blur-sm">
-            <div className="w-10 h-16 rounded-full border-2 border-amber-50/85 bg-black/45 flex justify-center pt-2.5 shadow-[0_0_24px_rgba(251,191,36,0.28)]">
+          <div className="flex flex-col items-center gap-3 rounded-[2rem] border border-amber-100/45 bg-slate-950/58 px-5 py-4 shadow-[0_0_40px_rgba(201,154,43,0.28)] backdrop-blur-sm">
+            <div className="w-10 h-16 rounded-full border-2 border-amber-50/85 bg-black/45 flex justify-center pt-2.5 shadow-[0_0_24px_rgba(201,154,43,0.28)]">
               <div
                 ref={scrollDotRef}
-                className="w-1.5 h-3.5 rounded-full bg-amber-50 shadow-[0_0_18px_rgba(251,191,36,1)]"
+                className="w-1.5 h-3.5 rounded-full bg-amber-50 shadow-[0_0_18px_rgba(201,154,43,1)]"
               />
             </div>
             <div className="flex items-center gap-3 [&>span]:hidden">
@@ -417,7 +419,7 @@ export default function BuddhaLotus() {
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 24 24"
-                  className="w-4 h-4 text-amber-50 drop-shadow-[0_0_12px_rgba(251,191,36,0.55)]"
+                  className="w-4 h-4 text-amber-50 drop-shadow-[0_0_12px_rgba(201,154,43,0.55)]"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="1.8"
@@ -431,10 +433,12 @@ export default function BuddhaLotus() {
                   Scroll
                 </span>
               </div>
-              <span className="font-cinzel text-amber-100 text-sm drop-shadow-[0_0_10px_rgba(251,191,36,0.45)]">
-                ↓
+              <span className="font-cinzel text-amber-100 text-sm drop-shadow-[0_0_10px_rgba(201,154,43,0.45)]">
+                Ã¢â€ â€œ
               </span>
-              <span className="font-cinzel text-amber-200/80 text-xs">⌄</span>
+              <span className="font-cinzel text-amber-200/80 text-xs">
+                Ã¢Å’â€ž
+              </span>
               <div className="w-12 h-px bg-gradient-to-l from-transparent to-amber-200/75" />
             </div>
           </div>
@@ -451,7 +455,7 @@ export default function BuddhaLotus() {
               className="font-cinzel text-[11px] text-amber-400/70 uppercase"
               style={{ writingMode: "vertical-rl", letterSpacing: "0.4em" }}
             >
-              Sacred · Ancient
+              Sacred Ã‚Â· Ancient
             </p>
             <div className="w-px h-16 bg-gradient-to-t from-transparent via-amber-400/50 to-amber-400/30" />
           </div>
@@ -501,7 +505,7 @@ export default function BuddhaLotus() {
               className="font-cinzel text-[11px] text-rose-300/70 uppercase"
               style={{ writingMode: "vertical-rl", letterSpacing: "0.4em" }}
             >
-              Purity · Peace
+              Purity Ã‚Â· Peace
             </p>
             <div className="w-px h-16 bg-gradient-to-t from-transparent via-rose-300/50 to-rose-300/30" />
           </div>
@@ -540,7 +544,7 @@ export default function BuddhaLotus() {
           </div>
         </div>
 
-        {/* Center — lotus absolutely centered */}
+        {/* Center Ã¢â‚¬â€ lotus absolutely centered */}
         <div className="absolute inset-0 flex items-center justify-center z-[3] pointer-events-none scale-[0.58] sm:scale-[0.76] md:scale-[0.9] lg:scale-100">
           {/* Glows */}
           <div
@@ -769,7 +773,7 @@ export default function BuddhaLotus() {
               <div className="w-8 sm:w-12 h-px bg-amber-400/40" />
             </div>
             <p className="font-cinzel text-[9px] sm:text-[10px] text-amber-100/40 tracking-[0.22em] sm:tracking-[0.3em] uppercase">
-              The Sacred Lotus — Symbol of Purity &amp; Enlightenment
+              The Sacred Lotus Symbol of Purity &amp; Enlightenment
             </p>
           </div>
         </div>
@@ -781,11 +785,11 @@ export default function BuddhaLotus() {
           style={{ transformOrigin: "50% 50%" }}
         >
           <div className="w-32 h-px bg-gradient-to-r from-transparent to-amber-400/40" />
-          <span className="font-cinzel text-amber-400/50 text-xs">✦</span>
+          <span className="font-cinzel text-amber-400/50 text-xs">+++</span>
           <p className="font-cinzel text-[9px] tracking-[0.4em] uppercase text-amber-100/40">
             Aba Ceylon Tours &amp; Travels
           </p>
-          <span className="font-cinzel text-amber-400/50 text-xs">✦</span>
+          <span className="font-cinzel text-amber-400/50 text-xs">+++</span>
           <div className="w-32 h-px bg-gradient-to-l from-transparent to-amber-400/40" />
         </div>
       </div>
