@@ -2,6 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Users, Briefcase } from "lucide-react";
 import Container from "@/components/layout/Container";
+import VehicleRequestButton from "@/features/fleet/VehicleRequestButton";
 import { fetchVehicleById } from "@/services/fleetService";
 
 export default async function VehiclePage({
@@ -95,9 +96,10 @@ export default async function VehiclePage({
                   confirm availability and pricing.
                 </p>
 
-                <button className="w-full px-5 py-3 rounded-full font-cinzel text-sm bg-amber-400 text-[#0b2545] hover:opacity-95 transition">
-                  Request Vehicle
-                </button>
+                <VehicleRequestButton
+                  vehicle={vehicle}
+                  className="inline-flex w-full items-center justify-center rounded-full bg-amber-400 px-5 py-3 font-cinzel text-sm text-[#0b2545] transition hover:opacity-95"
+                />
               </div>
             </aside>
           </div>
