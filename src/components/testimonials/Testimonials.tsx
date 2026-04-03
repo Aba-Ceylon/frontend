@@ -2,26 +2,25 @@
 
 import { useEffect, useState } from "react";
 import Container from "@/components/layout/Container";
+import type { FeedbackRecord } from "@/types/feedback";
 import TestimonialsCarousel, { TestimonialItem } from "./TestimonialsCarousel";
 
 export default function Testimonials() {
   const [items, setItems] = useState<TestimonialItem[]>([]);
 
   useEffect(() => {
-    fetch("/api/feedback/published")
+    fetch("/api/feedback/published", { cache: "no-store" })
       .then((r) => r.json())
-      .then(
-        (data: { message: string; user_name: string; rating: number }[]) => {
-          if (!Array.isArray(data)) return;
-          setItems(
-            data.map((row) => ({
-              quote: `"${row.message}"`,
-              name: row.user_name ?? "Guest",
-              rating: row.rating ?? 5,
-            })),
-          );
-        },
-      )
+      .then((data: FeedbackRecord[]) => {
+        if (!Array.isArray(data)) return;
+        setItems(
+          data.map((row) => ({
+            quote: `"${row.message}"`,
+            name: row.user_name ?? "Guest",
+            rating: row.rating ?? 5,
+          })),
+        );
+      })
       .catch(() => {});
   }, []);
 
