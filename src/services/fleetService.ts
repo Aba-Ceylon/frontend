@@ -42,7 +42,7 @@ function mapFallbackVehicle(
     vehicleNumber: "Available on request",
     passengerCapacity: vehicle.passengerCapacity,
     ownerName: "ABA Ceylon",
-    ownerWhatsAppNumber: "+94770000000",
+    ownerWhatsAppNumber: "+94722554488",
     availabilityStatus: "Available",
     images: [vehicle.imageUrl],
     imageUrl: vehicle.imageUrl,

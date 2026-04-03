@@ -170,11 +170,11 @@ export default function Footer() {
                   </p>
                   <p className="flex gap-3 items-start">
                     <Phone size={16} className="shrink-0 text-[#C99A2B]/70" />{" "}
-                    +94 77 000 0000
+                    072 255 4488
                   </p>
                   <p className="flex gap-3 items-start break-all md:break-normal">
                     <Mail size={16} className="shrink-0 text-[#C99A2B]/70" />{" "}
-                    hello@abaceylon.com
+                    abaceylon@gmail.com
                   </p>
                 </address>
 

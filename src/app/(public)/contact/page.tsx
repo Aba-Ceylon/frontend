@@ -6,8 +6,8 @@ import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { generateWhatsAppLink } from "@/lib/whatsapp/generateWhatsAppLink";
 
 const ADMIN_PHONE =
-  process.env.NEXT_PUBLIC_ADMIN_WHATSAPP_NUMBER || "+94770000000";
-const ADMIN_EMAIL = "hello@abaceylon.com";
+  process.env.NEXT_PUBLIC_ADMIN_WHATSAPP_NUMBER || "+94722554488";
+const ADMIN_EMAIL = "abaceylon@gmail.com";
 
 const OPENING_HOURS = [
   { label: "Weekdays", value: "8:00 AM - 5:00 PM (SLST)" },
@@ -17,6 +17,10 @@ const OPENING_HOURS = [
 
 function formatPhoneNumber(phoneNumber: string) {
   const digits = phoneNumber.replace(/[^\d]/g, "");
+
+  if (digits.length === 10 && digits.startsWith("0")) {
+    return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
+  }
 
   if (digits.length === 11 && digits.startsWith("94")) {
     return `+${digits.slice(0, 2)} ${digits.slice(2, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`;
