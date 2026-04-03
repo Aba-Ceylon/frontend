@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import Link from "next/link";
 import { LucideArrowLeft, LucideArrowRight } from "lucide-react";
-import { stays } from "@/data/stays";
+import { stays as fallbackStays } from "@/data/stays";
 import StayCard from "@/features/stays/StayCard";
+import { fetchStays } from "@/services/stayService";
+import type { Stay } from "@/types/stay";
 
-const LEN = stays.length;
-const cloned = [...stays, ...stays, ...stays];
 const GAP = 24;
 
 function getVisible() {
@@ -19,45 +19,61 @@ function getVisible() {
 }
 
 export default function FeaturedStays() {
-  const offset       = useRef(LEN);
-  const stripRef     = useRef<HTMLDivElement>(null);
+  const stripRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const animating    = useRef(false);
-  const dragStartX   = useRef<number | null>(null);
+  const offset = useRef(fallbackStays.length);
+  const animating = useRef(false);
+  const dragStartX = useRef<number | null>(null);
+  const [stayItems, setStayItems] = useState<Stay[]>(fallbackStays);
   const [dotIndex, setDotIndex] = useState(0);
-  const [visible, setVisible]   = useState(3);
+  const [visible, setVisible] = useState(3);
+
+  const totalStays = stayItems.length;
+  const clonedStays = useMemo(
+    () => [...stayItems, ...stayItems, ...stayItems],
+    [stayItems],
+  );
 
   const getStep = () => {
-    const w = containerRef.current?.offsetWidth ?? 0;
-    const vis = getVisible();
-    return (w - GAP * (vis - 1)) / vis + GAP;
+    const width = containerRef.current?.offsetWidth ?? 0;
+    const visibleCards = getVisible();
+    return (width - GAP * (visibleCards - 1)) / visibleCards + GAP;
   };
 
-  const snapToOffset = (off: number) => {
-    gsap.set(stripRef.current, { x: -(off * getStep()) });
-  };
+  const snapToOffset = useCallback((nextOffset: number) => {
+    gsap.set(stripRef.current, { x: -(nextOffset * getStep()) });
+  }, []);
 
-  const slideTo = (direction: 1 | -1) => {
-    if (animating.current) return;
-    animating.current = true;
-    offset.current += direction;
-    setDotIndex(((offset.current % LEN) + LEN) % LEN);
-    gsap.to(stripRef.current, {
-      x: -(offset.current * getStep()),
-      duration: 0.7,
-      ease: "power2.inOut",
-      onComplete: () => {
-        animating.current = false;
-        if (offset.current <= 0 || offset.current >= LEN * 2) {
-          offset.current = LEN + (((offset.current % LEN) + LEN) % LEN);
-          snapToOffset(offset.current);
-        }
-      },
-    });
-  };
+  const slideTo = useCallback(
+    (direction: 1 | -1) => {
+      if (!totalStays || animating.current) return;
 
-  const onPointerDown = (e: React.PointerEvent) => { dragStartX.current = e.clientX; };
-  const onPointerUp   = (e: React.PointerEvent) => {
+      animating.current = true;
+      offset.current += direction;
+      setDotIndex(((offset.current % totalStays) + totalStays) % totalStays);
+
+      gsap.to(stripRef.current, {
+        x: -(offset.current * getStep()),
+        duration: 0.7,
+        ease: "power2.inOut",
+        onComplete: () => {
+          animating.current = false;
+          if (offset.current <= 0 || offset.current >= totalStays * 2) {
+            offset.current =
+              totalStays +
+              (((offset.current % totalStays) + totalStays) % totalStays);
+            snapToOffset(offset.current);
+          }
+        },
+      });
+    },
+    [snapToOffset, totalStays],
+  );
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    dragStartX.current = e.clientX;
+  };
+  const onPointerUp = (e: React.PointerEvent) => {
     if (dragStartX.current === null) return;
     const diff = dragStartX.current - e.clientX;
     dragStartX.current = null;
@@ -65,21 +81,58 @@ export default function FeaturedStays() {
   };
 
   useEffect(() => {
-    const raf = requestAnimationFrame(() => {
-      setVisible(getVisible());
-      snapToOffset(LEN);
+    let active = true;
+
+    void fetchStays().then((loadedStays) => {
+      if (!active || !loadedStays.length) {
+        return;
+      }
+
+      setDotIndex(0);
+      setStayItems(loadedStays);
     });
-    const onResize = () => { setVisible(getVisible()); snapToOffset(offset.current); };
-    window.addEventListener("resize", onResize);
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", onResize); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
+    offset.current = totalStays;
+
+    const raf = requestAnimationFrame(() => {
+      snapToOffset(totalStays);
+    });
+
+    return () => {
+      cancelAnimationFrame(raf);
+    };
+  }, [snapToOffset, totalStays]);
+
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      setVisible(getVisible());
+      snapToOffset(offset.current);
+    });
+    const onResize = () => {
+      setVisible(getVisible());
+      snapToOffset(offset.current);
+    };
+    window.addEventListener("resize", onResize);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [snapToOffset]);
+
+  useEffect(() => {
+    if (!totalStays) {
+      return;
+    }
+
     const timer = setInterval(() => slideTo(1), 3500);
     return () => clearInterval(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [slideTo, totalStays]);
 
   const cardWidth = `calc((100% - ${GAP * (visible - 1)}px) / ${visible})`;
 
@@ -88,7 +141,7 @@ export default function FeaturedStays() {
       <div className="mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-5xl font-medium font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)] mb-4">
+          <h2 className="mb-4 text-5xl font-medium font-cinzel text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]">
             Accommodation in Sri Lanka
           </h2>
           <p className="text-lg font-cinzel text-amber-50/70 max-w-2xl mx-auto">
@@ -111,9 +164,17 @@ export default function FeaturedStays() {
             onPointerDown={onPointerDown}
             onPointerUp={onPointerUp}
           >
-            <div ref={stripRef} className="flex" style={{ gap: GAP, willChange: "transform" }}>
-              {cloned.map((stay, i) => (
-                <div key={i} className="shrink-0" style={{ width: cardWidth }}>
+            <div
+              ref={stripRef}
+              className="flex"
+              style={{ gap: GAP, willChange: "transform" }}
+            >
+              {clonedStays.map((stay, index) => (
+                <div
+                  key={`${stay.id}-${index}`}
+                  className="shrink-0"
+                  style={{ width: cardWidth }}
+                >
                   <StayCard stay={stay} />
                 </div>
               ))}
@@ -130,11 +191,13 @@ export default function FeaturedStays() {
 
         {/* Dots */}
         <div className="flex justify-center gap-2 mt-6">
-          {stays.map((_, i) => (
+          {stayItems.map((stay, index) => (
             <span
-              key={i}
+              key={stay.id}
               className={`w-2.5 h-2.5 rounded-full transition-all ${
-                i === dotIndex ? "bg-amber-400 scale-125" : "bg-amber-400/25"
+                index === dotIndex
+                  ? "bg-amber-400 scale-125"
+                  : "bg-amber-400/25"
               }`}
             />
           ))}
@@ -144,7 +207,7 @@ export default function FeaturedStays() {
         <div className="text-center mt-8">
           <Link
             href="/stays"
-            className="inline-flex items-center px-6 py-3 font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)] hover:text-white transition"
+            className="inline-flex items-center px-6 py-3 font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(201,154,43,0.5)] hover:text-white transition"
           >
             Discover All Stays
             <LucideArrowRight size={16} className="ml-2" />

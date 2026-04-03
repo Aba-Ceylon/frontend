@@ -10,13 +10,21 @@ export default function FeedbackForm() {
   const [rating, setRating] = useState(0);
   const [hovered, setHovered] = useState(0);
   const [message, setMessage] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (rating === 0) { setErrorMsg("Please select a star rating."); return; }
-    if (message.trim().length < 20) { setErrorMsg("Please write at least 20 characters."); return; }
+    if (rating === 0) {
+      setErrorMsg("Please select a star rating.");
+      return;
+    }
+    if (message.trim().length < 20) {
+      setErrorMsg("Please write at least 20 characters.");
+      return;
+    }
 
     setErrorMsg("");
     setStatus("loading");
@@ -52,7 +60,7 @@ export default function FeedbackForm() {
         <div className="w-12 h-px bg-amber-400/50" />
       </div>
 
-      <h2 className="font-cinzel text-2xl text-amber-400 text-center mb-1 drop-shadow-[0_0_20px_rgba(217,119,6,0.4)]">
+      <h2 className="font-cinzel text-2xl text-amber-400 text-center mb-1 drop-shadow-[0_0_20px_rgba(201,154,43,0.4)]">
         Share Your Experience
       </h2>
       <p className="text-slate-400 text-sm text-center mb-8 font-cinzel">
@@ -63,11 +71,19 @@ export default function FeedbackForm() {
         <div className="text-center py-8">
           <div className="flex justify-center gap-1 mb-4">
             {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} size={28} className="text-amber-400 fill-amber-400" />
+              <Star
+                key={i}
+                size={28}
+                className="text-amber-400 fill-amber-400"
+              />
             ))}
           </div>
-          <p className="font-cinzel text-amber-400 text-lg mb-2">Thank you for your feedback!</p>
-          <p className="text-slate-400 text-sm">Your experience has been shared with our team.</p>
+          <p className="font-cinzel text-amber-400 text-lg mb-2">
+            Thank you for your feedback!
+          </p>
+          <p className="text-slate-400 text-sm">
+            Your experience has been shared with our team for review.
+          </p>
           <button
             onClick={() => setStatus("idle")}
             className="mt-6 font-cinzel text-sm px-6 py-2 rounded-lg border border-amber-400/40 text-amber-400 hover:bg-amber-400/10 transition-colors"
@@ -128,7 +144,9 @@ export default function FeedbackForm() {
               placeholder="Tell us about your journey with Aba Ceylon..."
               className="w-full bg-slate-800/60 border border-slate-600 text-slate-100 placeholder-slate-500 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/60 focus:border-amber-400/60 resize-none transition-colors"
             />
-            <p className="text-xs text-slate-500 mt-1 text-right">{message.length}/600</p>
+            <p className="text-xs text-slate-500 mt-1 text-right">
+              {message.length}/600
+            </p>
           </div>
 
           {/* Error */}

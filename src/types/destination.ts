@@ -2,19 +2,46 @@ export type DestinationCategory =
   | "Heritage"
   | "Nature"
   | "Adventure"
-  | "Coastal";
+  | "Coastal"
+  | "Wildlife"
+  | "City"
+  | "Beach"
+  | "Unique";
+
+export type DestinationRegion =
+  | "Cultural Triangle"
+  | "Hill Country"
+  | "South Coast"
+  | "East Coast"
+  | "Wildlife Belt"
+  | "Northern Sri Lanka"
+  | "West Coast";
 
 export interface Destination {
   id: string;
+  destinationId?: number;
   name: string;
   slug: string;
-  category: DestinationCategory;
+  category: DestinationCategory | string;
+  region: DestinationRegion | string;
+  province: string;
+  district: string;
   coordinates: [number, number]; // [longitude, latitude]
   summary: string;
   description: string;
   highlights: string[];
   bestTimeToVisit: string;
   whyVisit: string;
+  images?: string[];
+}
+
+export interface SupabaseDestinationRow {
+  destination_id: number;
+  name: string | null;
+  latitude: number | string | null;
+  longitude: number | string | null;
+  description: string | null;
+  images: string[] | null;
 }
 
 export interface Package {
