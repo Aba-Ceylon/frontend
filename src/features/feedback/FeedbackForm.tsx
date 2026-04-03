@@ -82,7 +82,7 @@ export default function FeedbackForm() {
             Thank you for your feedback!
           </p>
           <p className="text-slate-400 text-sm">
-            Your experience has been shared with our team.
+            Your experience has been shared with our team for review.
           </p>
           <button
             onClick={() => setStatus("idle")}
