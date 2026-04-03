@@ -1,19 +1,21 @@
+"use client";
+
 import { useState } from "react";
 import PlannerInteractiveMap from "@/features/planner/PlannerInteractiveMap";
-import type { Destination } from "@/types/destination";
 import DestinationMapModal from "@/features/planner/DestinationMapModal";
+import type { Destination } from "@/types/destination";
 
 interface DestinationSelectorProps {
   destinations: Destination[];
   selectedDestinationIds: string[];
-  validationIssues: string[];
+  validationIssues?: string[];
   onToggleDestination: (destinationId: string) => void;
 }
 
 export default function DestinationSelector({
   destinations,
   selectedDestinationIds,
-  validationIssues,
+  validationIssues = [],
   onToggleDestination,
 }: DestinationSelectorProps) {
   const [mapDestination, setMapDestination] = useState<Destination | null>(
@@ -51,41 +53,15 @@ export default function DestinationSelector({
           </div>
         ) : null}
 
-          return (
-            <button
-              key={destination.id}
-              type="button"
-              onClick={() => onToggleDestination(destination.id)}
-              className={`rounded-3xl border p-5 text-left transition ${
-                isSelected
-                  ? "border-amber-500 bg-amber-50 shadow-[0_20px_50px_rgba(201,154,43,0.16)]"
-                  : "border-neutral-200 bg-white hover:border-amber-200 hover:shadow-lg"
-              }`}
-            >
-              <div className="flex items-start justify-between gap-3 mb-4">
-                <div>
-                  <p className="font-cinzel text-xs uppercase tracking-[0.24em] text-amber-700">
-                    {destination.category}
-                  </p>
-                  <h3 className="font-cinzel text-2xl text-[#0F172A] mt-2">
-                    {destination.name}
-                  </h3>
-                </div>
-                <span
-                  className={`rounded-full px-3 py-1 text-[11px] font-cinzel uppercase tracking-[0.22em] ${
-                    isSelected
-                      ? "bg-[#0F172A] text-amber-300"
-                      : "bg-neutral-100 text-neutral-500"
-                  }`}
-                >
-                  {isSelected ? "Selected" : "Tap to add"}
-                </span>
-              </div>
+        <PlannerInteractiveMap
+          destinations={destinations}
+          onToggleDestination={onToggleDestination}
+          selectedDestinationIds={selectedDestinationIds}
+        />
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {destinations.map((destination) => {
             const isSelected = selectedDestinationIds.includes(destination.id);
-            const previewImage = destination.images?.[0];
 
             return (
               <article
@@ -96,13 +72,6 @@ export default function DestinationSelector({
                     : "border-neutral-200 bg-white hover:border-amber-200 hover:shadow-lg"
                 }`}
               >
-                {previewImage ? (
-                  <div
-                    className="mb-4 h-44 rounded-[1.4rem] bg-cover bg-center bg-no-repeat"
-                    style={{ backgroundImage: `url('${previewImage}')` }}
-                  />
-                ) : null}
-
                 <div className="flex items-start justify-between gap-3 mb-4">
                   <div>
                     <p className="font-cinzel text-xs uppercase tracking-[0.24em] text-amber-700">
