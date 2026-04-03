@@ -19,16 +19,20 @@ export default function PlannerStepper({
         {steps.map((step, index) => {
           const isActive = index === currentStep;
           const isCompleted = stepValidity[index];
+          const isAccessible = stepValidity.slice(0, index).every(Boolean);
 
           return (
             <button
               key={step.id}
               type="button"
               onClick={() => onStepClick(index)}
+              disabled={!isAccessible}
               className={`rounded-2xl border px-4 py-4 text-left transition ${
                 isActive
                   ? "border-amber-400/80 bg-amber-400/10"
-                  : "border-white/10 bg-white/5 hover:bg-white/8"
+                  : isAccessible
+                    ? "border-white/10 bg-white/5 hover:bg-white/8"
+                    : "border-white/5 bg-white/[0.03] opacity-55 cursor-not-allowed"
               }`}
             >
               <div className="flex items-center justify-between gap-3 mb-3">

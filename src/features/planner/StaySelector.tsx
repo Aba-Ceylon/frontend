@@ -6,6 +6,7 @@ interface StaySelectorProps {
   selectedStayPlans: Array<PlannerStaySelection & { stay: RecommendedStay }>;
   tripEndDate: string;
   tripStartDate: string;
+  validationIssues: string[];
   onDateChange: (
     stayId: string,
     field: keyof Omit<PlannerStaySelection, "stayId">,
@@ -19,6 +20,7 @@ export default function StaySelector({
   selectedStayPlans,
   tripEndDate,
   tripStartDate,
+  validationIssues,
   onDateChange,
   onToggleStay,
 }: StaySelectorProps) {
@@ -40,6 +42,19 @@ export default function StaySelector({
           {selectedStayPlans.length === 1 ? "" : "s"} selected
         </span>
       </div>
+
+      {validationIssues.length ? (
+        <div className="rounded-3xl border border-red-200 bg-red-50 p-5">
+          <p className="font-cinzel text-lg text-red-900 mb-3">
+            Required Detail
+          </p>
+          <ul className="space-y-2 text-sm text-red-700">
+            {validationIssues.map((issue) => (
+              <li key={issue}>{issue}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
 
       {recommendedStays.length ? (
         <div className="grid gap-4 xl:grid-cols-2">

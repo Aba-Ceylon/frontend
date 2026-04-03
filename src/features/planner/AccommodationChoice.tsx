@@ -3,12 +3,14 @@ import type { AccommodationMode } from "@/types/planner";
 interface AccommodationChoiceProps {
   accommodationMode: AccommodationMode | "";
   accommodationNote: string;
+  validationIssues: string[];
   onModeChange: (mode: AccommodationMode) => void;
 }
 
 export default function AccommodationChoice({
   accommodationMode,
   accommodationNote,
+  validationIssues,
   onModeChange,
 }: AccommodationChoiceProps) {
   return (
@@ -21,6 +23,19 @@ export default function AccommodationChoice({
           Accommodation Preference
         </h2>
       </div>
+
+      {validationIssues.length ? (
+        <div className="rounded-3xl border border-red-200 bg-red-50 p-5">
+          <p className="font-cinzel text-lg text-red-900 mb-3">
+            Required Detail
+          </p>
+          <ul className="space-y-2 text-sm text-red-700">
+            {validationIssues.map((issue) => (
+              <li key={issue}>{issue}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
 
       <div className="grid gap-4 lg:grid-cols-2">
         <button
