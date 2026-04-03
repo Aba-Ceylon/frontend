@@ -10,7 +10,7 @@ interface FeedbackPayload {
 }
 
 export async function submitFeedback(
-  payload: FeedbackPayload
+  payload: FeedbackPayload,
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const supabase = getSupabaseClient();

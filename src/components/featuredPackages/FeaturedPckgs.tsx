@@ -226,7 +226,7 @@ export default function FeaturedPckgs() {
         <div className="text-center mt-8">
           <Link
             href="/packages"
-            className="inline-flex items-center px-6 py-3 font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)] hover:text-black transition"
+            className="inline-flex items-center px-6 py-3 font-cinzel text-neutral-800 hover:text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]"
           >
             View Available Packages
             <LucideArrowRight size={16} className="ml-2" />

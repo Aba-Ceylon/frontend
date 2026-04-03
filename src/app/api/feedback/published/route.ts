@@ -14,7 +14,7 @@ export async function GET() {
           Authorization: `Bearer ${key}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     if (!res.ok) return NextResponse.json([]);

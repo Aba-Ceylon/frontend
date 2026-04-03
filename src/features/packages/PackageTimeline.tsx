@@ -1,6 +1,10 @@
 import { ItineraryDay } from "@/types/package";
 
-export default function PackageTimeline({ itinerary }: { itinerary: ItineraryDay[] }) {
+export default function PackageTimeline({
+  itinerary,
+}: {
+  itinerary: ItineraryDay[];
+}) {
   return (
     <div className="space-y-6">
       {itinerary.map((day) => (

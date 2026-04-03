@@ -51,11 +51,36 @@ export default function DestinationSelector({
           </div>
         ) : null}
 
-        <PlannerInteractiveMap
-          destinations={destinations}
-          onToggleDestination={onToggleDestination}
-          selectedDestinationIds={selectedDestinationIds}
-        />
+          return (
+            <button
+              key={destination.id}
+              type="button"
+              onClick={() => onToggleDestination(destination.id)}
+              className={`rounded-3xl border p-5 text-left transition ${
+                isSelected
+                  ? "border-amber-500 bg-amber-50 shadow-[0_20px_50px_rgba(201,154,43,0.16)]"
+                  : "border-neutral-200 bg-white hover:border-amber-200 hover:shadow-lg"
+              }`}
+            >
+              <div className="flex items-start justify-between gap-3 mb-4">
+                <div>
+                  <p className="font-cinzel text-xs uppercase tracking-[0.24em] text-amber-700">
+                    {destination.category}
+                  </p>
+                  <h3 className="font-cinzel text-2xl text-[#0F172A] mt-2">
+                    {destination.name}
+                  </h3>
+                </div>
+                <span
+                  className={`rounded-full px-3 py-1 text-[11px] font-cinzel uppercase tracking-[0.22em] ${
+                    isSelected
+                      ? "bg-[#0F172A] text-amber-300"
+                      : "bg-neutral-100 text-neutral-500"
+                  }`}
+                >
+                  {isSelected ? "Selected" : "Tap to add"}
+                </span>
+              </div>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {destinations.map((destination) => {

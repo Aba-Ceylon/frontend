@@ -34,7 +34,10 @@ export default function FleetSection() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const len = fleetVehicles.length;
-  const cloned = useMemo(() => [...fleetVehicles, ...fleetVehicles, ...fleetVehicles], [fleetVehicles]);
+  const cloned = useMemo(
+    () => [...fleetVehicles, ...fleetVehicles, ...fleetVehicles],
+    [fleetVehicles],
+  );
 
   const getStep = () => {
     const w = containerRef.current?.offsetWidth ?? 0;
@@ -97,7 +100,8 @@ export default function FleetSection() {
         if (!active) {
           return;
         }
-        const message = err instanceof Error ? err.message : "Failed to load fleet section.";
+        const message =
+          err instanceof Error ? err.message : "Failed to load fleet section.";
         setError(message);
         setFleetVehicles([]);
       } finally {
@@ -149,50 +153,18 @@ export default function FleetSection() {
 
   const cardWidth = `calc((100% - ${GAP * (visible - 1)}px) / ${visible})`;
 
-  // Hover animations for the CTA using GSAP
-  useEffect(() => {
-    const strip = stripRef.current;
-    if (!strip) return;
+  useEffect(() => undefined, []);
 
-    const ctas = Array.from(strip.querySelectorAll(".fleet-cta")) as HTMLElement[];
-    const listeners: Array<() => void> = [];
-    const tls: gsap.core.Timeline[] = [];
-
-    ctas.forEach((el) => {
-      const tl = gsap.timeline({ paused: true });
-      tl.to(el, { backgroundColor: "#0b2545", color: "#ffffff", scale: 1.03, duration: 0.28, ease: "power2.out" }, 0);
-
-      const onEnter = () => tl.play();
-      const onLeave = () => tl.reverse();
-
-      el.addEventListener("mouseenter", onEnter);
-      el.addEventListener("mouseleave", onLeave);
-
-      listeners.push(() => {
-        el.removeEventListener("mouseenter", onEnter);
-        el.removeEventListener("mouseleave", onLeave);
-        tl.kill();
-      });
-
-      tls.push(tl);
-    });
-
-    return () => {
-      listeners.forEach((fn) => fn());
-      tls.forEach((t) => t.kill());
-    };
-  }, []);
-
-  // Inline modal logic removed — FleetDetailModal handles its own animations and keyboard
+  // Inline modal logic removed â€” FleetDetailModal handles its own animations and keyboard
 
   return (
-    <section id="fleet" className="py-24 bg-[#1A2238] overflow-hidden">
+    <section id="fleet" className="overflow-hidden bg-[#F5F2ED] py-24">
       <div className="mx-auto px-6">
         <div className="text-center mb-12">
-          <h2 className="text-5xl font-medium font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)] mb-4">
+          <h2 className="mb-4 text-5xl font-medium font-cinzel text-neutral-900">
             Premium Fleet
           </h2>
-          <p className="text-lg font-cinzel text-amber-50/70 max-w-2xl mx-auto">
+          <p className="mx-auto max-w-2xl text-lg font-cinzel text-neutral-600">
             Chauffeured luxury vehicles for seamless journeys across Sri Lanka.
           </p>
         </div>
@@ -201,7 +173,7 @@ export default function FleetSection() {
           <button
             onClick={() => slideTo(-1)}
             disabled={len <= 1}
-            className="shrink-0 hidden md:flex w-10 h-10 items-center justify-center rounded-full border border-amber-400/30 text-amber-400 hover:bg-amber-400/10 transition cursor-pointer"
+            className="hidden h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-neutral-300 text-neutral-800 transition hover:bg-neutral-100 disabled:opacity-40 md:flex"
           >
             <LucideArrowLeft size={16} />
           </button>
@@ -212,11 +184,19 @@ export default function FleetSection() {
             onPointerDown={onPointerDown}
             onPointerUp={onPointerUp}
           >
-            <div ref={stripRef} className="flex" style={{ gap: GAP, willChange: "transform" }}>
+            <div
+              ref={stripRef}
+              className="flex"
+              style={{ gap: GAP, willChange: "transform" }}
+            >
               {cloned.map((v, i) => (
-                <div key={`${v.id}-${i}`} className="shrink-0" style={{ width: cardWidth }}>
+                <div
+                  key={`${v.id}-${i}`}
+                  className="shrink-0"
+                  style={{ width: cardWidth }}
+                >
                   <Link href={`/fleet/${v.id}`} className="block h-full">
-                    <article className="h-full md:min-h-105 min-h-75 bg-white rounded-xl shadow-sm overflow-hidden border border-white/30 flex flex-col">
+                    <article className="min-h-75 flex h-full flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm md:min-h-105">
                       <div className="relative h-44 md:h-52 w-full bg-gray-100 overflow-hidden">
                         <Image
                           src={v.imageUrl}
@@ -228,24 +208,35 @@ export default function FleetSection() {
                       </div>
 
                       <div className="p-5 flex flex-col flex-1">
-                        <h3 className="font-cinzel text-lg md:text-xl text-[#0b2545] mb-2">{v.name}</h3>
-                        <p className="text-neutral-700 text-sm mb-4 line-clamp-2">{v.shortDescription}</p>
+                        <h3 className="font-cinzel text-lg md:text-xl text-[#0b2545] mb-2">
+                          {v.name}
+                        </h3>
+                        <p className="text-neutral-700 text-sm mb-4 line-clamp-2">
+                          {v.shortDescription}
+                        </p>
 
                         <div className="flex items-center gap-4 mb-4">
                           <div className="flex items-center gap-2 text-neutral-700">
                             <Users size={18} className="text-[#0b2545]" />
-                            <span className="text-sm">{v.passengerCapacity} pax</span>
+                            <span className="text-sm">
+                              {v.passengerCapacity} pax
+                            </span>
                           </div>
 
                           <div className="flex items-center gap-2 text-neutral-700">
                             <Briefcase size={18} className="text-[#0b2545]" />
-                            <span className="text-sm">{v.luggageCapacity} bags</span>
+                            <span className="text-sm">
+                              {v.luggageCapacity} bags
+                            </span>
                           </div>
                         </div>
 
                         <div className="flex flex-wrap gap-2 mb-4">
                           {v.features.slice(0, 3).map((f) => (
-                            <span key={f} className="text-xs text-neutral-600 bg-gray-50 px-2 py-1 rounded">
+                            <span
+                              key={f}
+                              className="text-xs text-neutral-600 bg-gray-50 px-2 py-1 rounded"
+                            >
                               {f}
                             </span>
                           ))}
@@ -258,7 +249,7 @@ export default function FleetSection() {
                               e.preventDefault();
                               setSelectedId(v.id);
                             }}
-                            className="fleet-cta inline-flex w-full max-w-full md:max-w-xs justify-center px-6 py-3 rounded-full font-cinzel text-sm bg-amber-400 text-[#0b2545] hover:opacity-95 transition"
+                            className="fleet-cta inline-flex w-full max-w-full justify-center rounded-lg bg-gradient-to-br from-slate-900/95 to-slate-800/95 px-6 py-3 font-cinzel text-sm text-white transition md:max-w-xs"
                             aria-expanded={!!selectedId}
                           >
                             View More Details
@@ -275,22 +266,32 @@ export default function FleetSection() {
           <button
             onClick={() => slideTo(1)}
             disabled={len <= 1}
-            className="shrink-0 hidden md:flex w-10 h-10 items-center justify-center rounded-full border border-amber-400/30 text-amber-400 hover:bg-amber-400/10 transition cursor-pointer"
+            className="hidden h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-neutral-300 text-neutral-800 transition hover:bg-neutral-100 disabled:opacity-40 md:flex"
           >
             <LucideArrowRight size={16} />
           </button>
         </div>
 
-        {isLoading && <p className="mt-6 text-center text-sm text-amber-50/70">Loading fleet...</p>}
-        {!isLoading && error && <p className="mt-6 text-center text-sm text-red-300">{error}</p>}
-        {!isLoading && !error && len === 0 && <p className="mt-6 text-center text-sm text-amber-50/70">No fleet vehicles available right now.</p>}
+        {isLoading && (
+          <p className="mt-6 text-center text-sm text-neutral-600">
+            Loading fleet...
+          </p>
+        )}
+        {!isLoading && error && (
+          <p className="mt-6 text-center text-sm text-red-300">{error}</p>
+        )}
+        {!isLoading && !error && len === 0 && (
+          <p className="mt-6 text-center text-sm text-neutral-600">
+            No fleet vehicles available right now.
+          </p>
+        )}
 
         <div className="flex justify-center gap-2 mt-6">
           {fleetVehicles.map((_, i) => (
             <span
               key={i}
               className={`w-2.5 h-2.5 rounded-full transition-all ${
-                i === dotIndex ? "bg-amber-400 scale-125" : "bg-amber-400/25"
+                i === dotIndex ? "bg-neutral-800 scale-125" : "bg-neutral-300"
               }`}
             />
           ))}
@@ -299,7 +300,7 @@ export default function FleetSection() {
         <div className="text-center mt-8">
           <Link
             href="/fleet"
-            className="inline-flex items-center px-6 py-3 font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)] hover:text-white transition"
+            className="inline-flex items-center px-6 py-3 font-cinzel text-neutral-800 transition hover:text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]"
           >
             Explore Full Fleet
             <LucideArrowRight size={16} className="ml-2" />
@@ -307,7 +308,9 @@ export default function FleetSection() {
         </div>
       </div>
 
-      {selectedId && <FleetDetailModal id={selectedId} onClose={() => setSelectedId(null)} />}
+      {selectedId && (
+        <FleetDetailModal id={selectedId} onClose={() => setSelectedId(null)} />
+      )}
     </section>
   );
 }
