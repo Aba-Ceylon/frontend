@@ -21,6 +21,7 @@ function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
       src={src}
       alt={alt}
       fill
+      sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
       className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
       onError={() => setErrored(true)}
     />

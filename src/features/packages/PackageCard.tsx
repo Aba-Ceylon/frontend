@@ -27,7 +27,13 @@ export default function PackageCard({ pkg }: PackageCardProps) {
       }`}
     >
       <div className="relative h-48 sm:h-64 md:h-72 lg:h-80 w-full">
-        <Image src={pkg.image} alt={pkg.title} fill className="object-cover" />
+        <Image
+          src={pkg.image}
+          alt={pkg.title}
+          fill
+          sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
+          className="object-cover"
+        />
       </div>
 
       <div className="p-3 sm:p-4 md:p-5">

@@ -20,6 +20,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             src={vehicle.imageUrl}
             alt={vehicle.name}
             fill
+            sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
             className="fleet-card-image object-cover transition-transform duration-500"
             placeholder="empty"
           />
