@@ -35,9 +35,11 @@ export default function PlannerPage() {
   const stepperWrapRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const {
+    accommodationModeValidationIssues,
     allDestinations,
     comfortLevels,
     currentStep,
+    destinationValidationIssues,
     filteredVehicles,
     form,
     goToNextStep,
@@ -53,6 +55,7 @@ export default function PlannerPage() {
     setAccommodationMode,
     setComfortLevel,
     setVehicleType,
+    stayValidationIssues,
     stepValidity,
     steps,
     toggleDestination,
@@ -60,6 +63,7 @@ export default function PlannerPage() {
     tripValidationIssues,
     updateField,
     updateStayPlan,
+    vehicleValidationIssues,
     vehicleTypes,
   } = usePlanner();
 
@@ -399,6 +403,7 @@ export default function PlannerPage() {
                   destinations={allDestinations}
                   onToggleDestination={toggleDestination}
                   selectedDestinationIds={form.selectedDestinationIds}
+                  validationIssues={destinationValidationIssues}
                 />
               ) : null}
 
@@ -409,6 +414,7 @@ export default function PlannerPage() {
                   selectedComfortLevel={form.comfortLevel}
                   selectedVehicleId={form.selectedVehicleId}
                   selectedVehicleType={form.vehicleType}
+                  validationIssues={vehicleValidationIssues}
                   vehicleTypes={vehicleTypes}
                   onComfortChange={setComfortLevel}
                   onVehicleSelect={(vehicleId) =>
@@ -423,6 +429,7 @@ export default function PlannerPage() {
                   <AccommodationChoice
                     accommodationMode={form.accommodationMode}
                     accommodationNote={reviewData.accommodationNote}
+                    validationIssues={accommodationModeValidationIssues}
                     onModeChange={setAccommodationMode}
                   />
 
@@ -432,6 +439,7 @@ export default function PlannerPage() {
                       selectedStayPlans={selectedStayPlans}
                       tripEndDate={tripEndDate}
                       tripStartDate={form.travelStartDate}
+                      validationIssues={stayValidationIssues}
                       onDateChange={updateStayPlan}
                       onToggleStay={toggleStaySelection}
                     />

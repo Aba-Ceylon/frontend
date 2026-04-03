@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { destinations } from "@/data/destinations";
 import {
   buildPlannerReviewData,
   COMFORT_LEVELS,
@@ -9,11 +8,16 @@ import {
   getVehicleTypes,
   normalizeStayPlanDates,
   recommendStaysForDestinations,
-  validateStayPlan,
+  validateAccommodationMode,
+  validateDestinationSelection,
+  validateRecommendedStaySelection,
   validateTripDetails,
+  validateVehicleSelection,
 } from "@/lib/planner/plannerHelpers";
+import { fetchDestinations } from "@/services/destinationService";
 import { fetchAllVehicles } from "@/services/fleetService";
 import { fetchStays } from "@/services/stayService";
+import type { Destination } from "@/types/destination";
 import type {
   AccommodationMode,
   ComfortLevel,
@@ -39,6 +43,7 @@ const DEFAULT_FORM: PlannerFormState = {
 
 export function usePlanner() {
   const [form, setForm] = useState<PlannerFormState>(DEFAULT_FORM);
+  const [destinations, setDestinations] = useState<Destination[]>([]);
   const [vehicles, setVehicles] = useState<FleetVehicle[]>([]);
   const [stays, setStays] = useState<Stay[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,7 +58,8 @@ export function usePlanner() {
       setLoadingError(null);
 
       try {
-        const [vehicleRows, stayRows] = await Promise.all([
+        const [destinationRows, vehicleRows, stayRows] = await Promise.all([
+          fetchDestinations(),
           fetchAllVehicles(),
           fetchStays(),
         ]);
@@ -62,6 +68,7 @@ export function usePlanner() {
           return;
         }
 
+        setDestinations(destinationRows);
         setVehicles(vehicleRows);
         setStays(stayRows);
       } catch (error) {
@@ -95,7 +102,7 @@ export function usePlanner() {
       destinations.filter((destination) =>
         form.selectedDestinationIds.includes(destination.id),
       ),
-    [form.selectedDestinationIds],
+    [destinations, form.selectedDestinationIds],
   );
 
   const vehicleTypes = useMemo(() => getVehicleTypes(vehicles), [vehicles]);
@@ -152,31 +159,65 @@ export function usePlanner() {
   );
 
   const tripValidationIssues = useMemo(() => validateTripDetails(form), [form]);
+  const destinationValidationIssues = useMemo(
+    () => validateDestinationSelection(form.selectedDestinationIds),
+    [form.selectedDestinationIds],
+  );
+  const vehicleValidationIssues = useMemo(
+    () =>
+      validateVehicleSelection({
+        comfortLevel: form.comfortLevel,
+        filteredVehicleCount: filteredVehicles.length,
+        selectedVehicleId: form.selectedVehicleId,
+        vehicleType: form.vehicleType,
+      }),
+    [
+      filteredVehicles.length,
+      form.comfortLevel,
+      form.selectedVehicleId,
+      form.vehicleType,
+    ],
+  );
+  const accommodationModeValidationIssues = useMemo(
+    () => validateAccommodationMode(form.accommodationMode),
+    [form.accommodationMode],
+  );
+  const stayValidationIssues = useMemo(
+    () =>
+      validateRecommendedStaySelection({
+        accommodationMode: form.accommodationMode,
+        details: form,
+        recommendedStaysCount: recommendedStays.length,
+        selectedStayPlans: form.selectedStayPlans,
+      }),
+    [form, recommendedStays.length],
+  );
 
   const isTripStepValid = tripValidationIssues.length === 0;
-  const isDestinationStepValid = form.selectedDestinationIds.length > 0;
-  const isVehicleStepValid =
-    Boolean(form.vehicleType) &&
-    Boolean(form.comfortLevel) &&
-    Boolean(form.selectedVehicleId);
+  const isDestinationStepValid = destinationValidationIssues.length === 0;
+  const isVehicleStepValid = vehicleValidationIssues.length === 0;
   const isAccommodationStepValid =
-    form.accommodationMode === "own"
-      ? true
-      : form.accommodationMode === "recommended"
-        ? selectedStayPlans.length > 0 &&
-          selectedStayPlans.every((plan) => validateStayPlan(plan, form))
-        : false;
+    accommodationModeValidationIssues.length === 0 &&
+    stayValidationIssues.length === 0;
 
-  const stepValidity = [
-    isTripStepValid,
-    isDestinationStepValid,
-    isVehicleStepValid,
-    isAccommodationStepValid,
-    isTripStepValid &&
-      isDestinationStepValid &&
-      isVehicleStepValid &&
+  const stepValidity = useMemo(
+    () => [
+      isTripStepValid,
+      isDestinationStepValid,
+      isVehicleStepValid,
       isAccommodationStepValid,
-  ];
+      isTripStepValid &&
+        isDestinationStepValid &&
+        isVehicleStepValid &&
+        isAccommodationStepValid,
+    ],
+    [
+      isAccommodationStepValid,
+      isDestinationStepValid,
+      isTripStepValid,
+      isVehicleStepValid,
+    ],
+  );
 
   const updateField = useCallback(
     <Key extends keyof PlannerFormState>(
@@ -285,14 +326,27 @@ export function usePlanner() {
     setCurrentStep((current) => Math.max(current - 1, 0));
   }, []);
 
-  const goToStep = useCallback((stepIndex: number) => {
-    setCurrentStep(stepIndex);
-  }, []);
+  const goToStep = useCallback(
+    (stepIndex: number) => {
+      const canAccessStep = stepValidity
+        .slice(0, stepIndex)
+        .every((isStepValid) => isStepValid);
+
+      if (!canAccessStep) {
+        return;
+      }
+
+      setCurrentStep(stepIndex);
+    },
+    [stepValidity],
+  );
 
   return {
+    accommodationModeValidationIssues,
     allDestinations: destinations,
     comfortLevels: COMFORT_LEVELS,
     currentStep,
+    destinationValidationIssues,
     filteredVehicles,
     form,
     goToNextStep,
@@ -312,6 +366,7 @@ export function usePlanner() {
     setAccommodationMode,
     setComfortLevel,
     setVehicleType,
+    stayValidationIssues,
     stays,
     stepValidity,
     steps,
@@ -320,6 +375,7 @@ export function usePlanner() {
     tripValidationIssues,
     updateField,
     updateStayPlan,
+    vehicleValidationIssues,
     vehicleTypes,
     vehicles,
   };
