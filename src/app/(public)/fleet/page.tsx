@@ -30,7 +30,7 @@ export default function FleetPage() {
       gsap.fromTo(
         heroTextRef.current,
         { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.1, ease: "power3.out", delay: 0.05 }
+        { y: 0, opacity: 1, duration: 1.1, ease: "power3.out", delay: 0.05 },
       );
 
       gsap.to(heroImgRef.current, {
@@ -56,7 +56,10 @@ export default function FleetPage() {
       setError(null);
 
       try {
-        const { vehicles, totalCount: count } = await fetchVehiclesPage(page, ITEMS_PER_PAGE);
+        const { vehicles, totalCount: count } = await fetchVehiclesPage(
+          page,
+          ITEMS_PER_PAGE,
+        );
         if (!active) {
           return;
         }
@@ -68,7 +71,8 @@ export default function FleetPage() {
           return;
         }
 
-        const message = err instanceof Error ? err.message : "Failed to load fleet vehicles.";
+        const message =
+          err instanceof Error ? err.message : "Failed to load fleet vehicles.";
         setError(message);
         setFleetVehicles([]);
       } finally {
@@ -87,7 +91,9 @@ export default function FleetPage() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const cards = gridRef.current ? Array.from(gridRef.current.querySelectorAll("[data-fleet-card]")) : [];
+      const cards = gridRef.current
+        ? Array.from(gridRef.current.querySelectorAll("[data-fleet-card]"))
+        : [];
       const cleanup: Array<() => void> = [];
       if (cards.length) {
         gsap.fromTo(
@@ -104,15 +110,30 @@ export default function FleetPage() {
               start: "top 85%",
               toggleActions: "play none none none",
             },
-          }
+          },
         );
 
         cards.forEach((cardEl) => {
-          const imageEl = cardEl.querySelector(".fleet-card-image") as HTMLElement | null;
+          const imageEl = cardEl.querySelector(
+            ".fleet-card-image",
+          ) as HTMLElement | null;
           const hoverTl = gsap.timeline({ paused: true });
-          hoverTl.to(cardEl, { y: -6, boxShadow: "0 20px 36px rgba(11,37,69,0.18)", duration: 0.24, ease: "power2.out" }, 0);
+          hoverTl.to(
+            cardEl,
+            {
+              y: -6,
+              boxShadow: "0 20px 36px rgba(11,37,69,0.18)",
+              duration: 0.24,
+              ease: "power2.out",
+            },
+            0,
+          );
           if (imageEl) {
-            hoverTl.to(imageEl, { scale: 1.08, duration: 0.42, ease: "power2.out" }, 0);
+            hoverTl.to(
+              imageEl,
+              { scale: 1.08, duration: 0.42, ease: "power2.out" },
+              0,
+            );
           }
 
           const onEnter = () => hoverTl.play();
@@ -149,7 +170,10 @@ export default function FleetPage() {
         </div>
         <div className="absolute inset-0 bg-linear-to-b from-black/50 via-black/30 to-black/60" />
 
-        <div ref={heroTextRef} className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+        <div
+          ref={heroTextRef}
+          className="absolute inset-0 flex flex-col items-center justify-center text-center px-6"
+        >
           <p className="font-cinzel text-amber-400 text-xs sm:text-sm tracking-[0.3em] uppercase mb-4">
             Aba Ceylon Tours & Travels
           </p>
@@ -157,14 +181,18 @@ export default function FleetPage() {
             Explore Our Premium Fleet
           </h1>
           <p className="font-cinzel text-sm sm:text-base text-white/80 max-w-lg">
-            Chauffeured vehicles designed for comfort, elegance, and seamless travel across Sri Lanka.
+            Chauffeured vehicles designed for comfort, elegance, and seamless
+            travel across Sri Lanka.
           </p>
           <div className="mt-6 w-16 h-px bg-amber-400" />
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div
+          ref={gridRef}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+        >
           {fleetVehicles.map((vehicle) => (
             <VehicleCard key={vehicle.id} vehicle={vehicle} />
           ))}
@@ -175,14 +203,22 @@ export default function FleetPage() {
         )}
 
         {!isLoading && !error && fleetVehicles.length === 0 && (
-          <p className="mt-8 text-center text-sm text-neutral-700">No fleet vehicles are available right now.</p>
+          <p className="mt-8 text-center text-sm text-neutral-700">
+            No fleet vehicles are available right now.
+          </p>
         )}
 
         {isLoading && (
-          <p className="mt-8 text-center text-sm text-neutral-700">Loading fleet vehicles...</p>
+          <p className="mt-8 text-center text-sm text-neutral-700">
+            Loading fleet vehicles...
+          </p>
         )}
 
-        <PaginationControls currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+        <PaginationControls
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );

@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import DestinationPanel from "@/components/interactiveSriLanka/DestinationPanel";
 import {
   getMapLegendCategory,
   mapCategoryStyles,
@@ -294,12 +293,65 @@ export default function PlannerInteractiveMap({
         </div>
 
         {selectedMapDestination ? (
-          <DestinationPanel
-            destination={selectedMapDestination}
-            onClose={handleClosePanel}
-            actionLabel={plannerActionLabel}
-            onAction={handlePlannerAction}
-          />
+          <>
+            <div
+              className="absolute inset-0 z-20 bg-black/20 backdrop-blur-[1px]"
+              onClick={handleClosePanel}
+            />
+            <div className="absolute inset-x-3 bottom-3 z-30 rounded-[1.5rem] border border-white/70 bg-white/96 p-4 shadow-2xl backdrop-blur md:inset-x-auto md:bottom-5 md:right-5 md:w-[320px]">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="font-cinzel text-xs uppercase tracking-[0.22em] text-amber-700">
+                    {selectedMapDestination.category}
+                  </p>
+                  <h4 className="mt-2 font-cinzel text-2xl text-[#0F172A]">
+                    {selectedMapDestination.name}
+                  </h4>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleClosePanel}
+                  className="rounded-full bg-neutral-100 px-3 py-1 text-xs text-neutral-600 transition hover:bg-neutral-200"
+                >
+                  Close
+                </button>
+              </div>
+
+              <p className="mt-3 text-sm leading-6 text-neutral-600">
+                {selectedMapDestination.summary}
+              </p>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {selectedMapDestination.highlights
+                  .slice(0, 2)
+                  .map((highlight) => (
+                    <span
+                      key={highlight}
+                      className="rounded-full bg-neutral-100 px-3 py-1 text-xs text-neutral-700"
+                    >
+                      {highlight}
+                    </span>
+                  ))}
+              </div>
+
+              <div className="mt-4 flex items-center justify-between text-xs text-neutral-500">
+                <span>{selectedMapDestination.region}</span>
+                <span>{selectedMapDestination.bestTimeToVisit}</span>
+              </div>
+
+              <button
+                type="button"
+                onClick={handlePlannerAction}
+                className={`mt-5 w-full rounded-2xl px-4 py-3 font-cinzel text-xs uppercase tracking-[0.22em] transition ${
+                  selectedDestinationSet.has(selectedMapDestination.id)
+                    ? "bg-[#0F172A] text-amber-300 hover:bg-[#18243D]"
+                    : "bg-amber-500 text-white hover:bg-amber-600"
+                }`}
+              >
+                {plannerActionLabel}
+              </button>
+            </div>
+          </>
         ) : null}
       </div>
     </div>

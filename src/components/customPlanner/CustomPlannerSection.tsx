@@ -78,7 +78,7 @@ export default function CustomPlannerSection() {
         style={{ backgroundImage: "url('/plannerBakcground.jpg')" }}
       />
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,10,18,0.86),rgba(10,15,26,0.64),rgba(5,10,18,0.82))]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(245,158,11,0.2),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_24%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(201,154,43,0.2),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_24%)]" />
 
       <div className="relative max-w-7xl mx-auto px-6 min-h-[260px] flex items-center justify-center">
         <div

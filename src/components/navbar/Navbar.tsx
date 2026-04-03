@@ -6,11 +6,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Show, UserButton } from "@clerk/nextjs";
 import { Menu, X } from "lucide-react";
+import FeedbackModal from "@/features/feedback/FeedbackModal";
 
 export default function NavBar() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
   const isAuthPage =
     pathname.startsWith("/sign-in") ||
@@ -30,7 +32,7 @@ export default function NavBar() {
 
   const navLinks = [
     { label: "Holiday Packages", href: "/packages" },
-    { label: "Customize Tour", href: "/#custom-planner" },
+    { label: "Plan With Us", href: "/#custom-planner" },
     { label: "Fleet", href: "/fleet" },
     { label: "Stays", href: "/stays" },
   ];
@@ -68,7 +70,7 @@ export default function NavBar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-white text-sm font-medium transition-colors duration-300 hover:text-[#B8860B]"
+                  className="font-cinzel text-white text-sm font-medium tracking-[0.08em] transition-colors duration-300 hover:text-[#C99A2B]"
                 >
                   {link.label}
                 </Link>
@@ -79,29 +81,41 @@ export default function NavBar() {
           {/* Desktop CTA & Auth Buttons */}
           {!isAuthPage && (
             <div className="hidden lg:flex items-center gap-4">
+              <Link
+                href="/contact"
+                className="relative overflow-hidden border-2 border-amber-400/60 bg-white/5 px-6 py-2 text-sm text-white shadow-2xl backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] hover:border-amber-400 hover:bg-white/10"
+              >
+                <span className="relative z-10 font-cinzel tracking-wide">
+                  Enquire Now
+                </span>
+              </Link>
               <Show when="signed-out">
                 <Link
                   href="/sign-in"
-                  className="text-white text-sm font-medium px-4 py-2 transition-colors duration-300 hover:text-[#B8860B]"
+                  className="font-cinzel text-white text-sm font-medium tracking-[0.08em] px-4 py-2 transition-colors duration-300 hover:text-[#C99A2B]"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/sign-up"
-                  className="text-white text-sm font-medium px-4 py-2 transition-colors duration-300 hover:text-[#B8860B]"
+                  className="rounded-md bg-amber-400/60 px-4 py-2 font-cinzel text-sm font-medium tracking-[0.08em] text-white drop-shadow-[0_0_30px_rgba(201,154,43,0.5)] transition-all duration-300 hover:bg-amber-400/75"
                 >
                   Sign Up
                 </Link>
               </Show>
               <Show when="signed-in">
+                <Link
+                  href="/feedback"
+                  className="font-cinzel text-white text-sm font-medium tracking-[0.08em] px-4 py-2 transition-colors duration-300 hover:text-[#C99A2B]"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setIsFeedbackOpen(true);
+                  }}
+                >
+                  Feedback
+                </Link>
                 <UserButton />
               </Show>
-              <Link
-                href="/planner"
-                className="bg-[#B8860B] hover:bg-[#9A7309] text-white px-6 py-2 rounded-md text-sm font-semibold transition-colors duration-300"
-              >
-                Plan Your Journey
-              </Link>
             </div>
           )}
 
@@ -131,7 +145,7 @@ export default function NavBar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-white text-sm font-medium py-2 transition-colors duration-300 hover:text-[#B8860B]"
+                  className="font-cinzel text-white text-sm font-medium tracking-[0.08em] py-2 transition-colors duration-300 hover:text-[#C99A2B]"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.label}
@@ -139,39 +153,56 @@ export default function NavBar() {
               ))}
 
               <div className="border-t border-white/20 pt-3 mt-3 flex flex-col gap-3">
+                <Link
+                  href="/contact"
+                  className="relative overflow-hidden border-2 border-amber-400/60 bg-white/5 px-4 py-3 text-center text-sm text-white shadow-2xl backdrop-blur-xl transition-all duration-300 hover:border-amber-400 hover:bg-white/10"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="relative z-10 font-cinzel tracking-wide">
+                    Enquire Now
+                  </span>
+                </Link>
                 <Show when="signed-out">
                   <Link
                     href="/sign-in"
-                    className="text-white text-sm font-medium py-2 transition-colors duration-300 hover:text-[#B8860B]"
+                    className="font-cinzel text-white text-sm font-medium tracking-[0.08em] py-2 transition-colors duration-300 hover:text-[#C99A2B]"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Sign In
                   </Link>
                   <Link
                     href="/sign-up"
-                    className="text-white text-sm font-medium py-2 transition-colors duration-300 hover:text-[#B8860B]"
+                    className="rounded-md bg-amber-400/60 px-4 py-2 text-center font-cinzel text-sm font-medium tracking-[0.08em] text-white drop-shadow-[0_0_30px_rgba(201,154,43,0.5)] transition-all duration-300 hover:bg-amber-400/75"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Sign Up
                   </Link>
                 </Show>
                 <Show when="signed-in">
+                  <Link
+                    href="/feedback"
+                    className="font-cinzel text-white text-sm font-medium tracking-[0.08em] py-2 transition-colors duration-300 hover:text-[#C99A2B]"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      setIsMobileMenuOpen(false);
+                      setIsFeedbackOpen(true);
+                    }}
+                  >
+                    Feedback
+                  </Link>
                   <div className="py-2">
                     <UserButton />
                   </div>
                 </Show>
-                <Link
-                  href="/planner"
-                  className="bg-[#B8860B] hover:bg-[#9A7309] text-white px-6 py-2 rounded-md text-sm font-semibold transition-colors duration-300 text-center"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Plan Your Journey
-                </Link>
               </div>
             </div>
           </div>
         )}
       </div>
+
+      {isFeedbackOpen ? (
+        <FeedbackModal onClose={() => setIsFeedbackOpen(false)} />
+      ) : null}
     </nav>
   );
 }

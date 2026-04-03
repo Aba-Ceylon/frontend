@@ -207,7 +207,7 @@ export default function PlannerPage() {
               style={{ backgroundImage: "url('/planner.png')" }}
             />
             <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(10,15,28,0.72),rgba(15,23,42,0.56),rgba(8,12,20,0.68))]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(245,158,11,0.28),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(217,119,6,0.18),transparent_30%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(201,154,43,0.28),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(201,154,43,0.18),transparent_30%)]" />
             <div
               ref={heroContentRef}
               className="relative flex min-h-[440px] sm:min-h-[500px] items-end px-6 py-12 sm:px-10 sm:py-14"

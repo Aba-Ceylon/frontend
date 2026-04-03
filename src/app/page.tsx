@@ -28,10 +28,10 @@ export default function Home() {
       <InteractiveMap />
       <FeaturedPckgs />
       <FeaturedStays />
-      <Testimonials />
       <FleetSection />
       <CustomPlannerSection />
       <BuddhaLotus />
+      <Testimonials />
     </div>
   );
 }

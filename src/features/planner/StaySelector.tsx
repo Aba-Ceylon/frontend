@@ -69,7 +69,7 @@ export default function StaySelector({
                 key={stay.id}
                 className={`rounded-3xl border overflow-hidden bg-white transition ${
                   isSelected
-                    ? "border-amber-500 shadow-[0_20px_50px_rgba(217,119,6,0.16)]"
+                    ? "border-amber-500 shadow-[0_20px_50px_rgba(201,154,43,0.16)]"
                     : "border-neutral-200"
                 }`}
               >
