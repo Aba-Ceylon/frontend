@@ -1,4 +1,4 @@
-import { destinations as fallbackDestinations } from "@/data/destinations";
+import { destinations as destinationMetadataSeeds } from "@/data/destinations";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import type { Destination, SupabaseDestinationRow } from "@/types/destination";
 
@@ -70,14 +70,6 @@ function buildDestinationDescription(
   );
 }
 
-function mapFallbackDestination(destination: Destination): Destination {
-  return {
-    ...destination,
-    destinationId: destination.destinationId,
-    images: destination.images ?? [],
-  };
-}
-
 function mapDestinationRow(
   row: SupabaseDestinationRow,
   fallbackDestination?: Destination,
@@ -129,7 +121,7 @@ function mapDestinationRow(
 
 function buildDestinationsFromRows(rows: SupabaseDestinationRow[]) {
   const fallbackMap = new Map(
-    fallbackDestinations.map((destination) => [
+    destinationMetadataSeeds.map((destination) => [
       normalizeName(destination.name),
       destination,
     ]),
@@ -148,12 +140,6 @@ function buildDestinationsFromRows(rows: SupabaseDestinationRow[]) {
     .sort((left, right) => left.name.localeCompare(right.name));
 }
 
-function getFallbackDestinations() {
-  return fallbackDestinations
-    .map(mapFallbackDestination)
-    .sort((left, right) => left.name.localeCompare(right.name));
-}
-
 export async function fetchDestinations() {
   try {
     const supabase = getSupabaseClient();
@@ -169,15 +155,11 @@ export async function fetchDestinations() {
     const rows = (data ?? []) as SupabaseDestinationRow[];
 
     if (!rows.length) {
-      return getFallbackDestinations();
+      return [];
     }
 
-    const mappedDestinations = buildDestinationsFromRows(rows);
-
-    return mappedDestinations.length
-      ? mappedDestinations
-      : getFallbackDestinations();
+    return buildDestinationsFromRows(rows);
   } catch {
-    return getFallbackDestinations();
+    return [];
   }
 }

@@ -7,11 +7,15 @@ import { getMapLegendCategory, mapCategoryStyles } from "./mapCategoryUtils";
 interface DestinationPanelProps {
   destination: Destination;
   onClose: () => void;
+  actionLabel?: string;
+  onAction?: () => void;
 }
 
 export default function DestinationPanel({
   destination,
   onClose,
+  actionLabel,
+  onAction,
 }: DestinationPanelProps) {
   const displayCategory = getMapLegendCategory(destination);
   const categoryStyle = mapCategoryStyles[displayCategory];
@@ -190,9 +194,16 @@ export default function DestinationPanel({
                 Close
               </button>
               <button
-                className={`flex-1 px-6 py-3 ${categoryStyle.bgClass} text-white rounded-lg font-medium hover:opacity-90 transition-opacity font-cinzel`}
+                type="button"
+                onClick={onAction}
+                disabled={!onAction}
+                className={`flex-1 px-6 py-3 ${categoryStyle.bgClass} text-white rounded-lg font-medium transition-opacity font-cinzel ${
+                  onAction
+                    ? "hover:opacity-90"
+                    : "cursor-not-allowed opacity-60"
+                }`}
               >
-                Add to Planner
+                {actionLabel || "Add to Planner"}
               </button>
             </div>
           </div>
