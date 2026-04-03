@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PlannerInteractiveMap from "@/features/planner/PlannerInteractiveMap";
 import type { Destination } from "@/types/destination";
 import DestinationMapModal from "@/features/planner/DestinationMapModal";
 
@@ -49,6 +50,12 @@ export default function DestinationSelector({
             </ul>
           </div>
         ) : null}
+
+        <PlannerInteractiveMap
+          destinations={destinations}
+          onToggleDestination={onToggleDestination}
+          selectedDestinationIds={selectedDestinationIds}
+        />
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {destinations.map((destination) => {
