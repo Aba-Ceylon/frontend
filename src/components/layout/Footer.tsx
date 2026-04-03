@@ -42,37 +42,44 @@ export default function Footer() {
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        bigTextRef.current,
-        { y: 30, opacity: 0 },
-        {
-          y: -10,
-          opacity: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: footerRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        },
-      );
+      const revealItems = gsap.utils.toArray<HTMLElement>("[data-f-reveal]");
 
-      gsap.fromTo(
-        "[data-f-reveal]",
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          stagger: 0.1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: footerRef.current,
-            start: "top 90%",
+      if (bigTextRef.current && footerRef.current) {
+        gsap.fromTo(
+          bigTextRef.current,
+          { y: 18 },
+          {
+            y: -10,
+            ease: "none",
+            scrollTrigger: {
+              trigger: footerRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
           },
-        },
-      );
+        );
+      }
+
+      revealItems.forEach((item, index) => {
+        gsap.fromTo(
+          item,
+          { y: 18 },
+          {
+            y: 0,
+            duration: 0.8,
+            delay: index * 0.06,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: item,
+              start: "top 95%",
+              once: true,
+              invalidateOnRefresh: true,
+            },
+          },
+        );
+      });
     }, footerRef);
 
     return () => ctx.revert();

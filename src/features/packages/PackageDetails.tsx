@@ -1,19 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import { MapPin, Clock, Route, Car, CheckCircle } from "lucide-react";
+import PackageRequestButton from "@/features/packages/PackageRequestButton";
 import { PackageItem } from "@/types/package";
 import PackageTimeline from "./PackageTimeline";
-import { usePackageStore } from "@/store/PackageStore";
-import { MapPin, Clock, Route, Car, CheckCircle } from "lucide-react";
 
 export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
-  const { selectedPackage, setSelectedPackage } = usePackageStore();
-  const isSelected = selectedPackage?.id === pkg.id;
   const routeLabel = pkg.route.join(" -> ");
 
   return (
     <div className="bg-[#F8F4ED] min-h-screen">
-      {/* Hero */}
       <div className="relative h-72 sm:h-96 w-full">
         <Image
           src={pkg.image}
@@ -34,7 +31,6 @@ export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
       </div>
 
       <div className="max-w-5xl mx-auto px-6 py-12 space-y-12">
-        {/* Quick stats */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
           <div className="flex items-center gap-3 bg-white rounded p-4 shadow-sm">
             <Clock size={18} className="text-amber-700" />
@@ -65,7 +61,6 @@ export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
           </div>
         </div>
 
-        {/* Overview */}
         <section>
           <h2 className="font-cinzel text-2xl text-neutral-900 mb-4">
             Overview
@@ -73,7 +68,6 @@ export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
           <p className="text-neutral-700 leading-7">{pkg.overview}</p>
         </section>
 
-        {/* Itinerary */}
         <section>
           <h2 className="font-cinzel text-2xl text-neutral-900 mb-6">
             Day-by-Day Itinerary
@@ -81,7 +75,6 @@ export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
           <PackageTimeline itinerary={pkg.itinerary} />
         </section>
 
-        {/* Included Services */}
         <section>
           <h2 className="font-cinzel text-2xl text-neutral-900 mb-4">
             Included Services
@@ -102,7 +95,6 @@ export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
           </div>
         </section>
 
-        {/* Recommended Vehicle */}
         {pkg.recommendedVehicle ? (
           <section>
             <h2 className="font-cinzel text-2xl text-neutral-900 mb-4">
@@ -122,17 +114,12 @@ export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
           </section>
         ) : null}
 
-        {/* CTA */}
         <div className="flex gap-4">
-          <button
-            onClick={() => setSelectedPackage(pkg)}
-            className="px-6 py-3 font-cinzel text-[0] rounded bg-neutral-900 text-white hover:bg-neutral-700 transition cursor-pointer"
-          >
-            <span className="text-sm">
-              {isSelected ? "Requested" : "Request This Package"}
-            </span>
-            {isSelected ? "Requested ✓" : "Request This Package"}
-          </button>
+          <PackageRequestButton
+            pkg={pkg}
+            className="rounded bg-neutral-900 px-6 py-3 font-cinzel text-sm text-white transition cursor-pointer hover:bg-neutral-700"
+            label="Request This Package"
+          />
         </div>
       </div>
     </div>
