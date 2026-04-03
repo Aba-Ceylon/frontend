@@ -4,6 +4,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import NavBar from "../components/navbar/Navbar";
 import Footer from "../components/layout/Footer";
+import { LoaderGateProvider } from "../components/home/LoaderGate";
+import GatedShell from "../components/home/GatedShell";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,9 +33,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ClerkProvider>
-          <NavBar />
-          <main>{children}</main>
-          <Footer />
+          <LoaderGateProvider>
+            <GatedShell navbar={<NavBar />} footer={<Footer />}>
+              {children}
+            </GatedShell>
+          </LoaderGateProvider>
         </ClerkProvider>
       </body>
     </html>

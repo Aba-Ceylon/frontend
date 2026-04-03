@@ -224,7 +224,7 @@ export default function HomeEntryLoader() {
           />
 
           <p className="mt-8 font-cinzel text-[0.68rem] uppercase tracking-[0.55em] text-amber-200/85 sm:text-xs">
-            Sri Lanka, Curated With Grace
+            The Ultimate Heritage Experience
           </p>
           <h1 className="mt-5 font-cinzel text-4xl text-white sm:text-5xl">
             ABA Ceylon
