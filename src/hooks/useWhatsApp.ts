@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { generateWhatsAppLink } from "@/lib/whatsapp/generateWhatsAppLink";
 
-const DEFAULT_ADMIN_WHATSAPP = "+94770000000";
+const DEFAULT_ADMIN_WHATSAPP = "+94722554488";
 
 export function useWhatsApp(message: string) {
   const adminPhoneNumber =
