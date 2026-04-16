@@ -4,6 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import NavBar from "../components/navbar/Navbar";
 import Footer from "../components/layout/Footer";
+import ChatbotWidget from "../features/chatbot/ChatbotWidget";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
           <NavBar />
           <main>{children}</main>
           <Footer />
+          <ChatbotWidget />
         </ClerkProvider>
       </body>
     </html>
