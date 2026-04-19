@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send, Loader2, Bot } from "lucide-react";
+import Image from "next/image";
+import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
@@ -11,7 +12,7 @@ interface Message {
 const WELCOME_MESSAGE: Message = {
   role: "assistant",
   content:
-    "Ayubowan! 🙏 I'm Aba, your Sri Lankan travel guide. Whether you're planning a trip, looking for hidden gems, or need local tips — I'm here to help! Koheda yanne? [Where are you going?]",
+    "Ayubowan! 🙏 I'm Aba, your personal Sri Lanka travel guide. Where are you thinking of heading?",
 };
 
 export default function ChatbotWidget() {
@@ -120,14 +121,19 @@ export default function ChatbotWidget() {
           <div className="flex items-center gap-3">
             {/* Avatar */}
             <div
-              className="flex items-center justify-center w-9 h-9 rounded-full shrink-0"
+              className="flex items-center justify-center w-9 h-9 rounded-full shrink-0 overflow-hidden"
               style={{
-                background:
-                  "linear-gradient(135deg, #c99a2b 0%, #a97b17 100%)",
+                border: "2px solid rgba(201,154,43,0.6)",
                 boxShadow: "0 0 12px rgba(201,154,43,0.4)",
               }}
             >
-              <Bot size={18} color="#0a0a0a" strokeWidth={2.5} />
+              <Image
+                src="/abaceylon avatar.jpeg"
+                alt="Aba"
+                width={36}
+                height={36}
+                className="object-cover w-full h-full"
+              />
             </div>
             <div>
               <p
@@ -195,14 +201,19 @@ export default function ChatbotWidget() {
             >
               {msg.role === "assistant" && (
                 <div
-                  className="flex items-end justify-center w-6 h-6 rounded-full shrink-0 mr-2 mb-0.5"
+                  className="flex items-end justify-center w-6 h-6 rounded-full shrink-0 mr-2 mb-0.5 overflow-hidden"
                   style={{
-                    background:
-                      "linear-gradient(135deg, #c99a2b 0%, #a97b17 100%)",
+                    border: "1.5px solid rgba(201,154,43,0.5)",
                     minWidth: "24px",
                   }}
                 >
-                  <Bot size={12} color="#0a0a0a" strokeWidth={2.5} />
+                  <Image
+                    src="/abaceylon avatar.jpeg"
+                    alt="Aba"
+                    width={24}
+                    height={24}
+                    className="object-cover w-full h-full"
+                  />
                 </div>
               )}
               <div
@@ -234,14 +245,19 @@ export default function ChatbotWidget() {
           {isLoading && (
             <div className="flex justify-start">
               <div
-                className="flex items-end justify-center w-6 h-6 rounded-full shrink-0 mr-2 mb-0.5"
+                className="flex items-end justify-center w-6 h-6 rounded-full shrink-0 mr-2 mb-0.5 overflow-hidden"
                 style={{
-                  background:
-                    "linear-gradient(135deg, #c99a2b 0%, #a97b17 100%)",
+                  border: "1.5px solid rgba(201,154,43,0.5)",
                   minWidth: "24px",
                 }}
               >
-                <Bot size={12} color="#0a0a0a" strokeWidth={2.5} />
+                <Image
+                  src="/abaceylon avatar.jpeg"
+                  alt="Aba"
+                  width={24}
+                  height={24}
+                  className="object-cover w-full h-full"
+                />
               </div>
               <div
                 className="flex items-center gap-1 px-4 py-3"
