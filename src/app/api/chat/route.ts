@@ -1,12 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
+import { fetchChatContext } from "@/lib/chatbot/fetchChatContext";
 
 const GEMINI_BASE_URL =
   "https://generativelanguage.googleapis.com/v1beta/models";
 
 // Primary model with fallback chain
-const MODELS = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-1.5-flash"];
+const MODELS = [
+  "gemini-2.5-flash",
+  "gemini-2.5-flash-lite",
+  "gemini-1.5-flash",
+];
 
-const SYSTEM_PROMPT = `You are "Aba", a friendly Sri Lankan travel assistant for Aba Ceylon Tours.
+function buildSystemPrompt(liveContext: string): string {
+  return `You are "Aba", a friendly Sri Lankan travel assistant for Aba Ceylon Tours.
 
 Personality: Warm and friendly like a knowledgeable local friend. Not too formal, not too casual.
 
@@ -16,14 +22,22 @@ Rules:
 - Use simple clear English for international tourists
 - Keep responses to 3–5 sentences unless a detailed itinerary is requested
 - Use 1–2 emojis max per message
+- When recommending packages or vehicles, refer to the REAL DATA below — use actual titles, durations, routes, and vehicle names
+- When asked about packages, list relevant ones with their route and duration
+- When asked about vehicles/transport, mention specific vehicles from the fleet with their capacity
+- Always suggest visiting /packages or /fleet pages for full details and booking
 
-Knowledge: Sri Lanka destinations (Ella, Sigiriya, Kandy, Mirissa, Galle, Colombo, Nuwara Eliya, Trincomalee, Yala, Arugam Bay), travel routes, monsoon seasons (SW: May–Sep, NE: Oct–Jan), cultural etiquette, budget tips, local food, Aba Ceylon Tours packages and fleet.
+General Knowledge: Sri Lanka destinations (Ella, Sigiriya, Kandy, Mirissa, Galle, Colombo, Nuwara Eliya, Trincomalee, Yala, Arugam Bay), travel routes, monsoon seasons (SW: May–Sep, NE: Oct–Jan), cultural etiquette, budget tips, local food.
 
-If asked something outside travel/Sri Lanka, gently redirect back to travel topics. Always represent Aba Ceylon Tours positively.`;
+If asked something outside travel/Sri Lanka, gently redirect back to travel topics.
+
+${liveContext}`;
+}
 
 async function callGemini(
   model: string,
   apiKey: string,
+  systemPrompt: string,
   contents: object[]
 ): Promise<string | null> {
   const url = `${GEMINI_BASE_URL}/${model}:generateContent?key=${apiKey}`;
@@ -33,7 +47,7 @@ async function callGemini(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       system_instruction: {
-        parts: [{ text: SYSTEM_PROMPT }],
+        parts: [{ text: systemPrompt }],
       },
       contents,
       generationConfig: {
@@ -46,20 +60,16 @@ async function callGemini(
   if (!response.ok) {
     const errorData = await response.json();
     const status = errorData?.error?.status;
-    // Retryable: overloaded or rate limited
     if (status === "UNAVAILABLE" || status === "RESOURCE_EXHAUSTED") {
       console.warn(`Model ${model} unavailable (${status}), trying fallback...`);
       return null;
     }
-    // Non-retryable error
     console.error(`Gemini API error (${model}):`, errorData);
     throw new Error(errorData?.error?.message || "Gemini API error");
   }
 
   const data = await response.json();
-  return (
-    data.candidates?.[0]?.content?.parts?.[0]?.text ?? null
-  );
+  return data.candidates?.[0]?.content?.parts?.[0]?.text ?? null;
 }
 
 export async function POST(req: NextRequest) {
@@ -81,6 +91,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Fetch live packages + fleet context (cached for 10 min)
+    const liveContext = await fetchChatContext();
+    const systemPrompt = buildSystemPrompt(liveContext);
+
     const contents = messages.map(
       (msg: { role: "user" | "assistant"; content: string }) => ({
         role: msg.role === "assistant" ? "model" : "user",
@@ -90,30 +104,22 @@ export async function POST(req: NextRequest) {
 
     // Try each model in order until one succeeds
     for (const model of MODELS) {
-      const text = await callGemini(model, apiKey, contents);
+      const text = await callGemini(model, apiKey, systemPrompt, contents);
       if (text !== null) {
         return NextResponse.json({ message: text, model });
       }
-      // Small delay before trying next model
       await new Promise((r) => setTimeout(r, 300));
     }
 
-    // All models failed
-    return NextResponse.json(
-      {
-        message:
-          "Samāwenna! [Sorry!] All models are busy right now. Please try again in a moment 🙏",
-      },
-      { status: 200 } // Return 200 so the UI shows the message gracefully
-    );
+    return NextResponse.json({
+      message:
+        "Samāwenna! [Sorry!] All models are busy right now. Please try again in a moment 🙏",
+    });
   } catch (error) {
     console.error("Chat API error:", error);
-    return NextResponse.json(
-      {
-        message:
-          "Samāwenna! [Sorry!] Something went wrong on my end. Please try again 🙏",
-      },
-      { status: 200 }
-    );
+    return NextResponse.json({
+      message:
+        "Samāwenna! [Sorry!] Something went wrong on my end. Please try again 🙏",
+    });
   }
 }
