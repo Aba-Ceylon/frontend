@@ -2,6 +2,7 @@
 
 import { Destination } from "@/types/destination";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { getMapLegendCategory, mapCategoryStyles } from "./mapCategoryUtils";
 
 interface DestinationPanelProps {
@@ -17,8 +18,25 @@ export default function DestinationPanel({
   actionLabel,
   onAction,
 }: DestinationPanelProps) {
+  const { t } = useTranslation();
   const displayCategory = getMapLegendCategory(destination);
   const categoryStyle = mapCategoryStyles[displayCategory];
+  const displayCategoryLabel = (() => {
+    switch (displayCategory) {
+      case "Heritage":
+        return t("map.categories.heritage");
+      case "Nature":
+        return t("map.categories.nature");
+      case "Coastal":
+        return t("map.categories.coastal");
+      case "Adventure":
+        return t("map.categories.adventure");
+      case "City":
+        return t("map.categories.city");
+      default:
+        return displayCategory;
+    }
+  })();
 
   // Close on Escape key
   useEffect(() => {
@@ -48,7 +66,7 @@ export default function DestinationPanel({
               <button
                 onClick={onClose}
                 className="absolute top-3 right-3 h-9 w-9 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors sm:top-4 sm:right-4 sm:h-10 sm:w-10"
-                aria-label="Close"
+                aria-label={t("map.panel.closeAria")}
               >
                 <svg
                   className="w-5 h-5 sm:w-6 sm:h-6"
@@ -67,7 +85,7 @@ export default function DestinationPanel({
 
               <div>
                 <div className="inline-flex px-3 py-1 bg-white/20 rounded-full text-xs sm:text-sm font-medium mb-3 font-cinzel uppercase tracking-[0.2em]">
-                  {displayCategory}
+                  {displayCategoryLabel}
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-bold mb-2 font-cinzel pr-2">
                   {destination.name}
@@ -84,7 +102,7 @@ export default function DestinationPanel({
                 <span
                   className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold tracking-[0.18em] uppercase ${categoryStyle.softClass}`}
                 >
-                  {displayCategory}
+                  {displayCategoryLabel}
                 </span>
                 <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold tracking-[0.14em] uppercase text-slate-700">
                   {destination.region}
@@ -96,7 +114,7 @@ export default function DestinationPanel({
               {/* Description */}
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2 font-cinzel">
-                  About
+                  {t("map.panel.about")}
                 </h3>
                 <p className="text-gray-700 leading-relaxed font-cinzel">
                   {destination.description}
@@ -106,7 +124,7 @@ export default function DestinationPanel({
               {/* Highlights */}
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3 font-cinzel">
-                  Key Highlights
+                  {t("map.panel.keyHighlights")}
                 </h3>
                 <ul className="space-y-2">
                   {destination.highlights.map((highlight, index) => (
@@ -152,7 +170,7 @@ export default function DestinationPanel({
                       d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                     />
                   </svg>
-                  Best Time to Visit
+                  {t("map.panel.bestTimeToVisit")}
                 </h3>
                 <p className="text-blue-800 font-cinzel">
                   {destination.bestTimeToVisit}
@@ -177,7 +195,7 @@ export default function DestinationPanel({
                       d="M13 10V3L4 14h7v7l9-11h-7z"
                     />
                   </svg>
-                  Why Visit This Place
+                  {t("map.panel.whyVisit")}
                 </h3>
                 <p className="text-gray-700 leading-relaxed font-cinzel">
                   {destination.whyVisit}
@@ -191,7 +209,7 @@ export default function DestinationPanel({
                 onClick={onClose}
                 className="flex-1 px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors font-cinzel"
               >
-                Close
+                {t("map.panel.closeButton")}
               </button>
               <button
                 type="button"
@@ -203,7 +221,7 @@ export default function DestinationPanel({
                     : "cursor-not-allowed opacity-60"
                 }`}
               >
-                {actionLabel || "Add to Planner"}
+                {actionLabel || t("map.panel.addToPlanner")}
               </button>
             </div>
           </div>

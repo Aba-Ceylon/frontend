@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Users, Briefcase } from "lucide-react";
 import Link from "next/link";
 import { LucideArrowLeft, LucideArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { FleetVehicle } from "@/types/vehicle";
 import { fetchVehiclesPage } from "@/services/fleetService";
 
@@ -20,6 +21,7 @@ function getVisible() {
 }
 
 export default function FleetSection() {
+  const { t } = useTranslation();
   const [fleetVehicles, setFleetVehicles] = useState<FleetVehicle[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -160,10 +162,10 @@ export default function FleetSection() {
       <div className="mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="mb-4 text-5xl font-medium font-cinzel text-neutral-900">
-            Premium Fleet
+            {t("fleet.title")}
           </h2>
           <p className="mx-auto max-w-2xl text-lg font-cinzel text-neutral-600">
-            Chauffeured luxury vehicles for seamless journeys across Sri Lanka.
+            {t("fleet.description")}
           </p>
         </div>
 
@@ -217,14 +219,18 @@ export default function FleetSection() {
                           <div className="flex items-center gap-2 text-neutral-700">
                             <Users size={18} className="text-[#0b2545]" />
                             <span className="text-sm">
-                              {v.passengerCapacity} pax
+                              {t("fleet.passengers", {
+                                count: v.passengerCapacity,
+                              })}
                             </span>
                           </div>
 
                           <div className="flex items-center gap-2 text-neutral-700">
                             <Briefcase size={18} className="text-[#0b2545]" />
                             <span className="text-sm">
-                              {v.luggageCapacity} bags
+                              {t("fleet.luggage", {
+                                count: v.luggageCapacity,
+                              })}
                             </span>
                           </div>
                         </div>
@@ -242,7 +248,7 @@ export default function FleetSection() {
 
                         <div className="mt-auto pt-4 flex justify-center">
                           <span className="fleet-cta inline-flex w-full max-w-full justify-center rounded-lg bg-gradient-to-br from-slate-900/95 to-slate-800/95 px-6 py-3 font-cinzel text-sm text-white transition md:max-w-xs">
-                            View More Details
+                            {t("fleet.viewMoreDetails")}
                           </span>
                         </div>
                       </div>
@@ -264,7 +270,7 @@ export default function FleetSection() {
 
         {isLoading && (
           <p className="mt-6 text-center text-sm text-neutral-600">
-            Loading fleet...
+            {t("fleet.loading")}
           </p>
         )}
         {!isLoading && error && (
@@ -272,7 +278,7 @@ export default function FleetSection() {
         )}
         {!isLoading && !error && len === 0 && (
           <p className="mt-6 text-center text-sm text-neutral-600">
-            No fleet vehicles available right now.
+            {t("fleet.noVehicles")}
           </p>
         )}
 
@@ -292,7 +298,7 @@ export default function FleetSection() {
             href="/fleet"
             className="inline-flex items-center px-6 py-3 font-cinzel text-neutral-800 transition hover:text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]"
           >
-            Explore Full Fleet
+            {t("fleet.exploreFullFleet")}
             <LucideArrowRight size={16} className="ml-2" />
           </Link>
         </div>

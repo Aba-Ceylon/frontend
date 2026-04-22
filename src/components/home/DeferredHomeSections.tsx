@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useTranslation } from "react-i18next";
 
 function SectionSkeleton({
   className = "bg-[#F5F2ED]",
@@ -27,14 +28,26 @@ function SectionSkeleton({
   );
 }
 
+function LocalizedSectionSkeleton({
+  className,
+  titleKey,
+}: {
+  className?: string;
+  titleKey: string;
+}) {
+  const { t } = useTranslation();
+
+  return <SectionSkeleton className={className} title={t(titleKey)} />;
+}
+
 const InteractiveMap = dynamic(
   () => import("@/components/interactiveSriLanka/InteractiveMap"),
   {
     ssr: false,
     loading: () => (
-      <SectionSkeleton
+      <LocalizedSectionSkeleton
         className="bg-[#0F172A] text-white"
-        title="Loading interactive map"
+        titleKey="loading.interactiveMap"
       />
     ),
   },
@@ -43,7 +56,7 @@ const InteractiveMap = dynamic(
 const FeaturedPckgs = dynamic(
   () => import("@/components/featuredPackages/FeaturedPckgs"),
   {
-    loading: () => <SectionSkeleton title="Loading packages" />,
+    loading: () => <LocalizedSectionSkeleton titleKey="loading.packages" />,
   },
 );
 
@@ -51,25 +64,25 @@ const FeaturedStays = dynamic(
   () => import("@/components/featuredStays/FeaturedStays"),
   {
     loading: () => (
-      <SectionSkeleton
+      <LocalizedSectionSkeleton
         className="bg-[#1A2238] text-white"
-        title="Loading stays"
+        titleKey="loading.stays"
       />
     ),
   },
 );
 
 const FleetSection = dynamic(() => import("@/components/fleet/FleetSection"), {
-  loading: () => <SectionSkeleton title="Loading fleet" />,
+  loading: () => <LocalizedSectionSkeleton titleKey="loading.fleet" />,
 });
 
 const CustomPlannerSection = dynamic(
   () => import("@/components/customPlanner/CustomPlannerSection"),
   {
     loading: () => (
-      <SectionSkeleton
+      <LocalizedSectionSkeleton
         className="bg-[#0F172A] text-white"
-        title="Loading planner section"
+        titleKey="loading.plannerSection"
       />
     ),
   },
@@ -80,9 +93,9 @@ const BuddhaLotus = dynamic(
   {
     ssr: false,
     loading: () => (
-      <SectionSkeleton
+      <LocalizedSectionSkeleton
         className="bg-[#05070A] text-white"
-        title="Loading Buddha Lotus section"
+        titleKey="loading.buddhaLotus"
       />
     ),
   },
@@ -92,9 +105,9 @@ const Testimonials = dynamic(
   () => import("@/components/testimonials/Testimonials"),
   {
     loading: () => (
-      <SectionSkeleton
+      <LocalizedSectionSkeleton
         className="bg-[#1A2238] text-white"
-        title="Loading testimonials"
+        titleKey="loading.testimonials"
       />
     ),
   },

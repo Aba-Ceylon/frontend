@@ -12,31 +12,33 @@ import {
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-const footerLinks = [
-  {
-    title: "Curation",
-    links: [
-      { label: "Holiday Packages", href: "/packages" },
-      { label: "Stays & Retreats", href: "/stays" },
-      { label: "Private Fleet", href: "/fleet" },
-      { label: "Bespoke Activities", href: "/activities" },
-    ],
-  },
-  {
-    title: "Heritage",
-    links: [
-      { label: "Our Story", href: "/about" },
-      { label: "Destinations", href: "/destinations" },
-      { label: "Sustainability", href: "/sustainability" },
-      { label: "Contact", href: "/contact" },
-    ],
-  },
-];
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
   const footerRef = useRef<HTMLElement>(null);
   const bigTextRef = useRef<HTMLDivElement>(null);
+
+  const footerLinks = [
+    {
+      title: t("footer.curation"),
+      links: [
+        { label: t("footer.holidayPackages"), href: "/packages" },
+        { label: t("footer.staysRetreats"), href: "/stays" },
+        { label: t("footer.privateFleet"), href: "/fleet" },
+        { label: t("footer.bespokeActivities"), href: "/activities" },
+      ],
+    },
+    {
+      title: t("footer.heritage"),
+      links: [
+        { label: t("footer.ourStory"), href: "/about" },
+        { label: t("footer.destinations"), href: "/destinations" },
+        { label: t("footer.sustainability"), href: "/sustainability" },
+        { label: t("footer.contact"), href: "/contact" },
+      ],
+    },
+  ];
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -110,16 +112,15 @@ export default function Footer() {
             data-f-reveal
           >
             <span className="font-cinzel text-[10px] tracking-[0.3em] md:tracking-[0.4em] uppercase text-[#C99A2B] block mb-4 md:mb-6">
-              Establishment of Excellence
+              {t("footer.eyebrow")}
             </span>
             <h3 className="font-cinzel text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-[1.1] mb-8">
-              THE FINEST WAY <br className="hidden sm:block" />
-              TO{" "}
+              {t("footer.headlineLine1")} <br className="hidden sm:block" />
               <span className="italic text-[#C99A2B] font-serif lowercase">
-                experience
+                {t("footer.headlineAccent")}
               </span>{" "}
               <br className="hidden sm:block" />
-              THE ISLAND.
+              {t("footer.headlineLine2")}
             </h3>
 
             <div className="flex justify-center md:justify-start">
@@ -128,7 +129,7 @@ export default function Footer() {
                 className="group relative inline-flex items-center gap-4 py-3 md:py-4 pr-6 md:pr-8 border-b border-[#C99A2B]/30 hover:border-[#C99A2B] transition-all duration-500"
               >
                 <span className="font-cinzel text-sm md:text-lg text-[#C99A2B] uppercase tracking-widest">
-                  Curate Your Journey
+                  {t("footer.curateYourJourney")}
                 </span>
                 <div className="relative overflow-hidden h-5 w-5">
                   <ArrowUpRight className="text-[#C99A2B] absolute inset-0 transition-transform duration-500 group-hover:translate-x-5 group-hover:-translate-y-5" />
@@ -168,7 +169,7 @@ export default function Footer() {
                 className="col-span-2 md:col-span-1 pt-4 md:pt-0 border-t border-white/5 md:border-none"
               >
                 <h4 className="font-cinzel text-[11px] tracking-[0.25em] uppercase text-[#C99A2B]/80 mb-6 md:mb-8">
-                  Headquarters
+                  {t("footer.headquarters")}
                 </h4>
                 <address className="not-italic text-sm font-light space-y-4 leading-relaxed text-white/60">
                   <p className="flex gap-3 items-start">
@@ -218,18 +219,18 @@ export default function Footer() {
               href="/privacy"
               className="font-cinzel hover:text-white transition-colors"
             >
-              Privacy
+              {t("footer.privacy")}
             </Link>
             <Link
               href="/terms"
               className="font-cinzel hover:text-white transition-colors"
             >
-              Terms
+              {t("footer.terms")}
             </Link>
           </div>
 
           <div className="font-cinzel text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-white/30">
-            Developed by{" "}
+            {t("footer.developedBy")}{" "}
             <a
               href="https://vernoxlabs.com"
               className="text-[#C99A2B]/60 hover:text-[#C99A2B] transition-colors"

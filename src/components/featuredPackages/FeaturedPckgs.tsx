@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import Link from "next/link";
 import { LucideArrowLeft, LucideArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { packages as fallbackPackages } from "@/data/packages";
 import PackageCard from "@/features/packages/PackageCard";
 import { fetchPackages } from "@/services/packageService";
@@ -19,6 +20,7 @@ function getVisible() {
 }
 
 export default function FeaturedPckgs() {
+  const { t } = useTranslation();
   const stripRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const offset = useRef(fallbackPackages.length);
@@ -164,11 +166,10 @@ export default function FeaturedPckgs() {
       <div className="mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-medium font-cinzel text-neutral-900 mb-4">
-            Curated Journeys
+            {t("packages.title")}
           </h2>
           <p className="text-lg font-cinzel text-neutral-600 max-w-2xl mx-auto">
-            Explore handcrafted travel experiences across Sri Lanka&apos;s
-            heritage, hills, and coastlines.
+            {t("packages.description")}
           </p>
         </div>
 
@@ -228,7 +229,7 @@ export default function FeaturedPckgs() {
             href="/packages"
             className="inline-flex items-center px-6 py-3 font-cinzel text-neutral-800 hover:text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]"
           >
-            View Available Packages
+            {t("packages.viewAvailablePackages")}
             <LucideArrowRight size={16} className="ml-2" />
           </Link>
         </div>

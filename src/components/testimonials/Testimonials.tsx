@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Container from "@/components/layout/Container";
 import type { FeedbackRecord } from "@/types/feedback";
 import TestimonialsCarousel, { TestimonialItem } from "./TestimonialsCarousel";
 
 export default function Testimonials() {
+  const { t } = useTranslation();
   const [items, setItems] = useState<TestimonialItem[]>([]);
 
   useEffect(() => {
@@ -16,7 +18,7 @@ export default function Testimonials() {
         setItems(
           data.map((row) => ({
             quote: `"${row.message}"`,
-            name: row.user_name ?? "Guest",
+            name: row.user_name ?? t("testimonials.guest"),
             rating: row.rating ?? 5,
           })),
         );
@@ -31,10 +33,10 @@ export default function Testimonials() {
       <Container>
         <div className="text-center max-w-3xl mx-auto mb-10">
           <h2 className="font-cinzel text-3xl font-semibold text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]">
-            Traveler Stories
+            {t("testimonials.title")}
           </h2>
           <p className="font-cinzel text-white mt-2">
-            What our guests say about their heritage journey
+            {t("testimonials.description")}
           </p>
         </div>
       </Container>
