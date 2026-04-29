@@ -30,14 +30,15 @@ export default function VehicleSelector({
   onVehicleSelect,
   onVehicleTypeChange,
 }: VehicleSelectorProps) {
+
   return (
     <div className="space-y-8">
       <div>
         <p className="font-cinzel text-xs uppercase tracking-[0.3em] text-amber-700 mb-2">
-          Step 3
+          Select Vehicle
         </p>
         <h2 className="font-cinzel text-3xl text-[#0F172A]">
-          Select Vehicle Type & Comfort
+          Select your preferred vehicle type and comfort level
         </h2>
       </div>
 
@@ -173,13 +174,13 @@ export default function VehicleSelector({
                           <span className="block text-xs text-neutral-500 uppercase tracking-[0.2em] mb-1">
                             Seats
                           </span>
-                          {vehicle.passengerCapacity} passengers
+                          {vehicle.passengerCapacity} Passengers
                         </div>
                         <div className="rounded-2xl bg-neutral-50 p-3">
                           <span className="block text-xs text-neutral-500 uppercase tracking-[0.2em] mb-1">
                             Luggage
                           </span>
-                          {vehicle.luggageCapacity} bags
+                          {vehicle.luggageCapacity} Bags
                         </div>
                       </div>
 
@@ -201,8 +202,7 @@ export default function VehicleSelector({
           </div>
         ) : (
           <div className="rounded-3xl border border-dashed border-neutral-300 bg-white p-8 text-center text-neutral-600">
-            Select a vehicle type and comfort level that have matching vehicles
-            in the system.
+            Please select both a vehicle type and comfort level to continue
           </div>
         )}
       </div>

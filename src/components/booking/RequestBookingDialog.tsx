@@ -36,39 +36,33 @@ export default function RequestBookingDialog({
   signInHref,
   allowUnknownDate = false,
   bookingDate,
-  dateUnknown,
+  dateUnknown = false,
   errorMessage,
   onBookingDateChange,
   onDateUnknownToggle,
   onClose,
   onConfirm,
 }: RequestBookingDialogProps) {
+
   useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
+    if (!isOpen) return;
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
+      if (event.key === "Escape") onClose();
     };
-
     document.addEventListener("keydown", handleEscape);
     document.body.style.overflow = "hidden";
-
     return () => {
       document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "";
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen || typeof document === "undefined") {
-    return null;
-  }
+  if (!isOpen || typeof document === "undefined") return null;
 
   const title =
-    subjectType === "package" ? "Request Package" : "Request Vehicle";
+    subjectType === "package"
+      ? "Request Package"
+      : "Request Vehicle";
 
   return createPortal(
     <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6">
@@ -76,13 +70,13 @@ export default function RequestBookingDialog({
         type="button"
         className="absolute inset-0 bg-[#08111d]/68 backdrop-blur-sm"
         onClick={onClose}
-        aria-label="Close request dialog"
+        aria-label="Close dialog"
       />
 
       <div className="relative z-10 w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/10 bg-[#0F172A] shadow-[0_30px_120px_rgba(0,0,0,0.45)]">
         <div className="border-b border-white/10 px-5 py-4 sm:px-6">
           <p className="font-cinzel text-xs uppercase tracking-[0.28em] text-amber-300/80">
-            Secure Booking Request
+            Secure Booking
           </p>
           <h3 className="mt-2 font-cinzel text-2xl text-white">{title}</h3>
           <p className="mt-2 text-sm leading-6 text-white/72">{subjectName}</p>
@@ -91,15 +85,13 @@ export default function RequestBookingDialog({
         <div className="space-y-5 px-5 py-5 sm:px-6 sm:py-6">
           {!isLoaded ? (
             <p className="text-sm leading-6 text-white/72">
-              Checking your account status...
+              Checking account...
             </p>
           ) : !isSignedIn ? (
             <>
               <p className="text-sm leading-7 text-white/72">
-                For security, please sign in before sending a {subjectType}{" "}
-                request to ABA Ceylon.
+                Please sign in to request this {subjectType}
               </p>
-
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Link
                   href={signInHref}
@@ -119,22 +111,19 @@ export default function RequestBookingDialog({
           ) : (
             <>
               <p className="text-sm leading-7 text-white/72">
-                Confirm the preferred booking date before we generate the
-                WhatsApp request for the ABA Ceylon team.
+                Confirm Booking Date
               </p>
 
               <div className="space-y-3">
                 <label className="block">
                   <span className="mb-2 block font-cinzel text-xs uppercase tracking-[0.22em] text-amber-300/80">
-                    Preferred Booking Date
+                    Preferred Date
                   </span>
                   <input
                     type="date"
                     min={getTodayDateString()}
                     value={bookingDate}
-                    onChange={(event) =>
-                      onBookingDateChange(event.target.value)
-                    }
+                    onChange={(event) => onBookingDateChange(event.target.value)}
                     disabled={allowUnknownDate && dateUnknown}
                     className="w-full rounded-2xl border border-white/12 bg-white px-4 py-3 text-sm text-[#0F172A] outline-none transition focus:border-amber-400/60 focus:ring-2 focus:ring-amber-400/20 disabled:cursor-not-allowed disabled:bg-white/55"
                   />
@@ -151,8 +140,8 @@ export default function RequestBookingDialog({
                     }`}
                   >
                     {dateUnknown
-                      ? "Date Will Be Decided Later"
-                      : "No Idea About Date"}
+                      ? "Date will be decided later"
+                      : "Not sure about date"}
                   </button>
                 ) : null}
               </div>
@@ -169,7 +158,7 @@ export default function RequestBookingDialog({
                   onClick={onConfirm}
                   className="inline-flex flex-1 items-center justify-center rounded-md bg-amber-400/60 px-5 py-3 font-cinzel text-sm uppercase tracking-[0.18em] text-white transition hover:bg-amber-400/75"
                 >
-                  Continue To WhatsApp
+                  Continue to WhatsApp
                 </button>
                 <button
                   type="button"

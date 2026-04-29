@@ -13,10 +13,7 @@ interface VehicleRequestButtonProps {
   className: string;
 }
 
-export default function VehicleRequestButton({
-  vehicle,
-  className,
-}: VehicleRequestButtonProps) {
+export default function VehicleRequestButton({ vehicle, className }: VehicleRequestButtonProps) {
   const { user, isLoaded, isSignedIn } = useUser();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -25,27 +22,21 @@ export default function VehicleRequestButton({
   const isUserSignedIn = Boolean(isSignedIn);
 
   const signInHref = `/sign-in?redirect_url=${encodeURIComponent(pathname || `/fleet/${vehicle.id}`)}`;
-  const adminWhatsAppNumber =
-    process.env.NEXT_PUBLIC_ADMIN_WHATSAPP_NUMBER || "+94722554488";
+  const adminWhatsAppNumber = process.env.NEXT_PUBLIC_ADMIN_WHATSAPP_NUMBER || "+94722554488";
 
   const handleConfirm = () => {
     if (!bookingDate) {
-      setErrorMessage("Please confirm the booking date before continuing.");
+      setErrorMessage("Please select a booking date");
       return;
     }
 
     const travelerName =
-      user?.fullName ||
-      [user?.firstName, user?.lastName].filter(Boolean).join(" ");
+      user?.fullName || [user?.firstName, user?.lastName].filter(Boolean).join(" ");
     const travelerEmail = user?.primaryEmailAddress?.emailAddress || "";
 
     const href = generateWhatsAppLink(
       adminWhatsAppNumber,
-      buildVehicleRequestMessage(vehicle, {
-        bookingDate,
-        travelerName,
-        travelerEmail,
-      }),
+      buildVehicleRequestMessage(vehicle, { bookingDate, travelerName, travelerEmail }),
     );
 
     setIsOpen(false);
@@ -57,11 +48,7 @@ export default function VehicleRequestButton({
     <>
       <button
         type="button"
-        onClick={() => {
-          setBookingDate("");
-          setErrorMessage("");
-          setIsOpen(true);
-        }}
+        onClick={() => { setBookingDate(""); setErrorMessage(""); setIsOpen(true); }}
         className={className}
       >
         Request Vehicle
@@ -77,16 +64,9 @@ export default function VehicleRequestButton({
         bookingDate={bookingDate}
         dateUnknown={false}
         errorMessage={errorMessage}
-        onBookingDateChange={(value) => {
-          setBookingDate(value);
-          setErrorMessage("");
-        }}
+        onBookingDateChange={(value) => { setBookingDate(value); setErrorMessage(""); }}
         onDateUnknownToggle={() => undefined}
-        onClose={() => {
-          setIsOpen(false);
-          setBookingDate("");
-          setErrorMessage("");
-        }}
+        onClose={() => { setIsOpen(false); setBookingDate(""); setErrorMessage(""); }}
         onConfirm={handleConfirm}
       />
     </>

@@ -1,7 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useTranslation } from "react-i18next";
 
 function SectionSkeleton({
   className = "bg-[#F5F2ED]",
@@ -35,9 +34,7 @@ function LocalizedSectionSkeleton({
   className?: string;
   titleKey: string;
 }) {
-  const { t } = useTranslation();
-
-  return <SectionSkeleton className={className} title={t(titleKey)} />;
+  return <SectionSkeleton className={className} title={titleKey.replace(/([A-Z])/g, ' $1').trim()} />;
 }
 
 const InteractiveMap = dynamic(

@@ -21,8 +21,8 @@ export default function PackageRequestButton({
   pkg,
   className,
   requestedClassName,
-  label = "Request Package",
-  requestedLabel = "Requested",
+  label,
+  requestedLabel,
 }: PackageRequestButtonProps) {
   const { user, isLoaded, isSignedIn } = useUser();
   const pathname = usePathname();
@@ -33,6 +33,9 @@ export default function PackageRequestButton({
   const [errorMessage, setErrorMessage] = useState("");
   const isRequested = selectedPackage?.id === pkg.id;
   const isUserSignedIn = Boolean(isSignedIn);
+
+  const resolvedLabel = label ?? "Request Package";
+  const resolvedRequestedLabel = requestedLabel ?? "Requested";
 
   const signInHref = `/sign-in?redirect_url=${encodeURIComponent(pathname || "/packages")}`;
   const adminWhatsAppNumber =
@@ -54,9 +57,7 @@ export default function PackageRequestButton({
 
   const handleConfirm = () => {
     if (!dateUnknown && !bookingDate) {
-      setErrorMessage(
-        "Please confirm the preferred date or choose no idea about date.",
-      );
+      setErrorMessage("Please select a booking date");
       return;
     }
 
@@ -86,7 +87,7 @@ export default function PackageRequestButton({
   return (
     <>
       <button type="button" onClick={handleOpen} className={buttonClassName}>
-        {isRequested ? requestedLabel : label}
+        {isRequested ? resolvedRequestedLabel : resolvedLabel}
       </button>
 
       <RequestBookingDialog
@@ -102,18 +103,14 @@ export default function PackageRequestButton({
         errorMessage={errorMessage}
         onBookingDateChange={(value) => {
           setBookingDate(value);
-          if (value) {
-            setDateUnknown(false);
-          }
+          if (value) setDateUnknown(false);
           setErrorMessage("");
         }}
         onDateUnknownToggle={() => {
           setDateUnknown((current) => {
-            const nextValue = !current;
-            if (nextValue) {
-              setBookingDate("");
-            }
-            return nextValue;
+            const next = !current;
+            if (next) setBookingDate("");
+            return next;
           });
           setErrorMessage("");
         }}

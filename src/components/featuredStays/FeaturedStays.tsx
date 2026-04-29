@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import Link from "next/link";
 import { LucideArrowLeft, LucideArrowRight } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { stays as fallbackStays } from "@/data/stays";
 import StayCard from "@/features/stays/StayCard";
 import { fetchStays } from "@/services/stayService";
@@ -20,7 +19,6 @@ function getVisible() {
 }
 
 export default function FeaturedStays() {
-  const { t } = useTranslation();
   const stripRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const offset = useRef(fallbackStays.length);
@@ -144,10 +142,10 @@ export default function FeaturedStays() {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="mb-4 text-5xl font-medium font-cinzel text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]">
-            {t("stays.title")}
+            Heritage Stays
           </h2>
           <p className="text-lg font-cinzel text-amber-50/70 max-w-2xl mx-auto">
-            {t("stays.description")}
+            Discover our curated collection of authentic Sri Lankan accommodations
           </p>
         </div>
 
@@ -211,7 +209,7 @@ export default function FeaturedStays() {
             href="/stays"
             className="inline-flex items-center px-6 py-3 font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(201,154,43,0.5)] hover:text-white transition"
           >
-            {t("stays.discoverAllStays")}
+            Discover All Stays
             <LucideArrowRight size={16} className="ml-2" />
           </Link>
         </div>

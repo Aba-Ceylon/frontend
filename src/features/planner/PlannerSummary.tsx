@@ -35,10 +35,10 @@ export default function PlannerSummary({
     <div className="space-y-6">
       <div>
         <p className="font-cinzel text-xs uppercase tracking-[0.3em] text-amber-700 mb-2">
-          Step 5
+          Review & Send Request
         </p>
         <h2 className="font-cinzel text-3xl text-[#0F172A]">
-          Review & Send Request
+          Review your custom journey details and send your request
         </h2>
       </div>
 
@@ -53,7 +53,7 @@ export default function PlannerSummary({
                 Traveler
               </p>
               <p className="text-sm text-neutral-700 leading-6">
-                {travelerName || "Signed-in traveler"}
+                {travelerName || "Signed-in Traveler"}
                 {travelerEmail ? ` • ${travelerEmail}` : ""}
               </p>
             </div>

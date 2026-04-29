@@ -12,8 +12,8 @@ type PackageCardProps = {
 
 export default function PackageCard({ pkg }: PackageCardProps) {
   const selectedPackage = usePackageStore((state) => state.selectedPackage);
-
   const isSelected = selectedPackage?.id === pkg.id;
+
   const packageLabel = pkg.packageId
     ? `Package ${String(pkg.packageId).padStart(2, "0")}`
     : "Curated Package";

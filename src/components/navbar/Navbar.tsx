@@ -6,12 +6,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Show, UserButton } from "@clerk/nextjs";
 import { Menu, X } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import FeedbackModal from "@/features/feedback/FeedbackModal";
 
 export default function NavBar() {
   const pathname = usePathname();
-  const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
@@ -33,10 +31,10 @@ export default function NavBar() {
   }, []);
 
   const navLinks = [
-    { label: t("navbar.holidayPackages"), href: "/packages" },
-    { label: t("navbar.planWithUs"), href: "/#custom-planner" },
-    { label: t("navbar.fleet"), href: "/fleet" },
-    { label: t("navbar.stays"), href: "/stays" },
+    { label: "Holiday Packages", href: "/packages" },
+    { label: "Plan With Us", href: "/#custom-planner" },
+    { label: "Fleet", href: "/fleet" },
+    { label: "Stays", href: "/stays" },
   ];
 
   return (
@@ -57,7 +55,7 @@ export default function NavBar() {
             <div className="relative w-12 h-12 sm:w-14 sm:h-14">
               <Image
                 src="/LOGO.jpeg"
-                alt={t("navbar.logoAlt")}
+                alt="Aba Ceylon Logo"
                 fill
                 className="object-contain"
                 priority
@@ -88,7 +86,7 @@ export default function NavBar() {
                   className="relative overflow-hidden border-2 border-amber-400/60 bg-white/5 px-6 py-2 text-sm text-white shadow-2xl backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] hover:border-amber-400 hover:bg-white/10"
                 >
                   <span className="relative z-10 font-cinzel tracking-wide">
-                    {t("navbar.enquireNow")}
+                    Enquire Now
                   </span>
                 </Link>
                 <Show when="signed-out">
@@ -96,13 +94,13 @@ export default function NavBar() {
                     href="/sign-in"
                     className="font-cinzel text-white text-sm font-medium tracking-[0.08em] px-4 py-2 transition-colors duration-300 hover:text-[#C99A2B]"
                   >
-                    {t("navbar.signIn")}
+                    Sign In
                   </Link>
                   <Link
                     href="/sign-up"
                     className="rounded-md bg-amber-400/60 px-4 py-2 font-cinzel text-sm font-medium tracking-[0.08em] text-white drop-shadow-[0_0_30px_rgba(201,154,43,0.5)] transition-all duration-300 hover:bg-amber-400/75"
                   >
-                    {t("navbar.signUp")}
+                    Sign Up
                   </Link>
                 </Show>
                 <Show when="signed-in">
@@ -114,7 +112,7 @@ export default function NavBar() {
                       setIsFeedbackOpen(true);
                     }}
                   >
-                    {t("navbar.feedback")}
+                    Feedback
                   </Link>
                   <UserButton />
                 </Show>
@@ -127,7 +125,7 @@ export default function NavBar() {
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="text-white p-2"
-                aria-label={t("navbar.toggleMenu")}
+                aria-label="Toggle menu"
               >
                 {isMobileMenuOpen ? (
                   <X className="w-6 h-6" />
@@ -165,7 +163,7 @@ export default function NavBar() {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <span className="relative z-10 font-cinzel tracking-wide">
-                    {t("navbar.enquireNow")}
+                    Enquire Now
                   </span>
                 </Link>
                 <Show when="signed-out">
@@ -174,14 +172,14 @@ export default function NavBar() {
                     className="font-cinzel text-white text-sm font-medium tracking-[0.08em] py-2 transition-colors duration-300 hover:text-[#C99A2B]"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    {t("navbar.signIn")}
+                    Sign In
                   </Link>
                   <Link
                     href="/sign-up"
                     className="rounded-md bg-amber-400/60 px-4 py-2 text-center font-cinzel text-sm font-medium tracking-[0.08em] text-white drop-shadow-[0_0_30px_rgba(201,154,43,0.5)] transition-all duration-300 hover:bg-amber-400/75"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    {t("navbar.signUp")}
+                    Sign Up
                   </Link>
                 </Show>
                 <Show when="signed-in">
@@ -194,7 +192,7 @@ export default function NavBar() {
                       setIsFeedbackOpen(true);
                     }}
                   >
-                    {t("navbar.feedback")}
+                    Feedback
                   </Link>
                   <div className="py-2">
                     <UserButton />

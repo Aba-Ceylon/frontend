@@ -34,12 +34,12 @@ export default function StaySelector({
             Recommended Stays
           </p>
           <h3 className="font-cinzel text-2xl text-[#0F172A]">
-            Choose Accommodation For Your Dates
+            Choose your accommodation for each destination
           </h3>
         </div>
         <span className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-700">
-          {selectedStayPlans.length} stay
-          {selectedStayPlans.length === 1 ? "" : "s"} selected
+          {selectedStayPlans.length} Stay
+          {selectedStayPlans.length === 1 ? "" : "s"} Selected
         </span>
       </div>
 
@@ -97,7 +97,7 @@ export default function StaySelector({
                             : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
                         }`}
                       >
-                        {isSelected ? "Selected" : "Add stay"}
+                        {isSelected ? "Selected" : "Add Stay"}
                       </button>
                     </div>
 
@@ -120,7 +120,7 @@ export default function StaySelector({
                       <div className="grid gap-3 sm:grid-cols-2">
                         <label className="block">
                           <span className="block text-xs uppercase tracking-[0.2em] text-neutral-500 mb-2">
-                            Check-in
+                            Check In
                           </span>
                           <input
                             type="date"
@@ -139,7 +139,7 @@ export default function StaySelector({
                         </label>
                         <label className="block">
                           <span className="block text-xs uppercase tracking-[0.2em] text-neutral-500 mb-2">
-                            Check-out
+                            Check Out
                           </span>
                           <input
                             type="date"
@@ -173,8 +173,7 @@ export default function StaySelector({
         </div>
       ) : (
         <div className="rounded-3xl border border-dashed border-neutral-300 bg-white p-8 text-center text-neutral-600">
-          No recommended stays matched this route yet. Try adjusting your
-          destination selection or continue with your own accommodation.
+          No recommended stays available for your selected destinations
         </div>
       )}
     </div>

@@ -13,6 +13,7 @@ export default function PlannerStepper({
   stepValidity,
   steps,
 }: PlannerStepperProps) {
+
   return (
     <div className="rounded-3xl border border-white/10 bg-[#0F172A] p-4 sm:p-6 shadow-[0_24px_80px_rgba(15,23,42,0.24)]">
       <div className="grid gap-3 lg:grid-cols-5">

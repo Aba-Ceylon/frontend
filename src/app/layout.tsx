@@ -6,8 +6,6 @@ import NavBar from "../components/navbar/Navbar";
 import Footer from "../components/layout/Footer";
 import { LoaderGateProvider } from "../components/home/LoaderGate";
 import GatedShell from "../components/home/GatedShell";
-import I18nProvider from "../components/i18n/I18nProvider";
-import LanguageSwitcher from "../components/navbar/LanguageSwitcher";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,14 +33,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ClerkProvider>
-          <I18nProvider>
-            <LoaderGateProvider>
-              <GatedShell navbar={<NavBar />} footer={<Footer />}>
-                {children}
-              </GatedShell>
-              <LanguageSwitcher />
-            </LoaderGateProvider>
-          </I18nProvider>
+          <LoaderGateProvider>
+            <GatedShell
+              navbar={<NavBar />}
+              footer={<Footer />}
+            >
+              {children}
+            </GatedShell>
+          </LoaderGateProvider>
         </ClerkProvider>
       </body>
     </html>

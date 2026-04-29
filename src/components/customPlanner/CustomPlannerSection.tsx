@@ -4,14 +4,12 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useTranslation } from "react-i18next";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 export default function CustomPlannerSection() {
-  const { t } = useTranslation();
   const sectionRef = useRef<HTMLElement>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -92,24 +90,24 @@ export default function CustomPlannerSection() {
               <div className="flex items-center gap-3 mb-4">
                 <div className="h-px w-10 bg-gradient-to-r from-transparent to-amber-300" />
                 <span className="font-cinzel text-[11px] uppercase tracking-[0.34em] text-amber-300">
-                  {t("plannerPromo.eyebrow")}
+                  Plan Your Journey
                 </span>
               </div>
               <h2 className="font-cinzel text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
-                {t("plannerPromo.title")}
+                Custom Journey Planner
               </h2>
               <p className="mt-4 max-w-2xl text-white/78 text-sm sm:text-base leading-7">
-                {t("plannerPromo.description")}
+                Design your perfect Sri Lankan adventure with our personalized planning service
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
                 <span className="rounded-full border border-white/12 bg-white/8 px-3 py-1.5 text-xs text-white/78">
-                  {t("plannerPromo.routePlanning")}
+                  Route Planning
                 </span>
                 <span className="rounded-full border border-white/12 bg-white/8 px-3 py-1.5 text-xs text-white/78">
-                  {t("plannerPromo.chauffeurMatching")}
+                  Chauffeur Matching
                 </span>
                 <span className="rounded-full border border-white/12 bg-white/8 px-3 py-1.5 text-xs text-white/78">
-                  {t("plannerPromo.whatsappReady")}
+                  WhatsApp Ready
                 </span>
               </div>
             </div>
@@ -119,7 +117,7 @@ export default function CustomPlannerSection() {
                 href="/planner"
                 className="inline-flex min-w-[220px] items-center justify-center rounded-sm border border-amber-300/60 bg-[linear-gradient(135deg,rgba(251,191,36,0.88),rgba(217,119,6,0.9))] px-7 py-4 font-cinzel text-sm uppercase tracking-[0.26em] text-[#0F172A] shadow-[0_0_30px_rgba(245,158,11,0.28)] transition hover:scale-[1.02] hover:shadow-[0_0_42px_rgba(245,158,11,0.36)]"
               >
-                {t("plannerPromo.cta")}
+                Start Planning
               </Link>
             </div>
           </div>
