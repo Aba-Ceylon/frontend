@@ -1,3 +1,7 @@
+"use client";
+
+import { useCallback } from "react";
+
 type PaginationControlsProps = {
   currentPage: number;
   totalPages: number;
@@ -11,30 +15,35 @@ export default function PaginationControls({
   onPageChange,
   className = "",
 }: PaginationControlsProps) {
-  if (totalPages <= 1) {
-    return null;
-  }
+  const goPrev = useCallback(
+    () => onPageChange(Math.max(1, currentPage - 1)),
+    [currentPage, onPageChange],
+  );
+
+  const goNext = useCallback(
+    () => onPageChange(Math.min(totalPages, currentPage + 1)),
+    [currentPage, totalPages, onPageChange],
+  );
+
+  if (totalPages <= 1) return null;
 
   return (
-    <div
-      className={`mt-10 flex items-center justify-center gap-2 sm:gap-3 flex-wrap ${className}`}
-    >
+    <div className={`mt-10 flex items-center justify-center gap-2 sm:gap-3 flex-wrap ${className}`}>
       <button
-        onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+        onClick={goPrev}
         disabled={currentPage === 1}
         className="px-4 py-2 rounded-full border border-[#0b2545]/20 text-[#0b2545] font-cinzel disabled:opacity-45 disabled:cursor-not-allowed hover:bg-[#0b2545] hover:text-white transition"
       >
         Prev
       </button>
 
-      {Array.from({ length: totalPages }).map((_, index) => {
-        const pageNumber = index + 1;
-        const active = pageNumber === currentPage;
-
+      {Array.from({ length: totalPages }, (_, i) => {
+        const page = i + 1;
+        const active = page === currentPage;
         return (
           <button
-            key={pageNumber}
-            onClick={() => onPageChange(pageNumber)}
+            key={page}
+            onClick={() => onPageChange(page)}
             aria-current={active ? "page" : undefined}
             className={`w-10 h-10 rounded-full font-cinzel transition ${
               active
@@ -42,13 +51,13 @@ export default function PaginationControls({
                 : "border border-[#0b2545]/20 text-[#0b2545] hover:bg-[#0b2545] hover:text-white"
             }`}
           >
-            {pageNumber}
+            {page}
           </button>
         );
       })}
 
       <button
-        onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+        onClick={goNext}
         disabled={currentPage === totalPages}
         className="px-4 py-2 rounded-full border border-[#0b2545]/20 text-[#0b2545] font-cinzel disabled:opacity-45 disabled:cursor-not-allowed hover:bg-[#0b2545] hover:text-white transition"
       >

@@ -2,12 +2,36 @@
 
 import Image from "next/image";
 import { MapPin, Clock, Route, Car, CheckCircle } from "lucide-react";
+import Card from "@/components/ui/Card";
+import Badge from "@/components/ui/Badge";
 import PackageRequestButton from "@/features/packages/PackageRequestButton";
 import { PackageItem } from "@/types/package";
 import PackageTimeline from "./PackageTimeline";
 
+function StatCard({
+  icon,
+  label,
+  value,
+  className = "",
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  className?: string;
+}) {
+  return (
+    <Card variant="white" className={`flex items-center gap-3 p-4 ${className}`}>
+      {icon}
+      <div>
+        <p className="text-xs text-[#1A2238] font-cinzel">{label}</p>
+        <p className="text-sm text-[#1A2238] font-medium font-cinzel">{value}</p>
+      </div>
+    </Card>
+  );
+}
+
 export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
-  const routeLabel = pkg.route.join(" -> ");
+  const routeLabel = pkg.route.join(" → ");
 
   return (
     <div className="bg-[#F8F4ED] min-h-screen">
@@ -15,34 +39,16 @@ export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
         <Image src={pkg.image} alt={pkg.title} fill className="object-cover" priority />
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-10 max-w-5xl mx-auto">
-          <p className="font-cinzel text-amber-400 text-sm mb-1">{pkg.duration}</p>
+          <Badge variant="amber" className="mb-2 w-fit">{pkg.duration}</Badge>
           <h1 className="font-cinzel text-3xl sm:text-5xl text-white font-medium">{pkg.title}</h1>
         </div>
       </div>
 
       <div className="max-w-5xl mx-auto px-6 py-12 space-y-12">
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          <div className="flex items-center gap-3 bg-white rounded p-4 shadow-sm">
-            <Clock size={18} className="text-amber-700" />
-            <div>
-              <p className="text-xs text-[#1A2238] font-cinzel">Duration</p>
-              <p className="text-sm text-[#1A2238] font-medium font-cinzel">{pkg.duration}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 bg-white rounded p-4 shadow-sm">
-            <Route size={18} className="text-amber-700" />
-            <div>
-              <p className="text-xs text-[#1A2238] font-cinzel">Distance</p>
-              <p className="text-sm text-[#1A2238] font-medium font-cinzel">{pkg.km} KM</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 bg-white rounded p-4 shadow-sm col-span-2 sm:col-span-1">
-            <MapPin size={18} className="text-amber-700" />
-            <div>
-              <p className="text-xs text-[#1A2238] font-cinzel">Route</p>
-              <p className="text-sm text-[#1A2238] font-medium font-cinzel">{routeLabel}</p>
-            </div>
-          </div>
+          <StatCard icon={<Clock size={18} className="text-amber-700" />} label="Duration" value={pkg.duration} />
+          <StatCard icon={<Route size={18} className="text-amber-700" />} label="Distance" value={`${pkg.km} KM`} />
+          <StatCard icon={<MapPin size={18} className="text-amber-700" />} label="Route" value={routeLabel} className="col-span-2 sm:col-span-1" />
         </div>
 
         <section>
@@ -51,7 +57,7 @@ export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
         </section>
 
         <section>
-          <h2 className="font-cinzel text-2xl text-neutral-900 mb-6">Itinerary</h2>
+          <h2 className="font-cinzel text-2xl text-neutral-900 mb-6">Day-by-Day Itinerary</h2>
           <PackageTimeline itinerary={pkg.itinerary} />
         </section>
 
@@ -59,10 +65,10 @@ export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
           <h2 className="font-cinzel text-2xl text-neutral-900 mb-4">Included Services</h2>
           <div className="grid sm:grid-cols-2 gap-3">
             {pkg.includedServices.map((service) => (
-              <div key={service} className="flex items-start gap-3 bg-white rounded p-3 shadow-sm">
+              <Card key={service} variant="white" className="flex items-start gap-3 p-3">
                 <CheckCircle size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
                 <span className="text-sm text-neutral-700">{service}</span>
-              </div>
+              </Card>
             ))}
           </div>
         </section>
@@ -70,23 +76,21 @@ export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
         {pkg.recommendedVehicle ? (
           <section>
             <h2 className="font-cinzel text-2xl text-neutral-900 mb-4">Recommended Vehicle</h2>
-            <div className="flex items-start gap-4 bg-white rounded p-5 shadow-sm">
+            <Card variant="white" className="flex items-start gap-4 p-5">
               <Car size={28} className="text-amber-700 flex-shrink-0 mt-1" />
               <div>
                 <p className="font-cinzel text-lg text-neutral-900 mb-1">{pkg.recommendedVehicle.type}</p>
                 <p className="text-sm text-neutral-600">{pkg.recommendedVehicle.description}</p>
               </div>
-            </div>
+            </Card>
           </section>
         ) : null}
 
-        <div className="flex gap-4">
-          <PackageRequestButton
-            pkg={pkg}
-            className="rounded bg-neutral-900 px-6 py-3 font-cinzel text-sm text-white transition cursor-pointer hover:bg-neutral-700"
-            label="Request Package"
-          />
-        </div>
+        <PackageRequestButton
+          pkg={pkg}
+          className="rounded bg-neutral-900 px-6 py-3 font-cinzel text-sm text-white transition cursor-pointer hover:bg-neutral-700"
+          label="Request This Package"
+        />
       </div>
     </div>
   );

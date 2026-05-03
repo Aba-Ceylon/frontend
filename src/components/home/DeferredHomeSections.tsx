@@ -13,6 +13,7 @@ function SectionSkeleton({
     <section
       className={`flex min-h-[420px] items-center justify-center px-6 py-24 ${className}`}
       aria-label={title}
+      aria-busy="true"
     >
       <div className="w-full max-w-6xl animate-pulse">
         <div className="mx-auto h-10 w-64 rounded-full bg-white/20" />
@@ -27,87 +28,39 @@ function SectionSkeleton({
   );
 }
 
-function LocalizedSectionSkeleton({
-  className,
-  titleKey,
-}: {
-  className?: string;
-  titleKey: string;
-}) {
-  return <SectionSkeleton className={className} title={titleKey.replace(/([A-Z])/g, ' $1').trim()} />;
-}
-
 const InteractiveMap = dynamic(
   () => import("@/components/interactiveSriLanka/InteractiveMap"),
-  {
-    ssr: false,
-    loading: () => (
-      <LocalizedSectionSkeleton
-        className="bg-[#0F172A] text-white"
-        titleKey="loading.interactiveMap"
-      />
-    ),
-  },
+  { ssr: false, loading: () => <SectionSkeleton className="bg-[#0F172A] text-white" title="Loading interactive map" /> },
 );
 
 const FeaturedPckgs = dynamic(
   () => import("@/components/featuredPackages/FeaturedPckgs"),
-  {
-    loading: () => <LocalizedSectionSkeleton titleKey="loading.packages" />,
-  },
+  { loading: () => <SectionSkeleton title="Loading packages" /> },
 );
 
 const FeaturedStays = dynamic(
   () => import("@/components/featuredStays/FeaturedStays"),
-  {
-    loading: () => (
-      <LocalizedSectionSkeleton
-        className="bg-[#1A2238] text-white"
-        titleKey="loading.stays"
-      />
-    ),
-  },
+  { loading: () => <SectionSkeleton className="bg-[#1A2238] text-white" title="Loading stays" /> },
 );
 
-const FleetSection = dynamic(() => import("@/components/fleet/FleetSection"), {
-  loading: () => <LocalizedSectionSkeleton titleKey="loading.fleet" />,
-});
+const FleetSection = dynamic(
+  () => import("@/components/fleet/FleetSection"),
+  { loading: () => <SectionSkeleton title="Loading fleet" /> },
+);
 
 const CustomPlannerSection = dynamic(
   () => import("@/components/customPlanner/CustomPlannerSection"),
-  {
-    loading: () => (
-      <LocalizedSectionSkeleton
-        className="bg-[#0F172A] text-white"
-        titleKey="loading.plannerSection"
-      />
-    ),
-  },
+  { loading: () => <SectionSkeleton className="bg-[#0F172A] text-white" title="Loading planner" /> },
 );
 
 const BuddhaLotus = dynamic(
   () => import("@/components/buddhaLotus/BuddhaLotus"),
-  {
-    ssr: false,
-    loading: () => (
-      <LocalizedSectionSkeleton
-        className="bg-[#05070A] text-white"
-        titleKey="loading.buddhaLotus"
-      />
-    ),
-  },
+  { ssr: false, loading: () => <SectionSkeleton className="bg-[#05070A] text-white" title="Loading" /> },
 );
 
 const Testimonials = dynamic(
   () => import("@/components/testimonials/Testimonials"),
-  {
-    loading: () => (
-      <LocalizedSectionSkeleton
-        className="bg-[#1A2238] text-white"
-        titleKey="loading.testimonials"
-      />
-    ),
-  },
+  { loading: () => <SectionSkeleton className="bg-[#1A2238] text-white" title="Loading testimonials" /> },
 );
 
 export default function DeferredHomeSections() {
