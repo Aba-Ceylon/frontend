@@ -90,26 +90,24 @@ export default function CustomPlannerSection() {
               <div className="flex items-center gap-3 mb-4">
                 <div className="h-px w-10 bg-gradient-to-r from-transparent to-amber-300" />
                 <span className="font-cinzel text-[11px] uppercase tracking-[0.34em] text-amber-300">
-                  Custom Planner
+                  Plan Your Journey
                 </span>
               </div>
               <h2 className="font-cinzel text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
-                Build Your Own Sri Lanka Journey With Aba Ceylon
+                Custom Journey Planner
               </h2>
               <p className="mt-4 max-w-2xl text-white/78 text-sm sm:text-base leading-7">
-                Choose your destinations, match the right chauffeur vehicle,
-                decide how accommodation should work, and let us shape a route
-                designed entirely around your travel style.
+                Design your perfect Sri Lankan adventure with our personalized planning service
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
                 <span className="rounded-full border border-white/12 bg-white/8 px-3 py-1.5 text-xs text-white/78">
-                  Multi-stop route planning
+                  Route Planning
                 </span>
                 <span className="rounded-full border border-white/12 bg-white/8 px-3 py-1.5 text-xs text-white/78">
-                  Chauffeur vehicle matching
+                  Chauffeur Matching
                 </span>
                 <span className="rounded-full border border-white/12 bg-white/8 px-3 py-1.5 text-xs text-white/78">
-                  WhatsApp-ready request
+                  WhatsApp Ready
                 </span>
               </div>
             </div>
@@ -119,7 +117,7 @@ export default function CustomPlannerSection() {
                 href="/planner"
                 className="inline-flex min-w-[220px] items-center justify-center rounded-sm border border-amber-300/60 bg-[linear-gradient(135deg,rgba(251,191,36,0.88),rgba(217,119,6,0.9))] px-7 py-4 font-cinzel text-sm uppercase tracking-[0.26em] text-[#0F172A] shadow-[0_0_30px_rgba(245,158,11,0.28)] transition hover:scale-[1.02] hover:shadow-[0_0_42px_rgba(245,158,11,0.36)]"
               >
-                Plan With Us
+                Start Planning
               </Link>
             </div>
           </div>

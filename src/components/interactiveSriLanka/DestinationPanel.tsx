@@ -19,6 +19,22 @@ export default function DestinationPanel({
 }: DestinationPanelProps) {
   const displayCategory = getMapLegendCategory(destination);
   const categoryStyle = mapCategoryStyles[displayCategory];
+  const displayCategoryLabel = (() => {
+    switch (displayCategory) {
+      case "Heritage":
+        return "Heritage";
+      case "Nature":
+        return "Nature";
+      case "Coastal":
+        return "Coastal";
+      case "Adventure":
+        return "Adventure";
+      case "City":
+        return "City";
+      default:
+        return displayCategory;
+    }
+  })();
 
   // Close on Escape key
   useEffect(() => {
@@ -48,7 +64,7 @@ export default function DestinationPanel({
               <button
                 onClick={onClose}
                 className="absolute top-3 right-3 h-9 w-9 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors sm:top-4 sm:right-4 sm:h-10 sm:w-10"
-                aria-label="Close"
+                aria-label="Close destination panel"
               >
                 <svg
                   className="w-5 h-5 sm:w-6 sm:h-6"
@@ -67,7 +83,7 @@ export default function DestinationPanel({
 
               <div>
                 <div className="inline-flex px-3 py-1 bg-white/20 rounded-full text-xs sm:text-sm font-medium mb-3 font-cinzel uppercase tracking-[0.2em]">
-                  {displayCategory}
+                  {displayCategoryLabel}
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-bold mb-2 font-cinzel pr-2">
                   {destination.name}
@@ -84,7 +100,7 @@ export default function DestinationPanel({
                 <span
                   className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold tracking-[0.18em] uppercase ${categoryStyle.softClass}`}
                 >
-                  {displayCategory}
+                  {displayCategoryLabel}
                 </span>
                 <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold tracking-[0.14em] uppercase text-slate-700">
                   {destination.region}
@@ -177,7 +193,7 @@ export default function DestinationPanel({
                       d="M13 10V3L4 14h7v7l9-11h-7z"
                     />
                   </svg>
-                  Why Visit This Place
+                  Why Visit
                 </h3>
                 <p className="text-gray-700 leading-relaxed font-cinzel">
                   {destination.whyVisit}

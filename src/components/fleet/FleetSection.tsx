@@ -163,7 +163,7 @@ export default function FleetSection() {
             Premium Fleet
           </h2>
           <p className="mx-auto max-w-2xl text-lg font-cinzel text-neutral-600">
-            Chauffeured luxury vehicles for seamless journeys across Sri Lanka.
+            Explore our curated collection of luxury vehicles for your journey
           </p>
         </div>
 
@@ -217,14 +217,14 @@ export default function FleetSection() {
                           <div className="flex items-center gap-2 text-neutral-700">
                             <Users size={18} className="text-[#0b2545]" />
                             <span className="text-sm">
-                              {v.passengerCapacity} pax
+                              {v.passengerCapacity} Passengers
                             </span>
                           </div>
 
                           <div className="flex items-center gap-2 text-neutral-700">
                             <Briefcase size={18} className="text-[#0b2545]" />
                             <span className="text-sm">
-                              {v.luggageCapacity} bags
+                              {v.luggageCapacity} Bags
                             </span>
                           </div>
                         </div>
@@ -264,7 +264,7 @@ export default function FleetSection() {
 
         {isLoading && (
           <p className="mt-6 text-center text-sm text-neutral-600">
-            Loading fleet...
+            Loading vehicles...
           </p>
         )}
         {!isLoading && error && (
@@ -272,7 +272,7 @@ export default function FleetSection() {
         )}
         {!isLoading && !error && len === 0 && (
           <p className="mt-6 text-center text-sm text-neutral-600">
-            No fleet vehicles available right now.
+            No vehicles available
           </p>
         )}
 

@@ -142,10 +142,10 @@ export default function FeaturedStays() {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="mb-4 text-5xl font-medium font-cinzel text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]">
-            Accommodation in Sri Lanka
+            Heritage Stays
           </h2>
           <p className="text-lg font-cinzel text-amber-50/70 max-w-2xl mx-auto">
-            Stay within the story of Sri Lanka, not outside it
+            Discover our curated collection of authentic Sri Lankan accommodations
           </p>
         </div>
 

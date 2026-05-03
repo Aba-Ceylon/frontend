@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-// Image not used in this component
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);

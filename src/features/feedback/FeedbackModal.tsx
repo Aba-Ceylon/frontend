@@ -33,11 +33,11 @@ export default function FeedbackModal({ onClose }: FeedbackModalProps) {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 w-full max-w-2xl">
+      <div className="relative z-10 mx-auto w-full max-w-xl">
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-3 top-3 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/25 text-white transition hover:bg-black/40 sm:right-4 sm:top-4"
+          className="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/35 text-white transition hover:bg-black/50"
           aria-label="Close feedback form"
         >
           <X className="h-5 w-5" />

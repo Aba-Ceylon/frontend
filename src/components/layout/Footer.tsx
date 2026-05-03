@@ -13,30 +13,30 @@ import {
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const footerLinks = [
-  {
-    title: "Curation",
-    links: [
-      { label: "Holiday Packages", href: "/packages" },
-      { label: "Stays & Retreats", href: "/stays" },
-      { label: "Private Fleet", href: "/fleet" },
-      { label: "Bespoke Activities", href: "/activities" },
-    ],
-  },
-  {
-    title: "Heritage",
-    links: [
-      { label: "Our Story", href: "/about" },
-      { label: "Destinations", href: "/destinations" },
-      { label: "Sustainability", href: "/sustainability" },
-      { label: "Contact", href: "/contact" },
-    ],
-  },
-];
-
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
   const bigTextRef = useRef<HTMLDivElement>(null);
+
+  const footerLinks = [
+    {
+      title: "Curation",
+      links: [
+        { label: "Holiday Packages", href: "/packages" },
+        { label: "Stays & Retreats", href: "/stays" },
+        { label: "Private Fleet", href: "/fleet" },
+        { label: "Bespoke Activities", href: "/activities" },
+      ],
+    },
+    {
+      title: "Heritage",
+      links: [
+        { label: "Our Story", href: "/about" },
+        { label: "Destinations", href: "/destinations" },
+        { label: "Sustainability", href: "/sustainability" },
+        { label: "Contact", href: "/contact" },
+      ],
+    },
+  ];
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -113,13 +113,7 @@ export default function Footer() {
               Establishment of Excellence
             </span>
             <h3 className="font-cinzel text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-[1.1] mb-8">
-              THE FINEST WAY <br className="hidden sm:block" />
-              TO{" "}
-              <span className="italic text-[#C99A2B] font-serif lowercase">
-                experience
-              </span>{" "}
-              <br className="hidden sm:block" />
-              THE ISLAND.
+              THE FINEST WAY <br className="hidden sm:block" /> to experience <br className="hidden sm:block" /> THE ISLAND.
             </h3>
 
             <div className="flex justify-center md:justify-start">

@@ -10,6 +10,7 @@ import type { Destination } from "@/types/destination";
 import DestinationPanel from "./DestinationPanel";
 import {
   getMapLegendCategory,
+  type MapLegendCategory,
   mapCategoryStyles,
   mapLegendItems,
 } from "./mapCategoryUtils";
@@ -247,6 +248,40 @@ export default function InteractiveMap() {
     }
   };
 
+  const getCategoryLabel = (category: MapLegendCategory) => {
+    switch (category) {
+      case "Heritage":
+        return "Heritage";
+      case "Nature":
+        return "Nature";
+      case "Coastal":
+        return "Coastal";
+      case "Adventure":
+        return "Adventure";
+      case "City":
+        return "City";
+      default:
+        return category;
+    }
+  };
+
+  const getCategoryDescription = (category: MapLegendCategory) => {
+    switch (category) {
+      case "Heritage":
+        return "Explore Sri Lanka's rich cultural heritage sites";
+      case "Nature":
+        return "Discover stunning natural landscapes and wildlife";
+      case "Coastal":
+        return "Relax on pristine beaches and coastal areas";
+      case "Adventure":
+        return "Experience thrilling adventures and outdoor activities";
+      case "City":
+        return "Explore vibrant cities and urban destinations";
+      default:
+        return "";
+    }
+  };
+
   return (
     <section ref={sectionRef} className="relative w-full h-screen bg-slate-50">
       <div
@@ -260,7 +295,7 @@ export default function InteractiveMap() {
           <div className="text-center">
             <div className="mx-auto mb-6 h-20 w-20 animate-spin rounded-full border-4 border-amber-500 border-t-transparent" />
             <p className="font-cinzel text-lg tracking-wider text-amber-100">
-              Loading Destination Map...
+              Loading map...
             </p>
           </div>
         </div>
@@ -278,12 +313,10 @@ export default function InteractiveMap() {
           </div>
 
           <h2 className="mb-3 font-cinzel text-3xl font-medium tracking-wide text-amber-100 drop-shadow-2xl sm:text-4xl md:mb-4 md:text-6xl">
-            Explore Sri Lanka
+            Interactive Map
           </h2>
           <p className="max-w-2xl pr-4 text-sm font-light leading-6 tracking-wide text-amber-50/90 sm:pr-0 sm:text-base md:text-xl md:leading-relaxed">
-            Discover the destinations already available in the system. Add new
-            destinations from the dashboard and they will appear here
-            automatically.
+            Explore destinations across Sri Lanka and plan your perfect journey
           </p>
 
           <div className="mt-4 flex items-center gap-2">
@@ -299,10 +332,10 @@ export default function InteractiveMap() {
         className="absolute bottom-4 left-1/2 z-10 w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 rounded-2xl border border-amber-400/20 bg-linear-to-br from-slate-900/95 to-slate-800/95 p-4 shadow-2xl backdrop-blur-md sm:bottom-8 sm:left-8 sm:w-auto sm:max-w-none sm:translate-x-0 sm:p-6"
       >
         <h3 className="mb-4 font-cinzel text-base font-medium tracking-wider text-amber-400">
-          Legends
+          Categories
         </h3>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-1">
-          {mapLegendItems.map(({ category, description }) => {
+          {mapLegendItems.map(({ category }) => {
             const categoryStyle = mapCategoryStyles[category];
 
             return (
@@ -318,10 +351,10 @@ export default function InteractiveMap() {
                 </div>
                 <div className="min-w-0">
                   <span className="block font-cinzel text-sm tracking-wide text-amber-50">
-                    {category}
+                    {getCategoryLabel(category)}
                   </span>
                   <span className="block text-xs leading-5 text-amber-50/65">
-                    {description}
+                    {getCategoryDescription(category)}
                   </span>
                 </div>
               </div>
@@ -334,15 +367,13 @@ export default function InteractiveMap() {
         <div className="absolute inset-x-4 top-1/2 z-10 -translate-y-1/2 sm:left-1/2 sm:max-w-xl sm:-translate-x-1/2">
           <div className="rounded-[1.75rem] border border-white/10 bg-slate-900/88 p-6 text-center shadow-2xl backdrop-blur-md sm:p-8">
             <p className="font-cinzel text-xs uppercase tracking-[0.32em] text-amber-400">
-              No System Destinations
+              Discover
             </p>
             <h3 className="mt-3 font-cinzel text-2xl text-amber-50 sm:text-3xl">
-              No destinations have been added yet
+              Explore Sri Lanka
             </h3>
             <p className="mt-3 text-sm leading-7 text-amber-50/75 sm:text-base">
-              This interactive map only shows destinations that already exist in
-              the system. Add destinations from the dashboard and they will
-              appear here automatically.
+              Click on destinations to learn more about each location
             </p>
           </div>
         </div>

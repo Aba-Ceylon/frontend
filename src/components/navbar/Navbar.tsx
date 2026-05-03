@@ -78,63 +78,67 @@ export default function NavBar() {
             </div>
           )}
 
-          {/* Desktop CTA & Auth Buttons */}
-          {!isAuthPage && (
-            <div className="hidden lg:flex items-center gap-4">
-              <Link
-                href="/contact"
-                className="relative overflow-hidden border-2 border-amber-400/60 bg-white/5 px-6 py-2 text-sm text-white shadow-2xl backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] hover:border-amber-400 hover:bg-white/10"
-              >
-                <span className="relative z-10 font-cinzel tracking-wide">
-                  Enquire Now
-                </span>
-              </Link>
-              <Show when="signed-out">
+          <div className="hidden lg:flex items-center gap-4">
+            {!isAuthPage && (
+              <>
                 <Link
-                  href="/sign-in"
-                  className="font-cinzel text-white text-sm font-medium tracking-[0.08em] px-4 py-2 transition-colors duration-300 hover:text-[#C99A2B]"
+                  href="/contact"
+                  className="relative overflow-hidden border-2 border-amber-400/60 bg-white/5 px-6 py-2 text-sm text-white shadow-2xl backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] hover:border-amber-400 hover:bg-white/10"
                 >
-                  Sign In
+                  <span className="relative z-10 font-cinzel tracking-wide">
+                    Enquire Now
+                  </span>
                 </Link>
-                <Link
-                  href="/sign-up"
-                  className="rounded-md bg-amber-400/60 px-4 py-2 font-cinzel text-sm font-medium tracking-[0.08em] text-white drop-shadow-[0_0_30px_rgba(201,154,43,0.5)] transition-all duration-300 hover:bg-amber-400/75"
-                >
-                  Sign Up
-                </Link>
-              </Show>
-              <Show when="signed-in">
-                <Link
-                  href="/feedback"
-                  className="font-cinzel text-white text-sm font-medium tracking-[0.08em] px-4 py-2 transition-colors duration-300 hover:text-[#C99A2B]"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    setIsFeedbackOpen(true);
-                  }}
-                >
-                  Feedback
-                </Link>
-                <UserButton />
-              </Show>
-            </div>
-          )}
-
-          {/* Mobile Hamburger Menu */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden text-white p-2"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
+                <Show when="signed-out">
+                  <Link
+                    href="/sign-in"
+                    className="font-cinzel text-white text-sm font-medium tracking-[0.08em] px-4 py-2 transition-colors duration-300 hover:text-[#C99A2B]"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/sign-up"
+                    className="rounded-md bg-amber-400/60 px-4 py-2 font-cinzel text-sm font-medium tracking-[0.08em] text-white drop-shadow-[0_0_30px_rgba(201,154,43,0.5)] transition-all duration-300 hover:bg-amber-400/75"
+                  >
+                    Sign Up
+                  </Link>
+                </Show>
+                <Show when="signed-in">
+                  <Link
+                    href="/feedback"
+                    className="font-cinzel text-white text-sm font-medium tracking-[0.08em] px-4 py-2 transition-colors duration-300 hover:text-[#C99A2B]"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      setIsFeedbackOpen(true);
+                    }}
+                  >
+                    Feedback
+                  </Link>
+                  <UserButton />
+                </Show>
+              </>
             )}
-          </button>
+          </div>
+
+          <div className="flex items-center gap-2 lg:hidden">
+            {!isAuthPage ? (
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-white p-2"
+                aria-label="Toggle menu"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </button>
+            ) : null}
+          </div>
         </div>
 
         {/* Mobile Navigation Menu */}
-        {isMobileMenuOpen && (
+        {!isAuthPage && isMobileMenuOpen && (
           <div
             className={`lg:hidden mt-4 pb-4 border-t ${
               isScrolled ? "border-white/20" : "border-white/30"

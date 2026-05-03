@@ -32,6 +32,7 @@ export interface Destination {
   highlights: string[];
   bestTimeToVisit: string;
   whyVisit: string;
+  tags?: string[];
   images?: string[];
 }
 
@@ -42,6 +43,11 @@ export interface SupabaseDestinationRow {
   longitude: number | string | null;
   description: string | null;
   images: string[] | null;
+  type: string | null;
+  tags: string[] | null;
+  highlights: string[] | null;
+  best_time_to_visit: string | null;
+  why_visit: string | null;
 }
 
 export interface Package {

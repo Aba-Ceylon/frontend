@@ -164,11 +164,10 @@ export default function FeaturedPckgs() {
       <div className="mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-medium font-cinzel text-neutral-900 mb-4">
-            Curated Journeys
+            Holiday Packages
           </h2>
           <p className="text-lg font-cinzel text-neutral-600 max-w-2xl mx-auto">
-            Explore handcrafted travel experiences across Sri Lanka&apos;s
-            heritage, hills, and coastlines.
+            Explore our curated collection of premium Sri Lankan holiday experiences
           </p>
         </div>
 
