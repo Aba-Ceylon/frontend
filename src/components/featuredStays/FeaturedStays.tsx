@@ -141,11 +141,11 @@ export default function FeaturedStays() {
       <div className="mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-5xl font-medium font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)] mb-4">
-            Accommodation in Sri Lanka
+          <h2 className="mb-4 text-5xl font-medium font-cinzel text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]">
+            Heritage Stays
           </h2>
           <p className="text-lg font-cinzel text-amber-50/70 max-w-2xl mx-auto">
-            Stay within the story of Sri Lanka, not outside it
+            Discover our curated collection of authentic Sri Lankan accommodations
           </p>
         </div>
 
@@ -207,7 +207,7 @@ export default function FeaturedStays() {
         <div className="text-center mt-8">
           <Link
             href="/stays"
-            className="inline-flex items-center px-6 py-3 font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)] hover:text-white transition"
+            className="inline-flex items-center px-6 py-3 font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(201,154,43,0.5)] hover:text-white transition"
           >
             Discover All Stays
             <LucideArrowRight size={16} className="ml-2" />

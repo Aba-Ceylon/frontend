@@ -1,18 +1,21 @@
+"use client";
+
 import { useState } from "react";
-import type { Destination } from "@/types/destination";
+import PlannerInteractiveMap from "@/features/planner/PlannerInteractiveMap";
 import DestinationMapModal from "@/features/planner/DestinationMapModal";
+import type { Destination } from "@/types/destination";
 
 interface DestinationSelectorProps {
   destinations: Destination[];
   selectedDestinationIds: string[];
-  validationIssues: string[];
+  validationIssues?: string[];
   onToggleDestination: (destinationId: string) => void;
 }
 
 export default function DestinationSelector({
   destinations,
   selectedDestinationIds,
-  validationIssues,
+  validationIssues = [],
   onToggleDestination,
 }: DestinationSelectorProps) {
   const [mapDestination, setMapDestination] = useState<Destination | null>(
@@ -50,10 +53,15 @@ export default function DestinationSelector({
           </div>
         ) : null}
 
+        <PlannerInteractiveMap
+          destinations={destinations}
+          onToggleDestination={onToggleDestination}
+          selectedDestinationIds={selectedDestinationIds}
+        />
+
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {destinations.map((destination) => {
             const isSelected = selectedDestinationIds.includes(destination.id);
-            const previewImage = destination.images?.[0];
 
             return (
               <article
@@ -64,13 +72,6 @@ export default function DestinationSelector({
                     : "border-neutral-200 bg-white hover:border-amber-200 hover:shadow-lg"
                 }`}
               >
-                {previewImage ? (
-                  <div
-                    className="mb-4 h-44 rounded-[1.4rem] bg-cover bg-center bg-no-repeat"
-                    style={{ backgroundImage: `url('${previewImage}')` }}
-                  />
-                ) : null}
-
                 <div className="flex items-start justify-between gap-3 mb-4">
                   <div>
                     <p className="font-cinzel text-xs uppercase tracking-[0.24em] text-amber-700">

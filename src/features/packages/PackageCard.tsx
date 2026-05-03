@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { PackageItem, usePackageStore } from "@/store/PackageStore";
 import Image from "next/image";
+import PackageRequestButton from "@/features/packages/PackageRequestButton";
+import { usePackageStore } from "@/store/PackageStore";
+import type { PackageItem } from "@/types/package";
 
 type PackageCardProps = {
   pkg: PackageItem;
@@ -10,11 +12,8 @@ type PackageCardProps = {
 
 export default function PackageCard({ pkg }: PackageCardProps) {
   const selectedPackage = usePackageStore((state) => state.selectedPackage);
-  const setSelectedPackage = usePackageStore(
-    (state) => state.setSelectedPackage,
-  );
-
   const isSelected = selectedPackage?.id === pkg.id;
+
   const packageLabel = pkg.packageId
     ? `Package ${String(pkg.packageId).padStart(2, "0")}`
     : "Curated Package";
@@ -28,7 +27,13 @@ export default function PackageCard({ pkg }: PackageCardProps) {
       }`}
     >
       <div className="relative h-48 sm:h-64 md:h-72 lg:h-80 w-full">
-        <Image src={pkg.image} alt={pkg.title} fill className="object-cover" />
+        <Image
+          src={pkg.image}
+          alt={pkg.title}
+          fill
+          sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
+          className="object-cover"
+        />
       </div>
 
       <div className="p-3 sm:p-4 md:p-5">
@@ -57,12 +62,10 @@ export default function PackageCard({ pkg }: PackageCardProps) {
         </p>
 
         <div className="flex gap-2 sm:gap-3 flex-col xl:flex-row">
-          <button
-            onClick={() => setSelectedPackage(pkg)}
+          <PackageRequestButton
+            pkg={pkg}
             className="text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 font-cinzel rounded-lg bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-md text-white hover:bg-amber-700 transition cursor-pointer"
-          >
-            {isSelected ? "Requested" : "Request Package"}
-          </button>
+          />
 
           <Link
             href={`/packages/${pkg.id}`}

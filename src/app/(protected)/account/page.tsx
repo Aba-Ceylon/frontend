@@ -15,7 +15,7 @@ export default async function AccountPage() {
     >
       <div className="max-w-xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="font-cinzel text-3xl text-amber-400 drop-shadow-[0_0_20px_rgba(217,119,6,0.4)]">
+          <h1 className="font-cinzel text-3xl text-amber-400 drop-shadow-[0_0_20px_rgba(201,154,43,0.4)]">
             My Account
           </h1>
           <div className="flex items-center justify-center gap-3 mt-4">

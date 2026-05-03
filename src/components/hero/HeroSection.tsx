@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-// Image not used in this component
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -214,7 +213,7 @@ export default function HeroSection() {
 
         {/* Main Headline */}
         <h1 className="hero-headline font-cinzel text-5xl md:text-7xl lg:text-8xl font-medium mb-6 tracking-wider leading-tight drop-shadow-2xl">
-          <span className="text-amber-400 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)]">
+          <span className="text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]">
             Aba Ceylon
           </span>
           <br />
@@ -239,7 +238,7 @@ export default function HeroSection() {
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
           <Link
             href="/packages"
-            className="relative overflow-hidden group bg-amber-400/60 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)] backdrop-blur-2xl text-white px-12 py-4 text-lg shadow-2xl transition-all duration-300 transform hover:scale-105"
+            className="relative overflow-hidden group bg-amber-400/60 drop-shadow-[0_0_30px_rgba(201,154,43,0.5)] backdrop-blur-2xl text-white px-12 py-4 text-lg shadow-2xl transition-all duration-300 transform hover:scale-105"
           >
             <span className="relative z-10 font-cinzel tracking-wide">
               View Our Packages

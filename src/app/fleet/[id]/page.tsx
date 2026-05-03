@@ -1,14 +1,43 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Image from "next/image";
-import { notFound } from "next/navigation";
 import { Users, Briefcase } from "lucide-react";
 import Container from "@/components/layout/Container";
+import VehicleRequestButton from "@/features/fleet/VehicleRequestButton";
 import { fetchVehicleById } from "@/services/fleetService";
+import type { FleetVehicle } from "@/types/vehicle";
 
-export default async function VehiclePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const vehicle = await fetchVehicleById(id);
+export default function VehiclePage() {
+  const params = useParams();
+  const id = params?.id as string;
+  const [vehicle, setVehicle] = useState<FleetVehicle | null>(null);
+  const [notFound, setNotFound] = useState(false);
 
-  if (!vehicle) return notFound();
+  useEffect(() => {
+    if (!id) return;
+    fetchVehicleById(id).then((v) => {
+      if (!v) setNotFound(true);
+      else setVehicle(v);
+    });
+  }, [id]);
+
+  if (notFound) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="font-cinzel text-2xl text-neutral-700">Vehicle not found.</p>
+      </div>
+    );
+  }
+
+  if (!vehicle) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="font-cinzel text-neutral-500">Loading vehicle...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -29,15 +58,17 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="lg:w-2/3 bg-white rounded p-6 shadow-sm">
               <h2 className="font-cinzel text-2xl text-[#0b2545] mb-4">Overview</h2>
-              <p className="text-neutral-700 mb-4">Models: {vehicle.models.join(", ")}</p>
+              <p className="text-neutral-700 mb-4">
+                Models: {vehicle.models.join(", ")}
+              </p>
               <div className="flex items-center gap-6 mb-6">
                 <div className="flex items-center gap-2 text-neutral-700">
                   <Users size={18} className="text-[#0b2545]" />
-                  <span className="text-sm">{vehicle.passengerCapacity} passengers</span>
+                  <span className="text-sm">{vehicle.passengerCapacity} Passengers</span>
                 </div>
                 <div className="flex items-center gap-2 text-neutral-700">
                   <Briefcase size={18} className="text-[#0b2545]" />
-                  <span className="text-sm">{vehicle.luggageCapacity} luggage</span>
+                  <span className="text-sm">{vehicle.luggageCapacity} Bags</span>
                 </div>
               </div>
 
@@ -49,19 +80,19 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
               </ul>
 
               <div>
-                <h3 className="font-cinzel text-lg text-[#0b2545] mb-2">About this vehicle</h3>
+                <h3 className="font-cinzel text-lg text-[#0b2545] mb-2">About This Vehicle</h3>
                 <p className="text-neutral-700 leading-7">{vehicle.shortDescription}</p>
               </div>
             </div>
 
             <aside className="lg:w-1/3">
               <div className="bg-white rounded p-6 shadow-sm">
-                <h4 className="font-cinzel text-lg text-[#0b2545] mb-4">Request Vehicle</h4>
-                <p className="text-neutral-700 mb-4">Complete a quick request and our concierge will contact you to confirm availability and pricing.</p>
-
-                <button className="w-full px-5 py-3 rounded-full font-cinzel text-sm bg-amber-400 text-[#0b2545] hover:opacity-95 transition">
-                  Request Vehicle
-                </button>
+                <h4 className="font-cinzel text-lg text-[#0b2545] mb-4">Request This Vehicle</h4>
+                <p className="text-neutral-700 mb-4">Our concierge team will contact you to confirm availability and arrange your booking</p>
+                <VehicleRequestButton
+                  vehicle={vehicle}
+                  className="inline-flex w-full items-center justify-center rounded-full bg-amber-400 px-5 py-3 font-cinzel text-sm text-[#0b2545] transition hover:opacity-95"
+                />
               </div>
             </aside>
           </div>

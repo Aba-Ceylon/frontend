@@ -4,9 +4,24 @@
 :root {
   --background: #0a0a0a;
   --foreground: #f5f5f5;
-  --royal-gold: #d4af37;
-  --antique-bronze: #cd7f32;
-  --heritage-amber: #d97706;
+  --royal-gold: #c99a2b;
+  --antique-bronze: #a97b17;
+  --heritage-amber: #c99a2b;
+  --color-amber-50: #fcf7e6;
+  --color-amber-100: #f8ebc7;
+  --color-amber-200: #ecd38e;
+  --color-amber-300: #ddb65a;
+  --color-amber-400: #c99a2b;
+  --color-amber-500: #b8891f;
+  --color-amber-600: #a97b17;
+  --color-amber-700: #896212;
+  --color-amber-800: #6d4d0f;
+  --color-amber-900: #553b0a;
+  --color-amber-950: #2f2005;
+  --color-yellow-300: #ddb65a;
+  --color-yellow-400: #c99a2b;
+  --color-yellow-500: #c99a2b;
+  --color-yellow-600: #a97b17;
 }
 
 @theme inline {

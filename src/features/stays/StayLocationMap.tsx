@@ -136,10 +136,10 @@ export default function StayLocationMap({ stay }: { stay: Stay }) {
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-4">
         <div>
           <h2 className="font-cinzel text-2xl text-neutral-900 mb-1">
-            Location Map
+            Location
           </h2>
           <p className="text-sm text-neutral-600">
-            OpenStreetMap preview for this accommodation.
+            {stay.name} is located in {stay.location}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

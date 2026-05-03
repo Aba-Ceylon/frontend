@@ -10,13 +10,21 @@ export default function FeedbackForm() {
   const [rating, setRating] = useState(0);
   const [hovered, setHovered] = useState(0);
   const [message, setMessage] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (rating === 0) { setErrorMsg("Please select a star rating."); return; }
-    if (message.trim().length < 20) { setErrorMsg("Please write at least 20 characters."); return; }
+    if (rating === 0) {
+      setErrorMsg("Please select a rating");
+      return;
+    }
+    if (message.trim().length < 20) {
+      setErrorMsg("Message must be at least 20 characters");
+      return;
+    }
 
     setErrorMsg("");
     setStatus("loading");
@@ -34,7 +42,7 @@ export default function FeedbackForm() {
       setMessage("");
     } else {
       setStatus("error");
-      setErrorMsg(result.error ?? "Something went wrong. Please try again.");
+      setErrorMsg(result.error ?? "An error occurred. Please try again.");
     }
   }
 
@@ -52,27 +60,35 @@ export default function FeedbackForm() {
         <div className="w-12 h-px bg-amber-400/50" />
       </div>
 
-      <h2 className="font-cinzel text-2xl text-amber-400 text-center mb-1 drop-shadow-[0_0_20px_rgba(217,119,6,0.4)]">
-        Share Your Experience
+      <h2 className="font-cinzel text-2xl text-amber-400 text-center mb-1 drop-shadow-[0_0_20px_rgba(201,154,43,0.4)]">
+        Share Your Feedback
       </h2>
       <p className="text-slate-400 text-sm text-center mb-8 font-cinzel">
-        Your feedback helps us craft better journeys
+        We value your opinion and would love to hear about your experience
       </p>
 
       {status === "success" ? (
         <div className="text-center py-8">
           <div className="flex justify-center gap-1 mb-4">
             {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} size={28} className="text-amber-400 fill-amber-400" />
+              <Star
+                key={i}
+                size={28}
+                className="text-amber-400 fill-amber-400"
+              />
             ))}
           </div>
-          <p className="font-cinzel text-amber-400 text-lg mb-2">Thank you for your feedback!</p>
-          <p className="text-slate-400 text-sm">Your experience has been shared with our team.</p>
+          <p className="font-cinzel text-amber-400 text-lg mb-2">
+            Thank You!
+          </p>
+          <p className="text-slate-400 text-sm">
+            Your feedback has been submitted successfully
+          </p>
           <button
             onClick={() => setStatus("idle")}
             className="mt-6 font-cinzel text-sm px-6 py-2 rounded-lg border border-amber-400/40 text-amber-400 hover:bg-amber-400/10 transition-colors"
           >
-            Submit Another
+            Submit Another Review
           </button>
         </div>
       ) : (
@@ -80,7 +96,7 @@ export default function FeedbackForm() {
           {/* Star Rating */}
           <div>
             <label className="block font-cinzel text-sm text-slate-300 mb-3">
-              Overall Rating
+              Rate Your Experience
             </label>
             <div className="flex gap-2" role="group" aria-label="Star rating">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -117,7 +133,7 @@ export default function FeedbackForm() {
               htmlFor="feedback-message"
               className="block font-cinzel text-sm text-slate-300 mb-2"
             >
-              Your Experience
+              Tell us about your experience
             </label>
             <textarea
               id="feedback-message"
@@ -125,10 +141,12 @@ export default function FeedbackForm() {
               onChange={(e) => setMessage(e.target.value)}
               rows={5}
               maxLength={600}
-              placeholder="Tell us about your journey with Aba Ceylon..."
+              placeholder="Share your thoughts about our service..."
               className="w-full bg-slate-800/60 border border-slate-600 text-slate-100 placeholder-slate-500 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/60 focus:border-amber-400/60 resize-none transition-colors"
             />
-            <p className="text-xs text-slate-500 mt-1 text-right">{message.length}/600</p>
+            <p className="text-xs text-slate-500 mt-1 text-right">
+              {message.length}/600
+            </p>
           </div>
 
           {/* Error */}

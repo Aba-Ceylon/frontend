@@ -164,11 +164,10 @@ export default function FeaturedPckgs() {
       <div className="mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-medium font-cinzel text-neutral-900 mb-4">
-            Curated Journeys
+            Holiday Packages
           </h2>
           <p className="text-lg font-cinzel text-neutral-600 max-w-2xl mx-auto">
-            Explore handcrafted travel experiences across Sri Lanka&apos;s
-            heritage, hills, and coastlines.
+            Explore our curated collection of premium Sri Lankan holiday experiences
           </p>
         </div>
 
@@ -226,7 +225,7 @@ export default function FeaturedPckgs() {
         <div className="text-center mt-8">
           <Link
             href="/packages"
-            className="inline-flex items-center px-6 py-3 font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(217,119,6,0.5)] hover:text-black transition"
+            className="inline-flex items-center px-6 py-3 font-cinzel text-neutral-800 hover:text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]"
           >
             View Available Packages
             <LucideArrowRight size={16} className="ml-2" />
