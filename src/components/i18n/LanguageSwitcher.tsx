@@ -1,7 +1,6 @@
 "use client";
 
-import Button from "@/components/ui/Button";
-import { useI18n } from "./I18nProvider";
+import { LANGUAGE_OPTIONS, useI18n, type Locale } from "./I18nProvider";
 
 export default function LanguageSwitcher({
   mobile = false,
@@ -19,26 +18,22 @@ export default function LanguageSwitcher({
       <span className="font-cinzel text-xs uppercase tracking-[0.18em] text-white/70">
         {t("language.label")}
       </span>
-      <div className="flex items-center rounded-md border border-white/15 bg-white/5 p-1 backdrop-blur-md">
-        <Button
-          type="button"
-          size="sm"
-          variant={locale === "en" ? "secondary" : "ghost"}
-          className="rounded-sm px-3 py-1 text-[11px]"
-          onClick={() => setLocale("en")}
-        >
-          EN
-        </Button>
-        <Button
-          type="button"
-          size="sm"
-          variant={locale === "si" ? "secondary" : "ghost"}
-          className="rounded-sm px-3 py-1 text-[11px]"
-          onClick={() => setLocale("si")}
-        >
-          සි
-        </Button>
-      </div>
+      <select
+        aria-label={t("language.label")}
+        value={locale}
+        onChange={(event) => setLocale(event.target.value as Locale)}
+        className="rounded-md border border-white/15 bg-black/35 px-3 py-2 font-cinzel text-xs uppercase tracking-[0.12em] text-white outline-none backdrop-blur-md transition hover:border-amber-300/50 focus:border-amber-300"
+      >
+        {LANGUAGE_OPTIONS.map((option) => (
+          <option
+            key={option.locale}
+            value={option.locale}
+            className="bg-[#0F172A] text-white"
+          >
+            {option.shortLabel} · {option.nativeLabel}
+          </option>
+        ))}
+      </select>
     </div>
   );
 }
