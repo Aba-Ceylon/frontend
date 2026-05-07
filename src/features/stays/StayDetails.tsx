@@ -2,24 +2,36 @@
 
 import Image from "next/image";
 import { CheckCircle, MapPin, Phone, Tag, User } from "lucide-react";
-import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
-import { Stay } from "@/types/stay";
+import Card from "@/components/ui/Card";
+import { useI18n } from "@/components/i18n/I18nProvider";
+import type { Stay } from "@/types/stay";
 import StayLocationMap from "./StayLocationMap";
 
-function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
+function StatCard({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+}) {
   return (
     <Card variant="white" className="flex items-center gap-3 p-4">
       {icon}
       <div>
-        <p className="text-xs text-[#1A2238] font-cinzel">{label}</p>
-        <p className="text-sm text-[#1A2238] font-medium font-cinzel">{value}</p>
+        <p className="font-cinzel text-xs text-[#1A2238]">{label}</p>
+        <p className="font-cinzel text-sm font-medium text-[#1A2238]">
+          {value}
+        </p>
       </div>
     </Card>
   );
 }
 
 export default function StayDetails({ stay }: { stay: Stay }) {
+  const { t } = useI18n();
   const mapsHref = stay.coordinates
     ? `https://www.google.com/maps?q=${stay.coordinates.latitude},${stay.coordinates.longitude}`
     : null;
@@ -29,61 +41,100 @@ export default function StayDetails({ stay }: { stay: Stay }) {
     : null;
 
   return (
-    <div className="bg-[#F8F4ED] min-h-screen">
-      <div className="relative h-72 sm:h-96 w-full">
-        <Image src={stay.image} alt={stay.name} fill className="object-cover" priority />
+    <div className="min-h-screen bg-[#F8F4ED]">
+      <div className="relative h-72 w-full sm:h-96">
+        <Image
+          src={stay.image}
+          alt={stay.name}
+          fill
+          className="object-cover"
+          priority
+        />
         <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-10 max-w-5xl mx-auto">
-          <Badge variant="amber" className="mb-2 w-fit">{stay.category}</Badge>
-          <h1 className="font-cinzel text-3xl sm:text-5xl text-white font-medium">{stay.name}</h1>
+        <div className="absolute inset-0 mx-auto flex max-w-5xl flex-col justify-end p-6 sm:p-10">
+          <Badge variant="amber" className="mb-2 w-fit">
+            {stay.category}
+          </Badge>
+          <h1 className="font-cinzel text-3xl font-medium text-white sm:text-5xl">
+            {stay.name}
+          </h1>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 py-12 space-y-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <StatCard icon={<Tag size={18} className="text-amber-700" />} label="Category" value={stay.category} />
-          <StatCard icon={<User size={18} className="text-amber-700" />} label="Owner" value={stay.ownerName || "Available on request"} />
+      <div className="mx-auto flex max-w-5xl flex-col gap-12 px-6 py-12">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <StatCard
+            icon={<Tag size={18} className="text-amber-700" />}
+            label={t("stays.category")}
+            value={stay.category}
+          />
+          <StatCard
+            icon={<User size={18} className="text-amber-700" />}
+            label={t("stays.owner")}
+            value={stay.ownerName || t("common.availableOnRequest")}
+          />
         </div>
 
         <StayLocationMap stay={stay} />
 
         <section>
-          <h2 className="font-cinzel text-2xl text-neutral-900 mb-4">About This Stay</h2>
-          <p className="text-neutral-700 leading-7">{stay.description}</p>
+          <h2 className="mb-4 font-cinzel text-2xl text-neutral-900">
+            {t("stays.about")}
+          </h2>
+          <p className="leading-7 text-neutral-700">{stay.description}</p>
         </section>
 
         <section>
-          <h2 className="font-cinzel text-2xl text-neutral-900 mb-4">Amenities</h2>
-          <div className="grid sm:grid-cols-2 gap-3">
+          <h2 className="mb-4 font-cinzel text-2xl text-neutral-900">
+            {t("stays.amenities")}
+          </h2>
+          <div className="grid gap-3 sm:grid-cols-2">
             {stay.amenities.map((amenity) => (
-              <Card key={amenity} variant="white" className="flex items-start gap-3 p-3">
-                <CheckCircle size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
+              <Card
+                key={amenity}
+                variant="white"
+                className="flex items-start gap-3 p-3"
+              >
+                <CheckCircle
+                  size={16}
+                  className="mt-0.5 shrink-0 text-green-600"
+                />
                 <span className="text-sm text-neutral-700">{amenity}</span>
               </Card>
             ))}
           </div>
         </section>
 
-        <section className="flex flex-col sm:flex-row sm:items-center gap-6">
-          <Card variant="white" className="p-5 min-w-[220px]">
-            <p className="font-cinzel text-xs text-neutral-500 mb-1">WhatsApp Contact</p>
-            <p className="font-cinzel text-xl text-neutral-900 font-medium break-all">
-              {stay.ownerWhatsAppNumber || "Available on request"}
+        <section className="flex flex-col gap-6 sm:flex-row sm:items-center">
+          <Card variant="white" className="min-w-[220px] p-5">
+            <p className="mb-1 font-cinzel text-xs text-neutral-500">
+              {t("stays.whatsappContact")}
+            </p>
+            <p className="font-cinzel text-xl font-medium text-neutral-900 break-all">
+              {stay.ownerWhatsAppNumber || t("common.availableOnRequest")}
             </p>
           </Card>
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row">
             {whatsappHref ? (
-              <a href={whatsappHref} target="_blank" rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 font-cinzel text-sm rounded bg-neutral-900 text-white hover:bg-amber-700 transition">
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded bg-neutral-900 px-6 py-3 font-cinzel text-sm text-white transition hover:bg-amber-700"
+              >
                 <Phone size={16} />
-                Contact on WhatsApp
+                {t("stays.contactWhatsApp")}
               </a>
             ) : null}
             {mapsHref ? (
-              <a href={mapsHref} target="_blank" rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 font-cinzel text-sm rounded border border-neutral-300 text-neutral-900 hover:bg-white transition">
+              <a
+                href={mapsHref}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded border border-neutral-300 px-6 py-3 font-cinzel text-sm text-neutral-900 transition hover:bg-white"
+              >
                 <MapPin size={16} />
-                View on Map
+                {t("stays.viewOnMap")}
               </a>
             ) : null}
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 type PaginationControlsProps = {
   currentPage: number;
@@ -15,6 +16,7 @@ export default function PaginationControls({
   onPageChange,
   className = "",
 }: PaginationControlsProps) {
+  const { t } = useI18n();
   const goPrev = useCallback(
     () => onPageChange(Math.max(1, currentPage - 1)),
     [currentPage, onPageChange],
@@ -34,7 +36,7 @@ export default function PaginationControls({
         disabled={currentPage === 1}
         className="px-4 py-2 rounded-full border border-[#0b2545]/20 text-[#0b2545] font-cinzel disabled:opacity-45 disabled:cursor-not-allowed hover:bg-[#0b2545] hover:text-white transition"
       >
-        Prev
+        {t("pagination.prev")}
       </button>
 
       {Array.from({ length: totalPages }, (_, i) => {
@@ -61,7 +63,7 @@ export default function PaginationControls({
         disabled={currentPage === totalPages}
         className="px-4 py-2 rounded-full border border-[#0b2545]/20 text-[#0b2545] font-cinzel disabled:opacity-45 disabled:cursor-not-allowed hover:bg-[#0b2545] hover:text-white transition"
       >
-        Next
+        {t("pagination.next")}
       </button>
     </div>
   );

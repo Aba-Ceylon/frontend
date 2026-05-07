@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { LucideArrowLeft, LucideArrowRight } from "lucide-react";
 import PackageCard from "@/features/packages/PackageCard";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { useCarousel } from "@/hooks/useCarousel";
 import { packages as fallbackPackages } from "@/data/packages";
@@ -11,6 +12,7 @@ import { fetchPackages } from "@/services/packageService";
 import type { PackageItem } from "@/types/package";
 
 export default function FeaturedPckgs() {
+  const { t } = useI18n();
   const [packageItems, setPackageItems] = useState<PackageItem[]>(fallbackPackages);
 
   useEffect(() => {
@@ -29,15 +31,15 @@ export default function FeaturedPckgs() {
     <section className="py-24 bg-[#F5F2ED]">
       <div className="mx-auto px-6">
         <SectionHeader
-          title="Curated Journeys"
-          description="Explore handcrafted travel experiences across Sri Lanka's heritage, hills, and coastlines."
+          title={t("home.packages.title")}
+          description={t("home.packages.description")}
         />
 
         <div className="flex items-center gap-4">
           <button
             onClick={() => slideTo(-1)}
             className="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer"
-            aria-label="Previous"
+            aria-label={t("home.packages.previous")}
           >
             <LucideArrowLeft size={16} />
           </button>
@@ -60,7 +62,7 @@ export default function FeaturedPckgs() {
           <button
             onClick={() => slideTo(1)}
             className="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer"
-            aria-label="Next"
+            aria-label={t("home.packages.next")}
           >
             <LucideArrowRight size={16} />
           </button>
@@ -77,7 +79,7 @@ export default function FeaturedPckgs() {
 
         <div className="text-center mt-8">
           <Link href="/packages" className="inline-flex items-center px-6 py-3 font-cinzel text-neutral-800 hover:text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]">
-            View Available Packages
+            {t("home.packages.viewAll")}
             <LucideArrowRight size={16} className="ml-2" />
           </Link>
         </div>

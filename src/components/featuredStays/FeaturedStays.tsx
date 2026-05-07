@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { LucideArrowLeft, LucideArrowRight } from "lucide-react";
 import StayCard from "@/features/stays/StayCard";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { useCarousel } from "@/hooks/useCarousel";
 import { stays as fallbackStays } from "@/data/stays";
@@ -11,6 +12,7 @@ import { fetchStays } from "@/services/stayService";
 import type { Stay } from "@/types/stay";
 
 export default function FeaturedStays() {
+  const { t } = useI18n();
   const [stayItems, setStayItems] = useState<Stay[]>(fallbackStays);
 
   useEffect(() => {
@@ -29,8 +31,8 @@ export default function FeaturedStays() {
     <section className="py-24 bg-[#1A2238]">
       <div className="mx-auto px-6">
         <SectionHeader
-          title="Accommodation in Sri Lanka"
-          description="Stay within the story of Sri Lanka, not outside it"
+          title={t("home.stays.title")}
+          description={t("home.stays.description")}
           titleClassName="text-5xl font-medium font-cinzel text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]"
           descriptionClassName="text-lg font-cinzel text-amber-50/70"
         />
@@ -39,7 +41,7 @@ export default function FeaturedStays() {
           <button
             onClick={() => slideTo(-1)}
             className="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-amber-400/30 text-amber-400 hover:bg-amber-400/10 transition cursor-pointer"
-            aria-label="Previous"
+            aria-label={t("home.stays.previous")}
           >
             <LucideArrowLeft size={16} />
           </button>
@@ -62,7 +64,7 @@ export default function FeaturedStays() {
           <button
             onClick={() => slideTo(1)}
             className="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-amber-400/30 text-amber-400 hover:bg-amber-400/10 transition cursor-pointer"
-            aria-label="Next"
+            aria-label={t("home.stays.next")}
           >
             <LucideArrowRight size={16} />
           </button>
@@ -79,7 +81,7 @@ export default function FeaturedStays() {
 
         <div className="text-center mt-8">
           <Link href="/stays" className="inline-flex items-center px-6 py-3 font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(201,154,43,0.5)] hover:text-white transition">
-            Discover All Stays
+            {t("home.stays.viewAll")}
             <LucideArrowRight size={16} className="ml-2" />
           </Link>
         </div>

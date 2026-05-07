@@ -1,4 +1,5 @@
 import { SignIn } from "@clerk/nextjs";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 const signInAppearance = {
   elements: {
@@ -15,6 +16,7 @@ const signInAppearance = {
 };
 
 export default function LoginForm() {
+  const { t } = useI18n();
   return (
     <main
       style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
@@ -43,15 +45,13 @@ export default function LoginForm() {
 
         <div className="max-w-xl text-white">
           <h1 className="mb-4 text-4xl lg:text-5xl font-bold leading-tight">
-            Your journey through paradise begins here.
+            {t("auth.desktopTitle")}
           </h1>
           <p className="mb-6 text-lg text-slate-200">
-            From golden beaches to misty hill country, ancient temples to
-            vibrant city life, Sri Lanka is a story waiting to be explored.
+            {t("auth.desktopDescription")}
           </p>
           <p className="text-sm font-medium text-amber-400">
-            Sign in to discover hidden gems, plan unforgettable experiences, and
-            travel smarter across every corner of the island.
+            {t("auth.signInHighlight")}
           </p>
         </div>
       </section>
@@ -59,10 +59,10 @@ export default function LoginForm() {
       <section className="flex w-full flex-col items-center justify-center py-12 md:w-1/2 md:bg-slate-50 md:px-4">
         <div className="mb-8 px-4 text-center md:hidden mt-8">
           <h1 className="text-3xl font-bold text-white mb-2">
-            Your journey begins here.
+            {t("auth.mobileTitle")}
           </h1>
           <p className="text-sm text-slate-200">
-            Sign in to discover hidden gems and travel smarter.
+            {t("auth.mobileSignIn")}
           </p>
         </div>
 

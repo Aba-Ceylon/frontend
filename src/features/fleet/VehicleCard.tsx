@@ -5,9 +5,11 @@ import Link from "next/link";
 import { Users, Briefcase } from "lucide-react";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import type { FleetVehicle } from "@/types/vehicle";
 
 export default function VehicleCard({ vehicle }: { vehicle: FleetVehicle }) {
+  const { t } = useI18n();
   return (
     <Link href={`/fleet/${vehicle.id}`} className="group block h-full" data-fleet-card>
       <Card variant="white" className="h-full min-h-75 md:min-h-105 rounded-xl overflow-hidden flex flex-col border-[#0b2545]/10">
@@ -29,11 +31,11 @@ export default function VehicleCard({ vehicle }: { vehicle: FleetVehicle }) {
           <div className="flex items-center gap-3 mb-4 flex-wrap">
             <Badge variant="light" className="bg-slate-100 text-slate-700 border-slate-200 gap-1.5">
               <Users size={13} />
-              {vehicle.passengerCapacity} pax
+              {t("fleet.pax", { count: vehicle.passengerCapacity })}
             </Badge>
             <Badge variant="light" className="bg-slate-100 text-slate-700 border-slate-200 gap-1.5">
               <Briefcase size={13} />
-              {vehicle.luggageCapacity} bags
+              {t("fleet.bags", { count: vehicle.luggageCapacity })}
             </Badge>
           </div>
 
@@ -47,7 +49,7 @@ export default function VehicleCard({ vehicle }: { vehicle: FleetVehicle }) {
 
           <div className="mt-auto pt-4 flex justify-center">
             <span className="inline-flex w-full max-w-full md:max-w-xs justify-center px-6 py-3 rounded-full font-cinzel text-sm bg-amber-400 text-[#0b2545] transition-colors duration-300 group-hover:bg-[#0b2545] group-hover:text-white">
-              View More Details
+              {t("fleet.viewMoreDetails")}
             </span>
           </div>
         </div>

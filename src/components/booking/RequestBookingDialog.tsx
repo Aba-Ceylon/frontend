@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { createPortal } from "react-dom";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 
@@ -44,6 +45,7 @@ export default function RequestBookingDialog({
   onClose,
   onConfirm,
 }: RequestBookingDialogProps) {
+  const { t } = useI18n();
   useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -57,7 +59,10 @@ export default function RequestBookingDialog({
 
   if (!isOpen || typeof document === "undefined") return null;
 
-  const title = subjectType === "package" ? "Request Package" : "Request Vehicle";
+  const title =
+    subjectType === "package"
+      ? t("booking.requestPackage")
+      : t("booking.requestVehicle");
 
   return createPortal(
     <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6">
@@ -65,13 +70,13 @@ export default function RequestBookingDialog({
         type="button"
         className="absolute inset-0 bg-[#08111d]/68 backdrop-blur-sm"
         onClick={onClose}
-        aria-label="Close dialog"
+        aria-label={t("common.close")}
       />
 
       <div className="relative z-10 w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/10 bg-[#0F172A] shadow-[0_30px_120px_rgba(0,0,0,0.45)]">
         <div className="border-b border-white/10 px-5 py-4 sm:px-6">
           <p className="font-cinzel text-xs uppercase tracking-[0.28em] text-amber-300/80">
-            Secure Booking
+            {t("booking.secure")}
           </p>
           <h3 className="mt-2 font-cinzel text-2xl text-white">{title}</h3>
           <p className="mt-2 text-sm leading-6 text-white/72">{subjectName}</p>
@@ -79,34 +84,34 @@ export default function RequestBookingDialog({
 
         <div className="space-y-5 px-5 py-5 sm:px-6 sm:py-6">
           {!isLoaded ? (
-            <p className="text-sm leading-6 text-white/72">Checking account status...</p>
+            <p className="text-sm leading-6 text-white/72">{t("booking.checkingStatus")}</p>
           ) : !isSignedIn ? (
             <>
               <p className="text-sm leading-7 text-white/72">
-                Please sign in to send a {subjectType} request to ABA Ceylon.
+                {t("booking.pleaseSignIn", { type: title.toLowerCase() })}
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Link
                   href={signInHref}
                   className="inline-flex flex-1 items-center justify-center rounded-md bg-amber-400/60 px-5 py-3 font-cinzel text-sm uppercase tracking-[0.18em] text-white transition hover:bg-amber-400/75"
                 >
-                  Sign In
+                  {t("common.signIn")}
                 </Link>
                 <Button variant="ghost" fullWidth onClick={onClose} className="flex-1">
-                  Close
+                  {t("common.close")}
                 </Button>
               </div>
             </>
           ) : (
             <>
               <p className="text-sm leading-7 text-white/72">
-                Confirm your preferred booking date before we open WhatsApp.
+                {t("booking.confirmDate")}
               </p>
 
               <div className="space-y-3">
                 <Input
                   dark
-                  label="Preferred Booking Date"
+                  label={t("booking.preferredDate")}
                   type="date"
                   min={getTodayDateString()}
                   value={bookingDate}
@@ -120,7 +125,9 @@ export default function RequestBookingDialog({
                     size="sm"
                     onClick={onDateUnknownToggle}
                   >
-                    {dateUnknown ? "Date Will Be Decided Later" : "No Idea About Date"}
+                    {dateUnknown
+                      ? t("booking.dateLater")
+                      : t("booking.noIdeaDate")}
                   </Button>
                 ) : null}
               </div>
@@ -133,10 +140,10 @@ export default function RequestBookingDialog({
 
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Button variant="secondary" fullWidth onClick={onConfirm} className="flex-1">
-                  Continue to WhatsApp
+                  {t("booking.continueWhatsApp")}
                 </Button>
                 <Button variant="ghost" fullWidth onClick={onClose} className="flex-1">
-                  Cancel
+                  {t("common.cancel")}
                 </Button>
               </div>
             </>

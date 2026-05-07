@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { LucideArrowLeft, LucideArrowRight } from "lucide-react";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import SectionHeader from "@/components/ui/SectionHeader";
 import VehicleCard from "@/features/fleet/VehicleCard";
 import { useCarousel } from "@/hooks/useCarousel";
@@ -12,6 +13,7 @@ import { fetchVehiclesPage } from "@/services/fleetService";
 const HOME_FLEET_ITEMS = 8;
 
 export default function FleetSection() {
+  const { t } = useI18n();
   const [fleetVehicles, setFleetVehicles] = useState<FleetVehicle[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,7 +28,7 @@ export default function FleetSection() {
       })
       .catch((err) => {
         if (!active) return;
-        setError(err instanceof Error ? err.message : "Failed to load fleet.");
+        setError(err instanceof Error ? err.message : t("home.fleet.loading"));
       })
       .finally(() => { if (active) setIsLoading(false); });
     return () => { active = false; };
@@ -39,8 +41,8 @@ export default function FleetSection() {
     <section id="fleet" className="overflow-hidden bg-[#F5F2ED] py-24">
       <div className="mx-auto px-6">
         <SectionHeader
-          title="Premium Fleet"
-          description="Chauffeured luxury vehicles for seamless journeys across Sri Lanka."
+          title={t("home.fleet.title")}
+          description={t("home.fleet.description")}
         />
 
         <div className="flex items-center gap-4">
@@ -48,7 +50,7 @@ export default function FleetSection() {
             onClick={() => slideTo(-1)}
             disabled={fleetVehicles.length <= 1}
             className="hidden h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-neutral-300 text-neutral-800 transition hover:bg-neutral-100 disabled:opacity-40 md:flex"
-            aria-label="Previous"
+            aria-label={t("home.fleet.previous")}
           >
             <LucideArrowLeft size={16} />
           </button>
@@ -72,16 +74,16 @@ export default function FleetSection() {
             onClick={() => slideTo(1)}
             disabled={fleetVehicles.length <= 1}
             className="hidden h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-neutral-300 text-neutral-800 transition hover:bg-neutral-100 disabled:opacity-40 md:flex"
-            aria-label="Next"
+            aria-label={t("home.fleet.next")}
           >
             <LucideArrowRight size={16} />
           </button>
         </div>
 
-        {isLoading && <p className="mt-6 text-center text-sm text-neutral-600">Loading fleet...</p>}
+        {isLoading && <p className="mt-6 text-center text-sm text-neutral-600">{t("home.fleet.loading")}</p>}
         {!isLoading && error && <p className="mt-6 text-center text-sm text-red-500">{error}</p>}
         {!isLoading && !error && fleetVehicles.length === 0 && (
-          <p className="mt-6 text-center text-sm text-neutral-600">No fleet vehicles available right now.</p>
+          <p className="mt-6 text-center text-sm text-neutral-600">{t("home.fleet.empty")}</p>
         )}
 
         <div className="flex justify-center gap-2 mt-6">
@@ -92,7 +94,7 @@ export default function FleetSection() {
 
         <div className="text-center mt-8">
           <Link href="/fleet" className="inline-flex items-center px-6 py-3 font-cinzel text-neutral-800 transition hover:text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]">
-            Explore Full Fleet
+            {t("home.fleet.explore")}
             <LucideArrowRight size={16} className="ml-2" />
           </Link>
         </div>

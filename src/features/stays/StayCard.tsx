@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Badge from "@/components/ui/Badge";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import { Stay } from "@/types/stay";
 
 function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
@@ -31,8 +32,9 @@ function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
 }
 
 export default function StayCard({ stay }: { stay: Stay }) {
+  const { t } = useI18n();
   const stayLabel = stay.accommodationId
-    ? `Stay ${String(stay.accommodationId).padStart(2, "0")}`
+    ? t("stays.stayLabel", { id: stay.accommodationId })
     : stay.category;
 
   return (
@@ -48,7 +50,7 @@ export default function StayCard({ stay }: { stay: Stay }) {
           href={`/stays/${stay.id}`}
           className="self-start font-cinzel rounded-md text-sm px-4 py-2 border border-amber-400/60 text-amber-400 hover:bg-amber-400 hover:text-black transition-colors duration-300"
         >
-          View Stay
+          {t("stays.viewStay")}
         </Link>
       </div>
     </div>
