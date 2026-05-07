@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer } from "react";
 import {
   buildPlannerReviewData,
   COMFORT_LEVELS,
@@ -28,6 +28,33 @@ import type {
 import type { Stay } from "@/types/stay";
 import type { FleetVehicle } from "@/types/vehicle";
 
+// ─── State & Actions ────────────────────────────────────────────────────────
+
+interface PlannerState {
+  form: PlannerFormState;
+  destinations: Destination[];
+  vehicles: FleetVehicle[];
+  stays: Stay[];
+  isLoading: boolean;
+  loadingError: string | null;
+  currentStep: number;
+}
+
+type PlannerAction =
+  | { type: "LOAD_START" }
+  | { type: "LOAD_SUCCESS"; destinations: Destination[]; vehicles: FleetVehicle[]; stays: Stay[] }
+  | { type: "LOAD_ERROR"; message: string }
+  | { type: "UPDATE_FIELD"; key: keyof PlannerFormState; value: PlannerFormState[keyof PlannerFormState] }
+  | { type: "TOGGLE_DESTINATION"; id: string }
+  | { type: "SET_VEHICLE_TYPE"; vehicleType: string }
+  | { type: "SET_COMFORT_LEVEL"; comfortLevel: ComfortLevel }
+  | { type: "SET_ACCOMMODATION_MODE"; mode: AccommodationMode }
+  | { type: "TOGGLE_STAY"; stayId: string; startDate: string; endDate: string }
+  | { type: "UPDATE_STAY_PLAN"; stayId: string; field: keyof Omit<PlannerStaySelection, "stayId">; value: string }
+  | { type: "GO_TO_STEP"; step: number }
+  | { type: "STEP_NEXT"; maxStep: number }
+  | { type: "STEP_PREV" };
+
 const DEFAULT_FORM: PlannerFormState = {
   arrivalDate: "",
   sriLankaStayDays: 7,
@@ -41,109 +68,164 @@ const DEFAULT_FORM: PlannerFormState = {
   selectedStayPlans: [],
 };
 
-export function usePlanner() {
-  const [form, setForm] = useState<PlannerFormState>(DEFAULT_FORM);
-  const [destinations, setDestinations] = useState<Destination[]>([]);
-  const [vehicles, setVehicles] = useState<FleetVehicle[]>([]);
-  const [stays, setStays] = useState<Stay[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [loadingError, setLoadingError] = useState<string | null>(null);
-  const [currentStep, setCurrentStep] = useState(0);
+const INITIAL_STATE: PlannerState = {
+  form: DEFAULT_FORM,
+  destinations: [],
+  vehicles: [],
+  stays: [],
+  isLoading: true,
+  loadingError: null,
+  currentStep: 0,
+};
 
-  useEffect(() => {
-    let active = true;
+function plannerReducer(state: PlannerState, action: PlannerAction): PlannerState {
+  switch (action.type) {
+    case "LOAD_START":
+      return { ...state, isLoading: true, loadingError: null };
 
-    async function loadPlannerData() {
-      setIsLoading(true);
-      setLoadingError(null);
+    case "LOAD_SUCCESS":
+      return {
+        ...state,
+        isLoading: false,
+        destinations: action.destinations,
+        vehicles: action.vehicles,
+        stays: action.stays,
+      };
 
-      try {
-        const [destinationRows, vehicleRows, stayRows] = await Promise.all([
-          fetchDestinations(),
-          fetchAllVehicles(),
-          fetchStays(),
-        ]);
+    case "LOAD_ERROR":
+      return { ...state, isLoading: false, loadingError: action.message };
 
-        if (!active) {
-          return;
-        }
+    case "UPDATE_FIELD":
+      return { ...state, form: { ...state.form, [action.key]: action.value } };
 
-        setDestinations(destinationRows);
-        setVehicles(vehicleRows);
-        setStays(stayRows);
-      } catch (error) {
-        if (!active) {
-          return;
-        }
-
-        const message =
-          error instanceof Error
-            ? error.message
-            : "Failed to load planner data.";
-        setLoadingError(message);
-      } finally {
-        if (active) {
-          setIsLoading(false);
-        }
-      }
+    case "TOGGLE_DESTINATION": {
+      const ids = state.form.selectedDestinationIds;
+      const next = ids.includes(action.id)
+        ? ids.filter((id) => id !== action.id)
+        : [...ids, action.id];
+      return { ...state, form: { ...state.form, selectedDestinationIds: next } };
     }
 
-    void loadPlannerData();
+    case "SET_VEHICLE_TYPE":
+      return { ...state, form: { ...state.form, vehicleType: action.vehicleType, selectedVehicleId: "" } };
 
-    return () => {
-      active = false;
-    };
+    case "SET_COMFORT_LEVEL":
+      return { ...state, form: { ...state.form, comfortLevel: action.comfortLevel, selectedVehicleId: "" } };
+
+    case "SET_ACCOMMODATION_MODE":
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          accommodationMode: action.mode,
+          selectedStayPlans: action.mode === "recommended" ? state.form.selectedStayPlans : [],
+        },
+      };
+
+    case "TOGGLE_STAY": {
+      const existing = state.form.selectedStayPlans.find((p) => p.stayId === action.stayId);
+      if (existing) {
+        return {
+          ...state,
+          form: {
+            ...state.form,
+            selectedStayPlans: state.form.selectedStayPlans.filter((p) => p.stayId !== action.stayId),
+          },
+        };
+      }
+      const nextPlan = normalizeStayPlanDates(
+        { stayId: action.stayId, checkInDate: action.startDate, checkOutDate: action.endDate },
+        state.form,
+      );
+      return {
+        ...state,
+        form: { ...state.form, selectedStayPlans: [...state.form.selectedStayPlans, nextPlan] },
+      };
+    }
+
+    case "UPDATE_STAY_PLAN":
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          selectedStayPlans: state.form.selectedStayPlans.map((p) =>
+            p.stayId === action.stayId ? { ...p, [action.field]: action.value } : p,
+          ),
+        },
+      };
+
+    case "GO_TO_STEP":
+      return { ...state, currentStep: action.step };
+
+    case "STEP_NEXT":
+      return { ...state, currentStep: Math.min(state.currentStep + 1, action.maxStep) };
+
+    case "STEP_PREV":
+      return { ...state, currentStep: Math.max(state.currentStep - 1, 0) };
+
+    default:
+      return state;
+  }
+}
+
+// ─── Hook ────────────────────────────────────────────────────────────────────
+
+export function usePlanner() {
+  const [state, dispatch] = useReducer(plannerReducer, INITIAL_STATE);
+  const { form, destinations, vehicles, stays, isLoading, loadingError, currentStep } = state;
+
+  // Data loading — single batched dispatch
+  useEffect(() => {
+    let active = true;
+    dispatch({ type: "LOAD_START" });
+
+    Promise.all([fetchDestinations(), fetchAllVehicles(), fetchStays()])
+      .then(([d, v, s]) => {
+        if (!active) return;
+        dispatch({ type: "LOAD_SUCCESS", destinations: d, vehicles: v, stays: s });
+      })
+      .catch((err) => {
+        if (!active) return;
+        dispatch({ type: "LOAD_ERROR", message: err instanceof Error ? err.message : "Failed to load planner data." });
+      });
+
+    return () => { active = false; };
   }, []);
 
   const steps = useMemo(() => getPlannerSteps(), []);
 
   const selectedDestinations = useMemo(
-    () =>
-      destinations.filter((destination) =>
-        form.selectedDestinationIds.includes(destination.id),
-      ),
+    () => destinations.filter((d) => form.selectedDestinationIds.includes(d.id)),
     [destinations, form.selectedDestinationIds],
   );
 
   const vehicleTypes = useMemo(() => getVehicleTypes(vehicles), [vehicles]);
 
   const filteredVehicles = useMemo(
-    () =>
-      filterVehiclesForPlanner(vehicles, form.vehicleType, form.comfortLevel),
-    [form.comfortLevel, form.vehicleType, vehicles],
+    () => filterVehiclesForPlanner(vehicles, form.vehicleType, form.comfortLevel),
+    [vehicles, form.vehicleType, form.comfortLevel],
   );
 
   const selectedVehicle = useMemo(
-    () =>
-      vehicles.find((vehicle) => vehicle.id === form.selectedVehicleId) || null,
-    [form.selectedVehicleId, vehicles],
+    () => vehicles.find((v) => v.id === form.selectedVehicleId) ?? null,
+    [vehicles, form.selectedVehicleId],
   );
 
   const recommendedStays = useMemo(
     () => recommendStaysForDestinations(stays, selectedDestinations),
-    [selectedDestinations, stays],
+    [stays, selectedDestinations],
   );
 
   const selectedStayPlans = useMemo(
     () =>
-      form.selectedStayPlans.reduce<
-        Array<PlannerStaySelection & { stay: RecommendedStay }>
-      >((plans, plan) => {
-        const stay = recommendedStays.find(
-          (recommendedStay) => recommendedStay.id === plan.stayId,
-        );
-
-        if (!stay) {
-          return plans;
-        }
-
-        plans.push({
-          ...normalizeStayPlanDates(plan, form),
-          stay,
-        });
-
-        return plans;
-      }, []),
+      form.selectedStayPlans.reduce<Array<PlannerStaySelection & { stay: RecommendedStay }>>(
+        (acc, plan) => {
+          const stay = recommendedStays.find((s) => s.id === plan.stayId);
+          if (stay) acc.push({ ...normalizeStayPlanDates(plan, form), stay });
+          return acc;
+        },
+        [],
+      ),
     [form, recommendedStays],
   );
 
@@ -158,188 +240,78 @@ export function usePlanner() {
     [form, selectedDestinations.length, selectedStayPlans.length],
   );
 
+  // Validations
   const tripValidationIssues = useMemo(() => validateTripDetails(form), [form]);
   const destinationValidationIssues = useMemo(
     () => validateDestinationSelection(form.selectedDestinationIds),
     [form.selectedDestinationIds],
   );
   const vehicleValidationIssues = useMemo(
-    () =>
-      validateVehicleSelection({
-        comfortLevel: form.comfortLevel,
-        filteredVehicleCount: filteredVehicles.length,
-        selectedVehicleId: form.selectedVehicleId,
-        vehicleType: form.vehicleType,
-      }),
-    [
-      filteredVehicles.length,
-      form.comfortLevel,
-      form.selectedVehicleId,
-      form.vehicleType,
-    ],
+    () => validateVehicleSelection({ comfortLevel: form.comfortLevel, filteredVehicleCount: filteredVehicles.length, selectedVehicleId: form.selectedVehicleId, vehicleType: form.vehicleType }),
+    [filteredVehicles.length, form.comfortLevel, form.selectedVehicleId, form.vehicleType],
   );
   const accommodationModeValidationIssues = useMemo(
     () => validateAccommodationMode(form.accommodationMode),
     [form.accommodationMode],
   );
   const stayValidationIssues = useMemo(
-    () =>
-      validateRecommendedStaySelection({
-        accommodationMode: form.accommodationMode,
-        details: form,
-        recommendedStaysCount: recommendedStays.length,
-        selectedStayPlans: form.selectedStayPlans,
-      }),
+    () => validateRecommendedStaySelection({ accommodationMode: form.accommodationMode, details: form, recommendedStaysCount: recommendedStays.length, selectedStayPlans: form.selectedStayPlans }),
     [form, recommendedStays.length],
   );
 
   const isTripStepValid = tripValidationIssues.length === 0;
   const isDestinationStepValid = destinationValidationIssues.length === 0;
   const isVehicleStepValid = vehicleValidationIssues.length === 0;
-  const isAccommodationStepValid =
-    accommodationModeValidationIssues.length === 0 &&
-    stayValidationIssues.length === 0;
+  const isAccommodationStepValid = accommodationModeValidationIssues.length === 0 && stayValidationIssues.length === 0;
 
   const stepValidity = useMemo(
-    () => [
-      isTripStepValid,
-      isDestinationStepValid,
-      isVehicleStepValid,
-      isAccommodationStepValid,
-      isTripStepValid &&
-        isDestinationStepValid &&
-        isVehicleStepValid &&
-        isAccommodationStepValid,
-    ],
-    [
-      isAccommodationStepValid,
-      isDestinationStepValid,
-      isTripStepValid,
-      isVehicleStepValid,
-    ],
+    () => [isTripStepValid, isDestinationStepValid, isVehicleStepValid, isAccommodationStepValid,
+      isTripStepValid && isDestinationStepValid && isVehicleStepValid && isAccommodationStepValid],
+    [isTripStepValid, isDestinationStepValid, isVehicleStepValid, isAccommodationStepValid],
   );
 
-  const updateField = useCallback(
-    <Key extends keyof PlannerFormState>(
-      key: Key,
-      value: PlannerFormState[Key],
-    ) => {
-      setForm((current) => ({ ...current, [key]: value }));
-    },
-    [],
-  );
+  // Actions
+  const updateField = useCallback(<K extends keyof PlannerFormState>(key: K, value: PlannerFormState[K]) => {
+    dispatch({ type: "UPDATE_FIELD", key, value });
+  }, []);
 
-  const toggleDestination = useCallback((destinationId: string) => {
-    setForm((current) => {
-      const isSelected = current.selectedDestinationIds.includes(destinationId);
-
-      return {
-        ...current,
-        selectedDestinationIds: isSelected
-          ? current.selectedDestinationIds.filter((id) => id !== destinationId)
-          : [...current.selectedDestinationIds, destinationId],
-      };
-    });
+  const toggleDestination = useCallback((id: string) => {
+    dispatch({ type: "TOGGLE_DESTINATION", id });
   }, []);
 
   const setVehicleType = useCallback((vehicleType: string) => {
-    setForm((current) => ({
-      ...current,
-      vehicleType,
-      selectedVehicleId: "",
-    }));
+    dispatch({ type: "SET_VEHICLE_TYPE", vehicleType });
   }, []);
 
   const setComfortLevel = useCallback((comfortLevel: ComfortLevel) => {
-    setForm((current) => ({
-      ...current,
-      comfortLevel,
-      selectedVehicleId: "",
-    }));
+    dispatch({ type: "SET_COMFORT_LEVEL", comfortLevel });
   }, []);
 
   const setAccommodationMode = useCallback((mode: AccommodationMode) => {
-    setForm((current) => ({
-      ...current,
-      accommodationMode: mode,
-      selectedStayPlans:
-        mode === "recommended" ? current.selectedStayPlans : [],
-    }));
+    dispatch({ type: "SET_ACCOMMODATION_MODE", mode });
   }, []);
 
   const toggleStaySelection = useCallback((stayId: string) => {
-    setForm((current) => {
-      const existing = current.selectedStayPlans.find(
-        (plan) => plan.stayId === stayId,
-      );
+    const range = getTripDateRange(state.form);
+    dispatch({ type: "TOGGLE_STAY", stayId, startDate: range.startDate, endDate: range.endDate || range.startDate });
+  }, [state.form]);
 
-      if (existing) {
-        return {
-          ...current,
-          selectedStayPlans: current.selectedStayPlans.filter(
-            (plan) => plan.stayId !== stayId,
-          ),
-        };
-      }
-
-      const range = getTripDateRange(current);
-
-      const nextPlan: PlannerStaySelection = normalizeStayPlanDates(
-        {
-          stayId,
-          checkInDate: range.startDate,
-          checkOutDate: range.endDate || range.startDate,
-        },
-        current,
-      );
-
-      return {
-        ...current,
-        selectedStayPlans: [...current.selectedStayPlans, nextPlan],
-      };
-    });
+  const updateStayPlan = useCallback((stayId: string, field: keyof Omit<PlannerStaySelection, "stayId">, value: string) => {
+    dispatch({ type: "UPDATE_STAY_PLAN", stayId, field, value });
   }, []);
 
-  const updateStayPlan = useCallback(
-    (
-      stayId: string,
-      field: keyof Omit<PlannerStaySelection, "stayId">,
-      value: string,
-    ) => {
-      setForm((current) => ({
-        ...current,
-        selectedStayPlans: current.selectedStayPlans.map((plan) =>
-          plan.stayId === stayId ? { ...plan, [field]: value } : plan,
-        ),
-      }));
-    },
-    [],
-  );
-
   const goToNextStep = useCallback(() => {
-    setCurrentStep((current) =>
-      Math.min(current + 1, Math.max(steps.length - 1, 0)),
-    );
+    dispatch({ type: "STEP_NEXT", maxStep: steps.length - 1 });
   }, [steps.length]);
 
   const goToPreviousStep = useCallback(() => {
-    setCurrentStep((current) => Math.max(current - 1, 0));
+    dispatch({ type: "STEP_PREV" });
   }, []);
 
-  const goToStep = useCallback(
-    (stepIndex: number) => {
-      const canAccessStep = stepValidity
-        .slice(0, stepIndex)
-        .every((isStepValid) => isStepValid);
-
-      if (!canAccessStep) {
-        return;
-      }
-
-      setCurrentStep(stepIndex);
-    },
-    [stepValidity],
-  );
+  const goToStep = useCallback((step: number) => {
+    const canAccess = stepValidity.slice(0, step).every(Boolean);
+    if (canAccess) dispatch({ type: "GO_TO_STEP", step });
+  }, [stepValidity]);
 
   return {
     accommodationModeValidationIssues,

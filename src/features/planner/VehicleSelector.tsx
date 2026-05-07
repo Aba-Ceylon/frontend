@@ -1,3 +1,8 @@
+import Badge from "@/components/ui/Badge";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import StepHeader from "@/components/ui/StepHeader";
+import ValidationErrors from "@/components/ui/ValidationErrors";
 import type { ComfortLevel } from "@/types/planner";
 import type { FleetVehicle } from "@/types/vehicle";
 
@@ -30,56 +35,44 @@ export default function VehicleSelector({
   onVehicleSelect,
   onVehicleTypeChange,
 }: VehicleSelectorProps) {
-
   return (
     <div className="space-y-8">
-      <div>
-        <p className="font-cinzel text-xs uppercase tracking-[0.3em] text-amber-700 mb-2">
-          Select Vehicle
-        </p>
-        <h2 className="font-cinzel text-3xl text-[#0F172A]">
-          Select your preferred vehicle type and comfort level
-        </h2>
-      </div>
+      <StepHeader
+        eyebrow="Step 3"
+        title="Select your preferred vehicle type and comfort level"
+      />
 
-      {validationIssues.length ? (
-        <div className="rounded-3xl border border-red-200 bg-red-50 p-5">
-          <p className="font-cinzel text-lg text-red-900 mb-3">
-            Required Detail
-          </p>
-          <ul className="space-y-2 text-sm text-red-700">
-            {validationIssues.map((issue) => (
-              <li key={issue}>{issue}</li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
+      <ValidationErrors issues={validationIssues} />
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-3xl border border-neutral-200 bg-white p-6">
-          <p className="font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-500 mb-4">
+        <Card variant="white" className="rounded-3xl p-6">
+          <p className="mb-4 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-500">
             Vehicle Type
           </p>
           <div className="flex flex-wrap gap-3">
             {vehicleTypes.map((vehicleType) => (
-              <button
+              <Button
                 key={vehicleType}
                 type="button"
+                size="sm"
+                variant={
+                  selectedVehicleType === vehicleType ? "primary" : "outline"
+                }
                 onClick={() => onVehicleTypeChange(vehicleType)}
-                className={`rounded-full px-4 py-2 text-sm transition ${
+                className={`rounded-full ${
                   selectedVehicleType === vehicleType
                     ? "bg-[#0F172A] text-amber-300"
-                    : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
+                    : "border-neutral-200 bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
                 }`}
               >
                 {vehicleType}
-              </button>
+              </Button>
             ))}
           </div>
-        </div>
+        </Card>
 
-        <div className="rounded-3xl border border-neutral-200 bg-white p-6">
-          <p className="font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-500 mb-4">
+        <Card variant="white" className="rounded-3xl p-6">
+          <p className="mb-4 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-500">
             Comfort Level
           </p>
           <div className="grid gap-3">
@@ -97,13 +90,13 @@ export default function VehicleSelector({
                 <p className="font-cinzel text-lg text-[#0F172A]">
                   {level.title}
                 </p>
-                <p className="text-sm text-neutral-600 mt-1">
+                <p className="mt-1 text-sm text-neutral-600">
                   {level.description}
                 </p>
               </button>
             ))}
           </div>
-        </div>
+        </Card>
       </div>
 
       <div className="space-y-4">
@@ -112,15 +105,18 @@ export default function VehicleSelector({
             <p className="font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-500">
               Matching Vehicles
             </p>
-            <p className="text-sm text-neutral-600 mt-1">
+            <p className="mt-1 text-sm text-neutral-600">
               Choose from the existing fleet that matches your type and comfort
               preference.
             </p>
           </div>
-          <span className="rounded-full bg-white border border-neutral-200 px-4 py-2 text-sm text-neutral-700">
+          <Badge
+            variant="light"
+            className="border-neutral-200 bg-white text-neutral-700"
+          >
             {filteredVehicles.length} option
             {filteredVehicles.length === 1 ? "" : "s"}
-          </span>
+          </Badge>
         </div>
 
         {filteredVehicles.length ? (
@@ -133,7 +129,7 @@ export default function VehicleSelector({
                   key={vehicle.id}
                   type="button"
                   onClick={() => onVehicleSelect(vehicle.id)}
-                  className={`rounded-3xl border overflow-hidden bg-white text-left transition ${
+                  className={`rounded-3xl overflow-hidden border bg-white text-left transition ${
                     isSelected
                       ? "border-amber-500 shadow-[0_20px_50px_rgba(201,154,43,0.16)]"
                       : "border-neutral-200 hover:border-amber-200 hover:shadow-lg"
@@ -141,57 +137,65 @@ export default function VehicleSelector({
                 >
                   <div className="flex flex-col md:flex-row">
                     <div
-                      className="w-full md:w-48 h-48 md:h-auto bg-cover bg-center"
+                      className="h-48 w-full bg-cover bg-center md:h-auto md:w-48"
                       style={{ backgroundImage: `url('${vehicle.imageUrl}')` }}
                     />
                     <div className="flex-1 p-5">
-                      <div className="flex items-start justify-between gap-3 mb-3">
+                      <div className="mb-3 flex items-start justify-between gap-3">
                         <div>
                           <p className="font-cinzel text-xs uppercase tracking-[0.24em] text-amber-700">
                             {vehicle.brandName}
                           </p>
-                          <h3 className="font-cinzel text-2xl text-[#0F172A] mt-2">
+                          <h3 className="mt-2 font-cinzel text-2xl text-[#0F172A]">
                             {vehicle.name}
                           </h3>
                         </div>
-                        <span
-                          className={`rounded-full px-3 py-1 text-[11px] font-cinzel uppercase tracking-[0.22em] ${
+                        <Badge
+                          variant={isSelected ? "dark" : "light"}
+                          className={
                             isSelected
-                              ? "bg-[#0F172A] text-amber-300"
-                              : "bg-neutral-100 text-neutral-500"
-                          }`}
+                              ? "border-transparent bg-[#0F172A] text-amber-300"
+                              : "border-neutral-200 bg-neutral-100 text-neutral-500"
+                          }
                         >
                           {isSelected ? "Chosen" : "Select"}
-                        </span>
+                        </Badge>
                       </div>
 
-                      <p className="text-sm text-neutral-600 leading-6 mb-4">
+                      <p className="mb-4 text-sm leading-6 text-neutral-600">
                         {vehicle.shortDescription}
                       </p>
 
-                      <div className="grid grid-cols-2 gap-3 text-sm text-neutral-700 mb-4">
-                        <div className="rounded-2xl bg-neutral-50 p-3">
-                          <span className="block text-xs text-neutral-500 uppercase tracking-[0.2em] mb-1">
+                      <div className="mb-4 grid grid-cols-2 gap-3 text-sm text-neutral-700">
+                        <Card
+                          variant="white"
+                          className="rounded-2xl bg-neutral-50 p-3 shadow-none"
+                        >
+                          <span className="mb-1 block text-xs uppercase tracking-[0.2em] text-neutral-500">
                             Seats
                           </span>
                           {vehicle.passengerCapacity} Passengers
-                        </div>
-                        <div className="rounded-2xl bg-neutral-50 p-3">
-                          <span className="block text-xs text-neutral-500 uppercase tracking-[0.2em] mb-1">
+                        </Card>
+                        <Card
+                          variant="white"
+                          className="rounded-2xl bg-neutral-50 p-3 shadow-none"
+                        >
+                          <span className="mb-1 block text-xs uppercase tracking-[0.2em] text-neutral-500">
                             Luggage
                           </span>
                           {vehicle.luggageCapacity} Bags
-                        </div>
+                        </Card>
                       </div>
 
                       <div className="flex flex-wrap gap-2">
                         {vehicle.features.slice(0, 4).map((feature) => (
-                          <span
+                          <Badge
                             key={feature}
-                            className="rounded-full bg-neutral-100 px-3 py-1 text-xs text-neutral-700"
+                            variant="light"
+                            className="border-neutral-200 bg-neutral-100 text-neutral-700"
                           >
                             {feature}
-                          </span>
+                          </Badge>
                         ))}
                       </div>
                     </div>
@@ -201,9 +205,12 @@ export default function VehicleSelector({
             })}
           </div>
         ) : (
-          <div className="rounded-3xl border border-dashed border-neutral-300 bg-white p-8 text-center text-neutral-600">
+          <Card
+            variant="white"
+            className="rounded-3xl border-dashed p-8 text-center text-neutral-600"
+          >
             Please select both a vehicle type and comfort level to continue
-          </div>
+          </Card>
         )}
       </div>
     </div>

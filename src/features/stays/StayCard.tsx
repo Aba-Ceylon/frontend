@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Badge from "@/components/ui/Badge";
 import { Stay } from "@/types/stay";
 
 function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
@@ -23,13 +24,13 @@ function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
       fill
       sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
       className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
+      loading="lazy"
       onError={() => setErrored(true)}
     />
   );
 }
 
 export default function StayCard({ stay }: { stay: Stay }) {
-
   const stayLabel = stay.accommodationId
     ? `Stay ${String(stay.accommodationId).padStart(2, "0")}`
     : stay.category;
@@ -39,7 +40,7 @@ export default function StayCard({ stay }: { stay: Stay }) {
       <ImageWithFallback src={stay.image} alt={stay.name} />
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
       <div className="absolute inset-0 flex flex-col justify-end p-6 gap-1">
-        <p className="font-cinzel text-amber-400 text-xs tracking-widest uppercase">{stayLabel}</p>
+        <Badge variant="amber" className="w-fit text-[10px]">{stayLabel}</Badge>
         <p className="font-cinzel text-amber-50/85 text-[11px] tracking-[0.24em] uppercase">{stay.category}</p>
         <h3 className="font-cinzel text-2xl text-white leading-snug mb-3">{stay.name}</h3>
         <p className="text-white/75 text-sm mb-3">{stay.location}</p>

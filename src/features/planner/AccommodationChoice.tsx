@@ -1,3 +1,6 @@
+import Card from "@/components/ui/Card";
+import StepHeader from "@/components/ui/StepHeader";
+import ValidationErrors from "@/components/ui/ValidationErrors";
 import type { AccommodationMode } from "@/types/planner";
 
 interface AccommodationChoiceProps {
@@ -15,27 +18,9 @@ export default function AccommodationChoice({
 }: AccommodationChoiceProps) {
   return (
     <div className="space-y-6">
-      <div>
-        <p className="font-cinzel text-xs uppercase tracking-[0.3em] text-amber-700 mb-2">
-          Step 4
-        </p>
-        <h2 className="font-cinzel text-3xl text-[#0F172A]">
-          Accommodation Preference
-        </h2>
-      </div>
+      <StepHeader eyebrow="Step 4" title="Accommodation Preference" />
 
-      {validationIssues.length ? (
-        <div className="rounded-3xl border border-red-200 bg-red-50 p-5">
-          <p className="font-cinzel text-lg text-red-900 mb-3">
-            Required Detail
-          </p>
-          <ul className="space-y-2 text-sm text-red-700">
-            {validationIssues.map((issue) => (
-              <li key={issue}>{issue}</li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
+      <ValidationErrors issues={validationIssues} />
 
       <div className="grid gap-4 lg:grid-cols-2">
         <button
@@ -75,14 +60,14 @@ export default function AccommodationChoice({
         </button>
       </div>
 
-      <div className="rounded-3xl border border-[#0F172A]/10 bg-[#0F172A] p-6 text-white">
+      <Card className="rounded-3xl border border-[#0F172A]/10 bg-[#0F172A] p-6 text-white">
         <p className="font-cinzel text-sm uppercase tracking-[0.24em] text-amber-300 mb-3">
           Planner Note
         </p>
-        <p className="whitespace-pre-line leading-7 text-white/80">
+        <p className="whitespace-pre-line leading-7 text-black/80">
           {accommodationNote}
         </p>
-      </div>
+      </Card>
     </div>
   );
 }

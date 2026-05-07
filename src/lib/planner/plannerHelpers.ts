@@ -162,6 +162,38 @@ export function getTripEndDate(travelStartDate: string, travelDays: number) {
   return addDays(travelStartDate, Math.max(travelDays - 1, 0));
 }
 
+export function getSriLankaDepartureDate(
+  arrivalDate: string,
+  sriLankaStayDays: number,
+) {
+  if (!arrivalDate || !sriLankaStayDays) {
+    return "";
+  }
+
+  return addDays(arrivalDate, Math.max(sriLankaStayDays - 1, 0));
+}
+
+export function getRequiredSriLankaStayDays(details: PlannerTripDetails) {
+  if (!details.travelDays) {
+    return 1;
+  }
+
+  if (!details.arrivalDate || !details.travelStartDate) {
+    return details.travelDays;
+  }
+
+  const daysBeforeRouteStarts = differenceInDays(
+    details.arrivalDate,
+    details.travelStartDate,
+  );
+
+  if (daysBeforeRouteStarts < 0) {
+    return details.travelDays;
+  }
+
+  return daysBeforeRouteStarts + details.travelDays;
+}
+
 export function validateTripDetails(details: PlannerTripDetails) {
   const issues: string[] = [];
 
@@ -181,18 +213,27 @@ export function validateTripDetails(details: PlannerTripDetails) {
     issues.push("Travel days must be at least 1 day.");
   }
 
+  if (details.sriLankaStayDays < details.travelDays) {
+    issues.push(
+      "Total stay in Sri Lanka must be at least as long as your guided travel days.",
+    );
+  }
+
   if (details.arrivalDate && details.travelStartDate) {
-    if (differenceInDays(details.arrivalDate, details.travelStartDate) < 0) {
+    const daysBeforeRouteStarts = differenceInDays(
+      details.arrivalDate,
+      details.travelStartDate,
+    );
+
+    if (daysBeforeRouteStarts < 0) {
       issues.push("Travel start date cannot be before your arrival date.");
     }
 
-    const totalWindowUsed =
-      differenceInDays(details.arrivalDate, details.travelStartDate) +
-      details.travelDays;
+    const minimumRequiredStayDays = getRequiredSriLankaStayDays(details);
 
-    if (totalWindowUsed > details.sriLankaStayDays) {
+    if (details.sriLankaStayDays < minimumRequiredStayDays) {
       issues.push(
-        "Travel route duration must fit within your total Sri Lanka stay.",
+        `With an arrival on ${toDisplayDate(details.arrivalDate)} and travel starting on ${toDisplayDate(details.travelStartDate)}, you need at least ${minimumRequiredStayDays} total days in Sri Lanka to cover the gap before the route and your ${details.travelDays}-day journey.`,
       );
     }
   }
@@ -440,7 +481,7 @@ export function buildPlannerReviewData(input: {
   const tripRange = getTripDateRange(input.tripDetails);
 
   return {
-    tripLabel: `${toDisplayDate(input.tripDetails.arrivalDate)} arrival • ${input.tripDetails.sriLankaStayDays} days in Sri Lanka • ${tripRange.label}`,
+    tripLabel: `${toDisplayDate(input.tripDetails.arrivalDate)} arrival - ${input.tripDetails.sriLankaStayDays} days in Sri Lanka - ${tripRange.label}`,
     serviceIncluded: `Vehicle hire with experienced chauffeur guide for ${input.tripDetails.travelDays} day${input.tripDetails.travelDays === 1 ? "" : "s"}.`,
     accommodationNote: buildAccommodationNote(
       input.accommodationMode,
@@ -514,6 +555,8 @@ ${context.serviceIncluded}`;
 export function plannerDateHelpers() {
   return {
     addDays,
+    getRequiredSriLankaStayDays,
+    getSriLankaDepartureDate,
     getTripEndDate,
     toDisplayDate,
   };

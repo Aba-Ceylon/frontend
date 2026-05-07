@@ -4,6 +4,12 @@ import { useEffect, useMemo, useRef } from "react";
 import { useUser } from "@clerk/nextjs";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Badge from "@/components/ui/Badge";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import Input from "@/components/ui/Input";
+import StepHeader from "@/components/ui/StepHeader";
+import ValidationErrors from "@/components/ui/ValidationErrors";
 import AccommodationChoice from "@/features/planner/AccommodationChoice";
 import DestinationSelector from "@/features/planner/DestinationSelector";
 import PlannerStepper from "@/features/planner/PlannerStepper";
@@ -17,9 +23,11 @@ import {
   plannerDateHelpers,
 } from "@/lib/planner/plannerHelpers";
 
-const { getTripEndDate } = plannerDateHelpers();
-const INPUT_CLASS =
-  "w-full rounded-2xl border border-neutral-200 bg-white px-4 py-3 text-sm text-[#0F172A] [color-scheme:light] outline-none placeholder:text-neutral-400 focus:border-amber-400";
+const {
+  getRequiredSriLankaStayDays,
+  getSriLankaDepartureDate,
+  getTripEndDate,
+} = plannerDateHelpers();
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -106,7 +114,27 @@ export default function PlannerPage() {
 
   const { adminPhoneNumber, href: whatsappHref } = useWhatsApp(whatsappMessage);
   const tripEndDate = getTripEndDate(form.travelStartDate, form.travelDays);
+  const sriLankaDepartureDate = getSriLankaDepartureDate(
+    form.arrivalDate,
+    form.sriLankaStayDays,
+  );
+  const requiredSriLankaStayDays = getRequiredSriLankaStayDays(form);
   const canContinue = stepValidity[currentStep];
+  const currentStepValidationIssues = [
+    tripValidationIssues,
+    destinationValidationIssues,
+    vehicleValidationIssues,
+    [...accommodationModeValidationIssues, ...stayValidationIssues],
+    [],
+  ][currentStep];
+
+  const handleContinue = () => {
+    if (!canContinue) {
+      return;
+    }
+
+    goToNextStep();
+  };
 
   useEffect(() => {
     if (
@@ -278,40 +306,27 @@ export default function PlannerPage() {
             <>
               {currentStep === 0 ? (
                 <div className="space-y-8">
-                  <div>
-                    <p className="font-cinzel text-xs uppercase tracking-[0.3em] text-amber-700 mb-2">
-                      Step 1
-                    </p>
-                    <h2 className="font-cinzel text-3xl text-[#0F172A]">
-                      Trip Details
-                    </h2>
-                    <p className="text-neutral-600 mt-3 leading-7">
-                      Tell us when you arrive in Sri Lanka, how long you plan to
-                      stay, and how many days of guided travel you want us to
-                      arrange.
-                    </p>
-                  </div>
+                  <StepHeader
+                    eyebrow="Step 1"
+                    title="Trip Details"
+                    description="Tell us when you arrive in Sri Lanka, how long you plan to stay, and how many days of guided travel you want us to arrange."
+                  />
 
                   <div className="grid gap-4 lg:grid-cols-2">
-                    <label className="block rounded-3xl border border-neutral-200 bg-white p-5">
-                      <span className="block font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600 mb-3">
-                        Arrival Date In Sri Lanka
-                      </span>
-                      <input
+                    <Card variant="white" className="rounded-3xl p-5">
+                      <Input
+                        label="Arrival Date In Sri Lanka"
                         type="date"
                         value={form.arrivalDate}
                         onChange={(event) =>
                           updateField("arrivalDate", event.target.value)
                         }
-                        className={INPUT_CLASS}
                       />
-                    </label>
+                    </Card>
 
-                    <label className="block rounded-3xl border border-neutral-200 bg-white p-5">
-                      <span className="block font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600 mb-3">
-                        Total Days In Sri Lanka
-                      </span>
-                      <input
+                    <Card variant="white" className="rounded-3xl p-5">
+                      <Input
+                        label="Total Days In Sri Lanka"
                         type="number"
                         min={1}
                         value={form.sriLankaStayDays}
@@ -321,30 +336,24 @@ export default function PlannerPage() {
                             Math.max(1, Number(event.target.value) || 1),
                           )
                         }
-                        className={INPUT_CLASS}
                       />
-                    </label>
+                    </Card>
 
-                    <label className="block rounded-3xl border border-neutral-200 bg-white p-5">
-                      <span className="block font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600 mb-3">
-                        Travel Start Date
-                      </span>
-                      <input
+                    <Card variant="white" className="rounded-3xl p-5">
+                      <Input
+                        label="Travel Start Date"
                         type="date"
                         value={form.travelStartDate}
                         min={form.arrivalDate || undefined}
                         onChange={(event) =>
                           updateField("travelStartDate", event.target.value)
                         }
-                        className={INPUT_CLASS}
                       />
-                    </label>
+                    </Card>
 
-                    <label className="block rounded-3xl border border-neutral-200 bg-white p-5">
-                      <span className="block font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600 mb-3">
-                        Travel Days With Driver
-                      </span>
-                      <input
+                    <Card variant="white" className="rounded-3xl p-5">
+                      <Input
+                        label="Travel Days With Driver"
                         type="number"
                         min={1}
                         value={form.travelDays}
@@ -354,46 +363,86 @@ export default function PlannerPage() {
                             Math.max(1, Number(event.target.value) || 1),
                           )
                         }
-                        className={INPUT_CLASS}
                       />
-                    </label>
+                    </Card>
                   </div>
 
-                  <div className="grid gap-4 lg:grid-cols-2">
-                    <div className="rounded-3xl border border-neutral-200 bg-white p-6">
-                      <p className="font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600 mb-3">
+                  <div className="grid gap-4 xl:grid-cols-4">
+                    <Card variant="white" className="rounded-3xl p-6">
+                      <p className="mb-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600">
                         Travel Window
                       </p>
-                      <p className="text-lg text-[#0F172A] font-cinzel">
+                      <p className="font-cinzel text-lg text-[#0F172A]">
                         {form.travelStartDate
                           ? `${form.travelStartDate} to ${tripEndDate || form.travelStartDate}`
                           : "Choose a travel start date"}
                       </p>
-                    </div>
-                    <div className="rounded-3xl border border-neutral-200 bg-white p-6">
-                      <p className="font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600 mb-3">
+                    </Card>
+                    <Card variant="white" className="rounded-3xl p-6">
+                      <p className="mb-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600">
+                        Sri Lanka Departure
+                      </p>
+                      <p className="font-cinzel text-lg text-[#0F172A]">
+                        {sriLankaDepartureDate ||
+                          "Choose your arrival and stay duration"}
+                      </p>
+                    </Card>
+                    <Card variant="white" className="rounded-3xl p-6">
+                      <p className="mb-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600">
+                        Minimum Stay Needed
+                      </p>
+                      <p className="font-cinzel text-lg text-[#0F172A]">
+                        {requiredSriLankaStayDays} day
+                        {requiredSriLankaStayDays === 1 ? "" : "s"}
+                      </p>
+                      <p className="mt-2 text-sm text-neutral-600">
+                        Based on your arrival date, route start date, and route
+                        duration.
+                      </p>
+                    </Card>
+                    <Card variant="white" className="rounded-3xl p-6">
+                      <p className="mb-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600">
                         Signed-in Traveler
                       </p>
-                      <p className="text-lg text-[#0F172A] font-cinzel">
+                      <p className="font-cinzel text-lg text-[#0F172A]">
                         {travelerName || "Signed-in traveler"}
                       </p>
-                      <p className="text-sm text-neutral-600 mt-2">
+                      <p className="mt-2 text-sm text-neutral-600">
                         {travelerEmail || "No email available"}
                       </p>
-                    </div>
+                    </Card>
                   </div>
 
-                  {tripValidationIssues.length ? (
-                    <div className="rounded-3xl border border-red-200 bg-red-50 p-6">
-                      <p className="font-cinzel text-lg text-red-900 mb-3">
-                        Please fix these details before continuing
-                      </p>
-                      <ul className="space-y-2 text-sm text-red-700">
-                        {tripValidationIssues.map((issue) => (
-                          <li key={issue}>{issue}</li>
-                        ))}
-                      </ul>
-                    </div>
+                  <ValidationErrors
+                    issues={tripValidationIssues}
+                    title="Please fix these details before continuing"
+                  />
+
+                  {!tripValidationIssues.length &&
+                  form.arrivalDate &&
+                  form.travelStartDate ? (
+                    <Card
+                      variant="glass"
+                      className="rounded-3xl border border-emerald-200/70 bg-emerald-50/80 p-5"
+                    >
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                          <p className="font-cinzel text-lg text-emerald-900">
+                            Trip details look valid
+                          </p>
+                          <p className="mt-2 text-sm leading-6 text-emerald-800">
+                            Your current stay window supports this guided route,
+                            so you can continue to destination selection.
+                          </p>
+                        </div>
+                        <Badge
+                          variant="green"
+                          className="w-fit border-emerald-300 bg-emerald-100 text-emerald-800"
+                        >
+                          Ready
+                        </Badge>
+                      </div>
+                    </Card>
                   ) : null}
                 </div>
               ) : null}
@@ -462,23 +511,32 @@ export default function PlannerPage() {
               ) : null}
 
               <div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={goToPreviousStep}
                   disabled={currentStep === 0}
-                  className="rounded-2xl border border-neutral-300 px-6 py-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-700 transition hover:bg-white disabled:opacity-40"
+                  className="rounded-2xl border-neutral-300 text-neutral-700 hover:bg-white"
                 >
                   Previous
-                </button>
+                </Button>
                 {currentStep < steps.length - 1 ? (
-                  <button
-                    type="button"
-                    onClick={goToNextStep}
-                    disabled={!canContinue}
-                    className="rounded-2xl bg-[#0F172A] px-6 py-3 font-cinzel text-sm uppercase tracking-[0.24em] text-amber-300 transition hover:bg-[#18243D] disabled:opacity-40"
-                  >
-                    Continue
-                  </button>
+                  <div className="flex flex-col items-start gap-3 sm:items-end">
+                    {!canContinue && currentStepValidationIssues.length ? (
+                      <p className="text-sm text-red-700">
+                        Complete the required details in this step to continue.
+                      </p>
+                    ) : null}
+                    <Button
+                      type="button"
+                      variant="primary"
+                      onClick={handleContinue}
+                      disabled={!canContinue}
+                      className="rounded-2xl"
+                    >
+                      Continue
+                    </Button>
+                  </div>
                 ) : (
                   <a
                     href={whatsappHref}

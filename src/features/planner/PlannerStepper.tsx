@@ -1,3 +1,7 @@
+"use client";
+
+import Card from "@/components/ui/Card";
+import Badge from "@/components/ui/Badge";
 import type { PlannerStep } from "@/types/planner";
 
 interface PlannerStepperProps {
@@ -7,15 +11,9 @@ interface PlannerStepperProps {
   steps: PlannerStep[];
 }
 
-export default function PlannerStepper({
-  currentStep,
-  onStepClick,
-  stepValidity,
-  steps,
-}: PlannerStepperProps) {
-
+export default function PlannerStepper({ currentStep, onStepClick, stepValidity, steps }: PlannerStepperProps) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-[#0F172A] p-4 sm:p-6 shadow-[0_24px_80px_rgba(15,23,42,0.24)]">
+    <Card variant="dark" className="p-4 sm:p-6 shadow-[0_24px_80px_rgba(15,23,42,0.24)]">
       <div className="grid gap-3 lg:grid-cols-5">
         {steps.map((step, index) => {
           const isActive = index === currentStep;
@@ -37,22 +35,15 @@ export default function PlannerStepper({
               }`}
             >
               <div className="flex items-center justify-between gap-3 mb-3">
-                <span
-                  className={`flex h-8 w-8 items-center justify-center rounded-full font-cinzel text-sm ${
-                    isActive || isCompleted
-                      ? "bg-amber-400 text-[#0F172A]"
-                      : "bg-white/10 text-white/80"
-                  }`}
-                >
+                <span className={`flex h-8 w-8 items-center justify-center rounded-full font-cinzel text-sm ${isActive || isCompleted ? "bg-amber-400 text-[#0F172A]" : "bg-white/10 text-white/80"}`}>
                   {index + 1}
                 </span>
-                <span
-                  className={`text-[11px] font-cinzel uppercase tracking-[0.28em] ${
-                    isCompleted ? "text-emerald-300" : "text-white/40"
-                  }`}
+                <Badge
+                  variant={isCompleted ? "green" : "dark"}
+                  className={isCompleted ? "text-emerald-300 bg-transparent border-emerald-400/30" : "text-white/40 bg-transparent border-white/10"}
                 >
                   {isCompleted ? "Ready" : "Pending"}
-                </span>
+                </Badge>
               </div>
               <p className="font-cinzel text-white text-lg">{step.title}</p>
               <p className="text-sm text-white/60 mt-1">{step.caption}</p>
@@ -60,6 +51,6 @@ export default function PlannerStepper({
           );
         })}
       </div>
-    </div>
+    </Card>
   );
 }
