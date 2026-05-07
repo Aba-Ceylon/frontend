@@ -9,16 +9,20 @@ import {
   useState,
 } from "react";
 
-type TranslationValue =
-  | string
-  | ((vars?: Record<string, string | number>) => string)
-  | Record<string, TranslationValue>;
+type TranslationVars = Record<string, string | number>;
+type TranslationFormatter = (vars: TranslationVars) => string;
+
+interface TranslationMessages {
+  [key: string]: string | TranslationFormatter | TranslationMessages;
+}
+
+type TranslationValue = string | TranslationFormatter | TranslationMessages;
 
 type Locale = "en" | "si";
 
 const STORAGE_KEY = "aba-locale";
 
-const messages: Record<Locale, Record<string, TranslationValue>> = {
+const messages: Record<Locale, TranslationMessages> = {
   en: {
     common: {
       close: "Close",
@@ -45,6 +49,11 @@ const messages: Record<Locale, Record<string, TranslationValue>> = {
       requestViaWhatsApp: "Request via WhatsApp",
       openWhatsAppRequest: "Open WhatsApp Request",
       systemAdministrator: "system administrator",
+      requiredDetail: "Required Detail",
+      noEmailAvailable: "No email available",
+      signedInTraveler: "Signed-in traveler",
+      days: ({ count }) => `${count} day${Number(count) === 1 ? "" : "s"}`,
+      dateRange: ({ start, end }) => `${start} to ${end}`,
     },
     language: {
       label: "Language",
@@ -251,6 +260,8 @@ const messages: Record<Locale, Record<string, TranslationValue>> = {
       luggage: ({ count }) => `${count} luggage`,
       pax: ({ count }) => `${count} pax`,
       bags: ({ count }) => `${count} bags`,
+      passengerCount: ({ count }) =>
+        `${count} passenger${Number(count) === 1 ? "" : "s"}`,
     },
     planner: {
       eyebrow: "Protected Journey Planner",
@@ -265,6 +276,7 @@ const messages: Record<Locale, Record<string, TranslationValue>> = {
         "Fetching vehicles, stays, and route recommendations for your custom trip.",
       loadErrorTitle: "Planner Data Couldn't Load",
       continueHint: "Complete the required details in this step to continue.",
+      noEmailAvailable: "No email available",
       trip: {
         eyebrow: "Step 1",
         title: "Trip Details",
@@ -331,6 +343,7 @@ const messages: Record<Locale, Record<string, TranslationValue>> = {
         checkOut: "Check Out",
         noStays:
           "No recommended stays available for your selected destinations",
+        fromRoute: ({ km }) => `~${km} km from route`,
       },
       review: {
         eyebrow: "Step 5",
@@ -392,6 +405,28 @@ const messages: Record<Locale, Record<string, TranslationValue>> = {
       errors: {
         selectRating: "Please select a rating",
         minimumMessage: "Message must be at least 20 characters",
+        generic: "An error occurred. Please try again.",
+      },
+    },
+    chat: {
+      welcome:
+        "Ayubowan! I'm Aba, your personal Sri Lanka travel guide. Where are you thinking of heading?",
+      error:
+        "Samawenna! I'm having a little trouble connecting right now. Please try again in a moment.",
+      dialogLabel: "Aba travel assistant chat",
+      guide: "Sri Lanka Travel Guide",
+      online: "Online",
+      close: "Close chat",
+      open: "Open Aba travel assistant",
+      typingLabel: "Type your message",
+      send: "Send message",
+      placeholder: "Ask me anything about Sri Lanka...",
+      poweredBy: "Powered by Aba Ceylon Tours",
+      suggestions: {
+        places: "Best places to visit",
+        sevenDay: "Plan a 7-day trip",
+        budget: "Budget tips",
+        beaches: "Best beaches",
       },
     },
     booking: {
@@ -498,6 +533,11 @@ const messages: Record<Locale, Record<string, TranslationValue>> = {
       requestViaWhatsApp: "WhatsApp හරහා ඉල්ලන්න",
       openWhatsAppRequest: "WhatsApp ඉල්ලීම විවෘත කරන්න",
       systemAdministrator: "පද්ධති පරිපාලක",
+      requiredDetail: "අවශ්‍ය විස්තර",
+      noEmailAvailable: "විද්‍යුත් තැපෑලක් නොමැත",
+      signedInTraveler: "ඇතුළු වූ සංචාරකයා",
+      days: ({ count }) => `${count} දින${Number(count) === 1 ? "" : ""}`,
+      dateRange: ({ start, end }) => `${start} සිට ${end} දක්වා`,
     },
     language: {
       label: "භාෂාව",
@@ -931,10 +971,57 @@ const messages: Record<Locale, Record<string, TranslationValue>> = {
 interface I18nContextValue {
   locale: Locale;
   setLocale: (locale: Locale) => void;
-  t: (key: string, vars?: Record<string, string | number>) => string;
+  t: (key: string, vars?: TranslationVars) => string;
 }
 
 const I18nContext = createContext<I18nContextValue | null>(null);
+
+const CP1252_OVERRIDES: Record<string, number> = {
+  "€": 0x80,
+  "‚": 0x82,
+  "ƒ": 0x83,
+  "„": 0x84,
+  "…": 0x85,
+  "†": 0x86,
+  "‡": 0x87,
+  "ˆ": 0x88,
+  "‰": 0x89,
+  "Š": 0x8a,
+  "‹": 0x8b,
+  "Œ": 0x8c,
+  "Ž": 0x8e,
+  "‘": 0x91,
+  "’": 0x92,
+  "“": 0x93,
+  "”": 0x94,
+  "•": 0x95,
+  "–": 0x96,
+  "—": 0x97,
+  "˜": 0x98,
+  "™": 0x99,
+  "š": 0x9a,
+  "›": 0x9b,
+  "œ": 0x9c,
+  "ž": 0x9e,
+  "Ÿ": 0x9f,
+};
+
+function repairMojibake(value: string) {
+  if (!/[ÃÂàâð]/.test(value)) {
+    return value;
+  }
+
+  try {
+    const bytes = Array.from(value, (char) => {
+      const code = char.charCodeAt(0);
+      return code <= 0xff ? code : CP1252_OVERRIDES[char] ?? code;
+    });
+
+    return new TextDecoder("utf-8").decode(new Uint8Array(bytes));
+  } catch {
+    return value;
+  }
+}
 
 function resolveMessage(locale: Locale, key: string): TranslationValue | undefined {
   return key.split(".").reduce<TranslationValue | undefined>((current, part) => {
@@ -947,14 +1034,14 @@ function resolveMessage(locale: Locale, key: string): TranslationValue | undefin
 }
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>("en");
-
-  useEffect(() => {
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (stored === "en" || stored === "si") {
-      setLocaleState(stored);
+  const [locale, setLocaleState] = useState<Locale>(() => {
+    if (typeof window === "undefined") {
+      return "en";
     }
-  }, []);
+
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    return stored === "en" || stored === "si" ? stored : "en";
+  });
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -967,10 +1054,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
         resolveMessage(locale, key) ?? resolveMessage("en", key) ?? key;
 
       if (typeof resolved === "function") {
-        return resolved(vars);
+        return resolved(vars ?? {});
       }
 
-      return typeof resolved === "string" ? resolved : key;
+      return typeof resolved === "string" ? repairMojibake(resolved) : key;
     };
 
     return {

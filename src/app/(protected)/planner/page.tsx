@@ -10,6 +10,7 @@ import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
 import StepHeader from "@/components/ui/StepHeader";
 import ValidationErrors from "@/components/ui/ValidationErrors";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import AccommodationChoice from "@/features/planner/AccommodationChoice";
 import DestinationSelector from "@/features/planner/DestinationSelector";
 import PlannerStepper from "@/features/planner/PlannerStepper";
@@ -35,6 +36,7 @@ if (typeof window !== "undefined") {
 
 export default function PlannerPage() {
   const { user } = useUser();
+  const { t } = useI18n();
   const pageRef = useRef<HTMLDivElement>(null);
   const pageBackgroundRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
@@ -97,7 +99,7 @@ export default function PlannerPage() {
           form.accommodationMode === "recommended" ? "recommended" : "own",
         accommodationNote: reviewData.accommodationNote,
         serviceIncluded: reviewData.serviceIncluded,
-        vehicleType: form.vehicleType || "Not selected",
+        vehicleType: form.vehicleType || t("common.notSpecified"),
         comfortLevel: form.comfortLevel || "Essential",
       }),
     [
@@ -109,6 +111,7 @@ export default function PlannerPage() {
       selectedVehicle,
       travelerEmail,
       travelerName,
+      t,
     ],
   );
 
@@ -244,27 +247,25 @@ export default function PlannerPage() {
                 <div className="mb-8 flex items-center gap-4">
                   <div className="h-px w-14 bg-gradient-to-r from-transparent to-amber-300" />
                   <span className="font-cinzel text-xs uppercase tracking-[0.34em] text-amber-300">
-                    Protected Journey Planner
+                    {t("planner.eyebrow")}
                   </span>
                   <div className="h-px w-14 bg-gradient-to-l from-transparent to-amber-300" />
                 </div>
                 <h1 className="font-cinzel text-4xl sm:text-6xl text-white leading-tight">
-                  Curate A Fully Custom Sri Lanka Journey
+                  {t("planner.title")}
                 </h1>
                 <p className="mt-5 max-w-2xl text-white/82 text-base sm:text-lg leading-8">
-                  Build your own route, match it with the right chauffeur
-                  vehicle, decide how accommodation should work, and send the
-                  full request straight to the ABA Ceylon team through WhatsApp.
+                  {t("planner.description")}
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3">
                   <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/80 backdrop-blur-sm">
-                    Signed-in planner access
+                    {t("planner.signedInAccess")}
                   </span>
                   <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/80 backdrop-blur-sm">
-                    Multi-destination custom route
+                    {t("planner.multiDestination")}
                   </span>
                   <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/80 backdrop-blur-sm">
-                    WhatsApp-ready request summary
+                    {t("planner.whatsappReady")}
                   </span>
                 </div>
               </div>
@@ -288,17 +289,16 @@ export default function PlannerPage() {
           {isLoading ? (
             <div className="rounded-3xl border border-neutral-200 bg-white p-10 text-center">
               <p className="font-cinzel text-2xl text-[#0F172A] mb-3">
-                Loading Planner Data
+                {t("planner.loadingTitle")}
               </p>
               <p className="text-neutral-600">
-                Fetching vehicles, stays, and route recommendations for your
-                custom trip.
+                {t("planner.loadingDescription")}
               </p>
             </div>
           ) : loadingError ? (
             <div className="rounded-3xl border border-red-200 bg-red-50 p-8">
               <p className="font-cinzel text-2xl text-red-900 mb-3">
-                Planner Data Couldn&apos;t Load
+                {t("planner.loadErrorTitle")}
               </p>
               <p className="text-red-700">{loadingError}</p>
             </div>
@@ -307,15 +307,15 @@ export default function PlannerPage() {
               {currentStep === 0 ? (
                 <div className="space-y-8">
                   <StepHeader
-                    eyebrow="Step 1"
-                    title="Trip Details"
-                    description="Tell us when you arrive in Sri Lanka, how long you plan to stay, and how many days of guided travel you want us to arrange."
+                    eyebrow={t("planner.trip.eyebrow")}
+                    title={t("planner.trip.title")}
+                    description={t("planner.trip.description")}
                   />
 
                   <div className="grid gap-4 lg:grid-cols-2">
                     <Card variant="white" className="rounded-3xl p-5">
                       <Input
-                        label="Arrival Date In Sri Lanka"
+                        label={t("planner.trip.arrivalDate")}
                         type="date"
                         value={form.arrivalDate}
                         onChange={(event) =>
@@ -326,7 +326,7 @@ export default function PlannerPage() {
 
                     <Card variant="white" className="rounded-3xl p-5">
                       <Input
-                        label="Total Days In Sri Lanka"
+                        label={t("planner.trip.totalDays")}
                         type="number"
                         min={1}
                         value={form.sriLankaStayDays}
@@ -341,7 +341,7 @@ export default function PlannerPage() {
 
                     <Card variant="white" className="rounded-3xl p-5">
                       <Input
-                        label="Travel Start Date"
+                        label={t("planner.trip.travelStartDate")}
                         type="date"
                         value={form.travelStartDate}
                         min={form.arrivalDate || undefined}
@@ -353,7 +353,7 @@ export default function PlannerPage() {
 
                     <Card variant="white" className="rounded-3xl p-5">
                       <Input
-                        label="Travel Days With Driver"
+                        label={t("planner.trip.travelDays")}
                         type="number"
                         min={1}
                         value={form.travelDays}
@@ -370,52 +370,53 @@ export default function PlannerPage() {
                   <div className="grid gap-4 xl:grid-cols-4">
                     <Card variant="white" className="rounded-3xl p-6">
                       <p className="mb-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600">
-                        Travel Window
+                        {t("planner.trip.travelWindow")}
                       </p>
                       <p className="font-cinzel text-lg text-[#0F172A]">
                         {form.travelStartDate
-                          ? `${form.travelStartDate} to ${tripEndDate || form.travelStartDate}`
-                          : "Choose a travel start date"}
+                          ? t("common.dateRange", {
+                              start: form.travelStartDate,
+                              end: tripEndDate || form.travelStartDate,
+                            })
+                          : t("planner.trip.chooseTravelStart")}
                       </p>
                     </Card>
                     <Card variant="white" className="rounded-3xl p-6">
                       <p className="mb-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600">
-                        Sri Lanka Departure
+                        {t("planner.trip.departure")}
                       </p>
                       <p className="font-cinzel text-lg text-[#0F172A]">
                         {sriLankaDepartureDate ||
-                          "Choose your arrival and stay duration"}
+                          t("planner.trip.chooseArrivalStay")}
                       </p>
                     </Card>
                     <Card variant="white" className="rounded-3xl p-6">
                       <p className="mb-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600">
-                        Minimum Stay Needed
+                        {t("planner.trip.minimumStay")}
                       </p>
                       <p className="font-cinzel text-lg text-[#0F172A]">
-                        {requiredSriLankaStayDays} day
-                        {requiredSriLankaStayDays === 1 ? "" : "s"}
+                        {t("common.days", { count: requiredSriLankaStayDays })}
                       </p>
                       <p className="mt-2 text-sm text-neutral-600">
-                        Based on your arrival date, route start date, and route
-                        duration.
+                        {t("planner.trip.basedOnTrip")}
                       </p>
                     </Card>
                     <Card variant="white" className="rounded-3xl p-6">
                       <p className="mb-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600">
-                        Signed-in Traveler
+                        {t("planner.trip.signedInTraveler")}
                       </p>
                       <p className="font-cinzel text-lg text-[#0F172A]">
-                        {travelerName || "Signed-in traveler"}
+                        {travelerName || t("common.signedInTraveler")}
                       </p>
                       <p className="mt-2 text-sm text-neutral-600">
-                        {travelerEmail || "No email available"}
+                        {travelerEmail || t("common.noEmailAvailable")}
                       </p>
                     </Card>
                   </div>
 
                   <ValidationErrors
                     issues={tripValidationIssues}
-                    title="Please fix these details before continuing"
+                    title={t("planner.trip.fixTitle")}
                   />
 
                   {!tripValidationIssues.length &&
@@ -428,18 +429,17 @@ export default function PlannerPage() {
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                           <p className="font-cinzel text-lg text-emerald-900">
-                            Trip details look valid
+                            {t("planner.trip.validTitle")}
                           </p>
                           <p className="mt-2 text-sm leading-6 text-emerald-800">
-                            Your current stay window supports this guided route,
-                            so you can continue to destination selection.
+                            {t("planner.trip.validDescription")}
                           </p>
                         </div>
                         <Badge
                           variant="green"
                           className="w-fit border-emerald-300 bg-emerald-100 text-emerald-800"
                         >
-                          Ready
+                          {t("common.ready")}
                         </Badge>
                       </div>
                     </Card>
@@ -518,13 +518,13 @@ export default function PlannerPage() {
                   disabled={currentStep === 0}
                   className="rounded-2xl border-neutral-300 text-neutral-700 hover:bg-white"
                 >
-                  Previous
+                  {t("common.previous")}
                 </Button>
                 {currentStep < steps.length - 1 ? (
                   <div className="flex flex-col items-start gap-3 sm:items-end">
                     {!canContinue && currentStepValidationIssues.length ? (
                       <p className="text-sm text-red-700">
-                        Complete the required details in this step to continue.
+                        {t("planner.continueHint")}
                       </p>
                     ) : null}
                     <Button
@@ -534,7 +534,7 @@ export default function PlannerPage() {
                       disabled={!canContinue}
                       className="rounded-2xl"
                     >
-                      Continue
+                      {t("common.continue")}
                     </Button>
                   </div>
                 ) : (
@@ -544,7 +544,7 @@ export default function PlannerPage() {
                     rel="noreferrer"
                     className="rounded-2xl bg-[#0F172A] px-6 py-3 font-cinzel text-sm uppercase tracking-[0.24em] text-amber-300 transition hover:bg-[#18243D]"
                   >
-                    Open WhatsApp Request
+                    {t("common.openWhatsAppRequest")}
                   </a>
                 )}
               </div>

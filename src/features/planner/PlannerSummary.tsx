@@ -4,6 +4,7 @@ import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import StepHeader from "@/components/ui/StepHeader";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import type { Destination } from "@/types/destination";
 import type { PlannerReviewData } from "@/types/planner";
 import type { Stay } from "@/types/stay";
@@ -37,31 +38,33 @@ export default function PlannerSummary({
   travelerName,
   whatsappHref,
 }: PlannerSummaryProps) {
+  const { t } = useI18n();
+
   return (
     <div className="space-y-6">
       <StepHeader
-        eyebrow="Step 5"
-        title="Review your custom journey details and send your request"
+        eyebrow={t("planner.review.eyebrow")}
+        title={t("planner.review.title")}
       />
 
       <div className="grid gap-4 xl:grid-cols-3">
         <Card variant="white" className="rounded-3xl p-6 xl:col-span-2">
           <p className="mb-4 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-500">
-            Custom Journey Summary
+            {t("planner.review.summary")}
           </p>
           <div className="space-y-6">
             <div>
               <p className="mb-2 font-cinzel text-lg text-[#0F172A]">
-                Traveler
+                {t("planner.review.traveler")}
               </p>
               <p className="text-sm leading-6 text-neutral-700">
-                {travelerName || "Signed-in Traveler"}
+                {travelerName || t("common.signedInTraveler")}
                 {travelerEmail ? ` - ${travelerEmail}` : ""}
               </p>
             </div>
 
             <div>
-              <p className="mb-2 font-cinzel text-lg text-[#0F172A]">Trip</p>
+              <p className="mb-2 font-cinzel text-lg text-[#0F172A]">{t("planner.review.trip")}</p>
               <p className="text-sm leading-6 text-neutral-700">
                 {reviewData.tripLabel}
               </p>
@@ -69,7 +72,7 @@ export default function PlannerSummary({
 
             <div>
               <p className="mb-2 font-cinzel text-lg text-[#0F172A]">
-                Destinations
+                {t("planner.review.destinations")}
               </p>
               <div className="flex flex-wrap gap-2">
                 {selectedDestinations.map((destination) => (
@@ -85,7 +88,7 @@ export default function PlannerSummary({
             </div>
 
             <div>
-              <p className="mb-2 font-cinzel text-lg text-[#0F172A]">Vehicle</p>
+              <p className="mb-2 font-cinzel text-lg text-[#0F172A]">{t("planner.review.vehicle")}</p>
               {selectedVehicle ? (
                 <Card
                   variant="white"
@@ -103,7 +106,7 @@ export default function PlannerSummary({
 
             <div>
               <p className="mb-2 font-cinzel text-lg text-[#0F172A]">
-                Accommodation
+                {t("planner.review.accommodation")}
               </p>
               <p className="whitespace-pre-line text-sm leading-7 text-neutral-700">
                 {reviewData.accommodationNote}
@@ -133,13 +136,12 @@ export default function PlannerSummary({
 
         <Card className="rounded-3xl border border-[#0F172A]/10 bg-[#0F172A] p-6 text-white">
           <p className="mb-4 font-cinzel text-sm uppercase tracking-[0.24em] text-amber-300">
-            WhatsApp Request
+            {t("planner.review.whatsappRequest")}
           </p>
           <p className="mb-6 text-sm leading-7 text-white/75">
-            Your planner request will open a pre-filled WhatsApp message ready
-            to send to the system administrator.
+            {t("planner.review.whatsappDescription")}
           </p>
-          <p className="mb-2 text-sm text-white/60">Admin WhatsApp</p>
+          <p className="mb-2 text-sm text-white/60">{t("planner.review.adminWhatsApp")}</p>
           <p className="mb-6 font-cinzel text-xl text-white">
             {adminPhoneNumber}
           </p>
@@ -155,7 +157,7 @@ export default function PlannerSummary({
               window.open(whatsappHref, "_blank", "noopener,noreferrer")
             }
           >
-            Request via WhatsApp
+            {t("common.requestViaWhatsApp")}
           </Button>
         </Card>
       </div>

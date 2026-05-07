@@ -1,6 +1,7 @@
 import Card from "@/components/ui/Card";
 import StepHeader from "@/components/ui/StepHeader";
 import ValidationErrors from "@/components/ui/ValidationErrors";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import type { AccommodationMode } from "@/types/planner";
 
 interface AccommodationChoiceProps {
@@ -16,9 +17,14 @@ export default function AccommodationChoice({
   validationIssues,
   onModeChange,
 }: AccommodationChoiceProps) {
+  const { t } = useI18n();
+
   return (
     <div className="space-y-6">
-      <StepHeader eyebrow="Step 4" title="Accommodation Preference" />
+      <StepHeader
+        eyebrow={t("planner.accommodation.eyebrow")}
+        title={t("planner.accommodation.title")}
+      />
 
       <ValidationErrors issues={validationIssues} />
 
@@ -33,11 +39,10 @@ export default function AccommodationChoice({
           }`}
         >
           <p className="font-cinzel text-xl text-[#0F172A] mb-2">
-            I Already Have Accommodation
+            {t("planner.accommodation.ownTitle")}
           </p>
           <p className="text-sm text-neutral-600 leading-6">
-            Continue only with vehicle hire and chauffeur guide support for the
-            destinations you selected.
+            {t("planner.accommodation.ownDescription")}
           </p>
         </button>
 
@@ -51,18 +56,17 @@ export default function AccommodationChoice({
           }`}
         >
           <p className="font-cinzel text-xl text-[#0F172A] mb-2">
-            Recommend Stays For My Route
+            {t("planner.accommodation.recommendedTitle")}
           </p>
           <p className="text-sm text-neutral-600 leading-6">
-            Show me system-recommended accommodations based on my selected
-            destinations and route timing.
+            {t("planner.accommodation.recommendedDescription")}
           </p>
         </button>
       </div>
 
       <Card className="rounded-3xl border border-[#0F172A]/10 bg-[#0F172A] p-6 text-white">
         <p className="font-cinzel text-sm uppercase tracking-[0.24em] text-amber-300 mb-3">
-          Planner Note
+          {t("planner.accommodation.plannerNote")}
         </p>
         <p className="whitespace-pre-line leading-7 text-black/80">
           {accommodationNote}

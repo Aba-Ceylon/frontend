@@ -15,12 +15,11 @@ const HOME_FLEET_ITEMS = 8;
 export default function FleetSection() {
   const { t } = useI18n();
   const [fleetVehicles, setFleetVehicles] = useState<FleetVehicle[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
-    setIsLoading(true);
     fetchVehiclesPage(1, HOME_FLEET_ITEMS)
       .then(({ vehicles }) => {
         if (!active) return;
@@ -32,7 +31,7 @@ export default function FleetSection() {
       })
       .finally(() => { if (active) setIsLoading(false); });
     return () => { active = false; };
-  }, []);
+  }, [t]);
 
   const { stripRef, containerRef, cloned, dotIndex, cardWidth, gap, slideTo, onPointerDown, onPointerUp } =
     useCarousel({ items: fleetVehicles, gap: 24, autoPlayMs: 5200 });

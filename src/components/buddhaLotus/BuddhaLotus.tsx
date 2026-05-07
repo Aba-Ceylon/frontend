@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -114,6 +115,7 @@ const MANDALA_TICKS = Array.from({ length: 24 }, (_, i) => {
 });
 
 export default function BuddhaLotus() {
+  const { t } = useI18n();
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const lotusRef = useRef<HTMLDivElement>(null);
@@ -383,7 +385,7 @@ export default function BuddhaLotus() {
           className="absolute top-5 sm:top-8 left-0 right-0 flex flex-col items-center pointer-events-none z-[3] px-4"
         >
           <p className="font-cinzel text-[10px] tracking-[0.5em] uppercase text-amber-400/80 mb-3">
-            Aba Ceylon Ã‚Â· Heritage Journeys
+            {t("home.buddhaLotus.heritageJourneys")}
           </p>
           <div className="flex items-center gap-3">
             <div className="w-24 h-px bg-gradient-to-r from-transparent to-amber-400/50" />
@@ -403,7 +405,7 @@ export default function BuddhaLotus() {
         >
           <div className="rounded-full border border-amber-100/85 bg-slate-950/90 px-6 py-3 shadow-[0_18px_55px_rgba(0,0,0,0.48)] backdrop-blur-md">
             <p className="font-cinzel text-xs sm:text-sm tracking-[0.34em] uppercase text-amber-50 whitespace-nowrap drop-shadow-[0_0_18px_rgba(201,154,43,0.35)]">
-              Scroll Down to Reveal
+              {t("home.buddhaLotus.scrollReveal")}
             </p>
           </div>
           <div className="flex flex-col items-center gap-3 rounded-[2rem] border border-amber-100/45 bg-slate-950/58 px-5 py-4 shadow-[0_0_40px_rgba(201,154,43,0.28)] backdrop-blur-sm">
@@ -430,7 +432,7 @@ export default function BuddhaLotus() {
                   <path d="m7 12 5 5 5-5" />
                 </svg>
                 <span className="font-cinzel text-[10px] tracking-[0.3em] uppercase text-amber-100/90">
-                  Scroll
+                  {t("home.buddhaLotus.scroll")}
                 </span>
               </div>
               <span className="font-cinzel text-amber-100 text-sm drop-shadow-[0_0_10px_rgba(201,154,43,0.45)]">
@@ -455,7 +457,7 @@ export default function BuddhaLotus() {
               className="font-cinzel text-[11px] text-amber-400/70 uppercase"
               style={{ writingMode: "vertical-rl", letterSpacing: "0.4em" }}
             >
-              Sacred Ã‚Â· Ancient
+              {t("home.buddhaLotus.sacredAncient")}
             </p>
             <div className="w-px h-16 bg-gradient-to-t from-transparent via-amber-400/50 to-amber-400/30" />
           </div>
@@ -468,9 +470,7 @@ export default function BuddhaLotus() {
             </p>
             <div className="w-8 h-px bg-amber-400/30 mx-auto mt-2" />
             <p className="font-cinzel text-[9px] text-amber-100/40 mt-2 leading-relaxed">
-              Sacred flower of
-              <br />
-              the Buddha
+              {t("home.buddhaLotus.sacredFlower")}
             </p>
           </div>
           <div className="flex flex-col items-center gap-2">
@@ -487,9 +487,7 @@ export default function BuddhaLotus() {
               2500
             </p>
             <p className="font-cinzel text-[9px] tracking-widest uppercase text-amber-100/40">
-              Years of
-              <br />
-              Buddhism
+              {t("home.buddhaLotus.yearsOfBuddhism")}
             </p>
           </div>
         </div>
@@ -505,7 +503,7 @@ export default function BuddhaLotus() {
               className="font-cinzel text-[11px] text-rose-300/70 uppercase"
               style={{ writingMode: "vertical-rl", letterSpacing: "0.4em" }}
             >
-              Purity Ã‚Â· Peace
+              {t("home.buddhaLotus.purityPeace")}
             </p>
             <div className="w-px h-16 bg-gradient-to-t from-transparent via-rose-300/50 to-rose-300/30" />
           </div>
@@ -518,9 +516,7 @@ export default function BuddhaLotus() {
             </p>
             <div className="w-8 h-px bg-rose-300/30 mx-auto mt-2" />
             <p className="font-cinzel text-[9px] text-rose-100/40 mt-2 leading-relaxed">
-              Wheel of the
-              <br />
-              Dharma
+              {t("home.buddhaLotus.wheelOfDharma")}
             </p>
           </div>
           <div className="flex flex-col items-center gap-2">
@@ -537,9 +533,7 @@ export default function BuddhaLotus() {
               8
             </p>
             <p className="font-cinzel text-[9px] tracking-widest uppercase text-rose-100/40">
-              Noble
-              <br />
-              Petals
+              {t("home.buddhaLotus.noblePetals")}
             </p>
           </div>
         </div>
@@ -744,18 +738,18 @@ export default function BuddhaLotus() {
         <div className="absolute bottom-12 sm:bottom-20 left-0 right-0 flex flex-col items-center gap-3 sm:gap-4 z-[3] pointer-events-none px-4">
           <div ref={quoteRef} className="text-center px-4 max-w-xl">
             <p className="font-cinzel text-lg md:text-2xl text-amber-50/90 leading-relaxed tracking-wide">
-              &ldquo;Just as the lotus rises from muddy waters,
-              <br />
-              <span className="text-amber-400">
-                Sri Lanka rises in timeless beauty.&rdquo;
-              </span>
+              &ldquo;{t("home.buddhaLotus.quote")}&rdquo;
             </p>
           </div>
           <div
             ref={attributesRef}
             className="flex items-center gap-4 sm:gap-10"
           >
-            {["Purity", "Enlightenment", "Rebirth"].map((word, i) => (
+            {[
+              t("home.buddhaLotus.purity"),
+              t("home.buddhaLotus.enlightenment"),
+              t("home.buddhaLotus.rebirth"),
+            ].map((word, i) => (
               <div key={i} className="text-center">
                 <div className="w-1 h-1 rounded-full bg-amber-400/70 mx-auto mb-1.5" />
                 <p className="font-cinzel text-[10px] text-amber-100/50 tracking-[0.25em] uppercase">
@@ -773,7 +767,7 @@ export default function BuddhaLotus() {
               <div className="w-8 sm:w-12 h-px bg-amber-400/40" />
             </div>
             <p className="font-cinzel text-[9px] sm:text-[10px] text-amber-100/40 tracking-[0.22em] sm:tracking-[0.3em] uppercase">
-              The Sacred Lotus Symbol of Purity &amp; Enlightenment
+              {t("home.buddhaLotus.sacredLotus")}
             </p>
           </div>
         </div>
@@ -787,7 +781,7 @@ export default function BuddhaLotus() {
           <div className="w-32 h-px bg-gradient-to-r from-transparent to-amber-400/40" />
           <span className="font-cinzel text-amber-400/50 text-xs">+++</span>
           <p className="font-cinzel text-[9px] tracking-[0.4em] uppercase text-amber-100/40">
-            Aba Ceylon Tours &amp; Travels
+            {t("home.buddhaLotus.brand")}
           </p>
           <span className="font-cinzel text-amber-400/50 text-xs">+++</span>
           <div className="w-32 h-px bg-gradient-to-l from-transparent to-amber-400/40" />

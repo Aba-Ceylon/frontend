@@ -71,7 +71,7 @@ export default function ContactPage() {
     }
     setError("");
     window.open(whatsappHref, "_blank", "noopener,noreferrer");
-  }, [form, whatsappHref]);
+  }, [form, t, whatsappHref]);
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#08111d] text-white">
