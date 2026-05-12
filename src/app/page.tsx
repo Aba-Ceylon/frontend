@@ -1,9 +1,18 @@
+"use client";
+
+import HeroSection from "@/components/hero/HeroSection";
+import DeferredHomeSections from "@/components/home/DeferredHomeSections";
+import HomeEntryLoader from "@/components/home/HomeEntryLoader";
+import { useLoaderGate } from "@/components/home/LoaderGate";
+
 export default function Home() {
+  const ready = useLoaderGate();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-transparent">
-      <h1 className="text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-indigo-600 to-teal-400">
-        aba ceylon
-      </h1>
+    <div className="min-h-screen bg-gradient-to-b from-black via-slate-900 to-black">
+      <HomeEntryLoader />
+      {ready && <HeroSection />}
+      {ready && <DeferredHomeSections />}
     </div>
   );
 }

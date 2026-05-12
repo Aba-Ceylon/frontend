@@ -1,0 +1,56 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import Badge from "@/components/ui/Badge";
+import { Stay } from "@/types/stay";
+
+function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
+  const [errored, setErrored] = useState(false);
+
+  if (errored) {
+    return (
+      <div className="w-full h-full bg-neutral-800 flex items-center justify-center">
+        <span className="font-cinzel text-neutral-500 text-sm">{alt}</span>
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
+      className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
+      loading="lazy"
+      onError={() => setErrored(true)}
+    />
+  );
+}
+
+export default function StayCard({ stay }: { stay: Stay }) {
+  const stayLabel = stay.accommodationId
+    ? `Stay ${String(stay.accommodationId).padStart(2, "0")}`
+    : stay.category;
+
+  return (
+    <div className="animate-card group relative rounded-sm overflow-hidden aspect-[3/4]">
+      <ImageWithFallback src={stay.image} alt={stay.name} />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+      <div className="absolute inset-0 flex flex-col justify-end p-6 gap-1">
+        <Badge variant="amber" className="w-fit text-[10px]">{stayLabel}</Badge>
+        <p className="font-cinzel text-amber-50/85 text-[11px] tracking-[0.24em] uppercase">{stay.category}</p>
+        <h3 className="font-cinzel text-2xl text-white leading-snug mb-3">{stay.name}</h3>
+        <p className="text-white/75 text-sm mb-3">{stay.location}</p>
+        <Link
+          href={`/stays/${stay.id}`}
+          className="self-start font-cinzel rounded-md text-sm px-4 py-2 border border-amber-400/60 text-amber-400 hover:bg-amber-400 hover:text-black transition-colors duration-300"
+        >
+          View Stay
+        </Link>
+      </div>
+    </div>
+  );
+}

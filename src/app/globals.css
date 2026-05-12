@@ -1,8 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Switzer:wght@300;400;600;700&display=swap");
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0a;
+  --foreground: #f5f5f5;
+  --royal-gold: #c99a2b;
+  --antique-bronze: #a97b17;
+  --heritage-amber: #c99a2b;
+  --color-amber-50: #fcf7e6;
+  --color-amber-100: #f8ebc7;
+  --color-amber-200: #ecd38e;
+  --color-amber-300: #ddb65a;
+  --color-amber-400: #c99a2b;
+  --color-amber-500: #b8891f;
+  --color-amber-600: #a97b17;
+  --color-amber-700: #896212;
+  --color-amber-800: #6d4d0f;
+  --color-amber-900: #553b0a;
+  --color-amber-950: #2f2005;
+  --color-yellow-300: #ddb65a;
+  --color-yellow-400: #c99a2b;
+  --color-yellow-500: #c99a2b;
+  --color-yellow-600: #a97b17;
 }
 
 @theme inline {
@@ -12,15 +31,154 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+main {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--royal-gold), var(--antique-bronze));
+  border-radius: 6px;
+  border: 2px solid #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--antique-bronze), var(--royal-gold));
+}
+
+.font-cinzel {
+  font-family: "Cinzel", serif;
+}
+
+.font-garamond {
+  font-family: "Cormorant Garamond", serif;
+}
+
+.text-shadow {
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.text-shadow-gold {
+  text-shadow:
+    0 0 20px rgba(212, 175, 55, 0.5),
+    0 0 40px rgba(212, 175, 55, 0.3);
+}
+
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+/* Royal Border Animation */
+@keyframes borderGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 5px var(--royal-gold),
+      0 0 10px var(--royal-gold);
+  }
+  50% {
+    box-shadow:
+      0 0 10px var(--royal-gold),
+      0 0 20px var(--royal-gold),
+      0 0 30px var(--royal-gold);
+  }
+}
+
+.border-glow {
+  animation: borderGlow 3s ease-in-out infinite;
+}
+
+/* Map marker animations */
+.custom-marker {
+  transition: transform 0.3s ease;
+}
+
+.custom-marker:hover {
+  transform: scale(1.2);
+  z-index: 10;
+}
+
+/* Panel slide up animation */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Noise texture overlay */
+.bg-noise {
+  position: relative;
+}
+
+.bg-noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+}
+
+.bg-noise > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Antique Paper Texture */
+.antique-texture {
+  background-image:
+    linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Fade in on scroll */
+.fade-in-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+
+.fade-in-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
