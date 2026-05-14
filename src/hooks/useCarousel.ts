@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 
-function getVisible(gap: number) {
+function getVisible() {
   if (typeof window === "undefined") return 3;
   if (window.innerWidth < 820) return 1;
   if (window.innerWidth < 1180) return 2;
@@ -28,7 +28,7 @@ export function useCarousel<T>({ items, gap = 32, autoPlayMs = 3000 }: UseCarous
 
   const getStep = useCallback(() => {
     const w = containerRef.current?.offsetWidth ?? 0;
-    const vis = getVisible(gap);
+    const vis = getVisible();
     return (w - gap * (vis - 1)) / vis + gap;
   }, [gap]);
 
@@ -73,11 +73,11 @@ export function useCarousel<T>({ items, gap = 32, autoPlayMs = 3000 }: UseCarous
   // Resize handler
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
-      setVisible(getVisible(gap));
+      setVisible(getVisible());
       snapToOffset(offset.current);
     });
     const onResize = () => {
-      setVisible(getVisible(gap));
+      setVisible(getVisible());
       snapToOffset(offset.current);
     };
     window.addEventListener("resize", onResize);
