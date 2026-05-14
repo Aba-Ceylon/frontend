@@ -4,12 +4,14 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 export default function HeroSection() {
+  const { t } = useI18n();
   const heroRef = useRef<HTMLElement>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -214,10 +216,10 @@ export default function HeroSection() {
         {/* Main Headline */}
         <h1 className="hero-headline font-cinzel text-5xl md:text-7xl lg:text-8xl font-medium mb-6 tracking-wider leading-tight drop-shadow-2xl">
           <span className="text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]">
-            Aba Ceylon
+            {t("home.hero.titleLine1")}
           </span>
           <br />
-          Tours and Travels
+          {t("home.hero.titleLine2")}
         </h1>
 
         {/* Decorative Divider */}
@@ -231,7 +233,7 @@ export default function HeroSection() {
 
         {/* Subheadline */}
         <p className="hero-subheadline text-lg md:text-2xl lg:text-3xl mb-12 max-w-3xl mx-auto leading-relaxed font-light tracking-wide text-amber-50/90">
-          The Ultimate Heritage Experience
+          {t("home.hero.subtitle")}
         </p>
 
         {/* CTAs */}
@@ -241,7 +243,7 @@ export default function HeroSection() {
             className="relative overflow-hidden group bg-amber-400/60 drop-shadow-[0_0_30px_rgba(201,154,43,0.5)] backdrop-blur-2xl text-white px-12 py-4 text-lg shadow-2xl transition-all duration-300 transform hover:scale-105"
           >
             <span className="relative z-10 font-cinzel tracking-wide">
-              View Our Packages
+              {t("home.hero.viewPackages")}
             </span>
           </Link>
 
@@ -250,7 +252,7 @@ export default function HeroSection() {
             className="relative overflow-hidden group border-2 border-amber-400/60 text-white px-12 py-4 text-lg backdrop-blur-xl bg-white/5 hover:bg-white/10 hover:border-amber-400 transition-all duration-300 transform hover:scale-105 shadow-2xl"
           >
             <span className="relative z-10 font-cinzel tracking-wide">
-              Plan Your Journey
+              {t("home.hero.planJourney")}
             </span>
           </Link>
         </div>
@@ -265,7 +267,7 @@ export default function HeroSection() {
           <div className="w-1.5 h-4 bg-amber-400 rounded-full mt-2 animate-pulse shadow-lg shadow-amber-400/50"></div>
         </div>
         <span className="text-xs font-cinzel font-semibold tracking-[0.3em] text-white">
-          SCROLL
+          {t("home.hero.scroll")}
         </span>
       </div>
     </section>

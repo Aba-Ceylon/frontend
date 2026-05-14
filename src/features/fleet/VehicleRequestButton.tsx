@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import RequestBookingDialog from "@/components/booking/RequestBookingDialog";
 import { buildVehicleRequestMessage } from "@/lib/fleet/buildVehicleRequestMessage";
 import { generateWhatsAppLink } from "@/lib/whatsapp/generateWhatsAppLink";
@@ -14,6 +15,7 @@ interface VehicleRequestButtonProps {
 }
 
 export default function VehicleRequestButton({ vehicle, className }: VehicleRequestButtonProps) {
+  const { t } = useI18n();
   const { user, isLoaded, isSignedIn } = useUser();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +28,7 @@ export default function VehicleRequestButton({ vehicle, className }: VehicleRequ
 
   const handleConfirm = () => {
     if (!bookingDate) {
-      setErrorMessage("Please select a booking date");
+      setErrorMessage(t("booking.selectBookingDate"));
       return;
     }
 
@@ -51,7 +53,7 @@ export default function VehicleRequestButton({ vehicle, className }: VehicleRequ
         onClick={() => { setBookingDate(""); setErrorMessage(""); setIsOpen(true); }}
         className={className}
       >
-        Request Vehicle
+        {t("fleet.requestVehicle")}
       </button>
 
       <RequestBookingDialog

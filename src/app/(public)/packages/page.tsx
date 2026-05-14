@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import PageHero from "@/components/ui/PageHero";
 import PackageCard from "@/features/packages/PackageCard";
 import PaginationControls from "@/components/ui/PaginationControls";
@@ -15,6 +16,7 @@ gsap.registerPlugin(ScrollTrigger);
 const ITEMS_PER_PAGE = 6;
 
 export default function PackagesPage() {
+  const { t } = useI18n();
   const gridRef = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(1);
   const [packageItems, setPackageItems] = useState<PackageItem[]>(fallbackPackages);
@@ -50,8 +52,8 @@ export default function PackagesPage() {
         imageSrc="/allPckgs.png"
         imageAlt="Holiday Packages"
         eyebrow="Aba Ceylon Tours & Travels"
-        title="Explore Our Curated Travel Packages"
-        subtitle="Handcrafted journeys across Sri Lanka's heritage, hills, wildlife, and coastlines."
+        title={t("packages.pageTitle")}
+        subtitle={t("packages.pageSubtitle")}
       />
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

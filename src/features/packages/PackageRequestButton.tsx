@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import RequestBookingDialog from "@/components/booking/RequestBookingDialog";
 import { buildPackageRequestMessage } from "@/lib/packages/buildPackageRequestMessage";
 import { generateWhatsAppLink } from "@/lib/whatsapp/generateWhatsAppLink";
@@ -24,6 +25,7 @@ export default function PackageRequestButton({
   label,
   requestedLabel,
 }: PackageRequestButtonProps) {
+  const { t } = useI18n();
   const { user, isLoaded, isSignedIn } = useUser();
   const pathname = usePathname();
   const { selectedPackage, setSelectedPackage } = usePackageStore();
@@ -34,8 +36,8 @@ export default function PackageRequestButton({
   const isRequested = selectedPackage?.id === pkg.id;
   const isUserSignedIn = Boolean(isSignedIn);
 
-  const resolvedLabel = label ?? "Request Package";
-  const resolvedRequestedLabel = requestedLabel ?? "Requested";
+  const resolvedLabel = label ?? t("packages.requestPackage");
+  const resolvedRequestedLabel = requestedLabel ?? t("packages.requested");
 
   const signInHref = `/sign-in?redirect_url=${encodeURIComponent(pathname || "/packages")}`;
   const adminWhatsAppNumber =
@@ -57,7 +59,7 @@ export default function PackageRequestButton({
 
   const handleConfirm = () => {
     if (!dateUnknown && !bookingDate) {
-      setErrorMessage("Please select a booking date");
+      setErrorMessage(t("booking.selectBookingDate"));
       return;
     }
 

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import PageHero from "@/components/ui/PageHero";
 import StayCard from "@/features/stays/StayCard";
 import PaginationControls from "@/components/ui/PaginationControls";
@@ -15,6 +16,7 @@ gsap.registerPlugin(ScrollTrigger);
 const ITEMS_PER_PAGE = 6;
 
 export default function StaysPage() {
+  const { t } = useI18n();
   const gridRef = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(1);
   const [stayItems, setStayItems] = useState<Stay[]>(fallbackStays);
@@ -50,8 +52,8 @@ export default function StaysPage() {
         imageSrc="/staysbanner.png"
         imageAlt="Curated Heritage Stays"
         eyebrow="Aba Ceylon Tours & Travels"
-        title="Curated Heritage Stays"
-        subtitle="Stay within the story of Sri Lanka, not outside it!"
+        title={t("stays.pageTitle")}
+        subtitle={t("stays.pageSubtitle")}
       />
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

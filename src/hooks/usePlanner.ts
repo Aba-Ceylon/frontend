@@ -17,6 +17,7 @@ import {
 import { fetchDestinations } from "@/services/destinationService";
 import { fetchAllVehicles } from "@/services/fleetService";
 import { fetchStays } from "@/services/stayService";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import type { Destination } from "@/types/destination";
 import type {
   AccommodationMode,
@@ -171,6 +172,7 @@ function plannerReducer(state: PlannerState, action: PlannerAction): PlannerStat
 // ─── Hook ────────────────────────────────────────────────────────────────────
 
 export function usePlanner() {
+  const { t } = useI18n();
   const [state, dispatch] = useReducer(plannerReducer, INITIAL_STATE);
   const { form, destinations, vehicles, stays, isLoading, loadingError, currentStep } = state;
 
@@ -192,7 +194,15 @@ export function usePlanner() {
     return () => { active = false; };
   }, []);
 
-  const steps = useMemo(() => getPlannerSteps(), []);
+  const steps = useMemo(
+    () =>
+      getPlannerSteps().map((step) => ({
+        ...step,
+        title: t(`planner.steps.${step.id}.title`),
+        caption: t(`planner.steps.${step.id}.caption`),
+      })),
+    [t],
+  );
 
   const selectedDestinations = useMemo(
     () => destinations.filter((d) => form.selectedDestinationIds.includes(d.id)),

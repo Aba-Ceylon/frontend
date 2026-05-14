@@ -8,6 +8,7 @@ import ValidationErrors from "@/components/ui/ValidationErrors";
 import StepHeader from "@/components/ui/StepHeader";
 import PlannerInteractiveMap from "@/features/planner/PlannerInteractiveMap";
 import DestinationMapModal from "@/features/planner/DestinationMapModal";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import type { Destination } from "@/types/destination";
 
 interface DestinationSelectorProps {
@@ -23,15 +24,21 @@ export default function DestinationSelector({
   validationIssues = [],
   onToggleDestination,
 }: DestinationSelectorProps) {
+  const { t } = useI18n();
   const [mapDestination, setMapDestination] = useState<Destination | null>(null);
 
   return (
     <>
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
-          <StepHeader eyebrow="Step 2" title="Select Your Destinations" />
+          <StepHeader
+            eyebrow={t("planner.destination.eyebrow")}
+            title={t("planner.destination.title")}
+          />
           <Badge variant="light" className="bg-white text-neutral-700 border-neutral-200 w-fit">
-            {selectedDestinationIds.length} destination{selectedDestinationIds.length === 1 ? "" : "s"} selected
+            {t("planner.destination.selectedCount", {
+              count: selectedDestinationIds.length,
+            })}
           </Badge>
         </div>
 
@@ -62,7 +69,7 @@ export default function DestinationSelector({
                     <h3 className="font-cinzel text-2xl text-[#0F172A] mt-1">{destination.name}</h3>
                   </div>
                   <Badge variant={isSelected ? "dark" : "light"} className={isSelected ? "bg-[#0F172A] text-amber-300 border-transparent" : "bg-neutral-100 text-neutral-500 border-neutral-200"}>
-                    {isSelected ? "Selected" : "Tap to add"}
+                    {isSelected ? t("common.selected") : t("planner.destination.tapToAdd")}
                   </Badge>
                 </div>
 
@@ -81,7 +88,7 @@ export default function DestinationSelector({
 
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <Button variant="outline" size="sm" fullWidth onClick={() => setMapDestination(destination)}>
-                    View Map
+                    {t("common.viewMap")}
                   </Button>
                   <Button
                     variant={isSelected ? "primary" : "secondary"}
@@ -90,7 +97,7 @@ export default function DestinationSelector({
                     onClick={() => onToggleDestination(destination.id)}
                     className={isSelected ? "bg-[#0F172A] text-amber-300 hover:bg-[#18243D]" : "bg-amber-500 hover:bg-amber-600"}
                   >
-                    {isSelected ? "Remove" : "Select"}
+                    {isSelected ? t("common.remove") : t("common.select")}
                   </Button>
                 </div>
               </Card>

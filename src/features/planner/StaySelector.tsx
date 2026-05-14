@@ -2,6 +2,7 @@ import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import ValidationErrors from "@/components/ui/ValidationErrors";
 import { formatStayPlanLabel } from "@/lib/planner/plannerHelpers";
 import type { PlannerStaySelection, RecommendedStay } from "@/types/planner";
@@ -29,6 +30,7 @@ export default function StaySelector({
   onDateChange,
   onToggleStay,
 }: StaySelectorProps) {
+  const { t } = useI18n();
   const selectedStayIds = selectedStayPlans.map((plan) => plan.stayId);
 
   return (
@@ -36,18 +38,19 @@ export default function StaySelector({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="mb-2 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-500">
-            Recommended Stays
+            {t("planner.accommodation.recommendedStays")}
           </p>
           <h3 className="font-cinzel text-2xl text-[#0F172A]">
-            Choose your accommodation for each destination
+            {t("planner.accommodation.chooseAccommodation")}
           </h3>
         </div>
         <Badge
           variant="light"
           className="w-fit border-neutral-200 bg-white text-neutral-700"
         >
-          {selectedStayPlans.length} Stay
-          {selectedStayPlans.length === 1 ? "" : "s"} Selected
+          {t("planner.accommodation.staysSelected", {
+            count: selectedStayPlans.length,
+          })}
         </Badge>
       </div>
 
@@ -96,7 +99,7 @@ export default function StaySelector({
                             : "border-neutral-200 bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
                         }`}
                       >
-                        {isSelected ? "Selected" : "Add Stay"}
+                        {isSelected ? t("common.selected") : t("planner.accommodation.addStay")}
                       </Button>
                     </div>
 
@@ -116,7 +119,9 @@ export default function StaySelector({
                           variant="light"
                           className="border-neutral-200 bg-neutral-100 text-neutral-700"
                         >
-                          ~{stay.distanceKm} km from route
+                          {t("planner.accommodation.fromRoute", {
+                            km: stay.distanceKm,
+                          })}
                         </Badge>
                       ) : null}
                     </div>
@@ -124,7 +129,7 @@ export default function StaySelector({
                     {isSelected && selectedPlan ? (
                       <div className="grid gap-3 sm:grid-cols-2">
                         <Input
-                          label="Check In"
+                          label={t("planner.accommodation.checkIn")}
                           type="date"
                           value={selectedPlan.checkInDate}
                           min={tripStartDate}
@@ -138,7 +143,7 @@ export default function StaySelector({
                           }
                         />
                         <Input
-                          label="Check Out"
+                          label={t("planner.accommodation.checkOut")}
                           type="date"
                           value={selectedPlan.checkOutDate}
                           min={selectedPlan.checkInDate || tripStartDate}
@@ -171,7 +176,7 @@ export default function StaySelector({
           variant="white"
           className="rounded-3xl border-dashed p-8 text-center text-neutral-600"
         >
-          No recommended stays available for your selected destinations
+          {t("planner.accommodation.noStays")}
         </Card>
       )}
     </div>

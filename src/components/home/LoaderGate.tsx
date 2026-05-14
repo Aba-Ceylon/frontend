@@ -18,10 +18,9 @@ export function LoaderGateProvider({ children }: { children: ReactNode }) {
   });
 
   useEffect(() => {
-    if (ready) {
-      return;
-    }
-    const id = window.setTimeout(() => setReady(true), GATE_DELAY_MS);
+    const delay =
+      sessionStorage.getItem(SESSION_KEY) === "true" ? 0 : GATE_DELAY_MS;
+    const id = window.setTimeout(() => setReady(true), delay);
     return () => window.clearTimeout(id);
   }, [ready]);
 

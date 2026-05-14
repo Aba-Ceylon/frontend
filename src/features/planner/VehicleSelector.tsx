@@ -3,6 +3,7 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import StepHeader from "@/components/ui/StepHeader";
 import ValidationErrors from "@/components/ui/ValidationErrors";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import type { ComfortLevel } from "@/types/planner";
 import type { FleetVehicle } from "@/types/vehicle";
 
@@ -35,11 +36,13 @@ export default function VehicleSelector({
   onVehicleSelect,
   onVehicleTypeChange,
 }: VehicleSelectorProps) {
+  const { t } = useI18n();
+
   return (
     <div className="space-y-8">
       <StepHeader
-        eyebrow="Step 3"
-        title="Select your preferred vehicle type and comfort level"
+        eyebrow={t("planner.vehicle.eyebrow")}
+        title={t("planner.vehicle.title")}
       />
 
       <ValidationErrors issues={validationIssues} />
@@ -47,7 +50,7 @@ export default function VehicleSelector({
       <div className="grid gap-4 lg:grid-cols-2">
         <Card variant="white" className="rounded-3xl p-6">
           <p className="mb-4 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-500">
-            Vehicle Type
+            {t("planner.vehicle.vehicleType")}
           </p>
           <div className="flex flex-wrap gap-3">
             {vehicleTypes.map((vehicleType) => (
@@ -73,7 +76,7 @@ export default function VehicleSelector({
 
         <Card variant="white" className="rounded-3xl p-6">
           <p className="mb-4 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-500">
-            Comfort Level
+            {t("planner.vehicle.comfortLevel")}
           </p>
           <div className="grid gap-3">
             {comfortLevels.map((level) => (
@@ -103,19 +106,17 @@ export default function VehicleSelector({
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-500">
-              Matching Vehicles
+              {t("planner.vehicle.matchingVehicles")}
             </p>
             <p className="mt-1 text-sm text-neutral-600">
-              Choose from the existing fleet that matches your type and comfort
-              preference.
+              {t("planner.vehicle.matchingDescription")}
             </p>
           </div>
           <Badge
             variant="light"
             className="border-neutral-200 bg-white text-neutral-700"
           >
-            {filteredVehicles.length} option
-            {filteredVehicles.length === 1 ? "" : "s"}
+            {t("planner.vehicle.options", { count: filteredVehicles.length })}
           </Badge>
         </div>
 
@@ -158,7 +159,7 @@ export default function VehicleSelector({
                               : "border-neutral-200 bg-neutral-100 text-neutral-500"
                           }
                         >
-                          {isSelected ? "Chosen" : "Select"}
+                          {isSelected ? t("planner.vehicle.chosen") : t("common.select")}
                         </Badge>
                       </div>
 
@@ -172,18 +173,20 @@ export default function VehicleSelector({
                           className="rounded-2xl bg-neutral-50 p-3 shadow-none"
                         >
                           <span className="mb-1 block text-xs uppercase tracking-[0.2em] text-neutral-500">
-                            Seats
+                            {t("planner.vehicle.seats")}
                           </span>
-                          {vehicle.passengerCapacity} Passengers
+                          {t("fleet.passengerCount", {
+                            count: vehicle.passengerCapacity,
+                          })}
                         </Card>
                         <Card
                           variant="white"
                           className="rounded-2xl bg-neutral-50 p-3 shadow-none"
                         >
                           <span className="mb-1 block text-xs uppercase tracking-[0.2em] text-neutral-500">
-                            Luggage
+                            {t("planner.vehicle.luggage")}
                           </span>
-                          {vehicle.luggageCapacity} Bags
+                          {t("fleet.bags", { count: vehicle.luggageCapacity })}
                         </Card>
                       </div>
 
@@ -209,7 +212,7 @@ export default function VehicleSelector({
             variant="white"
             className="rounded-3xl border-dashed p-8 text-center text-neutral-600"
           >
-            Please select both a vehicle type and comfort level to continue
+            {t("planner.vehicle.empty")}
           </Card>
         )}
       </div>

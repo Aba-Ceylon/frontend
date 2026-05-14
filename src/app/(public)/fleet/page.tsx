@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import PageHero from "@/components/ui/PageHero";
 import VehicleCard from "@/features/fleet/VehicleCard";
 import PaginationControls from "@/components/ui/PaginationControls";
@@ -14,6 +15,7 @@ gsap.registerPlugin(ScrollTrigger);
 const ITEMS_PER_PAGE = 6;
 
 export default function FleetPage() {
+  const { t } = useI18n();
   const gridRef = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(1);
   const [fleetVehicles, setFleetVehicles] = useState<FleetVehicle[]>([]);
@@ -81,8 +83,8 @@ export default function FleetPage() {
         imageSrc="/images/fleet/fleets.png"
         imageAlt="Premium Fleet Vehicles"
         eyebrow="Aba Ceylon Tours & Travels"
-        title="Explore Our Premium Fleet"
-        subtitle="Chauffeured vehicles designed for comfort, elegance, and seamless travel across Sri Lanka."
+        title={t("fleet.pageTitle")}
+        subtitle={t("fleet.pageSubtitle")}
         height="h-[52vh] sm:h-[58vh]"
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
@@ -91,9 +93,9 @@ export default function FleetPage() {
         </div>
         {!isLoading && error && <p className="mt-8 text-center text-sm text-red-700">{error}</p>}
         {!isLoading && !error && fleetVehicles.length === 0 && (
-          <p className="mt-8 text-center text-sm text-neutral-700">No fleet vehicles available right now.</p>
+          <p className="mt-8 text-center text-sm text-neutral-700">{t("fleet.empty")}</p>
         )}
-        {isLoading && <p className="mt-8 text-center text-sm text-neutral-700">Loading fleet vehicles...</p>}
+        {isLoading && <p className="mt-8 text-center text-sm text-neutral-700">{t("fleet.loading")}</p>}
         <PaginationControls currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
       </div>
     </div>

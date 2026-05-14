@@ -3,26 +3,32 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { MessageCircle, X, Send, Loader2 } from "lucide-react";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
 }
 
-const WELCOME_MESSAGE: Message = {
-  role: "assistant",
-  content:
-    "Ayubowan! 🙏 I'm Aba, your personal Sri Lanka travel guide. Where are you thinking of heading?",
-};
-
 export default function ChatbotWidget() {
+  const { locale, t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
+  const [messages, setMessages] = useState<Message[]>(() => [
+    { role: "assistant", content: t("chat.welcome") },
+  ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasUnread, setHasUnread] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setMessages((current) =>
+      current.length === 1 && current[0]?.role === "assistant"
+        ? [{ role: "assistant", content: t("chat.welcome") }]
+        : current,
+    );
+  }, [locale, t]);
 
   // Auto-scroll to latest message
   useEffect(() => {
@@ -71,7 +77,7 @@ export default function ChatbotWidget() {
         {
           role: "assistant",
           content:
-            "Samāwenna! [Sorry!] I'm having a little trouble connecting right now. Please try again in a moment 🙏",
+            t("chat.error"),
         },
       ]);
     } finally {
@@ -104,7 +110,7 @@ export default function ChatbotWidget() {
           boxShadow:
             "0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,154,43,0.1), inset 0 1px 0 rgba(201,154,43,0.15)",
         }}
-        aria-label="Aba travel assistant chat"
+        aria-label={t("chat.dialogLabel")}
         role="dialog"
         aria-modal="true"
       >
@@ -150,7 +156,7 @@ export default function ChatbotWidget() {
                 className="text-xs leading-tight"
                 style={{ color: "rgba(245,245,245,0.5)", fontFamily: "Switzer, system-ui" }}
               >
-                Sri Lanka Travel Guide
+                {t("chat.guide")}
               </p>
             </div>
           </div>
@@ -169,7 +175,7 @@ export default function ChatbotWidget() {
                 className="text-xs"
                 style={{ color: "rgba(245,245,245,0.4)", fontFamily: "Switzer, system-ui" }}
               >
-                Online
+                {t("chat.online")}
               </span>
             </div>
             <button
@@ -182,7 +188,7 @@ export default function ChatbotWidget() {
               onMouseLeave={(e) =>
                 (e.currentTarget.style.color = "rgba(245,245,245,0.5)")
               }
-              aria-label="Close chat"
+              aria-label={t("chat.close")}
             >
               <X size={16} />
             </button>
@@ -288,10 +294,10 @@ export default function ChatbotWidget() {
         {messages.length === 1 && !isLoading && (
           <div className="px-4 pb-2 flex flex-wrap gap-2">
             {[
-              "Best places to visit 🗺️",
-              "Plan a 7-day trip",
-              "Budget tips 💰",
-              "Best beaches 🏖️",
+              t("chat.suggestions.places"),
+              t("chat.suggestions.sevenDay"),
+              t("chat.suggestions.budget"),
+              t("chat.suggestions.beaches"),
             ].map((suggestion) => (
               <button
                 key={suggestion}
@@ -342,14 +348,14 @@ export default function ChatbotWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask me anything about Sri Lanka..."
+              placeholder={t("chat.placeholder")}
               disabled={isLoading}
               className="flex-1 bg-transparent text-sm outline-none placeholder:opacity-40"
               style={{
                 color: "#f5f5f5",
                 fontFamily: "Switzer, system-ui",
               }}
-              aria-label="Type your message"
+              aria-label={t("chat.typingLabel")}
             />
             <button
               onClick={sendMessage}
@@ -362,7 +368,7 @@ export default function ChatbotWidget() {
                     : "rgba(201,154,43,0.15)",
                 cursor: input.trim() && !isLoading ? "pointer" : "not-allowed",
               }}
-              aria-label="Send message"
+              aria-label={t("chat.send")}
             >
               {isLoading ? (
                 <Loader2
@@ -383,7 +389,7 @@ export default function ChatbotWidget() {
             className="text-center text-xs mt-2 opacity-30"
             style={{ fontFamily: "Switzer, system-ui", color: "#f5f5f5" }}
           >
-            Powered by Aba Ceylon Tours
+            {t("chat.poweredBy")}
           </p>
         </div>
       </div>
@@ -411,7 +417,7 @@ export default function ChatbotWidget() {
             e.currentTarget.style.boxShadow =
               "0 4px 24px rgba(201,154,43,0.5), 0 0 0 0 rgba(201,154,43,0.3)";
         }}
-        aria-label={isOpen ? "Close chat" : "Open Aba travel assistant"}
+        aria-label={isOpen ? t("chat.close") : t("chat.open")}
         aria-expanded={isOpen}
       >
         {isOpen ? (
