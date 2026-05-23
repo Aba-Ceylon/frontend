@@ -10,6 +10,7 @@ import { packages as fallbackPackages } from "@/data/packages";
 import { fetchPackages } from "@/services/packageService";
 import type { PackageItem } from "@/types/package";
 
+
 gsap.registerPlugin(ScrollTrigger);
 
 const ITEMS_PER_PAGE = 6;
