@@ -7,12 +7,14 @@ import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 interface Message {
   role: "user" | "assistant";
   content: string;
+  suggestions?: string[];
 }
 
 const WELCOME_MESSAGE: Message = {
   role: "assistant",
   content:
-    "Ayubowan! 🙏 I'm Aba, your personal Sri Lanka travel guide. Where are you thinking of heading?",
+    "Ayubowan! I’m Aba, your Sri Lanka travel guide. Tell me where you want to go, how many days you have, or how many people are travelling.",
+  suggestions: ["Beaches", "Wildlife", "Hill country", "Heritage"],
 };
 
 export default function ChatbotWidget() {
@@ -37,8 +39,8 @@ export default function ChatbotWidget() {
     }
   }, [isOpen]);
 
-  const sendMessage = async () => {
-    const trimmed = input.trim();
+  const sendMessage = async (rawMessage?: string) => {
+    const trimmed = (rawMessage ?? input).trim();
     if (!trimmed || isLoading) return;
 
     const userMessage: Message = { role: "user", content: trimmed };
@@ -61,10 +63,16 @@ export default function ChatbotWidget() {
         throw new Error(data.error || "Failed to get response");
       }
 
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: data.message },
-      ]);
+      setMessages((prev) => [...prev, {
+        role: "assistant",
+        content: data.message,
+        suggestions: Array.isArray(data.suggestions)
+          ? data.suggestions.filter(
+              (value: unknown): value is string =>
+                typeof value === "string" && value.trim().length > 0,
+            )
+          : [],
+      }]);
     } catch {
       setMessages((prev) => [
         ...prev,
@@ -72,6 +80,7 @@ export default function ChatbotWidget() {
           role: "assistant",
           content:
             "Samāwenna! [Sorry!] I'm having a little trouble connecting right now. Please try again in a moment 🙏",
+          suggestions: ["Beaches", "Wildlife", "Hill country", "Heritage"],
         },
       ]);
     } finally {
@@ -85,6 +94,11 @@ export default function ChatbotWidget() {
       sendMessage();
     }
   };
+
+  const lastAssistantIndex = [...messages]
+    .map((message, index) => ({ message, index }))
+    .reverse()
+    .find((entry) => entry.message.role === "assistant")?.index;
 
   return (
     <>
@@ -104,7 +118,7 @@ export default function ChatbotWidget() {
           boxShadow:
             "0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,154,43,0.1), inset 0 1px 0 rgba(201,154,43,0.15)",
         }}
-        aria-label="Aba travel assistant chat"
+        aria-label="Aba travel guide chat"
         role="dialog"
         aria-modal="true"
       >
@@ -241,6 +255,48 @@ export default function ChatbotWidget() {
             </div>
           ))}
 
+          {lastAssistantIndex !== undefined &&
+            !isLoading &&
+            messages[lastAssistantIndex]?.suggestions?.length ? (
+            <div className="pl-8 pr-2">
+              <p
+                className="mb-2 text-[11px] uppercase tracking-[0.16em]"
+                style={{
+                  color: "rgba(201,154,43,0.75)",
+                  fontFamily: "Switzer, system-ui",
+                }}
+              >
+                Quick choices
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {messages[lastAssistantIndex].suggestions?.map((suggestion) => (
+                  <button
+                    key={`${suggestion}-${messages.length}`}
+                    onClick={() => sendMessage(suggestion)}
+                    className="text-xs px-3 py-1.5 rounded-full transition-all duration-200"
+                    style={{
+                      background: "rgba(201,154,43,0.12)",
+                      border: "1px solid rgba(201,154,43,0.35)",
+                      color: "#f5deb0",
+                      fontFamily: "Switzer, system-ui",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "rgba(201,154,43,0.22)";
+                      e.currentTarget.style.borderColor = "rgba(201,154,43,0.6)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "rgba(201,154,43,0.12)";
+                      e.currentTarget.style.borderColor = "rgba(201,154,43,0.35)";
+                    }}
+                    aria-label={`Choose ${suggestion}`}
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
           {/* Typing indicator */}
           {isLoading && (
             <div className="flex justify-start">
@@ -284,43 +340,6 @@ export default function ChatbotWidget() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Quick suggestions (only shown when just welcome message) */}
-        {messages.length === 1 && !isLoading && (
-          <div className="px-4 pb-2 flex flex-wrap gap-2">
-            {[
-              "Best places to visit 🗺️",
-              "Plan a 7-day trip",
-              "Budget tips 💰",
-              "Best beaches 🏖️",
-            ].map((suggestion) => (
-              <button
-                key={suggestion}
-                onClick={() => {
-                  setInput(suggestion);
-                  setTimeout(() => inputRef.current?.focus(), 50);
-                }}
-                className="text-xs px-3 py-1.5 rounded-full transition-all duration-200"
-                style={{
-                  background: "rgba(201,154,43,0.1)",
-                  border: "1px solid rgba(201,154,43,0.3)",
-                  color: "#c99a2b",
-                  fontFamily: "Switzer, system-ui",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "rgba(201,154,43,0.2)";
-                  e.currentTarget.style.borderColor = "rgba(201,154,43,0.6)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "rgba(201,154,43,0.1)";
-                  e.currentTarget.style.borderColor = "rgba(201,154,43,0.3)";
-                }}
-              >
-                {suggestion}
-              </button>
-            ))}
-          </div>
-        )}
-
         {/* Input */}
         <div
           className="px-3 py-3 shrink-0"
@@ -342,7 +361,7 @@ export default function ChatbotWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask me anything about Sri Lanka..."
+              placeholder="Ask about routes, packages, or transport..."
               disabled={isLoading}
               className="flex-1 bg-transparent text-sm outline-none placeholder:opacity-40"
               style={{
@@ -352,7 +371,7 @@ export default function ChatbotWidget() {
               aria-label="Type your message"
             />
             <button
-              onClick={sendMessage}
+              onClick={() => sendMessage()}
               disabled={!input.trim() || isLoading}
               className="flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 shrink-0"
               style={{
@@ -411,7 +430,7 @@ export default function ChatbotWidget() {
             e.currentTarget.style.boxShadow =
               "0 4px 24px rgba(201,154,43,0.5), 0 0 0 0 rgba(201,154,43,0.3)";
         }}
-        aria-label={isOpen ? "Close chat" : "Open Aba travel assistant"}
+        aria-label={isOpen ? "Close chat" : "Open Aba travel guide"}
         aria-expanded={isOpen}
       >
         {isOpen ? (
