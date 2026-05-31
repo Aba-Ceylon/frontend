@@ -26,9 +26,9 @@ export const metadata: Metadata = {
     url: `${BASE_URL}/contact`,
     images: [
       {
-        url: `${BASE_URL}/og-image.jpg`,
-        width: 1200,
-        height: 630,
+        url: `${BASE_URL}/android-chrome-512x512.webp`,
+        width: 512,
+        height: 512,
         alt: "Contact Aba Ceylon Tours & Travels",
       },
     ],
@@ -38,5 +38,6 @@ export const metadata: Metadata = {
     title: "Contact Aba Ceylon Tours | Plan Your Sri Lanka Trip",
     description:
       "WhatsApp, call, or email our Colombo team to start planning your Sri Lanka holiday.",
+    images: [`${BASE_URL}/android-chrome-512x512.webp`],
   },
 };

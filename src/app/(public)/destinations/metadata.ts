@@ -26,6 +26,6 @@ export const metadata: Metadata = {
     description:
       "Your complete guide to Sri Lanka's best destinations — heritage cities, hill country, beaches, wildlife reserves, and hidden gems.",
     url: `${BASE_URL}/destinations`,
-    images: [{ url: `${BASE_URL}/og-image.jpg`, width: 1200, height: 630, alt: "Sri Lanka destinations guide" }],
+    images: [{ url: `${BASE_URL}/android-chrome-512x512.webp`, width: 512, height: 512, alt: "Sri Lanka destinations guide – Aba Ceylon Tours" }],
   },
 };

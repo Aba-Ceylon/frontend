@@ -47,9 +47,9 @@ export const metadata: Metadata = {
     url: `${BASE_URL}/fleet`,
     images: [
       {
-        url: `${BASE_URL}/og-image.jpg`,
-        width: 1200,
-        height: 630,
+        url: `${BASE_URL}/android-chrome-512x512.webp`,
+        width: 512,
+        height: 512,
         alt: "Premium fleet vehicles – chauffeur hire Sri Lanka",
       },
     ],
@@ -59,6 +59,6 @@ export const metadata: Metadata = {
     title: "Chauffeur Vehicle Hire Sri Lanka | Aba Ceylon Fleet",
     description:
       "Private chauffeur-driven vehicles across Sri Lanka — sedans, SUVs, vans, and convertibles for transfers and touring.",
-    images: [`${BASE_URL}/og-image.jpg`],
+    images: [`${BASE_URL}/android-chrome-512x512.webp`],
   },
 };
