@@ -119,9 +119,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: `${SITE_URL}/og-image.jpg`,
-        width: 1200,
-        height: 630,
+        url: `${SITE_URL}/android-chrome-512x512.webp`,
+        width: 512,
+        height: 512,
         alt: "Aba Ceylon Tours – Sri Lanka travel packages, stays & chauffeur fleet",
       },
     ],
@@ -134,7 +134,7 @@ export const metadata: Metadata = {
       "Aba Ceylon Tours & Travels | Sri Lanka Packages, Stays & Chauffeur Fleet",
     description:
       "Plan your perfect Sri Lanka holiday. Curated tours, heritage stays, and premium chauffeur fleet across the island.",
-    images: [`${SITE_URL}/og-image.jpg`],
+    images: [`${SITE_URL}/android-chrome-512x512.webp`],
     site: "@AbaCeylonTours",
     creator: "@AbaCeylonTours",
   },
@@ -168,7 +168,25 @@ export const metadata: Metadata = {
   generator: "Next.js",
   referrer: "origin-when-cross-origin",
   category: "travel",
+
+  /* ── Icons (Next.js picks these up automatically when placed in src/app/,
+     but declaring them explicitly here ensures they appear in <head> metadata
+     and are used by social crawlers / search engines.) ───────────────────── */
+  icons: {
+    icon: [
+      { url: "/favicon.ico",                   sizes: "any" },
+      { url: "/favicon-16x16.webp",             sizes: "16x16", type: "image/webp" },
+      { url: "/favicon-32x32.webp",             sizes: "32x32", type: "image/webp" },
+      { url: "/android-chrome-192x192.webp",   sizes: "192x192", type: "image/webp" },
+      { url: "/android-chrome-512x512.webp",   sizes: "512x512", type: "image/webp" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.webp", sizes: "180x180", type: "image/webp" },
+    ],
+    shortcut: "/favicon-32x32.webp",
+  },
 };
+
 
 /* ─── Organisation JSON-LD structured data ──────────────────────────────────
    Placed once in the root layout so it appears on every page.
@@ -183,11 +201,11 @@ const organizationJsonLd = {
   url: SITE_URL,
   logo: {
     "@type": "ImageObject",
-    url: `${SITE_URL}/LOGO.jpeg`,
+    url: `${SITE_URL}/android-chrome-512x512.webp`,
     width: 512,
     height: 512,
   },
-  image: `${SITE_URL}/og-image.jpg`,
+  image: `${SITE_URL}/android-chrome-512x512.webp`,
   description:
     "Aba Ceylon Tours & Travels is a Sri Lanka-based travel company offering curated tour packages, heritage accommodation stays, and premium chauffeur-driven vehicle hire across the island.",
   address: {
