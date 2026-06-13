@@ -228,7 +228,7 @@ export default function Footer() {
               href="https://vernoxlabs.com"
               className="text-[#C99A2B]/60 hover:text-[#C99A2B] transition-colors"
             >
-              Vernox Labs Sri Lanka
+              M99Labs Sri Lanka
             </a>
           </div>
         </div>

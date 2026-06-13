@@ -11,6 +11,7 @@ import FeedbackModal from "@/features/feedback/FeedbackModal";
 export default function NavBar() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
@@ -25,9 +26,17 @@ export default function NavBar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
     };
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
 
+    handleResize();
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const navLinks = [
@@ -44,7 +53,7 @@ export default function NavBar() {
       }`}
       style={{
         fontFamily: 'Switzer, system-ui, -apple-system, "Segoe UI"',
-        backgroundColor: isScrolled ? "#1A2238" : "transparent",
+        backgroundColor: isScrolled || isMobile ? "#1A2238" : "transparent",
         transition: "background-color 300ms ease",
       }}
     >

@@ -16,7 +16,7 @@ export default function GatedShell({
 
   return (
     <>
-      {ready && navbar}
+      {navbar}
       <main>{children}</main>
       {ready && footer}
     </>

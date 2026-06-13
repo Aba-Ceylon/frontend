@@ -28,6 +28,16 @@ function SectionSkeleton({
   );
 }
 
+const HowItWorks = dynamic(
+  () => import("@/components/howItWorks/HowItWorks"),
+  { loading: () => <SectionSkeleton title="Loading" /> },
+);
+
+const TrustBar = dynamic(
+  () => import("@/components/trustBar/TrustBar"),
+  { loading: () => <SectionSkeleton className="bg-[#0F172A] text-white" title="Loading" /> },
+);
+
 const InteractiveMap = dynamic(
   () => import("@/components/interactiveSriLanka/InteractiveMap"),
   { ssr: false, loading: () => <SectionSkeleton className="bg-[#0F172A] text-white" title="Loading interactive map" /> },
@@ -66,6 +76,8 @@ const Testimonials = dynamic(
 export default function DeferredHomeSections() {
   return (
     <>
+      <HowItWorks />
+      <TrustBar />
       <InteractiveMap />
       <FeaturedPckgs />
       <FeaturedStays />

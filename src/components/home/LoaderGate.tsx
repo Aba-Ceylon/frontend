@@ -12,18 +12,16 @@ export function useLoaderGate() {
 }
 
 export function LoaderGateProvider({ children }: { children: ReactNode }) {
-  const [ready, setReady] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return sessionStorage.getItem(SESSION_KEY) === "true";
-  });
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (ready) {
+    if (sessionStorage.getItem(SESSION_KEY) === "true") {
+      setReady(true);
       return;
     }
     const id = window.setTimeout(() => setReady(true), GATE_DELAY_MS);
     return () => window.clearTimeout(id);
-  }, [ready]);
+  }, []);
 
   return (
     <LoaderGateContext.Provider value={ready}>
