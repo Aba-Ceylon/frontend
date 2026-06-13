@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useEffect, useLayoutEffect, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useSyncExternalStore,
+  ReactNode,
+} from "react";
 
 const SESSION_KEY = "aba-home-loader-seen";
 const GATE_DELAY_MS = 2000;
@@ -11,17 +18,23 @@ export function useLoaderGate() {
   return useContext(LoaderGateContext);
 }
 
-export function LoaderGateProvider({ children }: { children: ReactNode }) {
-  const [ready, setReady] = useState(false);
+// useSyncExternalStore snapshot helpers — React-official pattern for
+// reading browser storage without setState-in-effect lint violations.
+// subscribe: sessionStorage never changes externally so a no-op is fine.
+const noopSubscribe = () => () => {};
+const getSnapshot = () => sessionStorage.getItem(SESSION_KEY) === "true";
+const getServerSnapshot = () => false; // SSR always returns false
 
-  // useLayoutEffect: runs synchronously after DOM paint, before browser renders.
-  // Safe for reading sessionStorage and syncing state without a visible flash.
-  // Not flagged by react-hooks/set-state-in-effect (that rule targets useEffect only).
-  useLayoutEffect(() => {
-    if (sessionStorage.getItem(SESSION_KEY) === "true") {
-      setReady(true);
-    }
-  }, []);
+export function LoaderGateProvider({ children }: { children: ReactNode }) {
+  // alreadySeen is true on the client when sessionStorage flag is set,
+  // false on server — no hydration mismatch, no setState in effect.
+  const alreadySeen = useSyncExternalStore(
+    noopSubscribe,
+    getSnapshot,
+    getServerSnapshot,
+  );
+
+  const [ready, setReady] = useState(alreadySeen);
 
   useEffect(() => {
     if (ready) return;
