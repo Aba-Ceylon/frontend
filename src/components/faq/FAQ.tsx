@@ -102,22 +102,23 @@ function AccordionItem({ item, isOpen, onToggle }: {
   onToggle: () => void;
 }) {
   return (
-    <div className="border-b border-white/8 last:border-b-0">
+    <div className="border-b border-neutral-100 last:border-b-0">
       <button
         type="button"
         onClick={onToggle}
         className="flex w-full items-start justify-between gap-4 py-5 text-left group"
         aria-expanded={isOpen}
       >
-        <span className="font-cinzel text-sm sm:text-base text-white/90 leading-relaxed group-hover:text-amber-300 transition-colors">
+        <span className="font-cinzel text-sm sm:text-base text-[#0F172A] leading-relaxed group-hover:text-amber-700 transition-colors">
           {item.q}
         </span>
         <span
-          className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/15 transition-all duration-300"
+          className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-all duration-300"
           style={{
-            background: isOpen ? "rgba(201,154,43,0.2)" : "rgba(255,255,255,0.05)",
-            borderColor: isOpen ? "rgba(201,154,43,0.5)" : "rgba(255,255,255,0.15)",
+            background: isOpen ? "rgba(201,154,43,0.15)" : "rgba(15,23,42,0.05)",
+            borderColor: isOpen ? "rgba(201,154,43,0.6)" : "rgba(15,23,42,0.15)",
             transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+            color: isOpen ? "#92600a" : "#0F172A",
           }}
         >
           <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
@@ -131,7 +132,7 @@ function AccordionItem({ item, isOpen, onToggle }: {
         style={{ maxHeight: isOpen ? "400px" : "0px", opacity: isOpen ? 1 : 0 }}
       >
         <p
-          className="pb-5 text-sm leading-7 text-white/55 pr-10"
+          className="pb-5 text-sm leading-7 text-neutral-500 pr-10"
           style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
         >
           {item.a}
@@ -153,7 +154,7 @@ export default function FAQ() {
   const currentItems = FAQ_CATEGORIES[activeCategory].items;
 
   return (
-    <section className="bg-[#0B1221] py-20 sm:py-28 overflow-hidden">
+    <section className="bg-[#F5F2ED] py-20 sm:py-28 overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
 
         {/* ── Top header ───────────────────────────────────────────────── */}
@@ -161,16 +162,16 @@ export default function FAQ() {
           <div>
             <div className="flex items-center gap-3 mb-5">
               <div className="h-px w-8 bg-amber-400/50" />
-              <p className="font-cinzel text-[11px] uppercase tracking-[0.45em] text-amber-400/80">
+              <p className="font-cinzel text-[11px] uppercase tracking-[0.45em] text-amber-700/80">
                 Frequently Asked Questions
               </p>
             </div>
-            <h2 className="font-cinzel text-4xl sm:text-5xl text-white leading-[1.15]">
+            <h2 className="font-cinzel text-4xl sm:text-5xl text-[#0F172A] leading-[1.15]">
               Do you have<br className="hidden sm:block" /> a question?
             </h2>
           </div>
           <p
-            className="text-base leading-7 text-white/50 lg:text-right lg:max-w-sm lg:ml-auto"
+            className="text-base leading-7 text-neutral-500 lg:text-right lg:max-w-sm lg:ml-auto"
             style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
           >
             Can&apos;t find the answer you&apos;re looking for? Write to us directly
@@ -187,9 +188,9 @@ export default function FAQ() {
               onClick={() => { setActiveCategory(i); setOpenIndex(0); }}
               className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-cinzel text-xs uppercase tracking-[0.2em] transition-all duration-200"
               style={{
-                background: activeCategory === i ? "rgba(201,154,43,0.18)" : "rgba(255,255,255,0.05)",
-                border: activeCategory === i ? "1px solid rgba(201,154,43,0.55)" : "1px solid rgba(255,255,255,0.1)",
-                color: activeCategory === i ? "#f5deb0" : "rgba(255,255,255,0.45)",
+                background: activeCategory === i ? "rgba(201,154,43,0.15)" : "rgba(15,23,42,0.05)",
+                border: activeCategory === i ? "1px solid rgba(201,154,43,0.6)" : "1px solid rgba(15,23,42,0.12)",
+                color: activeCategory === i ? "#92600a" : "rgba(15,23,42,0.45)",
               }}
             >
               <span>{cat.icon}</span>
@@ -203,13 +204,13 @@ export default function FAQ() {
 
           {/* Left: active category info + CTA */}
           <div className="lg:sticky lg:top-28 flex flex-col gap-8">
-            <div className="rounded-[1.75rem] border border-white/8 bg-white/4 p-7">
+            <div className="rounded-[1.75rem] border border-neutral-200 bg-white p-7 shadow-sm">
               <span className="text-3xl">{FAQ_CATEGORIES[activeCategory].icon}</span>
-              <h3 className="font-cinzel text-xl text-white mt-4 mb-3">
+              <h3 className="font-cinzel text-xl text-[#0F172A] mt-4 mb-3">
                 {FAQ_CATEGORIES[activeCategory].label}
               </h3>
               <p
-                className="text-sm leading-7 text-white/50"
+                className="text-sm leading-7 text-neutral-500"
                 style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
               >
                 {activeCategory === 0 && "Everything you need to know before making contact — payments, timing, and what to expect from the process."}
@@ -217,9 +218,9 @@ export default function FAQ() {
                 {activeCategory === 2 && "The practical side of Sri Lanka — when to go, how long you need, and what to expect on the ground."}
                 {activeCategory === 3 && "Vehicles, drivers, language, and what happens when plans change mid-trip."}
               </p>
-              <div className="mt-5 h-px w-full bg-white/8" />
+              <div className="mt-5 h-px w-full bg-neutral-100" />
               <p
-                className="mt-5 text-xs text-white/30"
+                className="mt-5 text-xs text-neutral-400"
                 style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
               >
                 {currentItems.length} questions in this section
@@ -227,10 +228,10 @@ export default function FAQ() {
             </div>
 
             {/* Still have questions CTA */}
-            <div className="rounded-[1.75rem] border border-amber-400/20 bg-amber-400/5 p-7">
-              <p className="font-cinzel text-sm text-amber-300 mb-2">Still have a question?</p>
+            <div className="rounded-[1.75rem] border border-amber-300/40 bg-amber-50 p-7">
+              <p className="font-cinzel text-sm text-amber-700 mb-2">Still have a question?</p>
               <p
-                className="text-sm leading-6 text-white/50 mb-5"
+                className="text-sm leading-6 text-neutral-500 mb-5"
                 style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
               >
                 We reply to every message within a few hours — WhatsApp, email, or the contact form.
@@ -249,7 +250,7 @@ export default function FAQ() {
                 </Link>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-5 py-3 font-cinzel text-xs uppercase tracking-[0.2em] text-white/60 transition hover:border-white/25 hover:text-white/90"
+                  className="inline-flex items-center justify-center rounded-full border border-neutral-200 bg-white px-5 py-3 font-cinzel text-xs uppercase tracking-[0.2em] text-neutral-600 transition hover:border-neutral-300 hover:text-neutral-900"
                 >
                   Contact Form
                 </Link>
@@ -258,7 +259,7 @@ export default function FAQ() {
           </div>
 
           {/* Right: accordion */}
-          <div className="rounded-[1.75rem] border border-white/8 bg-white/4 px-7 py-2">
+          <div className="rounded-[1.75rem] border border-neutral-200 bg-white px-7 py-2 shadow-sm">
             {currentItems.map((item, i) => (
               <AccordionItem
                 key={`${activeCategory}-${i}`}
