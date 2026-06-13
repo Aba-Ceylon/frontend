@@ -80,7 +80,7 @@ const BuddhaLotus = dynamic(
 
 const FAQ = dynamic(
   () => import("@/components/faq/FAQ"),
-  { loading: () => <SectionSkeleton className="bg-[#0B1221] text-white" title="Loading FAQ" /> },
+  { loading: () => <SectionSkeleton title="Loading FAQ" /> },
 );
 
 const Testimonials = dynamic(
@@ -93,6 +93,7 @@ export default function DeferredHomeSections() {
     <>
       <WhoWeAre />
       <HowItWorks />
+      <BuddhaLotus />
       <TrustBar />
       <InteractiveMap />
       <WhyChooseUs />
@@ -100,7 +101,6 @@ export default function DeferredHomeSections() {
       <FeaturedStays />
       <FleetSection />
       <CustomPlannerSection />
-      <BuddhaLotus />
       <FAQ />
       <Testimonials />
     </>
