@@ -284,7 +284,7 @@ export default function InteractiveMap() {
   };
 
   return (
-    <section ref={sectionRef} className="relative w-full h-screen bg-slate-50">
+    <section ref={sectionRef} id="map" className="relative w-full h-screen bg-slate-50">
       <div
         ref={mapContainer}
         className="absolute inset-0 z-0"

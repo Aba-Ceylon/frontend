@@ -60,7 +60,7 @@ export default function TrustBar() {
           {/* Avatar */}
           <div className="relative h-16 w-16 shrink-0 rounded-full overflow-hidden border-2 border-amber-400/40 bg-slate-700">
             <Image
-              src="/abaceylon avatar.jpeg"
+              src="/Founder.png"
               alt="Founder of Aba Ceylon Tours"
               fill
               className="object-cover"

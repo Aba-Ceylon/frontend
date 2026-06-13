@@ -30,11 +30,11 @@ export default function WhoWeAre() {
             <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-amber-400/60 to-transparent z-10" />
 
             <Image
-              src="/images/heritage/sigiriya-login.webp"
+              src="/Who.png"
               alt="Aba Ceylon Tours — Sri Lanka heritage landscape with ancient rock fortress and lush greenery"
               fill
               className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              //sizes="(max-width: 1024px) 100vw, 50vw"
             />
 
             {/* Overlay gradient so text on right side stays readable */}

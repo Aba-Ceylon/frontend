@@ -125,7 +125,7 @@ export default function WhyChooseUs() {
             {/* Main image */}
             <div className="relative aspect-[3/4] w-full rounded-[2rem] overflow-hidden">
               <Image
-                src="/images/heritage/sl-image.webp"
+                src="/Why.png"
                 alt="Aba Ceylon Tours — chauffeur and traveller on a scenic Sri Lanka road journey through lush landscape"
                 fill
                 className="object-cover"

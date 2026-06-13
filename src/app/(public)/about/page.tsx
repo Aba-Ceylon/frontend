@@ -63,7 +63,7 @@ export default function AboutPage() {
             backgroundPosition: "center",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0F172A]/80 to-[#0F172A]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0F172A]/20 to-[#0F172A]" />
         <div className="relative mx-auto max-w-4xl px-6 lg:px-10">
           <p className="font-cinzel text-[11px] uppercase tracking-[0.4em] text-amber-400/70 mb-5">
             Our Story
@@ -90,7 +90,7 @@ export default function AboutPage() {
             {/* Photo */}
             <div className="relative aspect-[4/5] w-full max-w-sm mx-auto lg:mx-0 rounded-[2rem] overflow-hidden bg-slate-200">
               <Image
-                src="/abaceylon avatar.jpeg"
+                src="/Founder.png"
                 alt="Founder of Aba Ceylon Tours & Travels"
                 fill
                 className="object-cover"

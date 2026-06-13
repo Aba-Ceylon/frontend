@@ -24,15 +24,15 @@ export default function Footer() {
         { label: "Holiday Packages", href: "/packages" },
         { label: "Stays & Retreats", href: "/stays" },
         { label: "Private Fleet", href: "/fleet" },
-        { label: "Bespoke Activities", href: "/activities" },
+        // { label: "Bespoke Activities", href: "/activities" },
       ],
     },
     {
       title: "Heritage",
       links: [
         { label: "Our Story", href: "/about" },
-        { label: "Destinations", href: "/destinations" },
-        { label: "Sustainability", href: "/sustainability" },
+        { label: "Destinations", href: "#map" },
+        // { label: "Sustainability", href: "/sustainability" },
         { label: "Contact", href: "/contact" },
       ],
     },

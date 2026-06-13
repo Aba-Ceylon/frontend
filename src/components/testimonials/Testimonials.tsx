@@ -43,7 +43,7 @@ export default function Testimonials() {
               </p>
             </div>
             <h2 className="font-cinzel text-4xl sm:text-5xl text-[#0F172A] leading-[1.15]">
-              What our guests<br className="hidden sm:block" /> say about us
+              What our people<br className="hidden sm:block" /> say about us
             </h2>
           </div>
 
