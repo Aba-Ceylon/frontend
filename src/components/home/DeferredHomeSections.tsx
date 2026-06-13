@@ -28,6 +28,11 @@ function SectionSkeleton({
   );
 }
 
+const WhoWeAre = dynamic(
+  () => import("@/components/whoWeAre/WhoWeAre"),
+  { loading: () => <SectionSkeleton className="bg-[#0F172A] text-white" title="Loading" /> },
+);
+
 const HowItWorks = dynamic(
   () => import("@/components/howItWorks/HowItWorks"),
   { loading: () => <SectionSkeleton title="Loading" /> },
@@ -41,6 +46,11 @@ const TrustBar = dynamic(
 const InteractiveMap = dynamic(
   () => import("@/components/interactiveSriLanka/InteractiveMap"),
   { ssr: false, loading: () => <SectionSkeleton className="bg-[#0F172A] text-white" title="Loading interactive map" /> },
+);
+
+const WhyChooseUs = dynamic(
+  () => import("@/components/whyChooseUs/WhyChooseUs"),
+  { loading: () => <SectionSkeleton title="Loading" /> },
 );
 
 const FeaturedPckgs = dynamic(
@@ -68,6 +78,11 @@ const BuddhaLotus = dynamic(
   { ssr: false, loading: () => <SectionSkeleton className="bg-[#05070A] text-white" title="Loading" /> },
 );
 
+const FAQ = dynamic(
+  () => import("@/components/faq/FAQ"),
+  { loading: () => <SectionSkeleton className="bg-[#0B1221] text-white" title="Loading FAQ" /> },
+);
+
 const Testimonials = dynamic(
   () => import("@/components/testimonials/Testimonials"),
   { loading: () => <SectionSkeleton className="bg-[#1A2238] text-white" title="Loading testimonials" /> },
@@ -76,14 +91,17 @@ const Testimonials = dynamic(
 export default function DeferredHomeSections() {
   return (
     <>
+      <WhoWeAre />
       <HowItWorks />
       <TrustBar />
       <InteractiveMap />
+      <WhyChooseUs />
       <FeaturedPckgs />
       <FeaturedStays />
       <FleetSection />
       <CustomPlannerSection />
       <BuddhaLotus />
+      <FAQ />
       <Testimonials />
     </>
   );

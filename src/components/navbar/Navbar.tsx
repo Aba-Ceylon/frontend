@@ -44,6 +44,7 @@ export default function NavBar() {
     { label: "Plan With Us", href: "/#custom-planner" },
     { label: "Fleet", href: "/fleet" },
     { label: "Stays", href: "/stays" },
+    { label: "About", href: "/about" },
   ];
 
   return (
