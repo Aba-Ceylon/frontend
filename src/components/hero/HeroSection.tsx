@@ -15,6 +15,7 @@ export default function HeroSection() {
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
+  const swipeIndicatorRef = useRef<HTMLDivElement>(null);
   const ornamentLeftRef = useRef<HTMLDivElement>(null);
   const ornamentRightRef = useRef<HTMLDivElement>(null);
 
@@ -92,7 +93,7 @@ export default function HeroSection() {
         });
       }
 
-      // Scroll indicator animation
+      // Scroll indicator animation (desktop)
       if (scrollIndicatorRef.current) {
         gsap.to(scrollIndicatorRef.current, {
           y: 10,
@@ -108,6 +109,27 @@ export default function HeroSection() {
             trigger: heroRef.current,
             start: "top top",
             end: "20% top",
+            scrub: true,
+          },
+        });
+      }
+
+      // Swipe indicator animation (mobile)
+      if (swipeIndicatorRef.current) {
+        gsap.to(swipeIndicatorRef.current, {
+          y: -12,
+          duration: 1.2,
+          repeat: -1,
+          yoyo: true,
+          ease: "power1.inOut",
+        });
+
+        gsap.to(swipeIndicatorRef.current, {
+          opacity: 0,
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: "top top",
+            end: "15% top",
             scrub: true,
           },
         });
@@ -256,16 +278,66 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll Indicator — desktop only */}
       <div
         ref={scrollIndicatorRef}
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-amber-100 md:flex flex-col items-center cursor-pointer z-20 hidden"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 text-amber-100 hidden md:flex flex-col items-center cursor-pointer z-20"
       >
-        <div className="w-7 h-12 border-2  rounded-full flex justify-center mb-2 backdrop-blur-sm bg-black/20">
-          <div className="w-1.5 h-4 bg-amber-400 rounded-full mt-2 animate-pulse shadow-lg shadow-amber-400/50"></div>
+        <div className="w-7 h-12 border-2 rounded-full flex justify-center mb-2 backdrop-blur-sm bg-black/20">
+          <div className="w-1.5 h-4 bg-amber-400 rounded-full mt-2 animate-pulse shadow-lg shadow-amber-400/50" />
         </div>
         <span className="text-xs font-cinzel font-semibold tracking-[0.3em] text-white">
           SCROLL
+        </span>
+      </div>
+
+      {/* Swipe Indicator — mobile only */}
+      <div
+        ref={swipeIndicatorRef}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex md:hidden flex-col items-center gap-1.5 z-20 cursor-pointer"
+        onClick={() => window.scrollBy({ top: window.innerHeight, behavior: "smooth" })}
+      >
+        {/* finger + swipe trail */}
+        <div className="flex flex-col items-center gap-0.5">
+          <svg
+            className="swipe-chevron-1 w-4 h-4 text-amber-400"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="18 15 12 9 6 15" />
+          </svg>
+          <svg
+            className="swipe-chevron-2 w-5 h-5 text-amber-400"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="18 15 12 9 6 15" />
+          </svg>
+          <svg
+            className="swipe-chevron-3 w-6 h-6 text-amber-400"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="18 15 12 9 6 15" />
+          </svg>
+        </div>
+        <span className="text-[10px] font-cinzel font-semibold tracking-[0.3em] text-white/80 uppercase">
+          Swipe
         </span>
       </div>
     </section>

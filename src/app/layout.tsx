@@ -8,6 +8,7 @@ import Footer from "../components/layout/Footer";
 import { LoaderGateProvider } from "../components/home/LoaderGate";
 import GatedShell from "../components/home/GatedShell";
 import ChatbotWidget from "../features/chatbot/ChatbotWidget";
+import WhatsAppButton from "../features/whatsapp/WhatsAppButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -339,6 +340,7 @@ export default function RootLayout({
               {children}
             </GatedShell>
             <ChatbotWidget />
+            <WhatsAppButton />
           </LoaderGateProvider>
         </ClerkProvider>
       </body>

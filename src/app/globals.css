@@ -182,3 +182,13 @@ main {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Swipe chevron stagger */
+@keyframes swipeChevron {
+  0%, 100% { opacity: 0.25; }
+  50%       { opacity: 1; }
+}
+
+.swipe-chevron-1 { animation: swipeChevron 1.4s ease-in-out 0s   infinite; }
+.swipe-chevron-2 { animation: swipeChevron 1.4s ease-in-out 0.2s infinite; }
+.swipe-chevron-3 { animation: swipeChevron 1.4s ease-in-out 0.4s infinite; }

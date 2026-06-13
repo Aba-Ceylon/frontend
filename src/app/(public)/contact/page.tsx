@@ -35,12 +35,6 @@ function formReducer(state: FormState, action: FormAction): FormState {
 
 const INITIAL: FormState = { name: "", email: "", phone: "", message: "", consent: false };
 
-const OPENING_HOURS = [
-  { label: "Weekdays", value: "8:00 AM – 5:00 PM (SLST)" },
-  { label: "Saturday", value: "9:00 AM – 1:00 PM (SLST)" },
-  { label: "Sunday", value: "By prior arrangement" },
-];
-
 export default function ContactPage() {
   const [form, dispatch] = useReducer(formReducer, INITIAL);
   const [error, setError] = useReducer((_: string, v: string) => v, "");
@@ -170,18 +164,42 @@ export default function ContactPage() {
             </Card>
 
             <Card variant="glass" className="p-6 sm:p-8">
-              <h2 className="font-cinzel text-3xl text-white sm:text-4xl">Opening Hours</h2>
-              <p className="mt-3 text-base text-white/65" style={SWITZER}>
-                Our Sri Lanka office hours are below. Outside these hours, you can still reach us on WhatsApp or email.
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-400/15 border border-amber-400/30">
+                  <span className="text-lg">🕐</span>
+                </div>
+                <div>
+                  <h2 className="font-cinzel text-2xl text-white sm:text-3xl">Always Available</h2>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#4ade80]" style={{ animation: "pulse 2s ease-in-out infinite" }} />
+                    <span className="text-xs text-emerald-400 font-medium" style={SWITZER}>Open 24 / 7</span>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-sm leading-7 text-white/60 mb-6" style={SWITZER}>
+                We don&apos;t keep office hours. Whether you&apos;re planning from a different timezone or something changes mid-trip at 2am, you can always reach us.
               </p>
-              <div className="mt-7 space-y-3">
-                {OPENING_HOURS.map((slot) => (
-                  <div key={slot.label} className="grid gap-3 rounded-2xl bg-white/8 p-4 text-white sm:grid-cols-[0.95fr_1.05fr] sm:items-center">
-                    <p className="text-base" style={SWITZER}>{slot.label}</p>
-                    <p className="text-base text-white/82" style={SWITZER}>{slot.value}</p>
+
+              <div className="space-y-3">
+                {[
+                  { channel: "WhatsApp", detail: "Fastest response — typically within minutes", color: "#25d366" },
+                  { channel: "Phone / Call", detail: "Available any time, any day", color: "#7fd0ff" },
+                  { channel: "Email", detail: "Response within a few hours", color: "#C99A2B" },
+                ].map((item) => (
+                  <div key={item.channel} className="flex items-center gap-4 rounded-2xl bg-white/6 border border-white/8 px-5 py-4">
+                    <span className="h-2.5 w-2.5 rounded-full shrink-0" style={{ background: item.color, boxShadow: `0 0 8px ${item.color}` }} />
+                    <div>
+                      <p className="font-cinzel text-sm text-white">{item.channel}</p>
+                      <p className="text-xs text-white/45 mt-0.5" style={SWITZER}>{item.detail}</p>
+                    </div>
                   </div>
                 ))}
               </div>
+
+              <p className="mt-5 text-xs text-white/30 text-center" style={SWITZER}>
+                Sri Lanka Standard Time (UTC+5:30) &mdash; we reply across all timezones
+              </p>
             </Card>
           </div>
         </div>

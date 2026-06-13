@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { MessageCircle, X, Send, Loader2 } from "lucide-react";
+import { X, Send, Loader2 } from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
@@ -410,33 +410,39 @@ export default function ChatbotWidget() {
       {/* Floating Toggle Button */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 rounded-full transition-all duration-300"
+        className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 rounded-full overflow-hidden transition-all duration-300"
         style={{
           background: isOpen
             ? "linear-gradient(135deg, #a97b17 0%, #c99a2b 100%)"
-            : "linear-gradient(135deg, #c99a2b 0%, #a97b17 100%)",
+            : "transparent",
           boxShadow: isOpen
             ? "0 4px 20px rgba(201,154,43,0.4)"
-            : "0 4px 24px rgba(201,154,43,0.5), 0 0 0 0 rgba(201,154,43,0.3)",
+            : "0 4px 24px rgba(0,0,0,0.5), 0 0 0 2px rgba(201,154,43,0.5)",
           transform: isOpen ? "scale(0.95)" : "scale(1)",
         }}
         onMouseEnter={(e) => {
           if (!isOpen)
             e.currentTarget.style.boxShadow =
-              "0 6px 28px rgba(201,154,43,0.7), 0 0 0 6px rgba(201,154,43,0.15)";
+              "0 6px 28px rgba(0,0,0,0.6), 0 0 0 3px rgba(201,154,43,0.8)";
         }}
         onMouseLeave={(e) => {
           if (!isOpen)
             e.currentTarget.style.boxShadow =
-              "0 4px 24px rgba(201,154,43,0.5), 0 0 0 0 rgba(201,154,43,0.3)";
+              "0 4px 24px rgba(0,0,0,0.5), 0 0 0 2px rgba(201,154,43,0.5)";
         }}
         aria-label={isOpen ? "Close chat" : "Open Aba travel guide"}
         aria-expanded={isOpen}
       >
-        {isOpen ? (
+      {isOpen ? (
           <X size={22} color="#0a0a0a" strokeWidth={2.5} />
         ) : (
-          <MessageCircle size={22} color="#0a0a0a" strokeWidth={2.5} fill="#0a0a0a" />
+          <Image
+            src="/abaceylon avatar.jpeg"
+            alt="Aba Ceylon chat"
+            width={56}
+            height={56}
+            className="w-full h-full rounded-full object-cover"
+          />
         )}
 
         {/* Unread badge */}

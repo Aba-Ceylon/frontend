@@ -66,6 +66,7 @@ export default function InteractiveMap() {
     useState<Destination | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [isLoadingDestinations, setIsLoadingDestinations] = useState(true);
+  const [legendExpanded, setLegendExpanded] = useState(false);
 
   useEffect(() => {
     if (!sectionRef.current) {
@@ -329,38 +330,83 @@ export default function InteractiveMap() {
 
       <div
         ref={legendRef}
-        className="absolute bottom-4 left-1/2 z-10 w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 rounded-2xl border border-amber-400/20 bg-linear-to-br from-slate-900/95 to-slate-800/95 p-4 shadow-2xl backdrop-blur-md sm:bottom-8 sm:left-8 sm:w-auto sm:max-w-none sm:translate-x-0 sm:p-6"
+        className="absolute bottom-4 left-4 z-10 sm:bottom-8 sm:left-8"
       >
-        <h3 className="mb-4 font-cinzel text-base font-medium tracking-wider text-amber-400">
-          Categories
-        </h3>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-1">
-          {mapLegendItems.map(({ category }) => {
-            const categoryStyle = mapCategoryStyles[category];
+        {/* Collapsed: circle button */}
+        {!legendExpanded && (
+          <button
+            type="button"
+            onClick={() => setLegendExpanded(true)}
+            aria-label="Show map categories"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-amber-400/30 bg-slate-900/95 shadow-2xl backdrop-blur-md transition-transform hover:scale-110 active:scale-95 sm:h-14 sm:w-14"
+          >
+            <svg
+              className="h-5 w-5 text-amber-400 sm:h-6 sm:w-6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <circle cx="5" cy="5" r="1.5" fill="currentColor" stroke="none" />
+              <circle cx="12" cy="5" r="1.5" fill="currentColor" stroke="none" />
+              <circle cx="19" cy="5" r="1.5" fill="currentColor" stroke="none" />
+              <circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none" />
+              <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+              <circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none" />
+              <circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none" />
+              <circle cx="12" cy="19" r="1.5" fill="currentColor" stroke="none" />
+              <circle cx="19" cy="19" r="1.5" fill="currentColor" stroke="none" />
+            </svg>
+          </button>
+        )}
 
-            return (
-              <div
-                key={category}
-                className="flex items-start gap-3 rounded-xl border border-white/8 bg-white/4 p-3"
+        {/* Expanded: full panel */}
+        {legendExpanded && (
+          <div className="w-[calc(100vw-2rem)] max-w-xs rounded-2xl border border-amber-400/20 bg-slate-900/95 p-4 shadow-2xl backdrop-blur-md sm:w-72 sm:p-5">
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="font-cinzel text-sm font-medium tracking-wider text-amber-400 sm:text-base">
+                Categories
+              </h3>
+              <button
+                type="button"
+                onClick={() => setLegendExpanded(false)}
+                aria-label="Hide map categories"
+                className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-white/70 transition-colors hover:bg-white/20 hover:text-white"
               >
-                <div
-                  className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-sm text-white shadow-lg"
-                  style={{ background: categoryStyle.markerColor }}
-                >
-                  <span aria-hidden="true">{categoryStyle.markerIcon}</span>
-                </div>
-                <div className="min-w-0">
-                  <span className="block font-cinzel text-sm tracking-wide text-amber-50">
-                    {getCategoryLabel(category)}
-                  </span>
-                  <span className="block text-xs leading-5 text-amber-50/65">
-                    {getCategoryDescription(category)}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="grid grid-cols-1 gap-2">
+              {mapLegendItems.map(({ category }) => {
+                const categoryStyle = mapCategoryStyles[category];
+                return (
+                  <div
+                    key={category}
+                    className="flex items-start gap-3 rounded-xl border border-white/8 bg-white/4 p-2.5"
+                  >
+                    <div
+                      className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border-2 border-white text-sm text-white shadow-lg"
+                      style={{ background: categoryStyle.markerColor }}
+                    >
+                      <span aria-hidden="true">{categoryStyle.markerIcon}</span>
+                    </div>
+                    <div className="min-w-0">
+                      <span className="block font-cinzel text-xs tracking-wide text-amber-50 sm:text-sm">
+                        {getCategoryLabel(category)}
+                      </span>
+                      <span className="block text-[11px] leading-4 text-amber-50/65 sm:text-xs sm:leading-5">
+                        {getCategoryDescription(category)}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {mapLoaded && !isLoadingDestinations && destinations.length === 0 ? (

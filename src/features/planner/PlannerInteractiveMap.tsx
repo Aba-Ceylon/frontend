@@ -120,6 +120,7 @@ export default function PlannerInteractiveMap({
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [selectedMapDestination, setSelectedMapDestination] =
     useState<Destination | null>(null);
+  const [legendExpanded, setLegendExpanded] = useState(false);
 
   const selectedDestinationSet = useMemo(
     () => new Set(selectedDestinationIds),
@@ -262,34 +263,75 @@ export default function PlannerInteractiveMap({
           </div>
         </div>
 
-        <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-auto sm:max-w-sm">
-          <div className="rounded-2xl border border-white/10 bg-[#020617]/88 p-4 backdrop-blur-md">
-            <h4 className="font-cinzel text-sm uppercase tracking-[0.28em] text-amber-300">
-              Legends
-            </h4>
-            <div className="mt-4 grid grid-cols-2 gap-3">
-              {mapLegendItems.map(({ category }) => {
-                const categoryStyle = mapCategoryStyles[category];
+        <div className="absolute bottom-4 left-4 z-10 sm:bottom-6 sm:left-6">
+          {!legendExpanded && (
+            <button
+              type="button"
+              onClick={() => setLegendExpanded(true)}
+              aria-label="Show map categories"
+              className="flex h-12 w-12 items-center justify-center rounded-full border border-amber-400/30 bg-[#020617]/95 shadow-2xl backdrop-blur-md transition-transform hover:scale-110 active:scale-95 sm:h-14 sm:w-14"
+            >
+              <svg
+                className="h-5 w-5 text-amber-400 sm:h-6 sm:w-6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <circle cx="5" cy="5" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="12" cy="5" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="19" cy="5" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="12" cy="19" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="19" cy="19" r="1.5" fill="currentColor" stroke="none" />
+              </svg>
+            </button>
+          )}
 
-                return (
-                  <div
-                    key={category}
-                    className="flex items-center gap-3 rounded-xl border border-white/8 bg-white/4 px-3 py-2"
-                  >
+          {legendExpanded && (
+            <div className="w-[calc(100vw-2rem)] max-w-xs rounded-2xl border border-white/10 bg-[#020617]/95 p-4 shadow-2xl backdrop-blur-md sm:w-64 sm:p-5">
+              <div className="mb-3 flex items-center justify-between">
+                <h4 className="font-cinzel text-sm uppercase tracking-[0.28em] text-amber-300">
+                  Legends
+                </h4>
+                <button
+                  type="button"
+                  onClick={() => setLegendExpanded(false)}
+                  aria-label="Hide map categories"
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-white/70 transition-colors hover:bg-white/20 hover:text-white"
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="grid grid-cols-1 gap-2">
+                {mapLegendItems.map(({ category }) => {
+                  const categoryStyle = mapCategoryStyles[category];
+                  return (
                     <div
-                      className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-sm text-white"
-                      style={{ background: categoryStyle.markerColor }}
+                      key={category}
+                      className="flex items-center gap-3 rounded-xl border border-white/8 bg-white/4 px-3 py-2"
                     >
-                      <span aria-hidden="true">{categoryStyle.markerIcon}</span>
+                      <div
+                        className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border-2 border-white text-sm text-white"
+                        style={{ background: categoryStyle.markerColor }}
+                      >
+                        <span aria-hidden="true">{categoryStyle.markerIcon}</span>
+                      </div>
+                      <span className="min-w-0 truncate font-cinzel text-xs text-amber-50 sm:text-sm">
+                        {category}
+                      </span>
                     </div>
-                    <span className="min-w-0 truncate text-sm text-amber-50">
-                      {category}
-                    </span>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {selectedMapDestination ? (
