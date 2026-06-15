@@ -1,7 +1,6 @@
+import { redirect } from "next/navigation";
+import { routes } from "@/constants/routes";
+
 export default function LoginPage() {
-  return (
-    <div>
-      <h1>Login</h1>
-    </div>
-  );
+  redirect(routes.signIn);
 }

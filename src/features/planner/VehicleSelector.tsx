@@ -45,7 +45,7 @@ export default function VehicleSelector({
       <ValidationErrors issues={validationIssues} />
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card variant="white" className="rounded-3xl p-6">
+        <Card variant="white" className="p-6">
           <p className="mb-4 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-500">
             Vehicle Type
           </p>
@@ -59,7 +59,7 @@ export default function VehicleSelector({
                   selectedVehicleType === vehicleType ? "primary" : "outline"
                 }
                 onClick={() => onVehicleTypeChange(vehicleType)}
-                className={`rounded-full ${
+                className={`${
                   selectedVehicleType === vehicleType
                     ? "bg-[#0F172A] text-amber-300"
                     : "border-neutral-200 bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
@@ -71,7 +71,7 @@ export default function VehicleSelector({
           </div>
         </Card>
 
-        <Card variant="white" className="rounded-3xl p-6">
+        <Card variant="white" className="p-6">
           <p className="mb-4 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-500">
             Comfort Level
           </p>
@@ -81,7 +81,7 @@ export default function VehicleSelector({
                 key={level.value}
                 type="button"
                 onClick={() => onComfortChange(level.value)}
-                className={`rounded-2xl border p-4 text-left transition ${
+                className={`border p-4 text-left transition ${
                   selectedComfortLevel === level.value
                     ? "border-amber-500 bg-amber-50"
                     : "border-neutral-200 hover:border-amber-200"
@@ -129,7 +129,7 @@ export default function VehicleSelector({
                   key={vehicle.id}
                   type="button"
                   onClick={() => onVehicleSelect(vehicle.id)}
-                  className={`rounded-3xl overflow-hidden border bg-white text-left transition ${
+                  className={`overflow-hidden border bg-white text-left transition ${
                     isSelected
                       ? "border-amber-500 shadow-[0_20px_50px_rgba(201,154,43,0.16)]"
                       : "border-neutral-200 hover:border-amber-200 hover:shadow-lg"
@@ -169,7 +169,7 @@ export default function VehicleSelector({
                       <div className="mb-4 grid grid-cols-2 gap-3 text-sm text-neutral-700">
                         <Card
                           variant="white"
-                          className="rounded-2xl bg-neutral-50 p-3 shadow-none"
+                          className="bg-neutral-50 p-3 shadow-none"
                         >
                           <span className="mb-1 block text-xs uppercase tracking-[0.2em] text-neutral-500">
                             Seats
@@ -178,7 +178,7 @@ export default function VehicleSelector({
                         </Card>
                         <Card
                           variant="white"
-                          className="rounded-2xl bg-neutral-50 p-3 shadow-none"
+                          className="bg-neutral-50 p-3 shadow-none"
                         >
                           <span className="mb-1 block text-xs uppercase tracking-[0.2em] text-neutral-500">
                             Luggage
@@ -207,7 +207,7 @@ export default function VehicleSelector({
         ) : (
           <Card
             variant="white"
-            className="rounded-3xl border-dashed p-8 text-center text-neutral-600"
+            className="border-dashed p-8 text-center text-neutral-600"
           >
             Please select both a vehicle type and comfort level to continue
           </Card>

@@ -32,7 +32,7 @@ export default function PaginationControls({
       <button
         onClick={goPrev}
         disabled={currentPage === 1}
-        className="px-4 py-2 rounded-full border border-[#0b2545]/20 text-[#0b2545] font-cinzel disabled:opacity-45 disabled:cursor-not-allowed hover:bg-[#0b2545] hover:text-white transition"
+        className="border border-[#182231]/14 px-4 py-2 font-cinzel text-[#182231] transition hover:bg-[#182231] hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
       >
         Prev
       </button>
@@ -45,10 +45,10 @@ export default function PaginationControls({
             key={page}
             onClick={() => onPageChange(page)}
             aria-current={active ? "page" : undefined}
-            className={`w-10 h-10 rounded-full font-cinzel transition ${
+            className={`h-10 w-10 font-cinzel transition ${
               active
-                ? "bg-[#0b2545] text-white"
-                : "border border-[#0b2545]/20 text-[#0b2545] hover:bg-[#0b2545] hover:text-white"
+                ? "bg-[#182231] text-white"
+                : "border border-[#182231]/14 text-[#182231] hover:bg-[#182231] hover:text-white"
             }`}
           >
             {page}
@@ -59,7 +59,7 @@ export default function PaginationControls({
       <button
         onClick={goNext}
         disabled={currentPage === totalPages}
-        className="px-4 py-2 rounded-full border border-[#0b2545]/20 text-[#0b2545] font-cinzel disabled:opacity-45 disabled:cursor-not-allowed hover:bg-[#0b2545] hover:text-white transition"
+        className="border border-[#182231]/14 px-4 py-2 font-cinzel text-[#182231] transition hover:bg-[#182231] hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
       >
         Next
       </button>

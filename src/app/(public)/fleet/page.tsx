@@ -76,7 +76,7 @@ export default function FleetPage() {
   const handlePageChange = useCallback((p: number) => setPage(p), []);
 
   return (
-    <div className="bg-noise bg-[#F5F2ED] min-h-screen">
+    <div className="bg-noise min-h-screen bg-white">
       <PageHero
         imageSrc="/images/fleet/fleets.png"
         imageAlt="Premium Fleet Vehicles"
@@ -85,7 +85,7 @@ export default function FleetPage() {
         subtitle="Chauffeured vehicles designed for comfort, elegance, and seamless travel across Sri Lanka."
         height="h-[52vh] sm:h-[58vh]"
       />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+      <div className="mx-auto max-w-[1360px] px-4 py-12 sm:px-6 sm:py-16 lg:px-10">
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {fleetVehicles.map((v) => <VehicleCard key={v.id} vehicle={v} />)}
         </div>

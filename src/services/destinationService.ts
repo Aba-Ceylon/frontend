@@ -40,6 +40,12 @@ const districtLookup = new Map(
   ).map((district) => [normalizeName(district), district]),
 );
 
+function getFallbackDestinations() {
+  return [...destinationMetadataSeeds].sort((left, right) =>
+    left.name.localeCompare(right.name),
+  );
+}
+
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
@@ -335,26 +341,62 @@ function buildDestinationsFromRows(rows: SupabaseDestinationRow[]) {
     .sort((left, right) => left.name.localeCompare(right.name));
 }
 
+let destinationsCache: Destination[] | null = null;
+let destinationsPromise: Promise<Destination[]> | null = null;
+
 export async function fetchDestinations() {
+  if (destinationsCache) {
+    return destinationsCache;
+  }
+
+  if (destinationsPromise) {
+    return destinationsPromise;
+  }
+
+  destinationsPromise = (async () => {
+    try {
+      const supabase = getSupabaseClient();
+      const { data, error } = await supabase
+        .from("destinations")
+        .select("*")
+        .order("destination_id", { ascending: true });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      const rows = (data ?? []) as SupabaseDestinationRow[];
+      const result = !rows.length
+        ? getFallbackDestinations()
+        : buildDestinationsFromRows(rows);
+
+      destinationsCache = result;
+      return result;
+    } catch {
+      const fallback = getFallbackDestinations();
+      destinationsCache = fallback;
+      return fallback;
+    } finally {
+      destinationsPromise = null;
+    }
+  })();
+
+  return destinationsPromise;
+}
+
+export async function fetchDestinationBySlug(slug: string) {
+  const fallbackMatch = getFallbackDestinations().find(
+    (destination) => destination.slug === slug,
+  );
+
   try {
-    const supabase = getSupabaseClient();
-    const { data, error } = await supabase
-      .from("destinations")
-      .select("*")
-      .order("destination_id", { ascending: true });
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    const rows = (data ?? []) as SupabaseDestinationRow[];
-
-    if (!rows.length) {
-      return [];
-    }
-
-    return buildDestinationsFromRows(rows);
+    const destinations = await fetchDestinations();
+    return (
+      destinations.find((destination) => destination.slug === slug) ??
+      fallbackMatch ??
+      null
+    );
   } catch {
-    return [];
+    return fallbackMatch ?? null;
   }
 }

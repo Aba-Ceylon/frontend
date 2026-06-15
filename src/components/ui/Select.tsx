@@ -10,13 +10,13 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 
 export default function Select({ label, options, dark = false, className = "", ...props }: SelectProps) {
   const base = dark
-    ? "w-full rounded-2xl border border-white/12 bg-white px-4 py-3 text-sm text-[#0F172A] outline-none transition focus:border-amber-400/60"
-    : "w-full rounded-2xl border border-neutral-200 bg-white px-4 py-3 text-sm text-[#0F172A] outline-none focus:border-amber-400";
+    ? "w-full border border-[#182231]/14 bg-white px-4 py-3 text-sm text-[#182231] outline-none transition focus:border-[#C99A2B] focus:ring-2 focus:ring-[#C99A2B]/15"
+    : "w-full border border-[#182231]/14 bg-white px-4 py-3 text-sm text-[#182231] outline-none transition focus:border-[#C99A2B] focus:ring-2 focus:ring-[#C99A2B]/15";
 
   return (
     <label className="block">
       {label && (
-        <span className="mb-2 block font-cinzel text-xs uppercase tracking-[0.22em] text-neutral-600">
+        <span className="mb-2 block font-cinzel text-xs uppercase tracking-[0.18em] text-[#182231]/72">
           {label}
         </span>
       )}

@@ -5,9 +5,9 @@ import type { FeedbackRecord } from "@/types/feedback";
 import TestimonialsCarousel, { TestimonialItem } from "./TestimonialsCarousel";
 
 const STATS = [
-  { value: "5.0", label: "Average Rating", sub: "Across all reviews" },
-  { value: "100%", label: "Personal Service", sub: "No call centres" },
-  { value: "24h", label: "Response Time", sub: "WhatsApp or email" },
+  { value: "5.0", label: "Average rating" },
+  { value: "100%", label: "Direct service" },
+  { value: "24h", label: "Typical reply" },
 ];
 
 export default function Testimonials() {
@@ -17,7 +17,9 @@ export default function Testimonials() {
     fetch("/api/feedback/published", { cache: "no-store" })
       .then((r) => r.json())
       .then((data: FeedbackRecord[]) => {
-        if (!Array.isArray(data)) return;
+        if (!Array.isArray(data)) {
+          return;
+        }
         setItems(
           data.map((row) => ({
             quote: row.message,
@@ -30,75 +32,53 @@ export default function Testimonials() {
   }, []);
 
   return (
-    <section className="bg-[#F5F2ED] py-20 sm:py-28 overflow-hidden">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10 mb-14">
-
-        {/* Header */}
-        <div className="grid gap-8 lg:grid-cols-2 lg:items-end">
-          <div>
-            <div className="flex items-center gap-3 mb-5">
-              <div className="h-px w-8 bg-amber-500/50" />
-              <p className="font-cinzel text-[11px] uppercase tracking-[0.45em] text-amber-700/80">
-                Traveller Stories
-              </p>
-            </div>
-            <h2 className="font-cinzel text-4xl sm:text-5xl text-[#0F172A] leading-[1.15]">
-              What our people<br className="hidden sm:block" /> say about us
+    <section className="bg-white py-20 sm:py-28 overflow-hidden">
+      <div className="mx-auto mb-14 max-w-[1360px] px-6 lg:px-10">
+        <div className="grid gap-8 border-b border-[#182231]/10 pb-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
+          <div data-reveal>
+            <p className="font-cinzel text-[11px] uppercase tracking-[0.22em] text-[#C99A2B]">
+              Traveller stories
+            </p>
+            <h2 className="mt-4 font-cinzel text-4xl leading-[1.08] text-[#182231] sm:text-5xl lg:text-[3.4rem]">
+              Trusted in the details, not just the photographs.
             </h2>
           </div>
 
-          <div className="flex flex-col gap-4 lg:items-end">
+          <div data-reveal>
             <p
-              className="text-base leading-7 text-neutral-500 lg:text-right lg:max-w-sm"
+              className="text-base leading-8 text-[#182231]/66"
               style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
             >
-              Real words from real travellers. Every review is from a guest who
-              travelled with us — unedited, unfiltered.
+              Real feedback from travellers who used the route planning,
+              chauffeur support, and on-the-ground coordination behind these
+              journeys.
             </p>
-
-            {/* Stats row */}
-            <div className="flex items-center gap-6 sm:gap-10">
-              {STATS.map((s, i) => (
-                <div key={s.label} className="flex items-center gap-6">
-                  <div className="text-center lg:text-right">
-                    <p className="font-cinzel text-2xl text-[#0F172A]">{s.value}</p>
-                    <p
-                      className="mt-0.5 text-[11px] uppercase tracking-[0.2em] text-neutral-400"
-                      style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
-                    >
-                      {s.label}
-                    </p>
-                  </div>
-                  {i < STATS.length - 1 && (
-                    <div className="h-8 w-px bg-neutral-300/60" />
-                  )}
+            <div className="mt-8 grid grid-cols-3 border border-[#182231]/10">
+              {STATS.map((stat) => (
+                <div key={stat.label} className="border-r border-[#182231]/10 px-4 py-5 last:border-r-0">
+                  <p className="font-cinzel text-2xl text-[#182231]">{stat.value}</p>
+                  <p
+                    className="mt-1 text-[10px] uppercase tracking-[0.16em] text-[#182231]/52"
+                    style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
+                  >
+                    {stat.label}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
         </div>
-
-        {/* Decorative divider */}
-        <div className="mt-10 flex items-center gap-4">
-          <div className="h-px flex-1 bg-neutral-200" />
-          <div className="flex items-center gap-1.5">
-            <div className="h-1.5 w-1.5 rounded-full bg-amber-400/60" />
-            <div className="h-1 w-1 rounded-full bg-amber-400/30" />
-          </div>
-          <div className="h-px flex-1 bg-neutral-200" />
-        </div>
       </div>
 
-      {/* Two-row marquee */}
       <TestimonialsCarousel items={items} />
 
-      {/* Bottom note */}
-      <div className="mx-auto max-w-7xl px-6 lg:px-10 mt-10">
+      <div className="mx-auto mt-10 max-w-[1360px] px-6 lg:px-10" data-reveal>
         <p
-          className="text-center text-sm text-neutral-400"
+          className="text-center text-sm text-[#182231]/54"
           style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
         >
-          All reviews are submitted by verified travellers after completing their journey with Aba Ceylon.
+          Reviews shown here come from published traveller feedback collected
+          after completed journeys.
         </p>
       </div>
     </section>

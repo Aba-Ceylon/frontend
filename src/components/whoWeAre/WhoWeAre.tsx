@@ -5,141 +5,98 @@ import Link from "next/link";
 
 const PILLARS = [
   {
-    label: "Local Routes",
-    description: "Every road we recommend has been personally driven by our team.",
+    label: "Local routes",
+    description: "Every road we recommend has been driven by our own team.",
   },
   {
-    label: "Direct Access",
-    description: "You speak to the person building your trip — not a call centre.",
+    label: "Direct access",
+    description: "You speak to the people who plan and coordinate the journey.",
   },
   {
-    label: "Zero Pressure",
-    description: "We plan your journey for free. You decide when you're ready.",
+    label: "No pressure",
+    description: "We design first and let you decide when the route feels right.",
   },
 ];
 
 export default function WhoWeAre() {
   return (
-    <section className="bg-[#0F172A] overflow-hidden">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <div className="grid lg:grid-cols-2 min-h-[620px]">
-
-          {/* ── Left: Image ───────────────────────────────────────────── */}
-          <div className="relative order-2 lg:order-1 min-h-[340px] lg:min-h-full">
-            {/* Decorative amber border strip */}
-            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-amber-400/60 to-transparent z-10" />
-
+    <section className="section-wash overflow-hidden bg-white">
+      <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
+        <div className="grid gap-12 py-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-center lg:gap-16 lg:py-24">
+          <div
+            className="relative min-h-[380px] overflow-hidden border border-[#182231]/10 lg:min-h-[620px]"
+            data-reveal
+          >
             <Image
-              src="/Who.png"
-              alt="Aba Ceylon Tours — Sri Lanka heritage landscape with ancient rock fortress and lush greenery"
+              src="/LOGO.jpeg"
+              alt="Aba Ceylon Tours landscape"
               fill
               className="object-cover"
-              //sizes="(max-width: 1024px) 100vw, 50vw"
+              sizes="(max-width: 1024px) 100vw, 46vw"
             />
-
-            {/* Overlay gradient so text on right side stays readable */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0F172A]/60" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/70 via-transparent to-transparent lg:hidden" />
-
-            {/* Floating caption badge */}
-            <div className="absolute bottom-6 left-8 z-10">
-              <div className="inline-flex items-center gap-2.5 rounded-full border border-amber-400/30 bg-[#0F172A]/80 px-4 py-2 backdrop-blur-md">
-                <span className="h-2 w-2 rounded-full bg-amber-400 shrink-0" />
-                <span
-                  className="font-cinzel text-[10px] uppercase tracking-[0.3em] text-amber-300/90"
-                >
-                  Sri Lanka &middot; Since Day One
-                </span>
-              </div>
+            <div className="absolute inset-0 bg-linear-to-t from-[#182231]/74 via-transparent to-transparent" />
+            <div className="absolute bottom-6 left-6 border border-[#C99A2B]/40 bg-[#182231] px-4 py-2">
+              <span className="font-cinzel text-[11px] uppercase tracking-[0.18em] text-white">
+                Sri Lanka, planned from within
+              </span>
             </div>
           </div>
 
-          {/* ── Right: Content ────────────────────────────────────────── */}
-          <div className="order-1 lg:order-2 flex flex-col justify-center gap-8 py-16 lg:py-20 lg:pl-16">
-
-            {/* Label */}
-            <div className="flex items-center gap-3">
-              <div className="h-px w-8 bg-amber-400/50" />
-              <p className="font-cinzel text-[11px] uppercase tracking-[0.45em] text-amber-400/80">
-                Aba Ceylon Tours
-              </p>
-            </div>
-
-            {/* Heading */}
-            <div>
-              <h2 className="font-cinzel text-4xl sm:text-5xl text-white leading-[1.15]">
-                Who We Are
-              </h2>
-              <div className="mt-4 flex items-center gap-3">
-                <div className="h-px w-12 bg-amber-400/40" />
-                <div className="h-1.5 w-1.5 rounded-full bg-amber-400/60" />
-                <div className="h-px w-4 bg-amber-400/20" />
-              </div>
-            </div>
-
-            {/* Body */}
-            <div
-              className="flex flex-col gap-5 text-[15px] leading-8 text-white/65 max-w-lg"
+          <div data-reveal>
+            <p className="font-cinzel text-[11px] uppercase tracking-[0.2em] text-[#C99A2B]">
+              Aba Ceylon Tours
+            </p>
+            <h2 className="mt-4 font-cinzel text-4xl leading-[1.1] text-[#182231] sm:text-5xl lg:text-[3.8rem]">
+              We design journeys with a local eye and a quieter kind of luxury.
+            </h2>
+            <p
+              className="mt-6 max-w-2xl text-base leading-8 text-[#182231]/68"
               style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
             >
-              <p>
-                We are a Sri Lanka&ndash;based travel company built on one idea — that the
-                best way to experience this island is through someone who actually lives here.
-                Not a booking platform. Not an overseas agency reselling packages. Us.
-              </p>
-              <p>
-                Every itinerary we create is shaped by real local knowledge — the right time
-                to arrive at Sigiriya before the crowds, the coastal road that no GPS
-                recommends, the family guesthouse in Ella that changes how you see the hill
-                country. We pair that knowledge with a completely personal service, from
-                first message to final drop-off.
-              </p>
-              <p>
-                We are small deliberately. Because when you are small, every traveller
-                matters — and every trip gets the attention it deserves.
-              </p>
-            </div>
+              We are a Sri Lanka-based travel company built around direct
+              planning, thoughtful pacing, and routes shaped by real local
+              knowledge rather than reseller templates. Every itinerary is
+              crafted to feel more personal, more grounded, and easier to trust.
+            </p>
+            <p
+              className="mt-4 max-w-2xl text-base leading-8 text-[#182231]/62"
+              style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
+            >
+              That means knowing when Sigiriya is worth the early start, which
+              road to take when the coast gets busy, and where to stay if you
+              care more about atmosphere than brand logos.
+            </p>
 
-            {/* Pillars */}
-            <div className="grid gap-4 sm:grid-cols-3">
-              {PILLARS.map((p) => (
+            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+              {PILLARS.map((pillar) => (
                 <div
-                  key={p.label}
-                  className="flex flex-col gap-2 rounded-2xl border border-white/8 bg-white/4 px-5 py-5"
+                  key={pillar.label}
+                  className="border border-[#182231]/10 bg-white px-5 py-5"
                 >
-                  <div className="h-0.5 w-6 rounded-full bg-amber-400" />
-                  <p className="font-cinzel text-sm text-white">{p.label}</p>
+                  <div className="mb-3 h-px w-8 bg-[#C99A2B]/70" />
+                  <p className="font-cinzel text-lg text-[#182231]">{pillar.label}</p>
                   <p
-                    className="text-xs leading-5 text-white/50"
+                    className="mt-2 text-sm leading-6 text-[#182231]/62"
                     style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
                   >
-                    {p.description}
+                    {pillar.description}
                   </p>
                 </div>
               ))}
             </div>
 
-            {/* CTA */}
-            <div className="flex items-center gap-6">
-              <Link
-                href="/about"
-                className="inline-flex items-center gap-2 font-cinzel text-xs uppercase tracking-[0.25em] text-amber-400 hover:text-amber-300 transition-colors"
-              >
-                Our Full Story
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
+            <div className="mt-8 flex flex-wrap items-center gap-6">
+              <Link href="/about" className="editorial-link text-[#C99A2B]">
+                Our full story
               </Link>
-              <div className="h-4 w-px bg-white/15" />
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 font-cinzel text-xs uppercase tracking-[0.25em] text-white/50 hover:text-white/80 transition-colors"
+                className="font-cinzel text-[12px] uppercase tracking-[0.14em] text-[#182231]/72 transition-colors hover:text-[#182231]"
               >
-                Get In Touch
+                Get in touch
               </Link>
             </div>
           </div>
-
         </div>
       </div>
     </section>

@@ -11,9 +11,14 @@ interface PlannerStepperProps {
   steps: PlannerStep[];
 }
 
-export default function PlannerStepper({ currentStep, onStepClick, stepValidity, steps }: PlannerStepperProps) {
+export default function PlannerStepper({
+  currentStep,
+  onStepClick,
+  stepValidity,
+  steps,
+}: PlannerStepperProps) {
   return (
-    <Card variant="dark" className="p-4 sm:p-6 shadow-[0_24px_80px_rgba(15,23,42,0.24)]">
+    <Card variant="white" className="p-4 sm:p-6 shadow-[0_20px_50px_rgba(17,24,39,0.05)]">
       <div className="grid gap-3 lg:grid-cols-5">
         {steps.map((step, index) => {
           const isActive = index === currentStep;
@@ -26,27 +31,37 @@ export default function PlannerStepper({ currentStep, onStepClick, stepValidity,
               type="button"
               onClick={() => onStepClick(index)}
               disabled={!isAccessible}
-              className={`rounded-2xl border px-4 py-4 text-left transition ${
+              className={`border px-4 py-4 text-left transition ${
                 isActive
-                  ? "border-amber-400/80 bg-amber-400/10"
+                  ? "border-[#bf9230]/70 bg-amber-50"
                   : isAccessible
-                    ? "border-white/10 bg-white/5 hover:bg-white/8"
-                    : "border-white/5 bg-white/[0.03] opacity-55 cursor-not-allowed"
+                    ? "border-[#182231]/8 bg-[#fffdf8] hover:bg-[#f8f3ea]"
+                    : "border-[#182231]/6 bg-[#f4ecdf]/50 opacity-60 cursor-not-allowed"
               }`}
             >
-              <div className="flex items-center justify-between gap-3 mb-3">
-                <span className={`flex h-8 w-8 items-center justify-center rounded-full font-cinzel text-sm ${isActive || isCompleted ? "bg-amber-400 text-[#0F172A]" : "bg-white/10 text-white/80"}`}>
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <span
+                  className={`flex h-8 w-8 items-center justify-center font-cinzel text-sm ${
+                    isActive || isCompleted
+                      ? "bg-[#182231] text-white"
+                      : "bg-[#f4ecdf] text-[#566173]"
+                  }`}
+                >
                   {index + 1}
                 </span>
                 <Badge
-                  variant={isCompleted ? "green" : "dark"}
-                  className={isCompleted ? "text-emerald-300 bg-transparent border-emerald-400/30" : "text-white/40 bg-transparent border-white/10"}
+                  variant={isCompleted ? "green" : "light"}
+                  className={
+                    isCompleted
+                      ? "border-emerald-300 bg-emerald-100 text-emerald-800"
+                      : "border-[#182231]/8 bg-white text-[#6e7684]"
+                  }
                 >
                   {isCompleted ? "Ready" : "Pending"}
                 </Badge>
               </div>
-              <p className="font-cinzel text-white text-lg">{step.title}</p>
-              <p className="text-sm text-white/60 mt-1">{step.caption}</p>
+              <p className="font-cinzel text-lg text-[#182231]">{step.title}</p>
+              <p className="mt-1 text-sm text-[#566173]">{step.caption}</p>
             </button>
           );
         })}

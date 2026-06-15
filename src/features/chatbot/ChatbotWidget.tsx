@@ -104,14 +104,14 @@ export default function ChatbotWidget() {
     <>
       {/* Chat Window */}
       <div
-        className={`fixed bottom-24 right-6 z-50 flex flex-col transition-all duration-300 ease-in-out ${
+        className={`fixed bottom-24 left-3 right-3 z-50 flex flex-col transition-all duration-300 ease-in-out sm:left-auto sm:right-6 ${
           isOpen
             ? "opacity-100 translate-y-0 pointer-events-auto"
             : "opacity-0 translate-y-4 pointer-events-none"
         }`}
         style={{
-          width: "clamp(320px, 90vw, 400px)",
-          height: "clamp(460px, 70vh, 560px)",
+          width: "min(400px, calc(100vw - 1.5rem))",
+          height: "min(560px, calc(100svh - 7.5rem))",
           borderRadius: "16px",
           background: "linear-gradient(160deg, #111111 0%, #1a1a1a 100%)",
           border: "1px solid rgba(201, 154, 43, 0.3)",
@@ -410,7 +410,7 @@ export default function ChatbotWidget() {
       {/* Floating Toggle Button */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 rounded-full overflow-hidden transition-all duration-300"
+        className="fixed bottom-5 right-4 z-50 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full transition-all duration-300 sm:bottom-6 sm:right-6"
         style={{
           background: isOpen
             ? "linear-gradient(135deg, #a97b17 0%, #c99a2b 100%)"

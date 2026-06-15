@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Users, Briefcase } from "lucide-react";
+import { Briefcase, Users } from "lucide-react";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import type { FleetVehicle } from "@/types/vehicle";
@@ -10,8 +10,11 @@ import type { FleetVehicle } from "@/types/vehicle";
 export default function VehicleCard({ vehicle }: { vehicle: FleetVehicle }) {
   return (
     <Link href={`/fleet/${vehicle.id}`} className="group block h-full" data-fleet-card>
-      <Card variant="white" className="h-full min-h-75 md:min-h-105 rounded-xl overflow-hidden flex flex-col border-[#0b2545]/10">
-        <div className="relative h-44 md:h-52 w-full bg-gray-100 overflow-hidden">
+      <Card
+        variant="white"
+        className="flex h-full min-h-75 flex-col overflow-hidden border-[#0b2545]/10 bg-[#fffdf8] md:min-h-105"
+      >
+        <div className="relative h-48 w-full overflow-hidden bg-gray-100 md:h-56">
           <Image
             src={vehicle.imageUrl}
             alt={vehicle.name}
@@ -20,34 +23,48 @@ export default function VehicleCard({ vehicle }: { vehicle: FleetVehicle }) {
             className="fleet-card-image object-cover transition-transform duration-500"
             loading="lazy"
           />
+          <div className="absolute inset-0 bg-linear-to-t from-black/28 via-transparent to-transparent" />
         </div>
 
-        <div className="p-5 flex flex-col flex-1">
-          <h3 className="font-cinzel text-lg md:text-xl text-[#0b2545] mb-2">{vehicle.name}</h3>
-          <p className="text-neutral-700 text-sm mb-4 line-clamp-2">{vehicle.shortDescription}</p>
+        <div className="flex flex-1 flex-col p-6">
+          <h3 className="mb-2 font-cinzel text-xl text-[#0b2545] md:text-2xl">
+            {vehicle.name}
+          </h3>
+          <p className="mb-5 text-sm leading-7 text-neutral-700">
+            {vehicle.shortDescription}
+          </p>
 
-          <div className="flex items-center gap-3 mb-4 flex-wrap">
-            <Badge variant="light" className="bg-slate-100 text-slate-700 border-slate-200 gap-1.5">
+          <div className="mb-5 flex flex-wrap items-center gap-3">
+            <Badge
+              variant="light"
+              className="gap-1.5 border-slate-200 bg-slate-100 text-slate-700"
+            >
               <Users size={13} />
               {vehicle.passengerCapacity} pax
             </Badge>
-            <Badge variant="light" className="bg-slate-100 text-slate-700 border-slate-200 gap-1.5">
+            <Badge
+              variant="light"
+              className="gap-1.5 border-slate-200 bg-slate-100 text-slate-700"
+            >
               <Briefcase size={13} />
               {vehicle.luggageCapacity} bags
             </Badge>
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-4">
+          <div className="mb-6 flex flex-wrap gap-2">
             {vehicle.features.slice(0, 3).map((feature) => (
-              <span key={feature} className="text-xs text-neutral-600 bg-gray-50 px-2 py-1 rounded border border-gray-100">
+              <span
+                key={feature}
+                className="border border-[#0b2545]/10 bg-[#F4ECDF] px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-[#3B4654]"
+              >
                 {feature}
               </span>
             ))}
           </div>
 
-          <div className="mt-auto pt-4 flex justify-center">
-            <span className="inline-flex w-full max-w-full md:max-w-xs justify-center px-6 py-3 rounded-full font-cinzel text-sm bg-amber-400 text-[#0b2545] transition-colors duration-300 group-hover:bg-[#0b2545] group-hover:text-white">
-              View More Details
+          <div className="mt-auto flex justify-center border-t border-[#0b2545]/10 pt-5">
+            <span className="inline-flex w-full max-w-full justify-center bg-[#C99A2B] px-6 py-3 font-cinzel text-[11px] uppercase tracking-[0.2em] text-[#0b2545] transition-colors duration-300 group-hover:bg-[#0b2545] group-hover:text-white md:max-w-xs">
+              View vehicle details
             </span>
           </div>
         </div>

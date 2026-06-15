@@ -26,7 +26,7 @@ export default function AccommodationChoice({
         <button
           type="button"
           onClick={() => onModeChange("own")}
-          className={`rounded-3xl border p-6 text-left transition ${
+          className={`border p-6 text-left transition ${
             accommodationMode === "own"
               ? "border-amber-500 bg-amber-50 shadow-[0_20px_50px_rgba(201,154,43,0.16)]"
               : "border-neutral-200 bg-white hover:border-amber-200"
@@ -44,7 +44,7 @@ export default function AccommodationChoice({
         <button
           type="button"
           onClick={() => onModeChange("recommended")}
-          className={`rounded-3xl border p-6 text-left transition ${
+          className={`border p-6 text-left transition ${
             accommodationMode === "recommended"
               ? "border-amber-500 bg-amber-50 shadow-[0_20px_50px_rgba(201,154,43,0.16)]"
               : "border-neutral-200 bg-white hover:border-amber-200"
@@ -60,11 +60,11 @@ export default function AccommodationChoice({
         </button>
       </div>
 
-      <Card className="rounded-3xl border border-[#0F172A]/10 bg-[#0F172A] p-6 text-white">
+      <Card className="border border-[#182231]/8 bg-[#f8f3ea] p-6 text-[#182231]">
         <p className="font-cinzel text-sm uppercase tracking-[0.24em] text-amber-300 mb-3">
           Planner Note
         </p>
-        <p className="whitespace-pre-line leading-7 text-black/80">
+        <p className="whitespace-pre-line leading-7 text-[#445062]">
           {accommodationNote}
         </p>
       </Card>

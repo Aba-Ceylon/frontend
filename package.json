@@ -2,11 +2,27 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "browserslist": {
+    "production": [
+      "chrome >= 109",
+      "edge >= 109",
+      "firefox >= 115",
+      "safari >= 16.4",
+      "ios_saf >= 16.4",
+      "android >= 109"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "node --import tsx --test \"src/**/*.test.ts\"",
     "format": "npx prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\" && npx eslint --fix . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
@@ -35,6 +51,7 @@
     "eslint-config-next": "16.1.6",
     "prettier": "^3.8.0",
     "tailwindcss": "^4.2.1",
+    "tsx": "^4.22.4",
     "typescript": "^5"
   }
 }

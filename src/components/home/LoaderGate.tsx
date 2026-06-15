@@ -1,49 +1,95 @@
 "use client";
 
 import {
+  ReactNode,
   createContext,
   useContext,
   useEffect,
   useState,
   useSyncExternalStore,
-  ReactNode,
 } from "react";
+import {
+  ensureHomeExperiencePreloaded,
+  subscribeHomePreloadProgress,
+} from "./homePreload";
 
 const SESSION_KEY = "aba-home-loader-seen";
-const GATE_DELAY_MS = 2000;
 
-const LoaderGateContext = createContext(false);
+type LoaderGateState = {
+  progress: number;
+  ready: boolean;
+};
+
+const LoaderGateContext = createContext<LoaderGateState>({
+  progress: 0,
+  ready: false,
+});
 
 export function useLoaderGate() {
-  return useContext(LoaderGateContext);
+  return useContext(LoaderGateContext).ready;
 }
 
-// useSyncExternalStore snapshot helpers — React-official pattern for
-// reading browser storage without setState-in-effect lint violations.
-// subscribe: sessionStorage never changes externally so a no-op is fine.
+export function useLoaderProgress() {
+  return useContext(LoaderGateContext).progress;
+}
+
 const noopSubscribe = () => () => {};
 const getSnapshot = () => sessionStorage.getItem(SESSION_KEY) === "true";
-const getServerSnapshot = () => false; // SSR always returns false
+const getServerSnapshot = () => false;
 
 export function LoaderGateProvider({ children }: { children: ReactNode }) {
-  // alreadySeen is true on the client when sessionStorage flag is set,
-  // false on server — no hydration mismatch, no setState in effect.
   const alreadySeen = useSyncExternalStore(
     noopSubscribe,
     getSnapshot,
     getServerSnapshot,
   );
 
-  const [ready, setReady] = useState(alreadySeen);
+  const [state, setState] = useState<LoaderGateState>({
+    progress: alreadySeen ? 1 : 0,
+    ready: alreadySeen,
+  });
 
   useEffect(() => {
-    if (ready) return;
-    const id = window.setTimeout(() => setReady(true), GATE_DELAY_MS);
-    return () => window.clearTimeout(id);
-  }, [ready]);
+    if (alreadySeen) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const unsubscribe = subscribeHomePreloadProgress((progress) => {
+      if (cancelled) {
+        return;
+      }
+
+      setState((previous) => ({
+        ...previous,
+        progress,
+      }));
+    });
+
+    void ensureHomeExperiencePreloaded()
+      .catch(() => undefined)
+      .then(() => {
+        if (cancelled) {
+          return;
+        }
+
+        sessionStorage.setItem(SESSION_KEY, "true");
+        setState({ progress: 1, ready: true });
+      });
+
+    return () => {
+      cancelled = true;
+      unsubscribe();
+    };
+  }, [alreadySeen]);
+
+  const contextValue = alreadySeen
+    ? { progress: 1, ready: true }
+    : state;
 
   return (
-    <LoaderGateContext.Provider value={ready}>
+    <LoaderGateContext.Provider value={contextValue}>
       {children}
     </LoaderGateContext.Provider>
   );

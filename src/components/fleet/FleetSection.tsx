@@ -35,18 +35,20 @@ export default function FleetSection() {
     useCarousel({ items: fleetVehicles, gap: 24, autoPlayMs: 5200 });
 
   return (
-    <section id="fleet" className="overflow-hidden bg-[#F5F2ED] py-24">
-      <div className="mx-auto px-6">
+    <section id="fleet" className="overflow-hidden bg-white py-24">
+      <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
         <SectionHeader
-          title="Premium Fleet"
-          description="Chauffeured luxury vehicles for seamless journeys across Sri Lanka."
+          align="left"
+          eyebrow="On-road comfort"
+          title="Vehicles chosen to suit the route, not fill a brochure."
+          description="Private transport options for couples, families, and longer island routes, matched around comfort, luggage, and travel rhythm."
         />
 
         <div className="flex items-center gap-4">
           <button
             onClick={() => slideTo(-1)}
             disabled={fleetVehicles.length <= 1}
-            className="hidden h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-neutral-300 text-neutral-800 transition hover:bg-neutral-100 disabled:opacity-40 md:flex"
+            className="hidden h-10 w-10 shrink-0 cursor-pointer items-center justify-center border border-[#182231]/14 text-[#182231] transition hover:bg-[#182231] hover:text-white disabled:opacity-40 md:flex"
             aria-label="Previous"
           >
             <LucideArrowLeft size={16} />
@@ -70,29 +72,28 @@ export default function FleetSection() {
           <button
             onClick={() => slideTo(1)}
             disabled={fleetVehicles.length <= 1}
-            className="hidden h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-neutral-300 text-neutral-800 transition hover:bg-neutral-100 disabled:opacity-40 md:flex"
+            className="hidden h-10 w-10 shrink-0 cursor-pointer items-center justify-center border border-[#182231]/14 text-[#182231] transition hover:bg-[#182231] hover:text-white disabled:opacity-40 md:flex"
             aria-label="Next"
           >
             <LucideArrowRight size={16} />
           </button>
         </div>
 
-        {isLoading && <p className="mt-6 text-center text-sm text-neutral-600">Loading fleet...</p>}
+        {isLoading && <p className="mt-6 text-center text-sm text-[#182231]/62">Loading fleet...</p>}
         {!isLoading && error && <p className="mt-6 text-center text-sm text-red-500">{error}</p>}
         {!isLoading && !error && fleetVehicles.length === 0 && (
-          <p className="mt-6 text-center text-sm text-neutral-600">No fleet vehicles available right now.</p>
+          <p className="mt-6 text-center text-sm text-[#182231]/62">No fleet vehicles available right now.</p>
         )}
 
         <div className="flex justify-center gap-2 mt-6">
           {fleetVehicles.map((_, i) => (
-            <span key={i} className={`w-2.5 h-2.5 rounded-full transition-all ${i === dotIndex ? "bg-neutral-800 scale-125" : "bg-neutral-300"}`} />
+            <span key={i} className={`h-2.5 transition-all ${i === dotIndex ? "w-8 bg-[#182231]" : "w-2.5 bg-[#182231]/16"}`} />
           ))}
         </div>
 
         <div className="text-center mt-8">
-          <Link href="/fleet" className="inline-flex items-center px-6 py-3 font-cinzel text-neutral-800 transition hover:text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]">
+          <Link href="/fleet" className="editorial-link text-[#182231]">
             Explore Full Fleet
-            <LucideArrowRight size={16} className="ml-2" />
           </Link>
         </div>
       </div>

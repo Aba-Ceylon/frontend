@@ -213,7 +213,7 @@ export default function PlannerPage() {
   return (
     <div
       ref={pageRef}
-      className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,rgba(246,235,216,0.54)_0%,rgba(245,242,237,0.44)_38%,rgba(232,226,215,0.58)_100%)]"
+      className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.4)_0%,rgba(246,240,230,0.9)_38%,rgba(239,230,216,0.92)_100%)]"
     >
       <div
         ref={pageBackgroundRef}
@@ -226,7 +226,7 @@ export default function PlannerPage() {
       <div className="relative max-w-7xl mx-auto px-6 py-12 sm:py-16">
         <div
           ref={heroRef}
-          className="rounded-[2rem] overflow-hidden border border-[#0F172A]/10 bg-[#0F172A] shadow-[0_30px_120px_rgba(15,23,42,0.28)]"
+          className="overflow-hidden border border-[#182231]/8 bg-[#f8f3ea] shadow-[0_24px_70px_rgba(17,24,39,0.06)]"
         >
           <div className="relative min-h-[440px] sm:min-h-[500px]">
             <div
@@ -234,8 +234,8 @@ export default function PlannerPage() {
               className="absolute inset-0 scale-[1.08] bg-cover bg-center bg-no-repeat"
               style={{ backgroundImage: "url('/planner.png')" }}
             />
-            <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(10,15,28,0.72),rgba(15,23,42,0.56),rgba(8,12,20,0.68))]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(201,154,43,0.28),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(201,154,43,0.18),transparent_30%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(246,240,230,0.94),rgba(246,240,230,0.78),rgba(246,240,230,0.42))]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(191,146,48,0.18),transparent_24%)]" />
             <div
               ref={heroContentRef}
               className="relative flex min-h-[440px] sm:min-h-[500px] items-end px-6 py-12 sm:px-10 sm:py-14"
@@ -243,27 +243,27 @@ export default function PlannerPage() {
               <div className="max-w-4xl">
                 <div className="mb-8 flex items-center gap-4">
                   <div className="h-px w-14 bg-gradient-to-r from-transparent to-amber-300" />
-                  <span className="font-cinzel text-xs uppercase tracking-[0.34em] text-amber-300">
+                  <span className="font-cinzel text-xs uppercase tracking-[0.34em] text-amber-700">
                     Protected Journey Planner
                   </span>
                   <div className="h-px w-14 bg-gradient-to-l from-transparent to-amber-300" />
                 </div>
-                <h1 className="font-cinzel text-4xl sm:text-6xl text-white leading-tight">
+                <h1 className="font-cinzel text-4xl sm:text-6xl text-[#182231] leading-tight">
                   Curate A Fully Custom Sri Lanka Journey
                 </h1>
-                <p className="mt-5 max-w-2xl text-white/82 text-base sm:text-lg leading-8">
+                <p className="mt-5 max-w-2xl text-[#445062] text-base sm:text-lg leading-8">
                   Build your own route, match it with the right chauffeur
                   vehicle, decide how accommodation should work, and send the
                   full request straight to the ABA Ceylon team through WhatsApp.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/80 backdrop-blur-sm">
+                  <span className="border border-[#182231]/8 bg-[rgba(255,253,248,0.84)] px-4 py-2 text-sm text-[#445062]">
                     Signed-in planner access
                   </span>
-                  <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/80 backdrop-blur-sm">
+                  <span className="border border-[#182231]/8 bg-[rgba(255,253,248,0.84)] px-4 py-2 text-sm text-[#445062]">
                     Multi-destination custom route
                   </span>
-                  <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/80 backdrop-blur-sm">
+                  <span className="border border-[#182231]/8 bg-[rgba(255,253,248,0.84)] px-4 py-2 text-sm text-[#445062]">
                     WhatsApp-ready request summary
                   </span>
                 </div>
@@ -283,10 +283,10 @@ export default function PlannerPage() {
 
         <div
           ref={panelRef}
-          className="mt-8 rounded-[2rem] border border-white/55 bg-[rgba(252,250,246,0.74)] backdrop-blur-md p-6 sm:p-8 shadow-[0_24px_80px_rgba(15,23,42,0.12)]"
+          className="mt-8 border border-[#182231]/8 bg-[rgba(255,253,248,0.84)] backdrop-blur-md p-6 sm:p-8 shadow-[0_24px_80px_rgba(15,23,42,0.06)]"
         >
           {isLoading ? (
-            <div className="rounded-3xl border border-neutral-200 bg-white p-10 text-center">
+            <div className="border border-neutral-200 bg-white p-10 text-center">
               <p className="font-cinzel text-2xl text-[#0F172A] mb-3">
                 Loading Planner Data
               </p>
@@ -296,7 +296,7 @@ export default function PlannerPage() {
               </p>
             </div>
           ) : loadingError ? (
-            <div className="rounded-3xl border border-red-200 bg-red-50 p-8">
+            <div className="border border-red-200 bg-red-50 p-8">
               <p className="font-cinzel text-2xl text-red-900 mb-3">
                 Planner Data Couldn&apos;t Load
               </p>
@@ -313,7 +313,7 @@ export default function PlannerPage() {
                   />
 
                   <div className="grid gap-4 lg:grid-cols-2">
-                    <Card variant="white" className="rounded-3xl p-5">
+                    <Card variant="white" className="p-5">
                       <Input
                         label="Arrival Date In Sri Lanka"
                         type="date"
@@ -324,7 +324,7 @@ export default function PlannerPage() {
                       />
                     </Card>
 
-                    <Card variant="white" className="rounded-3xl p-5">
+                    <Card variant="white" className="p-5">
                       <Input
                         label="Total Days In Sri Lanka"
                         type="number"
@@ -339,7 +339,7 @@ export default function PlannerPage() {
                       />
                     </Card>
 
-                    <Card variant="white" className="rounded-3xl p-5">
+                    <Card variant="white" className="p-5">
                       <Input
                         label="Travel Start Date"
                         type="date"
@@ -351,7 +351,7 @@ export default function PlannerPage() {
                       />
                     </Card>
 
-                    <Card variant="white" className="rounded-3xl p-5">
+                    <Card variant="white" className="p-5">
                       <Input
                         label="Travel Days With Driver"
                         type="number"
@@ -368,7 +368,7 @@ export default function PlannerPage() {
                   </div>
 
                   <div className="grid gap-4 xl:grid-cols-4">
-                    <Card variant="white" className="rounded-3xl p-6">
+                    <Card variant="white" className="p-6">
                       <p className="mb-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600">
                         Travel Window
                       </p>
@@ -378,7 +378,7 @@ export default function PlannerPage() {
                           : "Choose a travel start date"}
                       </p>
                     </Card>
-                    <Card variant="white" className="rounded-3xl p-6">
+                    <Card variant="white" className="p-6">
                       <p className="mb-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600">
                         Sri Lanka Departure
                       </p>
@@ -387,7 +387,7 @@ export default function PlannerPage() {
                           "Choose your arrival and stay duration"}
                       </p>
                     </Card>
-                    <Card variant="white" className="rounded-3xl p-6">
+                    <Card variant="white" className="p-6">
                       <p className="mb-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600">
                         Minimum Stay Needed
                       </p>
@@ -400,7 +400,7 @@ export default function PlannerPage() {
                         duration.
                       </p>
                     </Card>
-                    <Card variant="white" className="rounded-3xl p-6">
+                    <Card variant="white" className="p-6">
                       <p className="mb-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600">
                         Signed-in Traveler
                       </p>
@@ -423,7 +423,7 @@ export default function PlannerPage() {
                   form.travelStartDate ? (
                     <Card
                       variant="glass"
-                      className="rounded-3xl border border-emerald-200/70 bg-emerald-50/80 p-5"
+                      className="border border-emerald-200/70 bg-emerald-50/80 p-5"
                     >
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div>
@@ -516,7 +516,7 @@ export default function PlannerPage() {
                   variant="outline"
                   onClick={goToPreviousStep}
                   disabled={currentStep === 0}
-                  className="rounded-2xl border-neutral-300 text-neutral-700 hover:bg-white"
+                  className="border-neutral-300 text-neutral-700 hover:bg-white"
                 >
                   Previous
                 </Button>
@@ -532,7 +532,6 @@ export default function PlannerPage() {
                       variant="primary"
                       onClick={handleContinue}
                       disabled={!canContinue}
-                      className="rounded-2xl"
                     >
                       Continue
                     </Button>
@@ -542,7 +541,7 @@ export default function PlannerPage() {
                     href={whatsappHref}
                     target="_blank"
                     rel="noreferrer"
-                    className="rounded-2xl bg-[#0F172A] px-6 py-3 font-cinzel text-sm uppercase tracking-[0.24em] text-amber-300 transition hover:bg-[#18243D]"
+                    className="bg-[#182231] px-6 py-3 font-cinzel text-sm uppercase tracking-[0.24em] text-white transition hover:bg-[#243142]"
                   >
                     Open WhatsApp Request
                   </a>

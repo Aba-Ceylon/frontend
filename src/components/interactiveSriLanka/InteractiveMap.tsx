@@ -1,16 +1,16 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { destinations as fallbackDestinations } from "@/data/destinations";
 import { fetchDestinations } from "@/services/destinationService";
 import type { Destination } from "@/types/destination";
 import DestinationPanel from "./DestinationPanel";
 import {
   getMapLegendCategory,
-  type MapLegendCategory,
   mapCategoryStyles,
   mapLegendItems,
 } from "./mapCategoryUtils";
@@ -54,6 +54,20 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+function renderMarkerMarkup(markerColor: string) {
+  return `
+    <div class="marker-pin" style="
+      width: 18px;
+      height: 18px;
+      background: ${markerColor};
+      border: 2px solid rgba(255,255,255,0.94);
+      box-shadow: 0 0 0 5px rgba(5,7,10,0.14), 0 12px 24px rgba(5,7,10,0.22);
+      transition: transform 0.24s ease, box-shadow 0.24s ease;
+      transform-origin: center center;
+    "></div>
+  `;
+}
+
 export default function InteractiveMap() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -61,12 +75,14 @@ export default function InteractiveMap() {
   const legendRef = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<maplibregl.Marker[]>([]);
-  const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [destinations, setDestinations] =
+    useState<Destination[]>(fallbackDestinations);
   const [selectedDestination, setSelectedDestination] =
     useState<Destination | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [isLoadingDestinations, setIsLoadingDestinations] = useState(true);
   const [legendExpanded, setLegendExpanded] = useState(false);
+  const hasDestinations = destinations.length > 0;
 
   useEffect(() => {
     if (!sectionRef.current) {
@@ -175,34 +191,17 @@ export default function InteractiveMap() {
         mapCategoryStyles[getMapLegendCategory(destination)];
       const markerElement = document.createElement("div");
       markerElement.className = "custom-marker";
-      markerElement.style.width = "40px";
-      markerElement.style.height = "40px";
+      markerElement.style.width = "18px";
+      markerElement.style.height = "18px";
       markerElement.style.cursor = "pointer";
-
-      markerElement.innerHTML = `
-        <div class="marker-pin" style="
-          width: 40px;
-          height: 40px;
-          background: ${categoryStyle.markerColor};
-          border: 3px solid white;
-          border-radius: 50%;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.3s ease;
-          transform-origin: center center;
-        ">
-          <span style="color: white; font-size: 18px; line-height: 1;">
-            ${categoryStyle.markerIcon}
-          </span>
-        </div>
-      `;
+      markerElement.innerHTML = renderMarkerMarkup(categoryStyle.markerColor);
 
       markerElement.addEventListener("mouseenter", () => {
         const pin = markerElement.querySelector(".marker-pin") as HTMLElement;
         if (pin) {
-          pin.style.transform = "scale(1.2)";
+          pin.style.transform = "scale(1.22)";
+          pin.style.boxShadow =
+            "0 0 0 7px rgba(5,7,10,0.14), 0 18px 30px rgba(5,7,10,0.28)";
         }
       });
 
@@ -210,6 +209,8 @@ export default function InteractiveMap() {
         const pin = markerElement.querySelector(".marker-pin") as HTMLElement;
         if (pin) {
           pin.style.transform = "scale(1)";
+          pin.style.boxShadow =
+            "0 0 0 5px rgba(5,7,10,0.14), 0 12px 24px rgba(5,7,10,0.22)";
         }
       });
 
@@ -249,49 +250,19 @@ export default function InteractiveMap() {
     }
   };
 
-  const getCategoryLabel = (category: MapLegendCategory) => {
-    switch (category) {
-      case "Heritage":
-        return "Heritage";
-      case "Nature":
-        return "Nature";
-      case "Coastal":
-        return "Coastal";
-      case "Adventure":
-        return "Adventure";
-      case "City":
-        return "City";
-      default:
-        return category;
-    }
-  };
-
-  const getCategoryDescription = (category: MapLegendCategory) => {
-    switch (category) {
-      case "Heritage":
-        return "Explore Sri Lanka's rich cultural heritage sites";
-      case "Nature":
-        return "Discover stunning natural landscapes and wildlife";
-      case "Coastal":
-        return "Relax on pristine beaches and coastal areas";
-      case "Adventure":
-        return "Experience thrilling adventures and outdoor activities";
-      case "City":
-        return "Explore vibrant cities and urban destinations";
-      default:
-        return "";
-    }
-  };
-
   return (
-    <section ref={sectionRef} id="map" className="relative w-full h-screen bg-slate-50">
+    <section
+      ref={sectionRef}
+      id="map"
+      className="relative h-[100svh] min-h-[680px] w-full bg-slate-50"
+    >
       <div
         ref={mapContainer}
         className="absolute inset-0 z-0"
         style={{ width: "100%", height: "100%" }}
       />
 
-      {(!mapLoaded || isLoadingDestinations) && (
+      {!mapLoaded && (
         <div className="absolute inset-0 z-5 flex items-center justify-center bg-linear-to-br from-slate-900 to-slate-800">
           <div className="text-center">
             <div className="mx-auto mb-6 h-20 w-20 animate-spin rounded-full border-4 border-amber-500 border-t-transparent" />
@@ -304,13 +275,13 @@ export default function InteractiveMap() {
 
       <div
         ref={headerRef}
-        className="absolute top-0 left-0 right-0 z-10 pointer-events-none bg-linear-to-b from-black/70 via-black/50 to-transparent p-4 sm:p-6 md:p-12"
+        className="pointer-events-none absolute left-0 right-0 top-0 z-10 bg-linear-to-b from-black/70 via-black/50 to-transparent p-4 sm:p-6 md:p-12"
       >
-        <div className="max-w-7xl mx-auto">
+        <div className="mx-auto max-w-7xl">
           <div className="mb-4 flex items-center gap-3">
             <div className="h-px w-12 bg-amber-400" />
-            <div className="h-2 w-2 rounded-full bg-amber-400" />
-            <div className="h-2 w-2 rounded-full bg-amber-400" />
+            <div className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+            <div className="h-1.5 w-1.5 rounded-full bg-amber-400" />
           </div>
 
           <h2 className="mb-3 font-cinzel text-3xl font-medium tracking-wide text-amber-100 drop-shadow-2xl sm:text-4xl md:mb-4 md:text-6xl">
@@ -319,6 +290,13 @@ export default function InteractiveMap() {
           <p className="max-w-2xl pr-4 text-sm font-light leading-6 tracking-wide text-amber-50/90 sm:pr-0 sm:text-base md:text-xl md:leading-relaxed">
             Explore destinations across Sri Lanka and plan your perfect journey
           </p>
+
+          {isLoadingDestinations ? (
+            <div className="mt-4 inline-flex items-center gap-2 border border-amber-400/20 bg-black/35 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.24em] text-amber-100/85 backdrop-blur-sm">
+              <span className="h-1.5 w-1.5 animate-pulse bg-amber-400" />
+              Refreshing live locations
+            </div>
+          ) : null}
 
           <div className="mt-4 flex items-center gap-2">
             <div className="h-1 w-1 rounded-full bg-amber-400" />
@@ -332,13 +310,12 @@ export default function InteractiveMap() {
         ref={legendRef}
         className="absolute bottom-4 left-4 z-10 sm:bottom-8 sm:left-8"
       >
-        {/* Collapsed: circle button */}
         {!legendExpanded && (
           <button
             type="button"
             onClick={() => setLegendExpanded(true)}
             aria-label="Show map categories"
-            className="flex h-12 w-12 items-center justify-center rounded-full border border-amber-400/30 bg-slate-900/95 shadow-2xl backdrop-blur-md transition-transform hover:scale-110 active:scale-95 sm:h-14 sm:w-14"
+            className="flex h-12 w-12 items-center justify-center border border-amber-400/30 bg-slate-900/95 shadow-2xl backdrop-blur-md transition-transform hover:scale-105 active:scale-95 sm:h-14 sm:w-14"
           >
             <svg
               className="h-5 w-5 text-amber-400 sm:h-6 sm:w-6"
@@ -361,9 +338,8 @@ export default function InteractiveMap() {
           </button>
         )}
 
-        {/* Expanded: full panel */}
         {legendExpanded && (
-          <div className="w-[calc(100vw-2rem)] max-w-xs rounded-2xl border border-amber-400/20 bg-slate-900/95 p-4 shadow-2xl backdrop-blur-md sm:w-72 sm:p-5">
+          <div className="w-[calc(100vw-2rem)] max-w-xs border border-amber-400/20 bg-slate-900/95 p-4 shadow-2xl backdrop-blur-md sm:w-72 sm:p-5">
             <div className="mb-3 flex items-center justify-between">
               <h3 className="font-cinzel text-sm font-medium tracking-wider text-amber-400 sm:text-base">
                 Categories
@@ -372,33 +348,45 @@ export default function InteractiveMap() {
                 type="button"
                 onClick={() => setLegendExpanded(false)}
                 aria-label="Hide map categories"
-                className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-white/70 transition-colors hover:bg-white/20 hover:text-white"
+                className="flex h-8 w-8 items-center justify-center border border-white/10 bg-white/5 text-white/70 transition-colors hover:bg-white/10 hover:text-white"
               >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
             <div className="grid grid-cols-1 gap-2">
-              {mapLegendItems.map(({ category }) => {
+              {mapLegendItems.map(({ category, description }) => {
                 const categoryStyle = mapCategoryStyles[category];
+
                 return (
                   <div
                     key={category}
-                    className="flex items-start gap-3 rounded-xl border border-white/8 bg-white/4 p-2.5"
+                    className="flex items-start gap-3 border border-white/8 bg-white/4 p-3"
                   >
-                    <div
-                      className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border-2 border-white text-sm text-white shadow-lg"
-                      style={{ background: categoryStyle.markerColor }}
-                    >
-                      <span aria-hidden="true">{categoryStyle.markerIcon}</span>
+                    <div className="pt-1.5">
+                      <span
+                        className="block h-2.5 w-2.5 border border-white/70"
+                        style={{ background: categoryStyle.markerColor }}
+                      />
                     </div>
                     <div className="min-w-0">
                       <span className="block font-cinzel text-xs tracking-wide text-amber-50 sm:text-sm">
-                        {getCategoryLabel(category)}
+                        {category}
                       </span>
                       <span className="block text-[11px] leading-4 text-amber-50/65 sm:text-xs sm:leading-5">
-                        {getCategoryDescription(category)}
+                        {description}
                       </span>
                     </div>
                   </div>
@@ -409,9 +397,9 @@ export default function InteractiveMap() {
         )}
       </div>
 
-      {mapLoaded && !isLoadingDestinations && destinations.length === 0 ? (
+      {mapLoaded && !isLoadingDestinations && !hasDestinations ? (
         <div className="absolute inset-x-4 top-1/2 z-10 -translate-y-1/2 sm:left-1/2 sm:max-w-xl sm:-translate-x-1/2">
-          <div className="rounded-[1.75rem] border border-white/10 bg-slate-900/88 p-6 text-center shadow-2xl backdrop-blur-md sm:p-8">
+          <div className="border border-white/10 bg-slate-900/88 p-6 text-center shadow-2xl backdrop-blur-md sm:p-8">
             <p className="font-cinzel text-xs uppercase tracking-[0.32em] text-amber-400">
               Discover
             </p>

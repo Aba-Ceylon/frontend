@@ -1189,8 +1189,3 @@ export const destinations: Destination[] = destinationSeeds.map(
     ...destination,
   }),
 );
-
-export const packages = [];
-export const vehicles = [];
-export const stays = [];
-export const activities = [];

@@ -45,7 +45,7 @@ export default function StaysPage() {
   const handlePageChange = useCallback((p: number) => setPage(p), []);
 
   return (
-    <div className="bg-noise bg-[#F5F2ED] min-h-screen">
+    <div className="bg-noise min-h-screen bg-white">
       <PageHero
         imageSrc="/staysbanner.png"
         imageAlt="Curated Heritage Stays"
@@ -53,7 +53,7 @@ export default function StaysPage() {
         title="Curated Heritage Stays"
         subtitle="Stay within the story of Sri Lanka, not outside it!"
       />
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="mx-auto max-w-[1360px] px-6 py-16 lg:px-10">
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {paginatedStays.map((stay) => (
             <StayCard key={stay.id} stay={stay} />

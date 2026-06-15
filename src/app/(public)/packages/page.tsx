@@ -46,7 +46,7 @@ export default function PackagesPage() {
   const handlePageChange = useCallback((p: number) => setPage(p), []);
 
   return (
-    <div className="bg-noise bg-[#F5F2ED] min-h-screen">
+    <div className="bg-noise min-h-screen bg-white">
       <PageHero
         imageSrc="/allPckgs.png"
         imageAlt="Holiday Packages"
@@ -54,7 +54,7 @@ export default function PackagesPage() {
         title="Explore Our Curated Travel Packages"
         subtitle="Handcrafted journeys across Sri Lanka's heritage, hills, wildlife, and coastlines."
       />
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="mx-auto max-w-[1360px] px-6 py-16 lg:px-10">
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {paginatedPackages.map((pkg) => (
             <PackageCard key={pkg.id} pkg={pkg} />

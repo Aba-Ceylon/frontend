@@ -16,72 +16,98 @@ export default function FeaturedStays() {
   useEffect(() => {
     let active = true;
     void fetchStays().then((loaded) => {
-      if (!active || !loaded.length) return;
+      if (!active || !loaded.length) {
+        return;
+      }
       setStayItems(loaded);
     });
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, []);
 
-  const { stripRef, containerRef, cloned, dotIndex, cardWidth, gap, slideTo, onPointerDown, onPointerUp } =
-    useCarousel({ items: stayItems, gap: 24, autoPlayMs: 3500 });
+  const {
+    stripRef,
+    containerRef,
+    cloned,
+    dotIndex,
+    cardWidth,
+    gap,
+    slideTo,
+    onPointerDown,
+    onPointerUp,
+  } = useCarousel({ items: stayItems, gap: 24, autoPlayMs: 3500 });
 
   return (
-    <section className="py-24 bg-[#1A2238]">
-      <div className="mx-auto px-6">
-        <SectionHeader
-          title="Accommodation in Sri Lanka"
-          description="Stay within the story of Sri Lanka, not outside it"
-          titleClassName="text-5xl font-medium font-cinzel text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]"
-          descriptionClassName="text-lg font-cinzel text-amber-50/70"
-        />
+    <section className="ink-grid py-20 sm:py-28">
+      <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
+        <div className="grid gap-8 lg:grid-cols-[320px_minmax(0,1fr)] lg:items-end lg:gap-10">
+          <div data-reveal>
+            <SectionHeader
+              eyebrow="Accommodation"
+              align="left"
+              title="Places that hold the mood of the island."
+              description="Boutique stays, heritage houses, and retreat-style escapes selected for atmosphere, location, and how they fit the route."
+              titleClassName="font-cinzel text-4xl font-medium leading-tight text-[#182231] sm:text-5xl lg:text-[3.45rem]"
+              descriptionClassName="mx-auto max-w-2xl text-base leading-8 text-[#445062] sm:text-lg"
+              className="mb-0"
+            />
 
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => slideTo(-1)}
-            className="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-amber-400/30 text-amber-400 hover:bg-amber-400/10 transition cursor-pointer"
-            aria-label="Previous"
-          >
-            <LucideArrowLeft size={16} />
-          </button>
-
-          <div
-            ref={containerRef}
-            className="relative overflow-hidden flex-1 cursor-grab active:cursor-grabbing select-none"
-            onPointerDown={onPointerDown}
-            onPointerUp={onPointerUp}
-          >
-            <div ref={stripRef} className="flex" style={{ gap, willChange: "transform" }}>
-              {cloned.map((stay, i) => (
-                <div key={`${stay.id}-${i}`} className="shrink-0" style={{ width: cardWidth }}>
-                  <StayCard stay={stay} />
-                </div>
-              ))}
+            <div className="mt-8 flex items-center gap-3">
+              <button
+                onClick={() => slideTo(-1)}
+                className="flex h-11 w-11 items-center justify-center border border-[#182231]/12 text-[#182231] transition hover:bg-[#182231] hover:text-white"
+                aria-label="Previous"
+              >
+                <LucideArrowLeft size={16} />
+              </button>
+              <button
+                onClick={() => slideTo(1)}
+                className="flex h-11 w-11 items-center justify-center border border-[#182231]/12 text-[#182231] transition hover:bg-[#182231] hover:text-white"
+                aria-label="Next"
+              >
+                <LucideArrowRight size={16} />
+              </button>
             </div>
           </div>
 
-          <button
-            onClick={() => slideTo(1)}
-            className="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-amber-400/30 text-amber-400 hover:bg-amber-400/10 transition cursor-pointer"
-            aria-label="Next"
-          >
-            <LucideArrowRight size={16} />
-          </button>
-        </div>
+          <div className="min-w-0" data-reveal>
+            <div
+              ref={containerRef}
+              className="relative overflow-hidden cursor-grab select-none active:cursor-grabbing"
+              onPointerDown={onPointerDown}
+              onPointerUp={onPointerUp}
+            >
+              <div ref={stripRef} className="flex" style={{ gap, willChange: "transform" }}>
+                {cloned.map((stay, i) => (
+                  <div
+                    key={`${stay.id}-${i}`}
+                    className="max-w-full shrink-0"
+                    style={{ width: cardWidth, minWidth: cardWidth }}
+                  >
+                    <StayCard stay={stay} />
+                  </div>
+                ))}
+              </div>
+            </div>
 
-        <div className="flex justify-center gap-2 mt-6">
-          {stayItems.map((stay, i) => (
-            <span
-              key={stay.id}
-              className={`w-2.5 h-2.5 rounded-full transition-all ${i === dotIndex ? "bg-amber-400 scale-125" : "bg-amber-400/25"}`}
-            />
-          ))}
-        </div>
+            <div className="mt-7 flex flex-col items-center justify-between gap-5 sm:flex-row">
+              <div className="flex gap-2">
+                {stayItems.map((stay, i) => (
+                  <span
+                    key={stay.id}
+                    className={`h-2.5 transition-all ${
+                      i === dotIndex ? "w-8 bg-[#C99A2B]" : "w-2.5 bg-[#182231]/18"
+                    }`}
+                  />
+                ))}
+              </div>
 
-        <div className="text-center mt-8">
-          <Link href="/stays" className="inline-flex items-center px-6 py-3 font-cinzel text-amber-400 drop-shadow-[0_0_30px_rgba(201,154,43,0.5)] hover:text-white transition">
-            Discover All Stays
-            <LucideArrowRight size={16} className="ml-2" />
-          </Link>
+              <Link href="/stays" className="editorial-link text-[#182231]">
+                Discover all stays
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>

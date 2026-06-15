@@ -1,24 +1,36 @@
-@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Switzer:wght@300;400;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Switzer:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #f5f5f5;
+  --background: #ffffff;
+  --foreground: #121920;
+  --surface-cream: #ffffff;
+  --surface-cream-strong: #f7f7f5;
+  --surface-paper: #ffffff;
+  --surface-ink: #05070a;
+  --surface-navy: #182231;
+  --surface-navy-soft: #243142;
+  --line-soft: rgba(24, 34, 49, 0.12);
+  --copy-muted: rgba(18, 25, 32, 0.68);
+  --copy-dark: #1f2937;
+  --font-geist-sans: "Switzer", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-geist-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   --royal-gold: #c99a2b;
   --antique-bronze: #a97b17;
   --heritage-amber: #c99a2b;
-  --color-amber-50: #fcf7e6;
-  --color-amber-100: #f8ebc7;
-  --color-amber-200: #ecd38e;
-  --color-amber-300: #ddb65a;
+  --whatsapp-green: #25d366;
+  --color-amber-50: #fbf7ed;
+  --color-amber-100: #f5e9cc;
+  --color-amber-200: #e8cf95;
+  --color-amber-300: #d8b45b;
   --color-amber-400: #c99a2b;
-  --color-amber-500: #b8891f;
-  --color-amber-600: #a97b17;
-  --color-amber-700: #896212;
-  --color-amber-800: #6d4d0f;
-  --color-amber-900: #553b0a;
-  --color-amber-950: #2f2005;
-  --color-yellow-300: #ddb65a;
+  --color-amber-500: #b98920;
+  --color-amber-600: #9d7319;
+  --color-amber-700: #7d5b14;
+  --color-amber-800: #61460f;
+  --color-amber-900: #49350c;
+  --color-amber-950: #281d07;
+  --color-yellow-300: #d8b45b;
   --color-yellow-400: #c99a2b;
   --color-yellow-500: #c99a2b;
   --color-yellow-600: #a97b17;
@@ -31,19 +43,20 @@
   --font-mono: var(--font-geist-mono);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: "Cormorant Garamond", Georgia, serif;
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-}
-
 html,
 body {
   width: 100%;
   max-width: 100%;
   overflow-x: clip;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Switzer", system-ui, -apple-system, "Segoe UI", sans-serif;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
 }
 
 main {
@@ -52,19 +65,35 @@ main {
   overflow-x: clip;
 }
 
-/* Custom Scrollbar */
+::selection {
+  background: rgba(201, 154, 43, 0.18);
+  color: #182231;
+}
+
+a,
+button,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img {
+  user-select: none;
+}
+
 ::-webkit-scrollbar {
   width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a1a;
+  background: #f1f1ee;
 }
 
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, var(--royal-gold), var(--antique-bronze));
-  border-radius: 6px;
-  border: 2px solid #1a1a1a;
+  border-radius: 0;
+  border: 2px solid #f1f1ee;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -76,24 +105,109 @@ main {
 }
 
 .font-garamond {
-  font-family: "Cormorant Garamond", serif;
+  font-family: "Switzer", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 .text-shadow {
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .text-shadow-gold {
   text-shadow:
-    0 0 20px rgba(212, 175, 55, 0.5),
-    0 0 40px rgba(212, 175, 55, 0.3);
+    0 0 16px rgba(201, 154, 43, 0.28),
+    0 0 30px rgba(201, 154, 43, 0.14);
+}
+
+.luxury-kicker {
+  font-family: "Cinzel", serif;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.luxury-divider {
+  height: 1px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(201, 154, 43, 0.74) 48%,
+      transparent 100%
+    );
+}
+
+.luxury-panel {
+  border: 1px solid rgba(24, 34, 49, 0.1);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 22px 60px rgba(17, 24, 39, 0.06);
+}
+
+.luxury-card {
+  border: 1px solid rgba(24, 34, 49, 0.1);
+  background: #ffffff;
+  box-shadow: 0 18px 44px rgba(17, 24, 39, 0.04);
+}
+
+.section-wash {
+  position: relative;
+  isolation: isolate;
+}
+
+.section-wash::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at top left, rgba(201, 154, 43, 0.08), transparent 24%),
+    linear-gradient(180deg, rgba(24, 34, 49, 0.02), rgba(24, 34, 49, 0));
+}
+
+.cream-grid {
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(rgba(24, 34, 49, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24, 34, 49, 0.03) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+.ink-grid {
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(rgba(24, 34, 49, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24, 34, 49, 0.028) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+.editorial-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: "Cinzel", serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.editorial-link::after {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 1px;
+  background: rgba(201, 154, 43, 0.74);
+  transition:
+    width 240ms ease,
+    opacity 240ms ease;
+}
+
+.editorial-link:hover::after {
+  width: 3.5rem;
+  opacity: 1;
 }
 
 .bg-gradient-radial {
   background: radial-gradient(circle, var(--tw-gradient-stops));
 }
 
-/* Royal Border Animation */
 @keyframes borderGlow {
   0%,
   100% {
@@ -104,8 +218,8 @@ main {
   50% {
     box-shadow:
       0 0 10px var(--royal-gold),
-      0 0 20px var(--royal-gold),
-      0 0 30px var(--royal-gold);
+      0 0 18px var(--royal-gold),
+      0 0 24px var(--royal-gold);
   }
 }
 
@@ -113,17 +227,15 @@ main {
   animation: borderGlow 3s ease-in-out infinite;
 }
 
-/* Map marker animations */
 .custom-marker {
   transition: transform 0.3s ease;
 }
 
 .custom-marker:hover {
-  transform: scale(1.2);
+  transform: scale(1.1);
   z-index: 10;
 }
 
-/* Panel slide up animation */
 @keyframes slideUp {
   from {
     opacity: 0;
@@ -139,7 +251,6 @@ main {
   animation: slideUp 0.3s ease-out;
 }
 
-/* Noise texture overlay */
 .bg-noise {
   position: relative;
 }
@@ -150,7 +261,7 @@ main {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.045;
+  opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 180px 180px;
@@ -161,15 +272,13 @@ main {
   z-index: 1;
 }
 
-/* Antique Paper Texture */
 .antique-texture {
   background-image:
-    linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(201, 154, 43, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 154, 43, 0.02) 1px, transparent 1px);
   background-size: 20px 20px;
 }
 
-/* Fade in on scroll */
 .fade-in-scroll {
   opacity: 0;
   transform: translateY(30px);
@@ -183,12 +292,39 @@ main {
   transform: translateY(0);
 }
 
-/* Swipe chevron stagger */
-@keyframes swipeChevron {
-  0%, 100% { opacity: 0.25; }
-  50%       { opacity: 1; }
+[data-reveal] {
+  will-change: transform, opacity;
 }
 
-.swipe-chevron-1 { animation: swipeChevron 1.4s ease-in-out 0s   infinite; }
-.swipe-chevron-2 { animation: swipeChevron 1.4s ease-in-out 0.2s infinite; }
-.swipe-chevron-3 { animation: swipeChevron 1.4s ease-in-out 0.4s infinite; }
+@keyframes swipeChevron {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.swipe-chevron-1 {
+  animation: swipeChevron 1.4s ease-in-out 0s infinite;
+}
+
+.swipe-chevron-2 {
+  animation: swipeChevron 1.4s ease-in-out 0.2s infinite;
+}
+
+.swipe-chevron-3 {
+  animation: swipeChevron 1.4s ease-in-out 0.4s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

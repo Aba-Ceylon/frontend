@@ -19,55 +19,38 @@ export default function DestinationPanel({
 }: DestinationPanelProps) {
   const displayCategory = getMapLegendCategory(destination);
   const categoryStyle = mapCategoryStyles[displayCategory];
-  const displayCategoryLabel = (() => {
-    switch (displayCategory) {
-      case "Heritage":
-        return "Heritage";
-      case "Nature":
-        return "Nature";
-      case "Coastal":
-        return "Coastal";
-      case "Adventure":
-        return "Adventure";
-      case "City":
-        return "City";
-      default:
-        return displayCategory;
-    }
-  })();
 
-  // Close on Escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+      }
     };
+
     window.addEventListener("keydown", handleEscape);
     return () => window.removeEventListener("keydown", handleEscape);
   }, [onClose]);
 
   return (
     <>
-      {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/20 z-20 backdrop-blur-sm"
+        className="absolute inset-0 z-20 bg-black/20 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* Panel */}
-      <div className="absolute inset-x-0 top-3 bottom-3 z-30 flex items-center justify-center px-3 sm:top-4 sm:bottom-4 sm:px-4">
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl h-full max-h-full overflow-hidden animate-slideUp sm:rounded-3xl">
+      <div className="absolute inset-x-0 bottom-3 top-3 z-30 flex items-center justify-center px-3 sm:bottom-4 sm:top-4 sm:px-4">
+        <div className="h-full max-h-full w-full max-w-3xl overflow-hidden bg-[#FBF8F2] shadow-2xl animate-slideUp">
           <div className="flex h-full flex-col">
-            {/* Header */}
             <div
-              className={`${categoryStyle.bgClass} relative p-4 pr-14 text-white sm:p-6 sm:pr-16`}
+              className={`${categoryStyle.bgClass} relative border-b border-black/10 p-4 pr-14 text-white sm:p-6 sm:pr-16`}
             >
               <button
                 onClick={onClose}
-                className="absolute top-3 right-3 h-9 w-9 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors sm:top-4 sm:right-4 sm:h-10 sm:w-10"
+                className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center border border-white/18 bg-white/10 transition-colors hover:bg-white/18 sm:right-4 sm:top-4 sm:h-10 sm:w-10"
                 aria-label="Close destination panel"
               >
                 <svg
-                  className="w-5 h-5 sm:w-6 sm:h-6"
+                  className="h-5 w-5 sm:h-6 sm:w-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -82,56 +65,54 @@ export default function DestinationPanel({
               </button>
 
               <div>
-                <div className="inline-flex px-3 py-1 bg-white/20 rounded-full text-xs sm:text-sm font-medium mb-3 font-cinzel uppercase tracking-[0.2em]">
-                  {displayCategoryLabel}
+                <div className="mb-3 inline-flex border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] sm:text-sm">
+                  {displayCategory}
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-bold mb-2 font-cinzel pr-2">
+                <h2 className="pr-2 font-cinzel text-2xl font-bold sm:text-3xl">
                   {destination.name}
                 </h2>
-                <p className="text-white/90 text-sm sm:text-lg leading-6 sm:leading-7 font-cinzel">
+                <p className="mt-2 font-cinzel text-sm leading-6 text-white/90 sm:text-lg sm:leading-7">
                   {destination.summary}
                 </p>
               </div>
             </div>
 
-            {/* Content */}
             <div className="flex-1 overflow-y-auto p-4 sm:p-6">
               <div className="mb-6 flex flex-wrap gap-2">
                 <span
-                  className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold tracking-[0.18em] uppercase ${categoryStyle.softClass}`}
+                  className={`inline-flex px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${categoryStyle.softClass}`}
                 >
-                  {displayCategoryLabel}
+                  {displayCategory}
                 </span>
-                <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold tracking-[0.14em] uppercase text-slate-700">
+                <span className="inline-flex border border-[#182231]/10 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-700">
                   {destination.region}
                 </span>
-                <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold tracking-[0.14em] uppercase text-slate-700">
+                <span className="inline-flex border border-[#182231]/10 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-700">
                   {destination.district}
                 </span>
               </div>
-              {/* Description */}
+
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 font-cinzel">
+                <h3 className="mb-2 font-cinzel text-lg font-semibold text-gray-900">
                   About
                 </h3>
-                <p className="text-gray-700 leading-relaxed font-cinzel">
+                <p className="font-cinzel leading-relaxed text-gray-700">
                   {destination.description}
                 </p>
               </div>
 
-              {/* Highlights */}
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3 font-cinzel">
+                <h3 className="mb-3 font-cinzel text-lg font-semibold text-gray-900">
                   Key Highlights
                 </h3>
                 <ul className="space-y-2">
                   {destination.highlights.map((highlight, index) => (
                     <li key={index} className="flex items-start gap-3">
                       <span
-                        className={`${categoryStyle.bgClass} w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5`}
+                        className={`${categoryStyle.bgClass} mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center`}
                       >
                         <svg
-                          className="w-4 h-4 text-white"
+                          className="h-4 w-4 text-white"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -144,7 +125,7 @@ export default function DestinationPanel({
                           />
                         </svg>
                       </span>
-                      <span className="text-gray-700 font-cinzel">
+                      <span className="font-cinzel text-gray-700">
                         {highlight}
                       </span>
                     </li>
@@ -152,11 +133,10 @@ export default function DestinationPanel({
                 </ul>
               </div>
 
-              {/* Best Time to Visit */}
-              <div className="mb-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                <h3 className="text-sm font-semibold text-blue-900 mb-1 flex items-center gap-2 font-cinzel">
+              <div className="mb-6 border border-[#182231]/10 bg-white p-4">
+                <h3 className="mb-1 flex items-center gap-2 font-cinzel text-sm font-semibold text-[#182231]">
                   <svg
-                    className="w-5 h-5"
+                    className="h-5 w-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -170,18 +150,15 @@ export default function DestinationPanel({
                   </svg>
                   Best Time to Visit
                 </h3>
-                <p className="text-blue-800 font-cinzel">
+                <p className="font-cinzel text-[#445062]">
                   {destination.bestTimeToVisit}
                 </p>
               </div>
 
-              {/* Why Visit */}
-              <div
-                className={`p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border-l-4 ${categoryStyle.borderClass}`}
-              >
-                <h3 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2 font-cinzel">
+              <div className={`border ${categoryStyle.borderClass} bg-white p-4`}>
+                <h3 className="mb-2 flex items-center gap-2 font-cinzel text-sm font-semibold text-gray-900">
                   <svg
-                    className="w-5 h-5"
+                    className="h-5 w-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -195,17 +172,16 @@ export default function DestinationPanel({
                   </svg>
                   Why Visit
                 </h3>
-                <p className="text-gray-700 leading-relaxed font-cinzel">
+                <p className="font-cinzel leading-relaxed text-gray-700">
                   {destination.whyVisit}
                 </p>
               </div>
             </div>
 
-            {/* Footer Actions */}
-            <div className="p-4 sm:p-6 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col gap-3 border-t border-[#182231]/10 bg-white p-4 sm:flex-row sm:p-6">
               <button
                 onClick={onClose}
-                className="flex-1 px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors font-cinzel"
+                className="flex-1 border border-[#182231]/18 bg-white px-6 py-3 font-cinzel font-medium text-gray-700 transition-colors hover:bg-gray-50"
               >
                 Close
               </button>
@@ -213,7 +189,7 @@ export default function DestinationPanel({
                 type="button"
                 onClick={onAction}
                 disabled={!onAction}
-                className={`flex-1 px-6 py-3 ${categoryStyle.bgClass} text-white rounded-lg font-medium transition-opacity font-cinzel ${
+                className={`flex-1 px-6 py-3 font-cinzel font-medium text-white transition-opacity ${categoryStyle.bgClass} ${
                   onAction
                     ? "hover:opacity-90"
                     : "cursor-not-allowed opacity-60"
