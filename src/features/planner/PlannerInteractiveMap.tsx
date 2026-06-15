@@ -51,6 +51,27 @@ interface PlannerInteractiveMapProps {
   selectedDestinationIds: string[];
 }
 
+function renderPlannerMarkerMarkup(markerColor: string, isSelected: boolean) {
+  return `
+    <div
+      class="planner-map-marker-core"
+      style="
+        width: 18px;
+        height: 18px;
+        background: ${markerColor};
+        border: ${isSelected ? "3px" : "2px"} solid rgba(255,255,255,0.94);
+        box-shadow: ${
+          isSelected
+            ? "0 0 0 6px rgba(15,23,42,0.22), 0 14px 34px rgba(15,23,42,0.34)"
+            : "0 0 0 5px rgba(15,23,42,0.14), 0 10px 24px rgba(15,23,42,0.26)"
+        };
+        transition: transform 180ms ease, box-shadow 180ms ease;
+        transform-origin: center center;
+      "
+    ></div>
+  `;
+}
+
 function createMarkerElement(
   destination: Destination,
   isSelected: boolean,
@@ -73,23 +94,15 @@ function createMarkerElement(
   markerPin.className = "planner-map-marker-pin";
   markerPin.style.width = "50px";
   markerPin.style.height = "50px";
-  markerPin.style.borderRadius = "9999px";
-  markerPin.style.background = categoryStyle.markerColor;
-  markerPin.style.border = isSelected
-    ? "4px solid rgba(251, 191, 36, 0.96)"
-    : "3px solid rgba(255, 255, 255, 0.94)";
-  markerPin.style.boxShadow = isSelected
-    ? "0 0 0 4px rgba(15,23,42,0.22), 0 14px 34px rgba(15,23,42,0.34)"
-    : "0 10px 24px rgba(15,23,42,0.26)";
   markerPin.style.display = "flex";
   markerPin.style.alignItems = "center";
   markerPin.style.justifyContent = "center";
-  markerPin.style.color = "white";
-  markerPin.style.fontSize = "20px";
-  markerPin.style.lineHeight = "1";
   markerPin.style.transition = "transform 180ms ease, box-shadow 180ms ease";
   markerPin.style.transform = isSelected ? "scale(1.14)" : "scale(1)";
-  markerPin.innerHTML = `<span aria-hidden="true">${categoryStyle.markerIcon}</span>`;
+  markerPin.innerHTML = renderPlannerMarkerMarkup(
+    categoryStyle.markerColor,
+    isSelected,
+  );
 
   marker.addEventListener("mouseenter", () => {
     markerPin.style.transform = isSelected ? "scale(1.2)" : "scale(1.1)";
@@ -318,11 +331,9 @@ export default function PlannerInteractiveMap({
                       className="flex items-center gap-3 rounded-xl border border-white/8 bg-white/4 px-3 py-2"
                     >
                       <div
-                        className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border-2 border-white text-sm text-white"
+                        className="flex h-7 w-7 flex-shrink-0 items-center justify-center"
                         style={{ background: categoryStyle.markerColor }}
-                      >
-                        <span aria-hidden="true">{categoryStyle.markerIcon}</span>
-                      </div>
+                      />
                       <span className="min-w-0 truncate font-cinzel text-xs text-amber-50 sm:text-sm">
                         {category}
                       </span>
