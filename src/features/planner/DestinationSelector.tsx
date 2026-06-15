@@ -50,7 +50,7 @@ export default function DestinationSelector({
               <Card
                 key={destination.id}
                 variant="white"
-                className={`rounded-3xl p-5 transition ${
+                className={`p-5 transition ${
                   isSelected
                     ? "border-amber-500 bg-amber-50 shadow-[0_20px_50px_rgba(217,119,6,0.16)]"
                     : "hover:border-amber-200 hover:shadow-lg"

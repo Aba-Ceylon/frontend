@@ -45,30 +45,28 @@ export default function PlannerSummary({
       />
 
       <div className="grid gap-4 xl:grid-cols-3">
-        <Card variant="white" className="rounded-3xl p-6 xl:col-span-2">
-          <p className="mb-4 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-500">
+        <Card variant="white" className="p-6 xl:col-span-2">
+          <p className="mb-4 font-cinzel text-sm uppercase tracking-[0.24em] text-[#6e7684]">
             Custom Journey Summary
           </p>
           <div className="space-y-6">
             <div>
-              <p className="mb-2 font-cinzel text-lg text-[#0F172A]">
-                Traveler
-              </p>
-              <p className="text-sm leading-6 text-neutral-700">
+              <p className="mb-2 font-cinzel text-lg text-[#182231]">Traveler</p>
+              <p className="text-sm leading-6 text-[#445062]">
                 {travelerName || "Signed-in Traveler"}
                 {travelerEmail ? ` - ${travelerEmail}` : ""}
               </p>
             </div>
 
             <div>
-              <p className="mb-2 font-cinzel text-lg text-[#0F172A]">Trip</p>
-              <p className="text-sm leading-6 text-neutral-700">
+              <p className="mb-2 font-cinzel text-lg text-[#182231]">Trip</p>
+              <p className="text-sm leading-6 text-[#445062]">
                 {reviewData.tripLabel}
               </p>
             </div>
 
             <div>
-              <p className="mb-2 font-cinzel text-lg text-[#0F172A]">
+              <p className="mb-2 font-cinzel text-lg text-[#182231]">
                 Destinations
               </p>
               <div className="flex flex-wrap gap-2">
@@ -76,7 +74,7 @@ export default function PlannerSummary({
                   <Badge
                     key={destination.id}
                     variant="light"
-                    className="border-neutral-200 bg-neutral-100 py-2 text-neutral-700"
+                    className="border-[#182231]/10 bg-[#f4ecdf] py-2 text-[#445062]"
                   >
                     {destination.name}
                   </Badge>
@@ -85,16 +83,16 @@ export default function PlannerSummary({
             </div>
 
             <div>
-              <p className="mb-2 font-cinzel text-lg text-[#0F172A]">Vehicle</p>
+              <p className="mb-2 font-cinzel text-lg text-[#182231]">Vehicle</p>
               {selectedVehicle ? (
                 <Card
                   variant="white"
-                  className="rounded-2xl bg-neutral-50 p-4 shadow-none"
+                  className="border-[#182231]/8 bg-[#f8f3ea] p-4 shadow-none"
                 >
-                  <p className="font-cinzel text-xl text-[#0F172A]">
+                  <p className="font-cinzel text-xl text-[#182231]">
                     {selectedVehicle.brandName} {selectedVehicle.name}
                   </p>
-                  <p className="mt-2 text-sm text-neutral-600">
+                  <p className="mt-2 text-sm leading-7 text-[#566173]">
                     {selectedVehicle.shortDescription}
                   </p>
                 </Card>
@@ -102,25 +100,24 @@ export default function PlannerSummary({
             </div>
 
             <div>
-              <p className="mb-2 font-cinzel text-lg text-[#0F172A]">
+              <p className="mb-2 font-cinzel text-lg text-[#182231]">
                 Accommodation
               </p>
-              <p className="whitespace-pre-line text-sm leading-7 text-neutral-700">
+              <p className="whitespace-pre-line text-sm leading-7 text-[#445062]">
                 {reviewData.accommodationNote}
               </p>
-              {accommodationMode === "recommended" &&
-              selectedStayPlans.length ? (
+              {accommodationMode === "recommended" && selectedStayPlans.length ? (
                 <div className="mt-4 grid gap-3">
                   {selectedStayPlans.map((plan) => (
                     <Card
                       key={plan.stayId}
                       variant="white"
-                      className="rounded-2xl p-4 shadow-none"
+                      className="border-[#182231]/8 bg-[#f8f3ea] p-4 shadow-none"
                     >
-                      <p className="font-cinzel text-lg text-[#0F172A]">
+                      <p className="font-cinzel text-lg text-[#182231]">
                         {plan.stay.name}
                       </p>
-                      <p className="mt-1 text-sm text-neutral-600">
+                      <p className="mt-1 text-sm text-[#566173]">
                         {plan.checkInDate} to {plan.checkOutDate}
                       </p>
                     </Card>
@@ -131,26 +128,28 @@ export default function PlannerSummary({
           </div>
         </Card>
 
-        <Card className="rounded-3xl border border-[#0F172A]/10 bg-[#0F172A] p-6 text-white">
-          <p className="mb-4 font-cinzel text-sm uppercase tracking-[0.24em] text-amber-300">
+        <Card className="border-[#182231]/8 bg-[#f8f3ea] p-6 text-[#182231]">
+          <p className="mb-4 font-cinzel text-sm uppercase tracking-[0.24em] text-[#8b6b1f]">
             WhatsApp Request
           </p>
-          <p className="mb-6 text-sm leading-7 text-white/75">
-            Your planner request will open a pre-filled WhatsApp message ready
-            to send to the system administrator.
+          <p className="mb-6 text-sm leading-7 text-[#445062]">
+            Your planner request will open as a pre-filled WhatsApp message,
+            ready to send directly to the ABA Ceylon team.
           </p>
-          <p className="mb-2 text-sm text-white/60">Admin WhatsApp</p>
-          <p className="mb-6 font-cinzel text-xl text-white">
+          <p className="mb-2 text-sm text-[#6e7684]">Admin WhatsApp</p>
+          <p className="mb-6 font-cinzel text-xl text-[#182231]">
             {adminPhoneNumber}
           </p>
-          <p className="mb-6 text-sm text-white/80">
-            {reviewData.serviceIncluded}
-          </p>
+          <div className="mb-6 border-t border-[#182231]/8 pt-5">
+            <p className="text-sm leading-7 text-[#445062]">
+              {reviewData.serviceIncluded}
+            </p>
+          </div>
           <Button
             type="button"
-            variant="secondary"
+            variant="primary"
             fullWidth
-            className="rounded-2xl bg-amber-400 text-[#0F172A] hover:bg-amber-300"
+            className="min-h-13"
             onClick={() =>
               window.open(whatsappHref, "_blank", "noopener,noreferrer")
             }

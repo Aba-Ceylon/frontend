@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 
 function SectionSkeleton({
-  className = "bg-[#F5F2ED]",
+  className = "bg-white",
   title = "Loading section",
 }: {
   className?: string;
@@ -16,12 +16,12 @@ function SectionSkeleton({
       aria-busy="true"
     >
       <div className="w-full max-w-6xl animate-pulse">
-        <div className="mx-auto h-10 w-64 rounded-full bg-white/20" />
-        <div className="mx-auto mt-5 h-4 w-96 max-w-full rounded-full bg-white/10" />
+        <div className="mx-auto h-10 w-64 border border-current/10 bg-current/10" />
+        <div className="mx-auto mt-5 h-4 w-96 max-w-full border border-current/10 bg-current/5" />
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          <div className="h-72 rounded-[1.5rem] bg-white/10" />
-          <div className="h-72 rounded-[1.5rem] bg-white/10" />
-          <div className="h-72 rounded-[1.5rem] bg-white/10" />
+          <div className="h-72 border border-current/10 bg-current/5" />
+          <div className="h-72 border border-current/10 bg-current/5" />
+          <div className="h-72 border border-current/10 bg-current/5" />
         </div>
       </div>
     </section>
@@ -30,7 +30,7 @@ function SectionSkeleton({
 
 const WhoWeAre = dynamic(
   () => import("@/components/whoWeAre/WhoWeAre"),
-  { loading: () => <SectionSkeleton className="bg-[#0F172A] text-white" title="Loading" /> },
+  { loading: () => <SectionSkeleton className="bg-[#182231] text-white" title="Loading" /> },
 );
 
 const HowItWorks = dynamic(
@@ -40,12 +40,12 @@ const HowItWorks = dynamic(
 
 const TrustBar = dynamic(
   () => import("@/components/trustBar/TrustBar"),
-  { loading: () => <SectionSkeleton className="bg-[#0F172A] text-white" title="Loading" /> },
+  { loading: () => <SectionSkeleton title="Loading" /> },
 );
 
 const InteractiveMap = dynamic(
   () => import("@/components/interactiveSriLanka/InteractiveMap"),
-  { ssr: false, loading: () => <SectionSkeleton className="bg-[#0F172A] text-white" title="Loading interactive map" /> },
+  { ssr: false, loading: () => <SectionSkeleton className="bg-[#182231] text-white" title="Loading interactive map" /> },
 );
 
 const WhyChooseUs = dynamic(
@@ -60,7 +60,7 @@ const FeaturedPckgs = dynamic(
 
 const FeaturedStays = dynamic(
   () => import("@/components/featuredStays/FeaturedStays"),
-  { loading: () => <SectionSkeleton className="bg-[#1A2238] text-white" title="Loading stays" /> },
+  { loading: () => <SectionSkeleton title="Loading stays" /> },
 );
 
 const FleetSection = dynamic(
@@ -70,7 +70,7 @@ const FleetSection = dynamic(
 
 const CustomPlannerSection = dynamic(
   () => import("@/components/customPlanner/CustomPlannerSection"),
-  { loading: () => <SectionSkeleton className="bg-[#0F172A] text-white" title="Loading planner" /> },
+  { loading: () => <SectionSkeleton className="bg-[#05070A] text-white" title="Loading planner" /> },
 );
 
 const BuddhaLotus = dynamic(
@@ -85,7 +85,7 @@ const FAQ = dynamic(
 
 const Testimonials = dynamic(
   () => import("@/components/testimonials/Testimonials"),
-  { loading: () => <SectionSkeleton className="bg-[#1A2238] text-white" title="Loading testimonials" /> },
+  { loading: () => <SectionSkeleton title="Loading testimonials" /> },
 );
 
 export default function DeferredHomeSections() {

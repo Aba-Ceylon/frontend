@@ -9,7 +9,6 @@ export type MapLegendCategory =
 
 type MapCategoryStyle = {
   markerColor: string;
-  markerIcon: string;
   bgClass: string;
   borderClass: string;
   softClass: string;
@@ -17,39 +16,34 @@ type MapCategoryStyle = {
 
 export const mapCategoryStyles: Record<MapLegendCategory, MapCategoryStyle> = {
   Heritage: {
-    markerColor: "#D97706",
-    markerIcon: "🏛️",
-    bgClass: "bg-amber-600",
-    borderClass: "border-amber-600",
-    softClass: "bg-amber-50 text-amber-900",
+    markerColor: "#C99A2B",
+    bgClass: "bg-[#C99A2B]",
+    borderClass: "border-[#C99A2B]/35",
+    softClass: "border border-[#C99A2B]/22 bg-[#F7F1E5] text-[#182231]",
   },
   Nature: {
-    markerColor: "#059669",
-    markerIcon: "🌿",
-    bgClass: "bg-emerald-600",
-    borderClass: "border-emerald-600",
-    softClass: "bg-emerald-50 text-emerald-900",
+    markerColor: "#182231",
+    bgClass: "bg-[#182231]",
+    borderClass: "border-[#182231]/18",
+    softClass: "border border-[#182231]/12 bg-white text-[#182231]",
   },
   Coastal: {
-    markerColor: "#0284C7",
-    markerIcon: "🏖️",
-    bgClass: "bg-sky-600",
-    borderClass: "border-sky-600",
-    softClass: "bg-sky-50 text-sky-900",
+    markerColor: "#314055",
+    bgClass: "bg-[#314055]",
+    borderClass: "border-[#314055]/24",
+    softClass: "border border-[#314055]/14 bg-white text-[#182231]",
   },
   Adventure: {
-    markerColor: "#DC2626",
-    markerIcon: "🦁",
-    bgClass: "bg-red-600",
-    borderClass: "border-red-600",
-    softClass: "bg-red-50 text-red-900",
+    markerColor: "#8B6B1F",
+    bgClass: "bg-[#8B6B1F]",
+    borderClass: "border-[#8B6B1F]/28",
+    softClass: "border border-[#8B6B1F]/16 bg-[#FBF8F2] text-[#182231]",
   },
   City: {
-    markerColor: "#475569",
-    markerIcon: "🏙️",
-    bgClass: "bg-slate-600",
-    borderClass: "border-slate-600",
-    softClass: "bg-slate-100 text-slate-800",
+    markerColor: "#05070A",
+    bgClass: "bg-[#05070A]",
+    borderClass: "border-[#05070A]/18",
+    softClass: "border border-[#05070A]/10 bg-white text-[#182231]",
   },
 };
 

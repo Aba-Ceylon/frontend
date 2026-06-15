@@ -16,70 +16,96 @@ export default function FeaturedPckgs() {
   useEffect(() => {
     let active = true;
     void fetchPackages().then((loaded) => {
-      if (!active || !loaded.length) return;
+      if (!active || !loaded.length) {
+        return;
+      }
       setPackageItems(loaded);
     });
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, []);
 
-  const { stripRef, containerRef, cloned, dotIndex, cardWidth, gap, slideTo, onPointerDown, onPointerUp } =
-    useCarousel({ items: packageItems, gap: 32, autoPlayMs: 3000 });
+  const {
+    stripRef,
+    containerRef,
+    cloned,
+    dotIndex,
+    cardWidth,
+    gap,
+    slideTo,
+    onPointerDown,
+    onPointerUp,
+  } = useCarousel({ items: packageItems, gap: 32, autoPlayMs: 3400 });
 
   return (
-    <section className="py-24 bg-[#F5F2ED]">
-      <div className="mx-auto px-6">
-        <SectionHeader
-          title="Curated Journeys"
-          description="Explore handcrafted travel experiences across Sri Lanka's heritage, hills, and coastlines."
-        />
+    <section className="cream-grid py-20 sm:py-28">
+      <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
+        <div className="grid gap-8 lg:grid-cols-[320px_minmax(0,1fr)] lg:items-end lg:gap-10">
+          <div data-reveal>
+            <SectionHeader
+              eyebrow="Curated journeys"
+              align="left"
+              title="Sri Lanka itineraries with a stronger sense of place."
+              description="Explore tailored routes shaped around atmosphere, travel rhythm, and the parts of the island that fit together naturally."
+              className="mb-0"
+            />
 
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => slideTo(-1)}
-            className="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer"
-            aria-label="Previous"
-          >
-            <LucideArrowLeft size={16} />
-          </button>
-
-          <div
-            ref={containerRef}
-            className="relative overflow-hidden flex-1 cursor-grab active:cursor-grabbing select-none"
-            onPointerDown={onPointerDown}
-            onPointerUp={onPointerUp}
-          >
-            <div ref={stripRef} className="flex" style={{ gap, willChange: "transform" }}>
-              {cloned.map((pkg, i) => (
-                <div key={`${pkg.id}-${i}`} className="shrink-0" style={{ width: cardWidth }}>
-                  <PackageCard pkg={pkg} />
-                </div>
-              ))}
+            <div className="mt-8 flex items-center gap-3">
+              <button
+                onClick={() => slideTo(-1)}
+                className="flex h-11 w-11 items-center justify-center border border-[#101A28]/14 text-[#101A28] transition hover:bg-[#101A28] hover:text-white"
+                aria-label="Previous"
+              >
+                <LucideArrowLeft size={16} />
+              </button>
+              <button
+                onClick={() => slideTo(1)}
+                className="flex h-11 w-11 items-center justify-center border border-[#101A28]/14 text-[#101A28] transition hover:bg-[#101A28] hover:text-white"
+                aria-label="Next"
+              >
+                <LucideArrowRight size={16} />
+              </button>
             </div>
           </div>
 
-          <button
-            onClick={() => slideTo(1)}
-            className="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-neutral-300 text-neutral-800 hover:bg-neutral-100 transition cursor-pointer"
-            aria-label="Next"
-          >
-            <LucideArrowRight size={16} />
-          </button>
-        </div>
+          <div className="min-w-0" data-reveal>
+            <div
+              ref={containerRef}
+              className="relative overflow-hidden cursor-grab select-none active:cursor-grabbing"
+              onPointerDown={onPointerDown}
+              onPointerUp={onPointerUp}
+            >
+              <div ref={stripRef} className="flex" style={{ gap, willChange: "transform" }}>
+                {cloned.map((pkg, i) => (
+                  <div
+                    key={`${pkg.id}-${i}`}
+                    className="max-w-full shrink-0"
+                    style={{ width: cardWidth, minWidth: cardWidth }}
+                  >
+                    <PackageCard pkg={pkg} />
+                  </div>
+                ))}
+              </div>
+            </div>
 
-        <div className="flex justify-center gap-2 mt-6">
-          {packageItems.map((pkg, i) => (
-            <span
-              key={pkg.id}
-              className={`w-2.5 h-2.5 rounded-full transition-all ${i === dotIndex ? "bg-neutral-800 scale-125" : "bg-neutral-300"}`}
-            />
-          ))}
-        </div>
+            <div className="mt-7 flex flex-col items-center justify-between gap-5 sm:flex-row">
+              <div className="flex gap-2">
+                {packageItems.map((pkg, i) => (
+                  <span
+                    key={pkg.id}
+                    className={`h-2.5 transition-all ${
+                      i === dotIndex ? "w-8 bg-[#101A28]" : "w-2.5 bg-[#101A28]/18"
+                    }`}
+                  />
+                ))}
+              </div>
 
-        <div className="text-center mt-8">
-          <Link href="/packages" className="inline-flex items-center px-6 py-3 font-cinzel text-neutral-800 hover:text-[#C99A2B] drop-shadow-[0_0_30px_rgba(201,154,43,0.38)]">
-            View Available Packages
-            <LucideArrowRight size={16} className="ml-2" />
-          </Link>
+              <Link href="/packages" className="editorial-link text-[#101A28]">
+                View all packages
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>

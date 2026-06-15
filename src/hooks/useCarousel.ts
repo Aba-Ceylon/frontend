@@ -21,16 +21,16 @@ export function useCarousel<T>({ items, gap = 32, autoPlayMs = 3000 }: UseCarous
   const animating = useRef(false);
   const dragStartX = useRef<number | null>(null);
   const [dotIndex, setDotIndex] = useState(0);
-  const [visible, setVisible] = useState(3);
+  const [visible, setVisible] = useState(() => getVisible());
 
   const total = items.length;
   const cloned = useMemo(() => [...items, ...items, ...items], [items]);
+  const effectiveGap = visible === 1 ? 0 : gap;
 
   const getStep = useCallback(() => {
     const w = containerRef.current?.offsetWidth ?? 0;
-    const vis = getVisible();
-    return (w - gap * (vis - 1)) / vis + gap;
-  }, [gap]);
+    return (w - effectiveGap * (visible - 1)) / visible + effectiveGap;
+  }, [effectiveGap, visible]);
 
   const snapToOffset = useCallback(
     (nextOffset: number) => {
@@ -72,6 +72,10 @@ export function useCarousel<T>({ items, gap = 32, autoPlayMs = 3000 }: UseCarous
 
   // Resize handler
   useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
     const raf = requestAnimationFrame(() => {
       setVisible(getVisible());
       snapToOffset(offset.current);
@@ -85,7 +89,7 @@ export function useCarousel<T>({ items, gap = 32, autoPlayMs = 3000 }: UseCarous
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
     };
-  }, [gap, snapToOffset]);
+  }, [snapToOffset]);
 
   // Autoplay
   useEffect(() => {
@@ -108,7 +112,7 @@ export function useCarousel<T>({ items, gap = 32, autoPlayMs = 3000 }: UseCarous
     [slideTo],
   );
 
-  const cardWidth = `calc((100% - ${gap * (visible - 1)}px) / ${visible})`;
+  const cardWidth = `calc((100% - ${effectiveGap * (visible - 1)}px) / ${visible})`;
 
   return {
     stripRef,
@@ -116,7 +120,7 @@ export function useCarousel<T>({ items, gap = 32, autoPlayMs = 3000 }: UseCarous
     cloned,
     dotIndex,
     cardWidth,
-    gap,
+    gap: effectiveGap,
     slideTo,
     onPointerDown,
     onPointerUp,

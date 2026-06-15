@@ -64,7 +64,7 @@ export default function StaySelector({
             return (
               <div
                 key={stay.id}
-                className={`rounded-3xl overflow-hidden border bg-white transition ${
+                className={`overflow-hidden border bg-white transition ${
                   isSelected
                     ? "border-amber-500 shadow-[0_20px_50px_rgba(201,154,43,0.16)]"
                     : "border-neutral-200"
@@ -90,7 +90,7 @@ export default function StaySelector({
                         size="sm"
                         variant={isSelected ? "primary" : "outline"}
                         onClick={() => onToggleStay(stay.id)}
-                        className={`rounded-full ${
+                        className={`${
                           isSelected
                             ? "bg-[#0F172A] text-amber-300"
                             : "border-neutral-200 bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
@@ -166,14 +166,14 @@ export default function StaySelector({
             );
           })}
         </div>
-      ) : (
-        <Card
-          variant="white"
-          className="rounded-3xl border-dashed p-8 text-center text-neutral-600"
-        >
-          No recommended stays available for your selected destinations
-        </Card>
-      )}
+        ) : (
+          <Card
+            variant="white"
+            className="border-dashed p-8 text-center text-neutral-600"
+          >
+            No recommended stays available for your selected destinations
+          </Card>
+        )}
     </div>
   );
 }

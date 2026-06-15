@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import Script from "next/script";
 import "./globals.css";
@@ -9,16 +8,7 @@ import { LoaderGateProvider } from "../components/home/LoaderGate";
 import GatedShell from "../components/home/GatedShell";
 import ChatbotWidget from "../features/chatbot/ChatbotWidget";
 import WhatsAppButton from "../features/whatsapp/WhatsAppButton";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import SiteMotion from "../components/motion/SiteMotion";
 
 /* ─── Base URL ─────────────────────────────────────────────────────────────── */
 const SITE_URL = "https://www.abaceylontours.com";
@@ -333,9 +323,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className="antialiased">
         <ClerkProvider>
           <LoaderGateProvider>
+            <SiteMotion />
             <GatedShell navbar={<NavBar />} footer={<Footer />}>
               {children}
             </GatedShell>

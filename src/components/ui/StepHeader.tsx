@@ -6,12 +6,22 @@ interface StepHeaderProps {
   description?: string;
 }
 
-export default function StepHeader({ eyebrow, title, description }: StepHeaderProps) {
+export default function StepHeader({
+  eyebrow,
+  title,
+  description,
+}: StepHeaderProps) {
   return (
-    <div>
-      <p className="font-cinzel text-xs uppercase tracking-[0.3em] text-amber-700 mb-2">{eyebrow}</p>
-      <h2 className="font-cinzel text-3xl text-[#0F172A]">{title}</h2>
-      {description && <p className="text-neutral-600 mt-3 leading-7">{description}</p>}
+    <div data-reveal>
+      <p className="mb-2 font-cinzel text-[11px] uppercase tracking-[0.32em] text-amber-700">
+        {eyebrow}
+      </p>
+      <h2 className="font-cinzel text-3xl text-[#182231] sm:text-4xl">{title}</h2>
+      {description ? (
+        <p className="mt-3 max-w-3xl text-base leading-8 text-[#445062]">
+          {description}
+        </p>
+      ) : null}
     </div>
   );
 }

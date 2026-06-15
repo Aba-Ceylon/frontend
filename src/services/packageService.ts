@@ -287,28 +287,45 @@ function getFallbackPackages() {
   return fallbackPackages.map(mapFallbackPackage);
 }
 
+let packagesCache: PackageItem[] | null = null;
+let packagesPromise: Promise<PackageItem[]> | null = null;
+
 export async function fetchPackages() {
-  try {
-    const supabase = getSupabaseClient();
-    const { data, error } = await supabase
-      .from("packages")
-      .select("*")
-      .order("package_id", { ascending: true });
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    const rows = (data ?? []) as SupabasePackageRow[];
-
-    if (!rows.length) {
-      return getFallbackPackages();
-    }
-
-    return rows.map(mapPackageRow);
-  } catch {
-    return getFallbackPackages();
+  if (packagesCache) {
+    return packagesCache;
   }
+
+  if (packagesPromise) {
+    return packagesPromise;
+  }
+
+  packagesPromise = (async () => {
+    try {
+      const supabase = getSupabaseClient();
+      const { data, error } = await supabase
+        .from("packages")
+        .select("*")
+        .order("package_id", { ascending: true });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      const rows = (data ?? []) as SupabasePackageRow[];
+      const result = !rows.length ? getFallbackPackages() : rows.map(mapPackageRow);
+
+      packagesCache = result;
+      return result;
+    } catch {
+      const fallback = getFallbackPackages();
+      packagesCache = fallback;
+      return fallback;
+    } finally {
+      packagesPromise = null;
+    }
+  })();
+
+  return packagesPromise;
 }
 
 export async function fetchPackageBySlug(slug: string) {

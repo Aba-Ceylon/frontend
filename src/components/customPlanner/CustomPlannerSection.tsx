@@ -70,43 +70,44 @@ export default function CustomPlannerSection() {
     <section
       id="custom-planner"
       ref={sectionRef}
-      className="relative overflow-hidden py-16 sm:py-20 bg-[#0B1220] scroll-mt-28"
+      className="relative overflow-hidden bg-[#05070A] py-16 sm:py-20 scroll-mt-28"
     >
       <div
         ref={backgroundRef}
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-75"
         style={{ backgroundImage: "url('/plannerBakcground.jpg')" }}
       />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,10,18,0.86),rgba(10,15,26,0.64),rgba(5,10,18,0.82))]" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,7,10,0.88),rgba(24,34,49,0.72),rgba(5,7,10,0.86))]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(201,154,43,0.2),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_24%)]" />
 
       <div className="relative max-w-7xl mx-auto px-6 min-h-[260px] flex items-center justify-center">
         <div
           ref={cardRef}
-          className="w-full rounded-[2rem] border border-white/14 bg-white/10 backdrop-blur-xl shadow-[0_28px_100px_rgba(0,0,0,0.28)]"
+          className="w-full border border-white/12 bg-black/28 shadow-[0_28px_100px_rgba(0,0,0,0.28)] backdrop-blur-xl"
         >
           <div className="flex flex-col gap-8 px-6 py-8 sm:px-8 sm:py-10 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-3xl">
               <div className="flex items-center gap-3 mb-4">
                 <div className="h-px w-10 bg-gradient-to-r from-transparent to-amber-300" />
-                <span className="font-cinzel text-[11px] uppercase tracking-[0.34em] text-amber-300">
+                <span className="font-cinzel text-[11px] uppercase tracking-[0.22em] text-amber-300">
                   Plan Your Journey
                 </span>
               </div>
               <h2 className="font-cinzel text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
                 Custom Journey Planner
               </h2>
-              <p className="mt-4 max-w-2xl text-white/78 text-sm sm:text-base leading-7">
-                Design your perfect Sri Lankan adventure with our personalized planning service
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-white/72 sm:text-base">
+                Structure your dates, route ideas, stay style, and transport
+                preferences in one place, then send it directly to the team.
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
-                <span className="rounded-full border border-white/12 bg-white/8 px-3 py-1.5 text-xs text-white/78">
+                <span className="border border-white/12 px-3 py-1.5 text-xs text-white/74">
                   Route Planning
                 </span>
-                <span className="rounded-full border border-white/12 bg-white/8 px-3 py-1.5 text-xs text-white/78">
+                <span className="border border-white/12 px-3 py-1.5 text-xs text-white/74">
                   Chauffeur Matching
                 </span>
-                <span className="rounded-full border border-white/12 bg-white/8 px-3 py-1.5 text-xs text-white/78">
+                <span className="border border-white/12 px-3 py-1.5 text-xs text-white/74">
                   WhatsApp Ready
                 </span>
               </div>
@@ -115,7 +116,7 @@ export default function CustomPlannerSection() {
             <div className="flex w-full lg:w-auto lg:justify-end">
               <Link
                 href="/planner"
-                className="inline-flex min-w-[220px] items-center justify-center rounded-sm border border-amber-300/60 bg-[linear-gradient(135deg,rgba(251,191,36,0.88),rgba(217,119,6,0.9))] px-7 py-4 font-cinzel text-sm uppercase tracking-[0.26em] text-[#0F172A] shadow-[0_0_30px_rgba(245,158,11,0.28)] transition hover:scale-[1.02] hover:shadow-[0_0_42px_rgba(245,158,11,0.36)]"
+                className="inline-flex min-w-[220px] items-center justify-center border border-[#C99A2B] bg-[#C99A2B] px-7 py-4 font-cinzel text-sm uppercase tracking-[0.18em] text-[#182231] transition hover:brightness-105"
               >
                 Start Planning
               </Link>

@@ -12,17 +12,18 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
-  primary:  "bg-[#0F172A] text-amber-300 hover:bg-[#18243D] disabled:opacity-40",
-  secondary: "bg-amber-400/60 text-white drop-shadow-[0_0_30px_rgba(201,154,43,0.5)] hover:bg-amber-400/75",
-  outline:  "border border-neutral-300 text-neutral-800 hover:bg-neutral-50",
-  ghost:    "border border-white/12 bg-white/5 text-white hover:bg-white/10",
-  amber:    "bg-gradient-to-br from-slate-900/95 to-slate-800/95 text-white hover:opacity-90",
+  primary: "bg-[#182231] text-white hover:bg-[#243142] disabled:opacity-40",
+  secondary: "bg-[#C99A2B] text-[#101823] hover:brightness-105 disabled:opacity-40",
+  outline:
+    "border border-[#182231]/16 text-[#182231] hover:bg-[#182231] hover:text-white",
+  ghost: "border border-[#182231]/10 bg-white/70 text-[#182231] hover:bg-white",
+  amber: "bg-[#efe6d8] text-[#182231] hover:bg-[#e8dcc8] disabled:opacity-40",
 };
 
 const SIZE_CLASSES: Record<ButtonSize, string> = {
-  sm: "px-3 py-1.5 text-xs",
-  md: "px-5 py-3 text-sm",
-  lg: "px-8 py-4 text-base",
+  sm: "px-4 py-2 text-[11px]",
+  md: "px-5 py-3 text-xs",
+  lg: "px-8 py-4 text-sm",
 };
 
 export default function Button({
@@ -36,7 +37,7 @@ export default function Button({
   return (
     <button
       {...props}
-      className={`inline-flex items-center justify-center font-cinzel tracking-[0.18em] uppercase rounded-md transition-all duration-300 disabled:cursor-not-allowed
+      className={`inline-flex items-center justify-center rounded-sm font-cinzel uppercase tracking-[0.2em] transition-all duration-300 disabled:cursor-not-allowed
         ${VARIANT_CLASSES[variant]}
         ${SIZE_CLASSES[size]}
         ${fullWidth ? "w-full" : ""}

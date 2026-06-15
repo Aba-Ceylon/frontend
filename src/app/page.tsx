@@ -9,7 +9,7 @@ export default function Home() {
   const ready = useLoaderGate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-slate-900 to-black">
+    <div className="min-h-screen bg-white">
       <HomeEntryLoader />
       {ready && <HeroSection />}
       {ready && <DeferredHomeSections />}

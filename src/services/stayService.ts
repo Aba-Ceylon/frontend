@@ -121,28 +121,45 @@ function getFallbackStays() {
   return fallbackStays.map(mapFallbackStay);
 }
 
+let staysCache: Stay[] | null = null;
+let staysPromise: Promise<Stay[]> | null = null;
+
 export async function fetchStays() {
-  try {
-    const supabase = getSupabaseClient();
-    const { data, error } = await supabase
-      .from("accommodations")
-      .select("*")
-      .order("accommodation_id", { ascending: true });
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    const rows = (data ?? []) as SupabaseAccommodationRow[];
-
-    if (!rows.length) {
-      return getFallbackStays();
-    }
-
-    return rows.map(mapAccommodationRow);
-  } catch {
-    return getFallbackStays();
+  if (staysCache) {
+    return staysCache;
   }
+
+  if (staysPromise) {
+    return staysPromise;
+  }
+
+  staysPromise = (async () => {
+    try {
+      const supabase = getSupabaseClient();
+      const { data, error } = await supabase
+        .from("accommodations")
+        .select("*")
+        .order("accommodation_id", { ascending: true });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      const rows = (data ?? []) as SupabaseAccommodationRow[];
+      const result = !rows.length ? getFallbackStays() : rows.map(mapAccommodationRow);
+
+      staysCache = result;
+      return result;
+    } catch {
+      const fallback = getFallbackStays();
+      staysCache = fallback;
+      return fallback;
+    } finally {
+      staysPromise = null;
+    }
+  })();
+
+  return staysPromise;
 }
 
 export async function fetchStayBySlug(slug: string) {
