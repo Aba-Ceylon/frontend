@@ -8,6 +8,22 @@ gsap.registerPlugin(ScrollTrigger);
 
 const END_EPSILON = 0.08;
 
+function getInitialVideoEnabled() {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const videoProbe = document.createElement("video");
+  const canPlayMp4 =
+    typeof videoProbe.canPlayType === "function" &&
+    videoProbe.canPlayType("video/mp4").replace(/no/i, "") !== "";
+
+  return canPlayMp4 && !prefersReducedMotion;
+}
+
 export default function BuddhaLotus() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -21,20 +37,24 @@ export default function BuddhaLotus() {
   const attributesRef = useRef<HTMLDivElement>(null);
   const bottomLineRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const videoEnabled = getInitialVideoEnabled();
 
   useEffect(() => {
-    const video = videoRef.current;
     const section = sectionRef.current;
     const stage = stageRef.current;
-    if (!video || !section || !stage) {
+    const video = videoRef.current;
+
+    if (!section || !stage) {
       return;
     }
 
     let cleanup: (() => void) | undefined;
 
-    const buildScrollExperience = () => {
+    const buildScrollExperience = (withVideo: boolean) => {
       cleanup?.();
-      video.pause();
+      if (withVideo && video) {
+        video.pause();
+      }
 
       const ctx = gsap.context(() => {
         gsap.set(mediaShellRef.current, { scale: 0.94, yPercent: 8, autoAlpha: 0 });
@@ -46,7 +66,9 @@ export default function BuddhaLotus() {
         gsap.set(attributesRef.current, { opacity: 0, y: 18 });
         gsap.set(bottomLineRef.current, { opacity: 0, scaleX: 0.72 });
         gsap.set(overlayRef.current, { opacity: 0.1 });
-        gsap.set(video, { currentTime: 0.001 });
+        if (withVideo && video) {
+          gsap.set(video, { currentTime: 0.001 });
+        }
 
         const chapterTimeline = gsap.timeline({
           scrollTrigger: {
@@ -85,15 +107,6 @@ export default function BuddhaLotus() {
           .to(leftPanelRef.current, { opacity: 1, x: 0, duration: 0.14 }, 0.28)
           .to(rightPanelRef.current, { opacity: 1, x: 0, duration: 0.14 }, 0.28)
           .to(
-            video,
-            {
-              currentTime: Math.max(video.duration - END_EPSILON, 0.001),
-              ease: "none",
-              duration: 0.78,
-            },
-            0.18,
-          )
-          .to(
             mediaShellRef.current,
             {
               scale: 1.09,
@@ -116,24 +129,50 @@ export default function BuddhaLotus() {
             { opacity: 1, scaleX: 1, duration: 0.12 },
             0.72,
           );
+
+        if (withVideo && video) {
+          chapterTimeline.to(
+            video,
+            {
+              currentTime: Math.max(video.duration - END_EPSILON, 0.001),
+              ease: "none",
+              duration: 0.78,
+            },
+            0.18,
+          );
+        }
       }, sectionRef);
 
       cleanup = () => ctx.revert();
     };
 
+    if (!videoEnabled || !video) {
+      buildScrollExperience(false);
+      return () => {
+        cleanup?.();
+      };
+    }
+
     if (video.readyState >= 1) {
-      buildScrollExperience();
+      buildScrollExperience(true);
     } else {
-      video.addEventListener("loadedmetadata", buildScrollExperience, {
-        once: true,
-      });
+      const handleReady = () => buildScrollExperience(true);
+      const handleError = () => buildScrollExperience(false);
+
+      video.addEventListener("loadedmetadata", handleReady, { once: true });
+      video.addEventListener("error", handleError, { once: true });
+
+      return () => {
+        video.removeEventListener("loadedmetadata", handleReady);
+        video.removeEventListener("error", handleError);
+        cleanup?.();
+      };
     }
 
     return () => {
-      video.removeEventListener("loadedmetadata", buildScrollExperience);
       cleanup?.();
     };
-  }, []);
+  }, [videoEnabled]);
 
   return (
     <section ref={sectionRef} className="relative w-full bg-black">
@@ -145,16 +184,22 @@ export default function BuddhaLotus() {
           ref={mediaShellRef}
           className="absolute inset-0 z-[1] overflow-hidden will-change-transform"
         >
-          <video
-            ref={videoRef}
-            className="absolute inset-0 h-full w-full object-cover"
-            muted
-            playsInline
-            preload="auto"
-            aria-hidden="true"
-          >
-            <source src="/videos/output.mp4" type="video/mp4" />
-          </video>
+          {videoEnabled ? (
+            <video
+              ref={videoRef}
+              className="absolute inset-0 h-full w-full object-cover"
+              muted
+              playsInline
+              preload="auto"
+              poster="/beach.jpg"
+              aria-hidden="true"
+              disablePictureInPicture
+            >
+              <source src="/videos/output.mp4" type="video/mp4" />
+            </video>
+          ) : (
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(201,154,43,0.18),transparent_24%),linear-gradient(180deg,#0A0C10_0%,#15100B_38%,#05070A_100%)]" />
+          )}
         </div>
 
         <div

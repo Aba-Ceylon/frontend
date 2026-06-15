@@ -9,7 +9,7 @@ interface FeedbackModalProps {
 
 export default function FeedbackModal({ onClose }: FeedbackModalProps) {
   return (
-    <Modal isOpen onClose={onClose} maxWidth="max-w-xl">
+    <Modal isOpen onClose={onClose} maxWidth="max-w-4xl">
       <FeedbackForm />
     </Modal>
   );

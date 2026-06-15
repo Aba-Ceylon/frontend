@@ -1,13 +1,30 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { routes } from "@/constants/routes";
+import { isHomeMediaPreloaded } from "@/components/home/homePreload";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
+}
+
+function getInitialVideoEnabled() {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const videoProbe = document.createElement("video");
+  const canPlayMp4 =
+    typeof videoProbe.canPlayType === "function" &&
+    videoProbe.canPlayType("video/mp4").replace(/no/i, "") !== "";
+
+  return canPlayMp4 && !prefersReducedMotion;
 }
 
 const TRUST_POINTS = [
@@ -16,6 +33,8 @@ const TRUST_POINTS = [
   "One direct contact before arrival and on the road.",
 ];
 
+const HERO_VIDEO_SRC = "/videos/SriLanka.mp4";
+
 export default function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
@@ -23,6 +42,77 @@ export default function HeroSection() {
   const contentRef = useRef<HTMLDivElement>(null);
   const actionsRef = useRef<HTMLDivElement>(null);
   const trustRef = useRef<HTMLDivElement>(null);
+  const [videoEnabled] = useState(getInitialVideoEnabled);
+  const [videoReady, setVideoReady] = useState(() =>
+    isHomeMediaPreloaded(HERO_VIDEO_SRC),
+  );
+
+  useEffect(() => {
+    const video = heroVideoRef.current;
+
+    if (!videoEnabled || !video) {
+      return;
+    }
+
+    const syncVideoState = () => {
+      if (video.readyState >= 2) {
+        setVideoReady(true);
+      }
+    };
+
+    const ensurePlayback = () => {
+      syncVideoState();
+      void video.play().catch(() => {});
+    };
+
+    const handleError = () => {
+      setVideoReady(false);
+    };
+
+    syncVideoState();
+
+    video.preload = "auto";
+    video.muted = true;
+    video.playsInline = true;
+
+    if (video.readyState < 2) {
+      video.load();
+    }
+
+    ensurePlayback();
+
+    video.addEventListener("loadeddata", ensurePlayback);
+    video.addEventListener("canplay", ensurePlayback);
+    video.addEventListener("playing", syncVideoState);
+    video.addEventListener("error", handleError);
+
+    const handleVisibilityRestore = () => {
+      if (document.hidden) {
+        return;
+      }
+
+      if (video.readyState < 2) {
+        video.load();
+      }
+
+      ensurePlayback();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityRestore);
+    window.addEventListener("pageshow", handleVisibilityRestore);
+
+    return () => {
+      video.removeEventListener("loadeddata", ensurePlayback);
+      video.removeEventListener("canplay", ensurePlayback);
+      video.removeEventListener("playing", syncVideoState);
+      video.removeEventListener("error", handleError);
+      document.removeEventListener(
+        "visibilitychange",
+        handleVisibilityRestore,
+      );
+      window.removeEventListener("pageshow", handleVisibilityRestore);
+    };
+  }, [videoEnabled]);
 
   useEffect(() => {
     if (!heroRef.current || !backgroundRef.current || !contentRef.current) {
@@ -30,7 +120,7 @@ export default function HeroSection() {
     }
 
     const ctx = gsap.context(() => {
-      if (heroVideoRef.current) {
+      if (videoEnabled && heroVideoRef.current) {
         void heroVideoRef.current.play().catch(() => {});
       }
 
@@ -76,7 +166,7 @@ export default function HeroSection() {
     });
 
     return () => ctx.revert();
-  }, []);
+  }, [videoEnabled]);
 
   return (
     <section
@@ -85,22 +175,36 @@ export default function HeroSection() {
     >
       <div ref={backgroundRef} className="absolute inset-0 scale-[1.01]">
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-700 ${
+            videoReady ? "opacity-0" : "opacity-100"
+          }`}
           style={{ backgroundImage: "url('/images/heritage/Hero1.jpg')" }}
         />
-        <video
-          ref={heroVideoRef}
-          className="absolute inset-0 h-full w-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster="/images/heritage/Hero1.jpg"
-          aria-hidden="true"
-        >
-          <source src="/videos/SriLanka.mp4" type="video/mp4" />
-        </video>
+        {videoEnabled ? (
+          <video
+            ref={heroVideoRef}
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+              videoReady ? "opacity-100" : "opacity-0"
+            }`}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster="/images/heritage/Hero1.jpg"
+            aria-hidden="true"
+            disablePictureInPicture
+            onLoadedData={() => {
+              setVideoReady(true);
+              void heroVideoRef.current?.play().catch(() => {});
+            }}
+            onError={() => {
+              setVideoReady(false);
+            }}
+          >
+            <source src={HERO_VIDEO_SRC} type="video/mp4" />
+          </video>
+        ) : null}
       </div>
 
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.84)_0%,rgba(255,255,255,0.72)_32%,rgba(255,255,255,0.38)_56%,rgba(255,255,255,0.06)_100%)]" />

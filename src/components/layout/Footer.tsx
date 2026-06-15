@@ -181,7 +181,7 @@ export default function Footer() {
 
                 <div className="mt-8 flex gap-5">
                   <Link
-                    href="https://www.instagram.com/abaceylonaours"
+                    href="https://www.instagram.com/abaceylontours"
                     target="_blank"
                     rel="noreferrer"
                     className="text-white/40 transition-colors hover:text-[#C99A2B]"
@@ -189,7 +189,7 @@ export default function Footer() {
                     <Instagram size={20} />
                   </Link>
                   <Link
-                    href="https://www.facebook.com/abaceylonaours"
+                    href="https://www.facebook.com/abaceylontours"
                     target="_blank"
                     rel="noreferrer"
                     className="text-white/40 transition-colors hover:text-[#C99A2B]"
@@ -202,36 +202,33 @@ export default function Footer() {
           </div>
         </div>
 
-        <div
-          className="mt-10 flex flex-col items-center justify-between gap-6 text-center md:flex-row"
-          data-reveal
-        >
-          <div className=" text-[11px] tracking-[0.12em] text-white/52">
+        <div className="mt-8 flex flex-col items-center justify-between gap-4 px-4 py-4 text-center md:flex-row md:gap-6">
+          <div className="text-[11px] leading-5 tracking-[0.06em] text-white/82">
             &copy; 2026.Abaceylontours.com All Rights Reserved.
           </div>
 
-          <div className="flex gap-6 text-[11px] tracking-[0.12em] text-white/52 md:gap-8">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] leading-5 tracking-[0.06em] text-white/82 md:gap-x-8">
             <Link
               href={routes.privacy}
-              className="transition-colors hover:text-white"
+              className="transition-colors hover:text-[#C99A2B]"
             >
               Privacy
             </Link>
             <Link
               href={routes.terms}
-              className="transition-colors hover:text-white"
+              className="transition-colors hover:text-[#C99A2B]"
             >
               Terms
             </Link>
           </div>
 
-          <div className="text-[11px] tracking-[0.12em] text-white/52">
+          <div className="text-[11px] leading-5 tracking-[0.06em] text-white/82">
             Developed by{" "}
             <Link
-              href="https://vernoxlabs.com"
+              href="https://m99labs.com"
               target="_blank"
               rel="noreferrer"
-              className="text-[#C99A2B]/80 transition-colors hover:text-[#C99A2B]"
+              className="text-[#C99A2B] transition-colors hover:text-white"
             >
               M99Labs Sri Lanka
             </Link>

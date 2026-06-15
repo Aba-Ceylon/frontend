@@ -34,6 +34,7 @@ export default function FeedbackForm() {
   const { user } = useUser();
   const [state, dispatch] = useReducer(reducer, INITIAL);
   const { rating, hovered, message, status, errorMsg } = state;
+  const userDisplayName = user?.fullName ?? user?.username ?? "Guest traveller";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -56,82 +57,175 @@ export default function FeedbackForm() {
   }
 
   return (
-    <div
-      className="bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-md rounded-2xl border border-amber-400/20 shadow-2xl p-8 max-w-xl w-full mx-auto"
-      style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
-    >
-      <div className="flex items-center justify-center gap-3 mb-6">
-        <div className="w-12 h-px bg-amber-400/50" />
-        {[0, 1, 2].map((i) => <div key={i} className="w-1.5 h-1.5 bg-amber-400 rounded-full" />)}
-        <div className="w-12 h-px bg-amber-400/50" />
-      </div>
+    <div className="w-full bg-[#FBF8F2] text-[#182231]">
+      <div className="grid gap-0 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)]">
+        <div className="border-b border-[#182231]/10 bg-[#182231] px-6 py-8 text-white sm:px-8 lg:border-b-0 lg:border-r lg:px-10 lg:py-10">
+          <p className="font-cinzel text-[11px] uppercase tracking-[0.28em] text-[#C99A2B]">
+            Guest feedback
+          </p>
+          <h2 className="mt-5 font-cinzel text-3xl leading-[1.04] sm:text-[2.5rem]">
+            Tell us how
+            <br />
+            the journey felt.
+          </h2>
+          <p className="mt-5 max-w-md text-sm leading-7 text-white/72 sm:text-[15px]">
+            Your review helps us refine routes, support, and timing for the
+            next traveller.
+          </p>
 
-      <h2 className="font-cinzel text-2xl text-amber-400 text-center mb-1 drop-shadow-[0_0_20px_rgba(201,154,43,0.4)]">
-        Share Your Feedback
-      </h2>
-      <p className="text-slate-400 text-sm text-center mb-8 font-cinzel">
-        We value your opinion and would love to hear about your experience
-      </p>
-
-      {status === "success" ? (
-        <div className="text-center py-8">
-          <div className="flex justify-center gap-1 mb-4">
-            {Array.from({ length: 5 }).map((_, i) => <Star key={i} size={28} className="text-amber-400 fill-amber-400" />)}
+          <div className="mt-6 border border-white/10 px-5 py-4">
+            <p className="font-cinzel text-[10px] uppercase tracking-[0.24em] text-[#C99A2B]">
+              Signed in as
+            </p>
+            <p className="mt-2 text-sm uppercase tracking-[0.12em] text-white/84">
+              {userDisplayName}
+            </p>
+            <p className="mt-4 text-sm leading-6 text-white/62">
+              Published reviews are moderated before appearing on the site.
+            </p>
           </div>
-          <p className="font-cinzel text-amber-400 text-lg mb-2">Thank You!</p>
-          <p className="text-slate-400 text-sm">Your feedback has been submitted successfully</p>
-          <Button variant="outline" size="sm" onClick={() => dispatch({ type: "RESET" })} className="mt-6 border-amber-400/40 text-amber-400 hover:bg-amber-400/10">
-            Submit Another Review
-          </Button>
         </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block font-cinzel text-sm text-slate-300 mb-3">Rate Your Experience</label>
-            <div className="flex gap-2" role="group" aria-label="Star rating">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  key={star} type="button"
-                  onClick={() => dispatch({ type: "SET_RATING", value: star })}
-                  onMouseEnter={() => dispatch({ type: "SET_HOVERED", value: star })}
-                  onMouseLeave={() => dispatch({ type: "SET_HOVERED", value: 0 })}
-                  aria-label={`${star} star${star > 1 ? "s" : ""}`}
-                  className="transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-slate-900 rounded"
-                >
-                  <Star size={32} className={`transition-colors ${star <= (hovered || rating) ? "text-amber-400 fill-amber-400" : "text-slate-600"}`} />
-                </button>
-              ))}
+
+        <div className="px-6 py-7 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
+          {status === "success" ? (
+            <div className="flex h-full flex-col justify-center">
+              <p className="font-cinzel text-[11px] uppercase tracking-[0.28em] text-[#8B6B1F]">
+                Feedback received
+              </p>
+              <h3 className="mt-4 font-cinzel text-3xl leading-[1.08] text-[#182231]">
+                Thank you for
+                <br />
+                writing to us.
+              </h3>
+              <div className="mt-6 flex gap-2">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star
+                    key={i}
+                    size={24}
+                    className="fill-[#C99A2B] text-[#C99A2B]"
+                  />
+                ))}
+              </div>
+              <p className="mt-4 max-w-md text-sm leading-7 text-[#445062]">
+                Your review has been submitted successfully and will be reviewed
+                before publication.
+              </p>
+              <Button
+                variant="primary"
+                size="md"
+                onClick={() => dispatch({ type: "RESET" })}
+                className="mt-6 w-full sm:w-auto"
+              >
+                Submit Another Review
+              </Button>
             </div>
-            {rating > 0 && <p className="text-xs text-amber-400/70 mt-1 font-cinzel">{RATING_LABELS[rating]}</p>}
-          </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <p className="font-cinzel text-[11px] uppercase tracking-[0.28em] text-[#8B6B1F]">
+                  Leave a review
+                </p>
+                <h3 className="mt-4 font-cinzel text-[2rem] leading-[1.08] text-[#182231]">
+                  Share the parts
+                  <br />
+                  that stood out.
+                </h3>
+                <p className="mt-3 max-w-lg text-sm leading-7 text-[#445062]">
+                  A short note about planning, transport, communication, or the
+                  overall route is enough.
+                </p>
+              </div>
 
-          <div>
-            <label htmlFor="feedback-message" className="block font-cinzel text-sm text-slate-300 mb-2">
-              Tell us about your experience
-            </label>
-            <textarea
-              id="feedback-message"
-              value={message}
-              onChange={(e) => dispatch({ type: "SET_MESSAGE", value: e.target.value })}
-              rows={5} maxLength={600}
-              placeholder="Share your thoughts about our service..."
-              className="w-full bg-slate-800/60 border border-slate-600 text-slate-100 placeholder-slate-500 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/60 focus:border-amber-400/60 resize-none transition-colors"
-            />
-            <p className="text-xs text-slate-500 mt-1 text-right">{message.length}/600</p>
-          </div>
+              <div className="border-t border-[#182231]/10 pt-5">
+                <label className="block font-cinzel text-[11px] uppercase tracking-[0.22em] text-[#182231]">
+                  Rate your experience
+                </label>
+                <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label="Star rating">
+                  {[1, 2, 3, 4, 5].map((star) => {
+                    const isActive = star <= (hovered || rating);
 
-          {errorMsg && <p className="text-red-400 text-sm font-cinzel">{errorMsg}</p>}
+                    return (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => dispatch({ type: "SET_RATING", value: star })}
+                        onMouseEnter={() => dispatch({ type: "SET_HOVERED", value: star })}
+                        onMouseLeave={() => dispatch({ type: "SET_HOVERED", value: 0 })}
+                        aria-label={`${star} star${star > 1 ? "s" : ""}`}
+                        className={`inline-flex h-12 w-12 items-center justify-center border transition-colors focus:outline-none focus:ring-2 focus:ring-[#C99A2B]/40 ${
+                          isActive
+                            ? "border-[#C99A2B] bg-[#182231] text-[#C99A2B]"
+                            : "border-[#182231]/12 bg-white text-[#8D96A2] hover:border-[#C99A2B]/50 hover:text-[#8B6B1F]"
+                        }`}
+                      >
+                        <Star
+                          size={20}
+                          className={isActive ? "fill-current" : ""}
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="mt-3 flex items-center justify-between gap-4">
+                  <p className="font-cinzel text-xs uppercase tracking-[0.18em] text-[#8B6B1F]">
+                    {rating > 0 ? RATING_LABELS[rating] : "Select a rating"}
+                  </p>
+                  <p className="text-xs uppercase tracking-[0.16em] text-[#6B7280]">
+                    1 to 5 stars
+                  </p>
+                </div>
+              </div>
 
-          <Button
-            type="submit"
-            disabled={status === "loading"}
-            fullWidth
-            className="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-black font-bold border border-amber-300 shadow-lg hover:shadow-amber-500/30 hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100 normal-case tracking-normal"
-          >
-            {status === "loading" ? "Submitting..." : "Submit Feedback"}
-          </Button>
-        </form>
-      )}
+              <div className="border-t border-[#182231]/10 pt-5">
+                <label
+                  htmlFor="feedback-message"
+                  className="block font-cinzel text-[11px] uppercase tracking-[0.22em] text-[#182231]"
+                >
+                  Your note
+                </label>
+                <textarea
+                  id="feedback-message"
+                  value={message}
+                  onChange={(e) => dispatch({ type: "SET_MESSAGE", value: e.target.value })}
+                  rows={5}
+                  maxLength={600}
+                  placeholder="Tell us what felt smooth, what could improve, or what you would recommend to another traveller."
+                  className="mt-3 w-full border border-[#182231]/12 bg-white px-4 py-3 text-sm leading-7 text-[#182231] placeholder:text-[#7A8391] focus:border-[#C99A2B] focus:outline-none"
+                />
+                <div className="mt-3 flex items-center justify-between gap-4">
+                  <p className="text-xs leading-5 text-[#6B7280]">
+                    Minimum 20 characters. Clear, honest detail helps most.
+                  </p>
+                  <p className="text-xs uppercase tracking-[0.16em] text-[#6B7280]">
+                    {message.length}/600
+                  </p>
+                </div>
+              </div>
+
+              {errorMsg ? (
+                <div className="border border-[#C99A2B]/28 bg-[#F6EEDC] px-4 py-3 text-sm text-[#6F4F10]">
+                  {errorMsg}
+                </div>
+              ) : null}
+
+              <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-xs leading-6 text-[#6B7280]">
+                  Reviews are reviewed before they are shown publicly.
+                </p>
+                <Button
+                  type="submit"
+                  disabled={status === "loading"}
+                  variant="primary"
+                  size="md"
+                  className="w-full sm:w-auto"
+                >
+                  {status === "loading" ? "Submitting..." : "Submit Feedback"}
+                </Button>
+              </div>
+            </form>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

@@ -11,6 +11,7 @@ import { fetchVehiclesPage } from "@/services/fleetService";
 type ProgressListener = (progress: number) => void;
 
 const listeners = new Set<ProgressListener>();
+const completedMedia = new Set<string>();
 
 let preloadPromise: Promise<void> | null = null;
 let latestProgress = 0;
@@ -24,11 +25,15 @@ function trackImage(src: string) {
   return new Promise<void>((resolve) => {
     const image = new window.Image();
 
-    image.onload = () => resolve();
+    image.onload = () => {
+      completedMedia.add(src);
+      resolve();
+    };
     image.onerror = () => resolve();
     image.src = src;
 
     if (image.complete) {
+      completedMedia.add(src);
       resolve();
     }
   });
@@ -40,6 +45,9 @@ function trackVideo(src: string) {
     const settle = () => {
       video.removeEventListener("loadeddata", settle);
       video.removeEventListener("error", settle);
+      if (video.readyState >= 2) {
+        completedMedia.add(src);
+      }
       resolve();
     };
 
@@ -130,6 +138,10 @@ export function subscribeHomePreloadProgress(listener: ProgressListener) {
   return () => {
     listeners.delete(listener);
   };
+}
+
+export function isHomeMediaPreloaded(src: string) {
+  return completedMedia.has(src);
 }
 
 export function ensureHomeExperiencePreloaded() {
