@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { routes } from "@/constants/routes";
 import { isHomeMediaPreloaded } from "@/components/home/homePreload";
+import { cloudinaryVideos } from "@/config/media";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -20,11 +21,13 @@ function getInitialVideoEnabled() {
     "(prefers-reduced-motion: reduce)",
   ).matches;
   const videoProbe = document.createElement("video");
-  const canPlayMp4 =
+  const canPlayVideo =
     typeof videoProbe.canPlayType === "function" &&
-    videoProbe.canPlayType("video/mp4").replace(/no/i, "") !== "";
+    ["video/webm", "video/mp4"].some(
+      (type) => videoProbe.canPlayType(type).replace(/no/i, "") !== "",
+    );
 
-  return canPlayMp4 && !prefersReducedMotion;
+  return canPlayVideo && !prefersReducedMotion;
 }
 
 const TRUST_POINTS = [
@@ -33,7 +36,7 @@ const TRUST_POINTS = [
   "One direct contact before arrival and on the road.",
 ];
 
-const HERO_VIDEO_SRC = "/videos/SriLanka.mp4";
+const HERO_VIDEO_SRC = cloudinaryVideos.hero.url;
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
@@ -201,9 +204,8 @@ export default function HeroSection() {
             onError={() => {
               setVideoReady(false);
             }}
-          >
-            <source src={HERO_VIDEO_SRC} type="video/mp4" />
-          </video>
+            src={HERO_VIDEO_SRC}
+          />
         ) : null}
       </div>
 

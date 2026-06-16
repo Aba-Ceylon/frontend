@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { cloudinaryVideos } from "@/config/media";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,11 +18,13 @@ function getInitialVideoEnabled() {
     "(prefers-reduced-motion: reduce)",
   ).matches;
   const videoProbe = document.createElement("video");
-  const canPlayMp4 =
+  const canPlayVideo =
     typeof videoProbe.canPlayType === "function" &&
-    videoProbe.canPlayType("video/mp4").replace(/no/i, "") !== "";
+    ["video/webm", "video/mp4"].some(
+      (type) => videoProbe.canPlayType(type).replace(/no/i, "") !== "",
+    );
 
-  return canPlayMp4 && !prefersReducedMotion;
+  return canPlayVideo && !prefersReducedMotion;
 }
 
 export default function BuddhaLotus() {
@@ -194,9 +197,8 @@ export default function BuddhaLotus() {
               poster="/beach.jpg"
               aria-hidden="true"
               disablePictureInPicture
-            >
-              <source src="/videos/output.mp4" type="video/mp4" />
-            </video>
+              src={cloudinaryVideos.lotus.url}
+            />
           ) : (
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(201,154,43,0.18),transparent_24%),linear-gradient(180deg,#0A0C10_0%,#15100B_38%,#05070A_100%)]" />
           )}
