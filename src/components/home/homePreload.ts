@@ -7,6 +7,7 @@ import { fetchDestinations } from "@/services/destinationService";
 import { fetchPackages } from "@/services/packageService";
 import { fetchStays } from "@/services/stayService";
 import { fetchVehiclesPage } from "@/services/fleetService";
+import { homeVideoSources } from "@/config/media";
 
 type ProgressListener = (progress: number) => void;
 
@@ -85,11 +86,9 @@ function getHomeAssetTasks() {
     ]),
   );
 
-  const videoSources = ["/videos/SriLanka.mp4", "/videos/output.mp4"];
-
   return [
     ...imageSources.map((src) => () => trackImage(src)),
-    ...videoSources.map((src) => () => trackVideo(src)),
+    ...homeVideoSources.map((src) => () => trackVideo(src)),
   ];
 }
 
