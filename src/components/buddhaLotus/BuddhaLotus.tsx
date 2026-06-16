@@ -1,13 +1,16 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { isHomeMediaPreloaded } from "@/components/home/homePreload";
 import { cloudinaryVideos } from "@/config/media";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const END_EPSILON = 0.08;
+const LOTUS_VIDEO_SRC = cloudinaryVideos.lotus.url;
+const LOTUS_POSTER_SRC = "/beach.jpg";
 
 function getInitialVideoEnabled() {
   if (typeof window === "undefined") {
@@ -41,6 +44,56 @@ export default function BuddhaLotus() {
   const bottomLineRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const videoEnabled = getInitialVideoEnabled();
+  const [videoReady, setVideoReady] = useState(() =>
+    isHomeMediaPreloaded(LOTUS_VIDEO_SRC),
+  );
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!videoEnabled || !video) {
+      return;
+    }
+
+    const preloadLink = document.createElement("link");
+    preloadLink.rel = "preload";
+    preloadLink.as = "video";
+    preloadLink.href = LOTUS_VIDEO_SRC;
+    document.head.appendChild(preloadLink);
+
+    const markReady = () => {
+      if (video.readyState >= 2) {
+        setVideoReady(true);
+      }
+    };
+
+    const handleError = () => {
+      setVideoReady(false);
+    };
+
+    markReady();
+
+    video.preload = "auto";
+    video.muted = true;
+    video.playsInline = true;
+
+    if (video.readyState < 2) {
+      video.load();
+    }
+
+    video.addEventListener("loadeddata", markReady);
+    video.addEventListener("canplay", markReady);
+    video.addEventListener("playing", markReady);
+    video.addEventListener("error", handleError);
+
+    return () => {
+      video.removeEventListener("loadeddata", markReady);
+      video.removeEventListener("canplay", markReady);
+      video.removeEventListener("playing", markReady);
+      video.removeEventListener("error", handleError);
+      preloadLink.remove();
+    };
+  }, [videoEnabled]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -187,17 +240,28 @@ export default function BuddhaLotus() {
           ref={mediaShellRef}
           className="absolute inset-0 z-[1] overflow-hidden will-change-transform"
         >
+          <div
+            className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-700 ${
+              videoReady ? "opacity-0" : "opacity-100"
+            }`}
+            style={{ backgroundImage: `url('${LOTUS_POSTER_SRC}')` }}
+          />
+          {!videoReady ? (
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(201,154,43,0.12),transparent_26%),linear-gradient(180deg,rgba(10,12,16,0.18)_0%,rgba(21,16,11,0.3)_38%,rgba(5,7,10,0.5)_100%)]" />
+          ) : null}
           {videoEnabled ? (
             <video
               ref={videoRef}
-              className="absolute inset-0 h-full w-full object-cover"
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+                videoReady ? "opacity-100" : "opacity-0"
+              }`}
               muted
               playsInline
               preload="auto"
-              poster="/beach.jpg"
+              poster={LOTUS_POSTER_SRC}
               aria-hidden="true"
               disablePictureInPicture
-              src={cloudinaryVideos.lotus.url}
+              src={LOTUS_VIDEO_SRC}
             />
           ) : (
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(201,154,43,0.18),transparent_24%),linear-gradient(180deg,#0A0C10_0%,#15100B_38%,#05070A_100%)]" />
