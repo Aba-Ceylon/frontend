@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const END_EPSILON = 0.08;
 const LOTUS_VIDEO_SRC = cloudinaryVideos.lotus.url;
-const LOTUS_POSTER_SRC = "/beach.jpg";
+const LOTUS_POSTER_SRC = "/LotusFallback.jpg";
 
 function getInitialVideoEnabled() {
   if (typeof window === "undefined") {
