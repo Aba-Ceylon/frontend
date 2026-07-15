@@ -78,7 +78,6 @@ export function ensureHomeExperiencePreloaded() {
   const criticalPromise = Promise.all([windowLoadPromise, logoPromise, heroImagePromise]);
 
   preloadPromise = new Promise<void>((resolve) => {
-    let timerId: ReturnType<typeof setInterval>;
     let criticalCompleted = false;
 
     criticalPromise.finally(() => {
@@ -102,7 +101,7 @@ export function ensureHomeExperiencePreloaded() {
     };
 
     // Run every 16ms (roughly 60fps)
-    timerId = setInterval(update, 16);
+    const timerId = setInterval(update, 16);
   });
 
   return preloadPromise;
