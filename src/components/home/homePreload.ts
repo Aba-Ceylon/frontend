@@ -73,9 +73,8 @@ export function ensureHomeExperiencePreloaded() {
   // Start checking when window load event is ready
   const windowLoadPromise = waitForWindowLoad();
   const logoPromise = trackImage("/LOGO.jpeg");
-  const heroImagePromise = trackImage("/images/heritage/Hero1.jpg");
 
-  const criticalPromise = Promise.all([windowLoadPromise, logoPromise, heroImagePromise]);
+  const criticalPromise = Promise.all([windowLoadPromise, logoPromise]);
 
   preloadPromise = new Promise<void>((resolve) => {
     let criticalCompleted = false;

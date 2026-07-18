@@ -5,7 +5,6 @@ import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { routes } from "@/constants/routes";
-import { isHomeMediaPreloaded } from "@/components/home/homePreload";
 import { cloudinaryVideos } from "@/config/media";
 
 if (typeof window !== "undefined") {
@@ -46,9 +45,6 @@ export default function HeroSection() {
   const actionsRef = useRef<HTMLDivElement>(null);
   const trustRef = useRef<HTMLDivElement>(null);
   const [videoEnabled] = useState(getInitialVideoEnabled);
-  const [videoReady, setVideoReady] = useState(() =>
-    isHomeMediaPreloaded(HERO_VIDEO_SRC),
-  );
 
   useEffect(() => {
     const video = heroVideoRef.current;
@@ -57,22 +53,9 @@ export default function HeroSection() {
       return;
     }
 
-    const syncVideoState = () => {
-      if (video.readyState >= 2) {
-        setVideoReady(true);
-      }
-    };
-
     const ensurePlayback = () => {
-      syncVideoState();
       void video.play().catch(() => {});
     };
-
-    const handleError = () => {
-      setVideoReady(false);
-    };
-
-    syncVideoState();
 
     video.preload = "auto";
     video.muted = true;
@@ -86,8 +69,6 @@ export default function HeroSection() {
 
     video.addEventListener("loadeddata", ensurePlayback);
     video.addEventListener("canplay", ensurePlayback);
-    video.addEventListener("playing", syncVideoState);
-    video.addEventListener("error", handleError);
 
     const handleVisibilityRestore = () => {
       if (document.hidden) {
@@ -107,8 +88,6 @@ export default function HeroSection() {
     return () => {
       video.removeEventListener("loadeddata", ensurePlayback);
       video.removeEventListener("canplay", ensurePlayback);
-      video.removeEventListener("playing", syncVideoState);
-      video.removeEventListener("error", handleError);
       document.removeEventListener(
         "visibilitychange",
         handleVisibilityRestore,
@@ -177,32 +156,19 @@ export default function HeroSection() {
       className="relative min-h-[100svh] overflow-hidden bg-white pt-24 sm:pt-28"
     >
       <div ref={backgroundRef} className="absolute inset-0 scale-[1.01]">
-        <div
-          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-700 ${
-            videoReady ? "opacity-0" : "opacity-100"
-          }`}
-          style={{ backgroundImage: "url('/images/heritage/Hero1.jpg')" }}
-        />
         {videoEnabled ? (
           <video
             ref={heroVideoRef}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
-              videoReady ? "opacity-100" : "opacity-0"
-            }`}
+            className="absolute inset-0 h-full w-full object-cover"
             autoPlay
             muted
             loop
             playsInline
             preload="auto"
-            poster="/images/heritage/Hero1.jpg"
             aria-hidden="true"
             disablePictureInPicture
             onLoadedData={() => {
-              setVideoReady(true);
               void heroVideoRef.current?.play().catch(() => {});
-            }}
-            onError={() => {
-              setVideoReady(false);
             }}
             src={HERO_VIDEO_SRC}
           />
