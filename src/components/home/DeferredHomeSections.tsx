@@ -53,9 +53,9 @@ const WhyChooseUs = dynamic(
   { loading: () => <SectionSkeleton title="Loading" /> },
 );
 
-const FeaturedPckgs = dynamic(
-  () => import("@/components/featuredPackages/FeaturedPckgs"),
-  { loading: () => <SectionSkeleton title="Loading packages" /> },
+const PlanYourJourney = dynamic(
+  () => import("@/components/customPlanner/PlanYourJourney"),
+  { loading: () => <SectionSkeleton title="Loading journey planner" /> },
 );
 
 const FeaturedStays = dynamic(
@@ -66,11 +66,6 @@ const FeaturedStays = dynamic(
 const FleetSection = dynamic(
   () => import("@/components/fleet/FleetSection"),
   { loading: () => <SectionSkeleton title="Loading fleet" /> },
-);
-
-const CustomPlannerSection = dynamic(
-  () => import("@/components/customPlanner/CustomPlannerSection"),
-  { loading: () => <SectionSkeleton className="bg-[#05070A] text-white" title="Loading planner" /> },
 );
 
 const BuddhaLotus = dynamic(
@@ -97,10 +92,9 @@ export default function DeferredHomeSections() {
       <TrustBar />
       <InteractiveMap />
       <WhyChooseUs />
-      <FeaturedPckgs />
+      <PlanYourJourney />
       <FeaturedStays />
       <FleetSection />
-      <CustomPlannerSection />
       <FAQ />
       <Testimonials />
     </>
