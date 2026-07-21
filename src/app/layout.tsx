@@ -251,10 +251,10 @@ const organizationJsonLd = {
     itemListElement: [
       {
         "@type": "Offer",
-        name: "Sri Lanka Tour Packages",
-        url: `${SITE_URL}/packages`,
+        name: "Custom Sri Lanka Journeys",
+        url: `${SITE_URL}/customize-journeys`,
         description:
-          "Handcrafted multi-day Sri Lanka tour packages covering heritage sites, hill country, wildlife, and beaches.",
+          "A guided custom journey planner for building a Sri Lanka route around personal dates, interests, stays, and transport.",
       },
       {
         "@type": "Offer",
@@ -287,14 +287,6 @@ const websiteJsonLd = {
     "Sri Lanka tour packages, heritage stays, and chauffeur fleet hire.",
   publisher: {
     "@id": `${SITE_URL}/#organization`,
-  },
-  potentialAction: {
-    "@type": "SearchAction",
-    target: {
-      "@type": "EntryPoint",
-      urlTemplate: `${SITE_URL}/packages?q={search_term_string}`,
-    },
-    "query-input": "required name=search_term_string",
   },
   inLanguage: "en-US",
 };

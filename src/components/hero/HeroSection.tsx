@@ -1,32 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import { Pause, Play } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { routes } from "@/constants/routes";
-import { cloudinaryVideos } from "@/config/media";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
-}
-
-function getInitialVideoEnabled() {
-  if (typeof window === "undefined") {
-    return false;
-  }
-
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
-  const videoProbe = document.createElement("video");
-  const canPlayVideo =
-    typeof videoProbe.canPlayType === "function" &&
-    ["video/webm", "video/mp4"].some(
-      (type) => videoProbe.canPlayType(type).replace(/no/i, "") !== "",
-    );
-
-  return canPlayVideo && !prefersReducedMotion;
 }
 
 const TRUST_POINTS = [
@@ -35,66 +18,46 @@ const TRUST_POINTS = [
   "One direct contact before arrival and on the road.",
 ];
 
-const HERO_VIDEO_SRC = cloudinaryVideos.hero.url;
+const HERO_IMAGES = Array.from(
+  { length: 11 },
+  (_, index) => `/images/HeroMain/${index + 1}.jpg`,
+);
+
+const CAROUSEL_INTERVAL_MS = 6500;
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
-  const heroVideoRef = useRef<HTMLVideoElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const actionsRef = useRef<HTMLDivElement>(null);
   const trustRef = useRef<HTMLDivElement>(null);
-  const [videoEnabled] = useState(getInitialVideoEnabled);
+  const [activeImage, setActiveImage] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
-    const video = heroVideoRef.current;
-
-    if (!videoEnabled || !video) {
-      return;
-    }
-
-    const ensurePlayback = () => {
-      void video.play().catch(() => {});
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => {
+      setPrefersReducedMotion(mediaQuery.matches);
+      if (mediaQuery.matches) setIsPlaying(false);
     };
-
-    video.preload = "auto";
-    video.muted = true;
-    video.playsInline = true;
-
-    if (video.readyState < 2) {
-      video.load();
-    }
-
-    ensurePlayback();
-
-    video.addEventListener("loadeddata", ensurePlayback);
-    video.addEventListener("canplay", ensurePlayback);
-
-    const handleVisibilityRestore = () => {
-      if (document.hidden) {
-        return;
-      }
-
-      if (video.readyState < 2) {
-        video.load();
-      }
-
-      ensurePlayback();
-    };
-
-    document.addEventListener("visibilitychange", handleVisibilityRestore);
-    window.addEventListener("pageshow", handleVisibilityRestore);
+    updatePreference();
+    mediaQuery.addEventListener("change", updatePreference);
 
     return () => {
-      video.removeEventListener("loadeddata", ensurePlayback);
-      video.removeEventListener("canplay", ensurePlayback);
-      document.removeEventListener(
-        "visibilitychange",
-        handleVisibilityRestore,
-      );
-      window.removeEventListener("pageshow", handleVisibilityRestore);
+      mediaQuery.removeEventListener("change", updatePreference);
     };
-  }, [videoEnabled]);
+  }, []);
+
+  useEffect(() => {
+    if (!isPlaying || prefersReducedMotion) return;
+
+    const intervalId = window.setInterval(() => {
+      setActiveImage((current) => (current + 1) % HERO_IMAGES.length);
+    }, CAROUSEL_INTERVAL_MS);
+
+    return () => window.clearInterval(intervalId);
+  }, [isPlaying, prefersReducedMotion]);
 
   useEffect(() => {
     if (!heroRef.current || !backgroundRef.current || !contentRef.current) {
@@ -102,10 +65,6 @@ export default function HeroSection() {
     }
 
     const ctx = gsap.context(() => {
-      if (videoEnabled && heroVideoRef.current) {
-        void heroVideoRef.current.play().catch(() => {});
-      }
-
       gsap.to(backgroundRef.current, {
         scale: 1.04,
         yPercent: 6,
@@ -115,18 +74,6 @@ export default function HeroSection() {
           start: "top top",
           end: "bottom top",
           scrub: 1,
-        },
-      });
-
-      gsap.to(contentRef.current, {
-        opacity: 0,
-        y: -90,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.7,
         },
       });
 
@@ -148,7 +95,7 @@ export default function HeroSection() {
     });
 
     return () => ctx.revert();
-  }, [videoEnabled]);
+  }, []);
 
   return (
     <section
@@ -156,28 +103,51 @@ export default function HeroSection() {
       className="relative min-h-[100svh] overflow-hidden bg-white pt-24 sm:pt-28"
     >
       <div ref={backgroundRef} className="absolute inset-0 scale-[1.01]">
-        {videoEnabled ? (
-          <video
-            ref={heroVideoRef}
-            className="absolute inset-0 h-full w-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
+        {HERO_IMAGES.map((src, index) => (
+          <Image
+            key={src}
+            src={src}
+            alt=""
+            fill
+            priority={index === 0}
+            sizes="100vw"
+            quality={82}
             aria-hidden="true"
-            disablePictureInPicture
-            onLoadedData={() => {
-              void heroVideoRef.current?.play().catch(() => {});
-            }}
-            src={HERO_VIDEO_SRC}
+            className={`object-cover transition-[opacity,transform] duration-[1600ms] ease-out ${
+              index === activeImage
+                ? "z-10 scale-100 opacity-100"
+                : "z-0 scale-[1.045] opacity-0"
+            }`}
           />
-        ) : null}
+        ))}
       </div>
 
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.84)_0%,rgba(255,255,255,0.72)_32%,rgba(255,255,255,0.38)_56%,rgba(255,255,255,0.06)_100%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(24,34,49,0.05)_0%,rgba(24,34,49,0.02)_42%,rgba(255,255,255,0)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(191,146,48,0.08),transparent_22%)]" />
+
+      <div className="absolute bottom-5 right-5 z-20 flex items-center gap-2 sm:bottom-7 sm:right-8" aria-label="Hero image carousel controls">
+        <div className="flex items-center gap-1.5 border border-white/30 bg-[#182231]/45 px-3 py-2 backdrop-blur-md">
+          {HERO_IMAGES.map((src, index) => (
+            <button
+              key={src}
+              type="button"
+              onClick={() => setActiveImage(index)}
+              className={`h-1.5 transition-all duration-500 ${index === activeImage ? "w-7 bg-white" : "w-1.5 bg-white/45 hover:bg-white/75"}`}
+              aria-label={`Show image ${index + 1} of ${HERO_IMAGES.length}`}
+              aria-current={index === activeImage ? "true" : undefined}
+            />
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={() => setIsPlaying((current) => !current)}
+          className="flex h-9 w-9 items-center justify-center border border-white/30 bg-[#182231]/45 text-white backdrop-blur-md transition hover:bg-[#182231]/70"
+          aria-label={isPlaying ? "Pause image carousel" : "Play image carousel"}
+        >
+          {isPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+        </button>
+      </div>
 
       <div className="relative z-10 mx-auto grid min-h-[calc(100svh-6rem)] w-full max-w-[1360px] gap-10 px-6 pb-12 pt-12 sm:px-8 lg:grid-cols-[minmax(0,1.05fr)_320px] lg:px-10 lg:pb-16">
         <div ref={contentRef} className="flex flex-col justify-end">
@@ -213,16 +183,16 @@ export default function HeroSection() {
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row lg:hidden">
             <Link
-              href={routes.packages}
+              href={routes.customizeJourneys}
               className="inline-flex min-h-13 items-center justify-center bg-[#182231] px-7 py-4 font-cinzel text-xs uppercase tracking-[0.22em] text-white transition hover:bg-[#243142]"
             >
-              Explore Curated Packages
+              Customize Your Journey
             </Link>
             <Link
-              href={routes.planner}
+              href={routes.customizeJourneys}
               className="inline-flex min-h-13 items-center justify-center border border-[#182231]/16 bg-[rgba(255,253,248,0.78)] px-7 py-4 font-cinzel text-xs uppercase tracking-[0.22em] text-[#182231] transition hover:bg-white"
             >
-              Plan With Us
+              See How It Works
             </Link>
           </div>
         </div>
@@ -236,21 +206,21 @@ export default function HeroSection() {
               Start here
             </p>
             <p className="mt-3 text-sm leading-7 text-[#445062]">
-              Explore ready-made routes or begin a fully custom journey with the
-              planner.
+              Learn how to shape your route, then open the planner when you are
+              ready.
             </p>
           </div>
           <Link
-            href={routes.packages}
+            href={routes.customizeJourneys}
             className="inline-flex min-h-14 items-center justify-center bg-[#182231] px-8 py-4 text-center font-cinzel text-xs uppercase tracking-[0.24em] text-white transition hover:bg-[#243142]"
           >
-            Explore Curated Packages
+            Customize Your Journey
           </Link>
           <Link
-            href={routes.planner}
+            href={routes.customizeJourneys}
             className="inline-flex min-h-14 items-center justify-center border border-[#182231]/16 bg-[rgba(255,253,248,0.84)] px-8 py-4 text-center font-cinzel text-xs uppercase tracking-[0.24em] text-[#182231] transition hover:bg-white"
           >
-            Plan With Us
+            See How It Works
           </Link>
         </div>
       </div>

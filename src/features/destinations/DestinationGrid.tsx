@@ -7,7 +7,7 @@ export function DestinationGrid({
   destinations: Destination[];
 }) {
   return (
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid gap-x-7 gap-y-12 md:grid-cols-2 xl:grid-cols-3">
       {destinations.map((destination) => (
         <DestinationCard key={destination.id} destination={destination} />
       ))}

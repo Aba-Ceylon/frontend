@@ -131,13 +131,23 @@ export default function PlannerInteractiveMap({
     }>
   >([]);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const [selectedMapDestination, setSelectedMapDestination] =
+  const [selectedMapDestinationState, setSelectedMapDestination] =
     useState<Destination | null>(null);
   const [legendExpanded, setLegendExpanded] = useState(false);
 
   const selectedDestinationSet = useMemo(
     () => new Set(selectedDestinationIds),
     [selectedDestinationIds],
+  );
+  const selectedMapDestination = useMemo(
+    () =>
+      selectedMapDestinationState &&
+      destinations.some(
+        (destination) => destination.id === selectedMapDestinationState.id,
+      )
+        ? selectedMapDestinationState
+        : null,
+    [destinations, selectedMapDestinationState],
   );
 
   useEffect(() => {

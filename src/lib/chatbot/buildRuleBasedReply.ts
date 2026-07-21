@@ -382,7 +382,7 @@ function buildTransportReply(
 
 function buildContactReply(profile: TravelerProfile) {
   return reply(
-    "You can review the ready-made tours on /packages and transport options on /fleet, then contact Aba Ceylon to confirm dates and booking. If you want, choose one of these and I’ll narrow it first.",
+    "You can learn how to build your own route on /customize-journeys and review transport options on /fleet, then contact Aba Ceylon to confirm dates and booking.",
     buildFollowUpSuggestions(profile),
   );
 }

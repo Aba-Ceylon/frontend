@@ -1,9 +1,6 @@
 import type { MetadataRoute } from "next";
-import { packages } from "@/data/packages";
 import { destinations } from "@/data/destinations";
 import { stays } from "@/data/stays";
-// Note: destinations.ts also exports empty arrays named packages/stays/vehicles;
-// we import stays & packages from their canonical data files above.
 
 const BASE_URL = "https://www.abaceylontours.com";
 
@@ -18,9 +15,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
-      url: `${BASE_URL}/packages`,
+      url: `${BASE_URL}/customize-journeys`,
       lastModified: now,
-      changeFrequency: "weekly",
+      changeFrequency: "monthly",
       priority: 0.9,
     },
     {
@@ -61,13 +58,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const packageRoutes: MetadataRoute.Sitemap = packages.map((pkg) => ({
-    url: `${BASE_URL}/packages/${pkg.id}`,
-    lastModified: now,
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }));
-
   const destinationRoutes: MetadataRoute.Sitemap = destinations.map((dest) => ({
     url: `${BASE_URL}/destinations/${dest.slug}`,
     lastModified: now,
@@ -84,7 +74,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     ...staticRoutes,
-    ...packageRoutes,
     ...destinationRoutes,
     ...stayRoutes,
   ];

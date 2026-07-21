@@ -37,9 +37,9 @@ export default async function MyPlansPage() {
               href: routes.planner,
             },
             {
-              title: "Explore packages",
-              body: "If you are not ready for a fully custom route, start from curated packages and refine from there.",
-              href: routes.packages,
+              title: "Planning guide",
+              body: "Review how the custom journey process works and what to prepare before you begin.",
+              href: routes.customizeJourneys,
             },
           ].map((item) => (
             <Link
