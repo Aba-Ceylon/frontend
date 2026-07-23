@@ -24,8 +24,7 @@ import {
 } from "@/lib/planner/plannerHelpers";
 
 const {
-  getRequiredSriLankaStayDays,
-  getSriLankaDepartureDate,
+  getSriLankaStayLength,
   getTripEndDate,
 } = plannerDateHelpers();
 
@@ -114,11 +113,10 @@ export default function PlannerPage() {
 
   const { adminPhoneNumber, href: whatsappHref } = useWhatsApp(whatsappMessage);
   const tripEndDate = getTripEndDate(form.travelStartDate, form.travelDays);
-  const sriLankaDepartureDate = getSriLankaDepartureDate(
+  const stayLength = getSriLankaStayLength(
     form.arrivalDate,
-    form.sriLankaStayDays,
+    form.departureDate,
   );
-  const requiredSriLankaStayDays = getRequiredSriLankaStayDays(form);
   const canContinue = stepValidity[currentStep];
   const currentStepValidationIssues = [
     tripValidationIssues,
@@ -309,7 +307,7 @@ export default function PlannerPage() {
                   <StepHeader
                     eyebrow="Step 1"
                     title="Trip Details"
-                    description="Tell us when you arrive in Sri Lanka, how long you plan to stay, and how many days of guided travel you want us to arrange."
+                    description="Add your arrival and return-flight dates, then tell us when chauffeur service should begin and whether you need an airport drop-off."
                   />
 
                   <div className="grid gap-4 lg:grid-cols-2">
@@ -326,15 +324,12 @@ export default function PlannerPage() {
 
                     <Card variant="white" className="p-5">
                       <Input
-                        label="Total Days In Sri Lanka"
-                        type="number"
-                        min={1}
-                        value={form.sriLankaStayDays}
+                        label="Departure / Return Flight Date"
+                        type="date"
+                        min={form.arrivalDate || undefined}
+                        value={form.departureDate}
                         onChange={(event) =>
-                          updateField(
-                            "sriLankaStayDays",
-                            Math.max(1, Number(event.target.value) || 1),
-                          )
+                          updateField("departureDate", event.target.value)
                         }
                       />
                     </Card>
@@ -345,6 +340,7 @@ export default function PlannerPage() {
                         type="date"
                         value={form.travelStartDate}
                         min={form.arrivalDate || undefined}
+                        max={form.departureDate || undefined}
                         onChange={(event) =>
                           updateField("travelStartDate", event.target.value)
                         }
@@ -367,6 +363,58 @@ export default function PlannerPage() {
                     </Card>
                   </div>
 
+                  <div className="grid gap-4 lg:grid-cols-2">
+                    <fieldset className="border border-[#182231]/10 bg-white p-5">
+                      <legend className="px-1 font-cinzel text-sm text-[#182231]">
+                        Vehicle from arrival day?
+                      </legend>
+                      <p className="mt-2 text-sm leading-6 text-[#445062]">
+                        Choose yes if you want the chauffeur and vehicle waiting for your airport arrival.
+                      </p>
+                      <div className="mt-4 grid grid-cols-2 gap-3">
+                        {[true, false].map((value) => (
+                          <button
+                            key={String(value)}
+                            type="button"
+                            onClick={() => updateField("vehicleFromArrival", value)}
+                            className={`min-h-12 border px-4 font-cinzel text-[10px] uppercase tracking-[0.16em] transition ${
+                              form.vehicleFromArrival === value
+                                ? "border-[#182231] bg-[#182231] text-white"
+                                : "border-[#182231]/14 bg-white text-[#182231] hover:border-[#9b7422]"
+                            }`}
+                          >
+                            {value ? "Yes, airport pickup" : "No, tour start only"}
+                          </button>
+                        ))}
+                      </div>
+                    </fieldset>
+
+                    <fieldset className="border border-[#182231]/10 bg-white p-5">
+                      <legend className="px-1 font-cinzel text-sm text-[#182231]">
+                        Departure airport transfer?
+                      </legend>
+                      <p className="mt-2 text-sm leading-6 text-[#445062]">
+                        Include the final drive to the airport on your departure date.
+                      </p>
+                      <div className="mt-4 grid grid-cols-2 gap-3">
+                        {[true, false].map((value) => (
+                          <button
+                            key={String(value)}
+                            type="button"
+                            onClick={() => updateField("departureAirportTransfer", value)}
+                            className={`min-h-12 border px-4 font-cinzel text-[10px] uppercase tracking-[0.16em] transition ${
+                              form.departureAirportTransfer === value
+                                ? "border-[#182231] bg-[#182231] text-white"
+                                : "border-[#182231]/14 bg-white text-[#182231] hover:border-[#9b7422]"
+                            }`}
+                          >
+                            {value ? "Yes, include drop-off" : "No transfer needed"}
+                          </button>
+                        ))}
+                      </div>
+                    </fieldset>
+                  </div>
+
                   <div className="grid gap-4 xl:grid-cols-4">
                     <Card variant="white" className="p-6">
                       <p className="mb-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600">
@@ -380,24 +428,25 @@ export default function PlannerPage() {
                     </Card>
                     <Card variant="white" className="p-6">
                       <p className="mb-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600">
-                        Sri Lanka Departure
+                        Time In Sri Lanka
                       </p>
                       <p className="font-cinzel text-lg text-[#0F172A]">
-                        {sriLankaDepartureDate ||
-                          "Choose your arrival and stay duration"}
+                        {stayLength.calendarDays
+                          ? `${stayLength.calendarDays} days / ${stayLength.nights} nights`
+                          : "Choose arrival and departure"}
                       </p>
                     </Card>
                     <Card variant="white" className="p-6">
                       <p className="mb-3 font-cinzel text-sm uppercase tracking-[0.24em] text-neutral-600">
-                        Minimum Stay Needed
+                        Chauffeur Begins
                       </p>
                       <p className="font-cinzel text-lg text-[#0F172A]">
-                        {requiredSriLankaStayDays} day
-                        {requiredSriLankaStayDays === 1 ? "" : "s"}
+                        {form.vehicleFromArrival ? "Arrival day" : "Tour start date"}
                       </p>
                       <p className="mt-2 text-sm text-neutral-600">
-                        Based on your arrival date, route start date, and route
-                        duration.
+                        {form.vehicleFromArrival
+                          ? "Airport pickup is included in the route estimate."
+                          : "Airport pickup is not requested."}
                       </p>
                     </Card>
                     <Card variant="white" className="p-6">
@@ -448,12 +497,29 @@ export default function PlannerPage() {
               ) : null}
 
               {currentStep === 1 ? (
-                <DestinationSelector
-                  destinations={allDestinations}
-                  onToggleDestination={toggleDestination}
-                  selectedDestinationIds={form.selectedDestinationIds}
-                  validationIssues={destinationValidationIssues}
-                />
+                <div className="space-y-6">
+                  <DestinationSelector
+                    destinations={allDestinations}
+                    onToggleDestination={toggleDestination}
+                    selectedDestinationIds={form.selectedDestinationIds}
+                    validationIssues={destinationValidationIssues}
+                  />
+                  {selectedDestinations.length ? (
+                    <div className="border border-[#182231]/10 bg-[#182231] p-6 text-white">
+                      <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+                        <div>
+                          <p className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-[#d5aa47]">Live route estimate</p>
+                          <p className="mt-2 text-sm leading-7 text-white/68">
+                            Based on your selection order
+                            {form.vehicleFromArrival ? ", including arrival pickup" : ""}
+                            {form.departureAirportTransfer ? " and departure airport drop-off" : ""}.
+                          </p>
+                        </div>
+                        <p className="font-cinzel text-4xl text-[#f0c967]">~{reviewData.routeEstimate.totalDistanceKm} km</p>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
               ) : null}
 
               {currentStep === 2 ? (

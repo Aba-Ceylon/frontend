@@ -124,7 +124,7 @@ export default async function DestinationPage({ params }: Props) {
               <div className="grid grid-cols-[42px_1fr] gap-4 py-6">
                 <MapPin className="mt-0.5 h-5 w-5 text-[#9b7422]" />
                 <div>
-                  <p className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-[#182231]/48">Location</p>
+                  <p className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-[#182231]/48">District</p>
                   <p className="mt-2 font-cinzel text-lg leading-7 text-[#182231]">{destination.district}</p>
                   <p className="mt-1 text-sm leading-6 text-[#182231]/58">{destination.province}</p>
                 </div>

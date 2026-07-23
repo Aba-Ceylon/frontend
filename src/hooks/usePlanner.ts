@@ -57,9 +57,11 @@ type PlannerAction =
 
 const DEFAULT_FORM: PlannerFormState = {
   arrivalDate: "",
-  sriLankaStayDays: 7,
+  departureDate: "",
   travelStartDate: "",
   travelDays: 5,
+  vehicleFromArrival: true,
+  departureAirportTransfer: true,
   selectedDestinationIds: [],
   vehicleType: "",
   comfortLevel: "",
@@ -195,7 +197,14 @@ export function usePlanner() {
   const steps = useMemo(() => getPlannerSteps(), []);
 
   const selectedDestinations = useMemo(
-    () => destinations.filter((d) => form.selectedDestinationIds.includes(d.id)),
+    () => {
+      const destinationById = new Map(
+        destinations.map((destination) => [destination.id, destination]),
+      );
+      return form.selectedDestinationIds
+        .map((id) => destinationById.get(id))
+        .filter((destination): destination is Destination => Boolean(destination));
+    },
     [destinations, form.selectedDestinationIds],
   );
 
@@ -233,11 +242,11 @@ export function usePlanner() {
     () =>
       buildPlannerReviewData({
         tripDetails: form,
-        destinationCount: selectedDestinations.length,
+        destinations: selectedDestinations,
         accommodationMode: form.accommodationMode,
         selectedStayCount: selectedStayPlans.length,
       }),
-    [form, selectedDestinations.length, selectedStayPlans.length],
+    [form, selectedDestinations, selectedStayPlans.length],
   );
 
   // Validations

@@ -301,11 +301,13 @@ function mapDestinationRow(
       provinceLookup,
       fallbackDestination?.province,
     ),
-    district: inferLookupValue(
-      tags,
-      districtLookup,
-      fallbackDestination?.district,
-    ),
+    district: isNonEmptyString(row.district)
+      ? row.district.trim()
+      : inferLookupValue(
+          tags,
+          districtLookup,
+          fallbackDestination?.district,
+        ),
     coordinates,
     summary: buildDestinationSummary(row, tags, fallbackDestination),
     description: buildDestinationDescription(row, fallbackDestination),
