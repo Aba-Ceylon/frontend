@@ -13,9 +13,24 @@ export interface PlannerStaySelection {
 
 export interface PlannerTripDetails {
   arrivalDate: string;
-  sriLankaStayDays: number;
+  departureDate: string;
   travelStartDate: string;
   travelDays: number;
+  vehicleFromArrival: boolean;
+  departureAirportTransfer: boolean;
+}
+
+export interface PlannerRouteLeg {
+  from: string;
+  to: string;
+  distanceKm: number;
+}
+
+export interface PlannerRouteEstimate {
+  totalDistanceKm: number;
+  legs: PlannerRouteLeg[];
+  includesArrivalPickup: boolean;
+  includesDepartureTransfer: boolean;
 }
 
 export interface PlannerFormState extends PlannerTripDetails {
@@ -37,6 +52,10 @@ export interface PlannerReviewData {
   serviceIncluded: string;
   accommodationNote: string;
   totalDestinations: number;
+  stayLengthLabel: string;
+  chauffeurStartLabel: string;
+  departureTransferLabel: string;
+  routeEstimate: PlannerRouteEstimate;
 }
 
 export interface PlannerStep {

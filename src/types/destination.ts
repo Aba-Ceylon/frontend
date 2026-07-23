@@ -39,6 +39,7 @@ export interface Destination {
 export interface SupabaseDestinationRow {
   destination_id: number;
   name: string | null;
+  district: string | null;
   latitude: number | string | null;
   longitude: number | string | null;
   description: string | null;

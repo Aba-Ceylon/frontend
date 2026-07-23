@@ -63,6 +63,20 @@ export default function PlannerSummary({
               <p className="text-sm leading-6 text-[#445062]">
                 {reviewData.tripLabel}
               </p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                <div className="border-l-2 border-[#C99A2B] pl-4">
+                  <p className="text-[10px] uppercase tracking-[0.16em] text-[#6e7684]">Stay length</p>
+                  <p className="mt-1 text-sm text-[#182231]">{reviewData.stayLengthLabel}</p>
+                </div>
+                <div className="border-l-2 border-[#C99A2B] pl-4">
+                  <p className="text-[10px] uppercase tracking-[0.16em] text-[#6e7684]">Chauffeur start</p>
+                  <p className="mt-1 text-sm text-[#182231]">{reviewData.chauffeurStartLabel}</p>
+                </div>
+                <div className="border-l-2 border-[#C99A2B] pl-4">
+                  <p className="text-[10px] uppercase tracking-[0.16em] text-[#6e7684]">Final transfer</p>
+                  <p className="mt-1 text-sm text-[#182231]">{reviewData.departureTransferLabel}</p>
+                </div>
+              </div>
             </div>
 
             <div>
@@ -70,16 +84,43 @@ export default function PlannerSummary({
                 Destinations
               </p>
               <div className="flex flex-wrap gap-2">
-                {selectedDestinations.map((destination) => (
+                {selectedDestinations.map((destination, index) => (
                   <Badge
                     key={destination.id}
                     variant="light"
                     className="border-[#182231]/10 bg-[#f4ecdf] py-2 text-[#445062]"
                   >
-                    {destination.name}
+                    {index + 1}. {destination.name}
                   </Badge>
                 ))}
               </div>
+            </div>
+
+            <div>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="font-cinzel text-lg text-[#182231]">Estimated Tour Distance</p>
+                  <p className="mt-1 text-xs leading-5 text-[#6e7684]">
+                    Coordinate-based road estimate. The final itinerary may change the exact distance.
+                  </p>
+                </div>
+                <p className="font-cinzel text-3xl text-[#8b6b1f]">
+                  ~{reviewData.routeEstimate.totalDistanceKm} km
+                </p>
+              </div>
+              {reviewData.routeEstimate.legs.length ? (
+                <ol className="mt-5 divide-y divide-[#182231]/8 border-y border-[#182231]/8">
+                  {reviewData.routeEstimate.legs.map((leg, index) => (
+                    <li key={`${leg.from}-${leg.to}-${index}`} className="grid gap-1 py-3 text-sm sm:grid-cols-[32px_1fr_auto] sm:items-center sm:gap-3">
+                      <span className="font-cinzel text-xs text-[#8b6b1f]">{String(index + 1).padStart(2, "0")}</span>
+                      <span className="text-[#445062]">{leg.from} → {leg.to}</span>
+                      <span className="font-cinzel text-xs text-[#182231]">~{leg.distanceKm} km</span>
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                <p className="mt-4 text-sm text-[#6e7684]">Add another route point or airport transfer to calculate distance.</p>
+              )}
             </div>
 
             <div>

@@ -2,6 +2,7 @@ import type { Destination } from "@/types/destination";
 import type {
   ComfortLevel,
   PlannerReviewData,
+  PlannerRouteEstimate,
   PlannerStaySelection,
   PlannerTripDetails,
   PlannerWhatsAppContext,
@@ -33,9 +34,14 @@ export const COMFORT_LEVELS: Array<{
 ];
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
+const ROAD_DISTANCE_FACTOR = 1.25;
+const BANDARANAIKE_AIRPORT = {
+  name: "Bandaranaike International Airport",
+  coordinates: [79.8841, 7.1808] as [number, number],
+};
 
 function startOfDay(value: string) {
-  return new Date(`${value}T00:00:00`);
+  return new Date(`${value}T00:00:00Z`);
 }
 
 function differenceInDays(start: string, end: string) {
@@ -46,7 +52,7 @@ function differenceInDays(start: string, end: string) {
 
 function addDays(value: string, days: number) {
   const date = startOfDay(value);
-  date.setDate(date.getDate() + days);
+  date.setUTCDate(date.getUTCDate() + days);
   return date.toISOString().slice(0, 10);
 }
 
@@ -194,6 +200,63 @@ export function getRequiredSriLankaStayDays(details: PlannerTripDetails) {
   return daysBeforeRouteStarts + details.travelDays;
 }
 
+export function getSriLankaStayLength(arrivalDate: string, departureDate: string) {
+  if (!arrivalDate || !departureDate) {
+    return { calendarDays: 0, nights: 0 };
+  }
+
+  const nights = differenceInDays(arrivalDate, departureDate);
+  if (nights < 0) {
+    return { calendarDays: 0, nights: 0 };
+  }
+
+  return { calendarDays: nights + 1, nights };
+}
+
+export function calculatePlannerRouteEstimate(
+  destinations: Destination[],
+  options: {
+    vehicleFromArrival: boolean;
+    departureAirportTransfer: boolean;
+  },
+): PlannerRouteEstimate {
+  const routePoints = destinations.map((destination) => ({
+    name: destination.name,
+    coordinates: destination.coordinates,
+  }));
+
+  if (options.vehicleFromArrival && routePoints.length) {
+    routePoints.unshift(BANDARANAIKE_AIRPORT);
+  }
+
+  if (options.departureAirportTransfer && routePoints.length) {
+    routePoints.push(BANDARANAIKE_AIRPORT);
+  }
+
+  const legs = routePoints.slice(1).map((point, index) => {
+    const previous = routePoints[index];
+    const directDistance = haversineDistanceKm(
+      previous.coordinates[1],
+      previous.coordinates[0],
+      point.coordinates[1],
+      point.coordinates[0],
+    );
+
+    return {
+      from: previous.name,
+      to: point.name,
+      distanceKm: Math.max(1, Math.round(directDistance * ROAD_DISTANCE_FACTOR)),
+    };
+  });
+
+  return {
+    totalDistanceKm: legs.reduce((total, leg) => total + leg.distanceKm, 0),
+    legs,
+    includesArrivalPickup: options.vehicleFromArrival,
+    includesDepartureTransfer: options.departureAirportTransfer,
+  };
+}
+
 export function validateTripDetails(details: PlannerTripDetails) {
   const issues: string[] = [];
 
@@ -201,8 +264,8 @@ export function validateTripDetails(details: PlannerTripDetails) {
     issues.push("Arrival date is required.");
   }
 
-  if (details.sriLankaStayDays < 1) {
-    issues.push("Total stay in Sri Lanka must be at least 1 day.");
+  if (!details.departureDate) {
+    issues.push("Departure or return-flight date is required.");
   }
 
   if (!details.travelStartDate) {
@@ -213,10 +276,10 @@ export function validateTripDetails(details: PlannerTripDetails) {
     issues.push("Travel days must be at least 1 day.");
   }
 
-  if (details.sriLankaStayDays < details.travelDays) {
-    issues.push(
-      "Total stay in Sri Lanka must be at least as long as your guided travel days.",
-    );
+  if (details.arrivalDate && details.departureDate) {
+    if (differenceInDays(details.arrivalDate, details.departureDate) < 0) {
+      issues.push("Departure date cannot be before your arrival date.");
+    }
   }
 
   if (details.arrivalDate && details.travelStartDate) {
@@ -229,11 +292,13 @@ export function validateTripDetails(details: PlannerTripDetails) {
       issues.push("Travel start date cannot be before your arrival date.");
     }
 
-    const minimumRequiredStayDays = getRequiredSriLankaStayDays(details);
+  }
 
-    if (details.sriLankaStayDays < minimumRequiredStayDays) {
+  if (details.departureDate && details.travelStartDate && details.travelDays > 0) {
+    const routeEndDate = getTripEndDate(details.travelStartDate, details.travelDays);
+    if (routeEndDate && differenceInDays(routeEndDate, details.departureDate) < 0) {
       issues.push(
-        `With an arrival on ${toDisplayDate(details.arrivalDate)} and travel starting on ${toDisplayDate(details.travelStartDate)}, you need at least ${minimumRequiredStayDays} total days in Sri Lanka to cover the gap before the route and your ${details.travelDays}-day journey.`,
+        `Your ${details.travelDays}-day route ends on ${toDisplayDate(routeEndDate)}, after your departure on ${toDisplayDate(details.departureDate)}. Shorten the route or change the dates.`,
       );
     }
   }
@@ -474,22 +539,41 @@ Recommended Stay Plan: ${selectedStayCount} accommodation${selectedStayCount ===
 
 export function buildPlannerReviewData(input: {
   tripDetails: PlannerTripDetails;
-  destinationCount: number;
+  destinations: Destination[];
   accommodationMode: "own" | "recommended" | "";
   selectedStayCount: number;
 }): PlannerReviewData {
   const tripRange = getTripDateRange(input.tripDetails);
+  const stayLength = getSriLankaStayLength(
+    input.tripDetails.arrivalDate,
+    input.tripDetails.departureDate,
+  );
+  const routeEstimate = calculatePlannerRouteEstimate(input.destinations, {
+    vehicleFromArrival: input.tripDetails.vehicleFromArrival,
+    departureAirportTransfer: input.tripDetails.departureAirportTransfer,
+  });
+  const chauffeurStartLabel = input.tripDetails.vehicleFromArrival
+    ? `Arrival pickup on ${toDisplayDate(input.tripDetails.arrivalDate)}`
+    : `Service begins with the tour on ${toDisplayDate(input.tripDetails.travelStartDate)}`;
 
   return {
-    tripLabel: `${toDisplayDate(input.tripDetails.arrivalDate)} arrival - ${input.tripDetails.sriLankaStayDays} days in Sri Lanka - ${tripRange.label}`,
-    serviceIncluded: `Vehicle hire with experienced chauffeur guide for ${input.tripDetails.travelDays} day${input.tripDetails.travelDays === 1 ? "" : "s"}.`,
+    tripLabel: `${toDisplayDate(input.tripDetails.arrivalDate)} arrival - ${toDisplayDate(input.tripDetails.departureDate)} departure - guided route ${tripRange.label}`,
+    serviceIncluded: `${chauffeurStartLabel}. Guided vehicle service is planned for ${input.tripDetails.travelDays} day${input.tripDetails.travelDays === 1 ? "" : "s"}.${input.tripDetails.departureAirportTransfer ? " Airport drop-off requested for departure." : " Departure airport transfer not requested."}`,
     accommodationNote: buildAccommodationNote(
       input.accommodationMode,
-      input.destinationCount,
+      input.destinations.length,
       input.tripDetails.travelDays,
       input.selectedStayCount,
     ),
-    totalDestinations: input.destinationCount,
+    totalDestinations: input.destinations.length,
+    stayLengthLabel: stayLength.calendarDays
+      ? `${stayLength.calendarDays} calendar day${stayLength.calendarDays === 1 ? "" : "s"} / ${stayLength.nights} night${stayLength.nights === 1 ? "" : "s"}`
+      : "Dates not complete",
+    chauffeurStartLabel,
+    departureTransferLabel: input.tripDetails.departureAirportTransfer
+      ? "Airport drop-off required"
+      : "No departure transfer required",
+    routeEstimate,
   };
 }
 
@@ -502,6 +586,25 @@ export function formatStayPlanLabel(
 }
 
 export function buildPlannerWhatsAppMessage(context: PlannerWhatsAppContext) {
+  const stayLength = getSriLankaStayLength(
+    context.tripDetails.arrivalDate,
+    context.tripDetails.departureDate,
+  );
+  const routeEstimate = calculatePlannerRouteEstimate(
+    context.selectedDestinations,
+    {
+      vehicleFromArrival: context.tripDetails.vehicleFromArrival,
+      departureAirportTransfer: context.tripDetails.departureAirportTransfer,
+    },
+  );
+  const routeLegLines = routeEstimate.legs.length
+    ? routeEstimate.legs
+        .map(
+          (leg, index) =>
+            `${index + 1}. ${leg.from} to ${leg.to}: ~${leg.distanceKm} km`,
+        )
+        .join("\n")
+    : "Route distance requires at least two route points";
   const destinationLines = context.selectedDestinations.length
     ? context.selectedDestinations
         .map(
@@ -531,9 +634,16 @@ Traveler: ${context.travelerName || "Signed-in traveler"}
 Email: ${context.travelerEmail || "Not provided"}
 
 Arrival in Sri Lanka: ${toDisplayDate(context.tripDetails.arrivalDate)}
-Total stay in Sri Lanka: ${context.tripDetails.sriLankaStayDays} days
+Departure / return flight: ${toDisplayDate(context.tripDetails.departureDate)}
+Time in Sri Lanka: ${stayLength.calendarDays} calendar days / ${stayLength.nights} nights
 Travel start date: ${toDisplayDate(context.tripDetails.travelStartDate)}
 Travel duration: ${context.tripDetails.travelDays} days
+Vehicle needed from arrival: ${context.tripDetails.vehicleFromArrival ? "Yes - airport pickup requested" : "No - start on tour date"}
+Departure airport transfer: ${context.tripDetails.departureAirportTransfer ? "Yes" : "No"}
+
+Estimated route distance: ${routeEstimate.totalDistanceKm} km (planning estimate; final road route to be confirmed)
+Route legs:
+${routeLegLines}
 
 Destinations:
 ${destinationLines}
@@ -556,6 +666,7 @@ export function plannerDateHelpers() {
   return {
     addDays,
     getRequiredSriLankaStayDays,
+    getSriLankaStayLength,
     getSriLankaDepartureDate,
     getTripEndDate,
     toDisplayDate,

@@ -9,7 +9,9 @@ const plannerHelpers = (
 ).default ?? plannerHelpersModule;
 
 const {
+  calculatePlannerRouteEstimate,
   classifyVehicleComfort,
+  getSriLankaStayLength,
   recommendStaysForDestinations,
   validateTripDetails,
 } = plannerHelpers;
@@ -17,9 +19,11 @@ const {
 test("validateTripDetails flags impossible travel windows", () => {
   const issues = validateTripDetails({
     arrivalDate: "2026-06-10",
-    sriLankaStayDays: 2,
+    departureDate: "2026-06-11",
     travelStartDate: "2026-06-09",
-    travelDays: 3,
+    travelDays: 4,
+    vehicleFromArrival: true,
+    departureAirportTransfer: true,
   });
 
   assert.ok(
@@ -29,9 +33,62 @@ test("validateTripDetails flags impossible travel windows", () => {
   );
   assert.ok(
     issues.some((issue) =>
-      issue.includes("Total stay in Sri Lanka must be at least as long"),
+      issue.includes("after your departure"),
     ),
   );
+});
+
+test("getSriLankaStayLength calculates calendar days and nights from explicit dates", () => {
+  assert.deepEqual(getSriLankaStayLength("2026-07-01", "2026-07-08"), {
+    calendarDays: 8,
+    nights: 7,
+  });
+});
+
+test("calculatePlannerRouteEstimate preserves route order and includes airport transfers", () => {
+  const route = calculatePlannerRouteEstimate(
+    [
+      {
+        id: "sigiriya",
+        slug: "sigiriya",
+        name: "Sigiriya",
+        category: "Heritage",
+        region: "Cultural Triangle",
+        province: "Central Province",
+        district: "Matale",
+        coordinates: [80.7603, 7.9569],
+        summary: "",
+        description: "",
+        highlights: [],
+        bestTimeToVisit: "",
+        whyVisit: "",
+      },
+      {
+        id: "kandy",
+        slug: "kandy",
+        name: "Kandy",
+        category: "Heritage",
+        region: "Hill Country",
+        province: "Central Province",
+        district: "Kandy",
+        coordinates: [80.6337, 7.2906],
+        summary: "",
+        description: "",
+        highlights: [],
+        bestTimeToVisit: "",
+        whyVisit: "",
+      },
+    ],
+    { vehicleFromArrival: true, departureAirportTransfer: true },
+  );
+
+  assert.equal(route.legs.length, 3);
+  assert.equal(route.legs[0]?.from, "Bandaranaike International Airport");
+  assert.equal(route.legs[0]?.to, "Sigiriya");
+  assert.equal(route.legs[1]?.from, "Sigiriya");
+  assert.equal(route.legs[1]?.to, "Kandy");
+  assert.equal(route.legs[2]?.to, "Bandaranaike International Airport");
+  assert.ok(route.totalDistanceKm > 0);
 });
 
 test("classifyVehicleComfort identifies premium vehicles from brand/features", () => {
