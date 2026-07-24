@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "About",
   description:
     "Aba Ceylon Tours & Travels is a Sri Lanka-based travel company founded by a local who knows every road on the island.",
+  alternates: {
+    canonical: "https://www.abaceylontours.com/about",
+  },
 };
 
 const WHATSAPP_NUMBER =

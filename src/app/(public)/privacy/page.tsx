@@ -4,6 +4,9 @@ export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "Privacy policy for Aba Ceylon Tours and Travels and how travel enquiry information is handled.",
+  alternates: {
+    canonical: "https://www.abaceylontours.com/privacy",
+  },
 };
 
 const privacySections = [

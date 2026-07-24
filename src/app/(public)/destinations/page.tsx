@@ -1,7 +1,17 @@
+import type { Metadata } from "next";
 import { DestinationGrid } from "@/features/destinations/DestinationGrid";
 import { DestinationHeader } from "@/features/destinations/DestinationHeader";
 import PageHero from "@/components/ui/PageHero";
 import { fetchDestinations } from "@/services/destinationService";
+
+export const metadata: Metadata = {
+  title: "Destinations",
+  description:
+    "Explore Sri Lanka's heritage cities, hill country, coasts, and wildlife zones with local route context from Aba Ceylon Tours & Travels.",
+  alternates: {
+    canonical: "https://www.abaceylontours.com/destinations",
+  },
+};
 
 export default async function DestinationsPage() {
   const destinations = await fetchDestinations();
