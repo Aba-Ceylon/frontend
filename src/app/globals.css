@@ -315,6 +315,16 @@ img {
   animation: abaCeylonTextSweep 2s linear infinite;
 }
 
+.aba-ceylon-loader-fill {
+  color: transparent;
+  -webkit-text-stroke: 1px #f7f2e7;
+  background:
+    linear-gradient(90deg, transparent 33%, var(--royal-gold) 0 67%, transparent 0)
+    0 / 300% 100% no-repeat text;
+  -webkit-background-clip: text;
+  animation: abaCeylonTextSweep 2.2s linear infinite;
+}
+
 @keyframes abaCeylonTextSweep {
   0% {
     background-position: 100%;
