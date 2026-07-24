@@ -79,7 +79,7 @@ export default function HomeEntryLoader() {
               </AnimatePresence>
             </div>
 
-            <div className="font-cinzel text-shadow-gold text-[13vw] font-bold uppercase leading-none tracking-[0.04em] text-[#f7f2e7] md:text-[6rem]">
+            <div className="aba-ceylon-loader-fill font-cinzel text-[13vw] font-bold uppercase leading-none tracking-[0.04em] md:text-[6rem]">
               Aba Ceylon
             </div>
           </div>
