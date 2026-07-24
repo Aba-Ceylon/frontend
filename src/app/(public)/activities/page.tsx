@@ -1,6 +1,16 @@
+import type { Metadata } from "next";
 import PageHero from "@/components/ui/PageHero";
 import { activities } from "@/data/activities";
 import ActivityCard from "@/features/activities/ActivityCard";
+
+export const metadata: Metadata = {
+  title: "Curated Activities",
+  description:
+    "Route-first Sri Lanka experiences from Aba Ceylon Tours & Travels, chosen to strengthen your itinerary rather than pad it.",
+  alternates: {
+    canonical: "https://www.abaceylontours.com/activities",
+  },
+};
 
 export default function ActivitiesPage() {
   return (
