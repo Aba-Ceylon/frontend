@@ -41,14 +41,14 @@ export default function NavBar() {
   }, [isMobileMenuOpen]);
 
   const shellClass = isScrolled || isAuthPage
-    ? "border-[#182231]/10 bg-[rgba(251,248,242,0.92)] shadow-[0_16px_36px_rgba(17,24,39,0.06)] backdrop-blur-xl"
-    : "border-transparent bg-[rgba(251,248,242,0.58)] backdrop-blur-md";
+    ? "lg:border-[#182231]/10 lg:bg-[rgba(251,248,242,0.92)] lg:shadow-[0_16px_36px_rgba(17,24,39,0.06)] lg:backdrop-blur-xl"
+    : "lg:border-transparent lg:bg-[rgba(251,248,242,0.58)] lg:backdrop-blur-md";
 
   return (
     <>
       <nav className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 lg:px-8">
         <div
-          className={`mx-auto max-w-[1360px] border transition-all duration-500 ${shellClass}`}
+          className={`mx-auto max-w-[1360px] border border-transparent bg-transparent shadow-none backdrop-blur-none transition-all duration-500 ${shellClass}`}
           style={{ fontFamily: 'Switzer, system-ui, -apple-system, "Segoe UI"' }}
         >
           <div className="flex items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
