@@ -4,6 +4,9 @@ export const metadata: Metadata = {
   title: "Terms and Conditions",
   description:
     "Terms and conditions for using the Aba Ceylon Tours and Travels website and planning enquiries.",
+  alternates: {
+    canonical: "https://www.abaceylontours.com/terms",
+  },
 };
 
 const termSections = [
