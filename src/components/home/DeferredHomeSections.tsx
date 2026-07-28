@@ -33,6 +33,11 @@ const WhoWeAre = dynamic(
   { loading: () => <SectionSkeleton className="bg-[#182231] text-white" title="Loading" /> },
 );
 
+const TopPackagesCarousel = dynamic(
+  () => import("@/components/packages/TopPackagesCarousel"),
+  { loading: () => <SectionSkeleton className="bg-[#f6f0e6] text-[#182231]" title="Loading tour packages" /> },
+);
+
 const HowItWorks = dynamic(
   () => import("@/components/howItWorks/HowItWorks"),
   { loading: () => <SectionSkeleton title="Loading" /> },
@@ -87,6 +92,7 @@ export default function DeferredHomeSections() {
   return (
     <>
       <WhoWeAre />
+      <TopPackagesCarousel />
       <HowItWorks />
       <BuddhaLotus />
       <TrustBar />

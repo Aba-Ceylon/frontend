@@ -18,10 +18,12 @@ export const routes = {
   myInquiries: "/my-inquiries",
   myPlans: "/my-plans",
   planner: "/planner",
+  packages: "/packages",
 } as const;
 
 export const primaryNavLinks = [
   { label: "Customize Journeys", href: routes.customizeJourneys },
+  { label: "Tour Packages", href: routes.packages },
   { label: "Destinations", href: routes.destinations },
   { label: "Fleet", href: routes.fleet },
   { label: "Stays", href: routes.stays },

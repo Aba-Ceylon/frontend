@@ -150,7 +150,7 @@ function parseItineraryDay(value: unknown, index: number): ItineraryDay {
   const record = value as Record<string, unknown>;
   const parsedDay = Number(record.day);
   const title =
-    [record.title, record.name, record.label].find(isNonEmptyString)?.trim() ||
+    [record.location, record.title, record.name, record.label].find(isNonEmptyString)?.trim() ||
     `Day ${Number.isFinite(parsedDay) ? parsedDay : index + 1}`;
   const description =
     [
@@ -287,45 +287,20 @@ function getFallbackPackages() {
   return fallbackPackages.map(mapFallbackPackage);
 }
 
-let packagesCache: PackageItem[] | null = null;
-let packagesPromise: Promise<PackageItem[]> | null = null;
-
 export async function fetchPackages() {
-  if (packagesCache) {
-    return packagesCache;
+  try {
+    const supabase = getSupabaseClient();
+    const { data, error } = await supabase
+      .from("packages")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) throw new Error(error.message);
+    const rows = (data ?? []) as SupabasePackageRow[];
+    return rows.length ? rows.map(mapPackageRow) : [];
+  } catch {
+    return getFallbackPackages();
   }
-
-  if (packagesPromise) {
-    return packagesPromise;
-  }
-
-  packagesPromise = (async () => {
-    try {
-      const supabase = getSupabaseClient();
-      const { data, error } = await supabase
-        .from("packages")
-        .select("*")
-        .order("package_id", { ascending: true });
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      const rows = (data ?? []) as SupabasePackageRow[];
-      const result = !rows.length ? getFallbackPackages() : rows.map(mapPackageRow);
-
-      packagesCache = result;
-      return result;
-    } catch {
-      const fallback = getFallbackPackages();
-      packagesCache = fallback;
-      return fallback;
-    } finally {
-      packagesPromise = null;
-    }
-  })();
-
-  return packagesPromise;
 }
 
 export async function fetchPackageBySlug(slug: string) {

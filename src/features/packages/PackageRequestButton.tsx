@@ -3,11 +3,17 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import RequestBookingDialog from "@/components/booking/RequestBookingDialog";
+import PackageRequestDialog from "@/components/booking/PackageRequestDialog";
 import { buildPackageRequestMessage } from "@/lib/packages/buildPackageRequestMessage";
+import {
+  DEFAULT_PACKAGE_REQUEST,
+  validatePackageRequestDates,
+  validatePackageRequestParty,
+} from "@/lib/packages/packageRequest";
 import { generateWhatsAppLink } from "@/lib/whatsapp/generateWhatsAppLink";
 import { usePackageStore } from "@/store/PackageStore";
 import type { PackageItem } from "@/types/package";
+import type { PackageRequestDetails } from "@/types/packageRequest";
 
 interface PackageRequestButtonProps {
   pkg: PackageItem;
@@ -28,9 +34,9 @@ export default function PackageRequestButton({
   const pathname = usePathname();
   const { selectedPackage, setSelectedPackage } = usePackageStore();
   const [isOpen, setIsOpen] = useState(false);
-  const [bookingDate, setBookingDate] = useState("");
-  const [dateUnknown, setDateUnknown] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [details, setDetails] = useState<PackageRequestDetails>(DEFAULT_PACKAGE_REQUEST);
+  const [step, setStep] = useState(0);
+  const [issues, setIssues] = useState<string[]>([]);
   const isRequested = selectedPackage?.id === pkg.id;
   const isUserSignedIn = Boolean(isSignedIn);
 
@@ -42,22 +48,25 @@ export default function PackageRequestButton({
     process.env.NEXT_PUBLIC_ADMIN_WHATSAPP_NUMBER || "+94722554488";
 
   const handleOpen = () => {
-    setBookingDate("");
-    setDateUnknown(false);
-    setErrorMessage("");
+    setDetails(DEFAULT_PACKAGE_REQUEST);
+    setStep(0);
+    setIssues([]);
     setIsOpen(true);
   };
 
   const handleClose = () => {
     setIsOpen(false);
-    setBookingDate("");
-    setDateUnknown(false);
-    setErrorMessage("");
+    setIssues([]);
   };
 
   const handleConfirm = () => {
-    if (!dateUnknown && !bookingDate) {
-      setErrorMessage("Please select a booking date");
+    const validationIssues = [
+      ...validatePackageRequestDates(details),
+      ...validatePackageRequestParty(details),
+    ];
+    if (validationIssues.length) {
+      setIssues(validationIssues);
+      setStep(validationIssues.some((issue) => issue.toLowerCase().includes("date") || issue.toLowerCase().includes("arrival") || issue.toLowerCase().includes("departure") || issue.toLowerCase().includes("chauffeur")) ? 0 : 1);
       return;
     }
 
@@ -69,8 +78,7 @@ export default function PackageRequestButton({
     const href = generateWhatsAppLink(
       adminWhatsAppNumber,
       buildPackageRequestMessage(pkg, {
-        bookingDate: dateUnknown ? null : bookingDate,
-        dateUnknown,
+        details,
         travelerName,
         travelerEmail,
       }),
@@ -79,6 +87,29 @@ export default function PackageRequestButton({
     setSelectedPackage(pkg);
     handleClose();
     window.open(href, "_blank", "noopener,noreferrer");
+  };
+
+  const handleStepChange = (nextStep: number) => {
+    const validationIssues =
+      step === 0
+        ? validatePackageRequestDates(details)
+        : step === 1
+          ? validatePackageRequestParty(details)
+          : [];
+    if (nextStep > step && validationIssues.length) {
+      setIssues(validationIssues);
+      return;
+    }
+    setIssues([]);
+    setStep(nextStep);
+  };
+
+  const handleChange = <K extends keyof PackageRequestDetails>(
+    key: K,
+    value: PackageRequestDetails[K],
+  ) => {
+    setDetails((current) => ({ ...current, [key]: value }));
+    setIssues([]);
   };
 
   const buttonClassName =
@@ -90,32 +121,21 @@ export default function PackageRequestButton({
         {isRequested ? resolvedRequestedLabel : resolvedLabel}
       </button>
 
-      <RequestBookingDialog
+      <PackageRequestDialog
         isOpen={isOpen}
         isLoaded={isLoaded}
         isSignedIn={isUserSignedIn}
         signInHref={signInHref}
-        subjectName={pkg.title}
-        subjectType="package"
-        allowUnknownDate
-        bookingDate={bookingDate}
-        dateUnknown={dateUnknown}
-        errorMessage={errorMessage}
-        onBookingDateChange={(value) => {
-          setBookingDate(value);
-          if (value) setDateUnknown(false);
-          setErrorMessage("");
-        }}
-        onDateUnknownToggle={() => {
-          setDateUnknown((current) => {
-            const next = !current;
-            if (next) setBookingDate("");
-            return next;
-          });
-          setErrorMessage("");
-        }}
+        packageTitle={pkg.title}
+        packageRoute={pkg.route}
+        packageDuration={pkg.duration}
+        details={details}
+        step={step}
+        issues={issues}
+        onChange={handleChange}
+        onStepChange={handleStepChange}
         onClose={handleClose}
-        onConfirm={handleConfirm}
+        onSubmit={handleConfirm}
       />
     </>
   );

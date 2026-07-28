@@ -7,13 +7,13 @@ export default function PackageTimeline({
 }) {
   return (
     <div className="space-y-6">
-      {itinerary.map((day) => (
-        <div key={day.day} className="flex gap-4">
+      {itinerary.map((day, index) => (
+        <div key={`${day.day}-${day.title}-${index}`} className="flex gap-4">
           <div className="flex flex-col items-center">
             <div className="w-9 h-9 rounded-full bg-[#1A2238] text-white flex items-center justify-center font-cinzel text-sm flex-shrink-0">
               {day.day}
             </div>
-            {day.day < itinerary.length && (
+            {index < itinerary.length - 1 && (
               <div className="w-px flex-1 bg-neutral-200 mt-2" />
             )}
           </div>
