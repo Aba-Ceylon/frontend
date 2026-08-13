@@ -3,10 +3,17 @@ import Script from "next/script";
 import StayDetails from "@/features/stays/StayDetails";
 import { fetchStayBySlug } from "@/services/stayService";
 import { notFound } from "next/navigation";
+import { stays } from "@/data/stays";
 
 const BASE_URL = "https://www.abaceylontours.com";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
+
+// Prerender the same slugs the sitemap advertises so every submitted URL is a
+// static page rather than a per-request Supabase fetch.
+export function generateStaticParams() {
+  return stays.map((stay) => ({ slug: stay.id }));
+}
 
 type Props = { params: Promise<{ slug: string }> };
 

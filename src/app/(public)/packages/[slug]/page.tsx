@@ -2,8 +2,16 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PackageDetails from "@/features/packages/PackageDetails";
 import { fetchPackageBySlug } from "@/services/packageService";
+import { packages } from "@/data/packages";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
+
+// Prerender the same slugs the sitemap advertises so every submitted URL is a
+// static page rather than a per-request Supabase fetch.
+export function generateStaticParams() {
+  return packages.map((pkg) => ({ slug: pkg.id }));
+}
+
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

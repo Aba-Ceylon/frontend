@@ -2,7 +2,7 @@ import PageHero from "@/components/ui/PageHero";
 import PackageCard from "@/features/packages/PackageCard";
 import { fetchPackages } from "@/services/packageService";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function PackagesPage() {
   const packages = await fetchPackages();

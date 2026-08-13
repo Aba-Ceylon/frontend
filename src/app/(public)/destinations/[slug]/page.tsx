@@ -6,9 +6,18 @@ import { ArrowLeft, ArrowRight, Compass, MapPin } from "lucide-react";
 import { routes } from "@/constants/routes";
 import { fetchDestinationBySlug } from "@/services/destinationService";
 import DestinationGuideBook from "@/features/destinations/DestinationGuideBook";
+import { destinations } from "@/data/destinations";
 
 const BASE_URL = "https://www.abaceylontours.com";
 const FALLBACK_IMAGE = "/images/heritage/sl-image.webp";
+
+export const revalidate = 3600;
+
+// Prerender the same slugs the sitemap advertises so every submitted URL is a
+// static page rather than a per-request Supabase fetch.
+export function generateStaticParams() {
+  return destinations.map((destination) => ({ slug: destination.slug }));
+}
 
 type Props = {
   params: Promise<{ slug: string }>;
