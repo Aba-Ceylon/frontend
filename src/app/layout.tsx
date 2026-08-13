@@ -143,16 +143,6 @@ export const metadata: Metadata = {
     },
   },
 
-  /* ── Verification (replace placeholder tokens after domain setup) ────────── */
-  verification: {
-    google: "REPLACE_WITH_GOOGLE_SEARCH_CONSOLE_VERIFICATION_TOKEN",
-    // yandex: "REPLACE_WITH_YANDEX_TOKEN",
-    // bing verified via BingWebmasterTools HTML-tag or DNS; add below if needed
-    other: {
-      "msvalidate.01": "REPLACE_WITH_BING_VERIFICATION_TOKEN",
-    },
-  },
-
   /* ── App / PWA metadata ─────────────────────────────────────────────────── */
   applicationName: "Aba Ceylon Tours & Travels",
   authors: [{ name: "Aba Ceylon Tours & Travels", url: SITE_URL }],

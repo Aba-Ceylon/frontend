@@ -22,6 +22,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "seo:check": "node scripts/seo-check.mjs",
     "test": "node --import tsx --test \"src/**/*.test.ts\"",
     "format": "npx prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\" && npx eslint --fix . --ext .js,.jsx,.ts,.tsx"
   },
