@@ -2,15 +2,18 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { Map } from "lucide-react";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import PackageRequestButton from "@/features/packages/PackageRequestButton";
+import { buildGoogleMapsRouteUrl } from "@/lib/maps/buildRouteUrl";
 import { usePackageStore } from "@/store/PackageStore";
 import type { PackageItem } from "@/types/package";
 
 export default function PackageCard({ pkg }: { pkg: PackageItem }) {
   const selectedPackage = usePackageStore((s) => s.selectedPackage);
   const isSelected = selectedPackage?.id === pkg.id;
+  const routeMapsHref = buildGoogleMapsRouteUrl(pkg.route);
 
   const packageLabel = pkg.packageId
     ? `Package ${String(pkg.packageId).padStart(2, "0")}`
@@ -49,9 +52,22 @@ export default function PackageCard({ pkg }: { pkg: PackageItem }) {
         <h3 className="font-cinzel text-xl leading-snug text-[#101A28]">
           {pkg.title}
         </h3>
-        <p className="mt-2 text-sm uppercase tracking-[0.18em] text-[#A97B17]/90">
-          {pkg.route.join(" | ")}
-        </p>
+        {routeMapsHref ? (
+          <a
+            href={routeMapsHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(event) => event.stopPropagation()}
+            className="mt-2 inline-flex items-center gap-1.5 text-sm uppercase tracking-[0.18em] text-[#A97B17]/90 transition hover:text-[#101A28]"
+          >
+            <Map size={13} className="shrink-0" aria-hidden="true" />
+            {pkg.route.join(" | ")}
+          </a>
+        ) : (
+          <p className="mt-2 text-sm uppercase tracking-[0.18em] text-[#A97B17]/90">
+            {pkg.route.join(" | ")}
+          </p>
+        )}
         <p className="mt-4 text-sm leading-7 text-[#3B4654]">{pkg.summary}</p>
 
         <div className="mt-5 flex items-center justify-between border-t border-[#101A28]/8 pt-4">

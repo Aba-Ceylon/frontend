@@ -3,7 +3,8 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { createPortal } from "react-dom";
-import { ArrowLeft, ArrowRight, Check, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Map, X } from "lucide-react";
+import { buildGoogleMapsRouteUrl } from "@/lib/maps/buildRouteUrl";
 import type {
   AccommodationRequest,
   AccommodationStyle,
@@ -81,6 +82,8 @@ export default function PackageRequestDialog(props: Props) {
   }, [isOpen, onClose]);
 
   if (!isOpen || typeof document === "undefined") return null;
+
+  const routeMapsHref = buildGoogleMapsRouteUrl(packageRoute);
 
   const fieldClass =
     "mt-2 min-h-12 w-full border border-[#182231]/14 bg-white px-4 text-sm text-[#182231] outline-none transition focus:border-[#A97B17]";
@@ -217,9 +220,16 @@ export default function PackageRequestDialog(props: Props) {
               <button type="button" onClick={() => step === 0 ? onClose() : onStepChange(step - 1)} className="inline-flex min-h-11 items-center gap-2 px-2 font-cinzel text-[10px] uppercase tracking-[0.16em] text-[#182231]">
                 {step > 0 ? <ArrowLeft className="h-4 w-4" /> : null}{step === 0 ? "Cancel" : "Back"}
               </button>
-              <button type="button" onClick={() => step === 2 ? onSubmit() : onStepChange(step + 1)} className="inline-flex min-h-12 items-center gap-3 bg-[#182231] px-5 font-cinzel text-[10px] uppercase tracking-[0.18em] text-white transition hover:bg-[#283548]">
-                {step === 2 ? "Send request on WhatsApp" : "Continue"}<ArrowRight className="h-4 w-4" />
-              </button>
+              <div className="flex items-center gap-3">
+                {routeMapsHref ? (
+                  <a href={routeMapsHref} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center gap-2 border border-[#182231]/16 px-4 font-cinzel text-[10px] uppercase tracking-[0.18em] text-[#182231] transition hover:border-[#A97B17] hover:text-[#A97B17]">
+                    <Map className="h-4 w-4" />Route
+                  </a>
+                ) : null}
+                <button type="button" onClick={() => step === 2 ? onSubmit() : onStepChange(step + 1)} className="inline-flex min-h-12 items-center gap-3 bg-[#182231] px-5 font-cinzel text-[10px] uppercase tracking-[0.18em] text-white transition hover:bg-[#283548]">
+                  {step === 2 ? "Send request on WhatsApp" : "Continue"}<ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
             </footer>
           </>
         )}

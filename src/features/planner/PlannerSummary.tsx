@@ -1,9 +1,11 @@
 "use client";
 
+import { Map } from "lucide-react";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import StepHeader from "@/components/ui/StepHeader";
+import { buildGoogleMapsRouteUrl } from "@/lib/maps/buildRouteUrl";
 import type { Destination } from "@/types/destination";
 import type { PlannerReviewData } from "@/types/planner";
 import type { Stay } from "@/types/stay";
@@ -37,6 +39,12 @@ export default function PlannerSummary({
   travelerName,
   whatsappHref,
 }: PlannerSummaryProps) {
+  const { legs } = reviewData.routeEstimate;
+  const routeStops = legs.length
+    ? [legs[0].from, ...legs.map((leg) => leg.to)]
+    : [];
+  const routeMapsHref = buildGoogleMapsRouteUrl(routeStops);
+
   return (
     <div className="space-y-6">
       <StepHeader
@@ -186,17 +194,30 @@ export default function PlannerSummary({
               {reviewData.serviceIncluded}
             </p>
           </div>
-          <Button
-            type="button"
-            variant="primary"
-            fullWidth
-            className="min-h-13"
-            onClick={() =>
-              window.open(whatsappHref, "_blank", "noopener,noreferrer")
-            }
-          >
-            Request via WhatsApp
-          </Button>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            {routeMapsHref ? (
+              <a
+                href={routeMapsHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-13 flex-1 items-center justify-center gap-2 border border-[#182231]/16 px-4 font-cinzel text-[11px] uppercase tracking-[0.2em] text-[#182231] transition hover:border-[#A97B17] hover:text-[#A97B17] sm:flex-none"
+              >
+                <Map className="h-4 w-4" aria-hidden="true" />
+                Route
+              </a>
+            ) : null}
+            <Button
+              type="button"
+              variant="primary"
+              fullWidth
+              className="min-h-13"
+              onClick={() =>
+                window.open(whatsappHref, "_blank", "noopener,noreferrer")
+              }
+            >
+              Request via WhatsApp
+            </Button>
+          </div>
         </Card>
       </div>
     </div>
