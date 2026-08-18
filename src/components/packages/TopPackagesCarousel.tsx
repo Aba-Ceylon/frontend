@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight, ArrowUpRight, MapPin } from "lucide-react";
 import { routes } from "@/constants/routes";
 import { packages } from "@/data/packages";
 import { getTopPackages } from "@/lib/packages/getTopPackages";
+import { buildGoogleMapsRouteUrl } from "@/lib/maps/buildRouteUrl";
 
 const topPackages = getTopPackages(packages, 6);
 
@@ -118,10 +119,30 @@ export default function TopPackagesCarousel() {
                     {pkg.summary}
                   </p>
                   <div className="mt-5 flex flex-col gap-5 border-t border-white/16 pt-5 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="flex items-start gap-2 text-xs uppercase tracking-[0.14em] text-white/68">
-                      <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#D8B45B]" aria-hidden="true" />
-                      <span>{pkg.route.slice(0, 3).join(" — ")}</span>
-                    </p>
+                    {(() => {
+                      const routeMapsHref = buildGoogleMapsRouteUrl(pkg.route);
+                      const routeText = (
+                        <>
+                          <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#D8B45B]" aria-hidden="true" />
+                          <span>{pkg.route.slice(0, 3).join(" — ")}</span>
+                        </>
+                      );
+
+                      return routeMapsHref ? (
+                        <a
+                          href={routeMapsHref}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-start gap-2 text-xs uppercase tracking-[0.14em] text-white/68 transition hover:text-white"
+                        >
+                          {routeText}
+                        </a>
+                      ) : (
+                        <p className="flex items-start gap-2 text-xs uppercase tracking-[0.14em] text-white/68">
+                          {routeText}
+                        </p>
+                      );
+                    })()}
                     <Link
                       href={`${routes.packages}/${pkg.id}`}
                       className="inline-flex min-h-11 shrink-0 items-center gap-2 font-cinzel text-[11px] uppercase tracking-[0.18em] text-[#F0D99F] transition-colors hover:text-white"

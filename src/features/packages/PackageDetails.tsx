@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { MapPin, Clock, Route, Car, CheckCircle } from "lucide-react";
+import { MapPin, Clock, Route, Car, CheckCircle, ExternalLink } from "lucide-react";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import PackageRequestButton from "@/features/packages/PackageRequestButton";
+import { buildGoogleMapsRouteUrl } from "@/lib/maps/buildRouteUrl";
 import { PackageItem } from "@/types/package";
 import PackageTimeline from "./PackageTimeline";
 
@@ -13,25 +14,56 @@ function StatCard({
   label,
   value,
   className = "",
+  href,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string;
   className?: string;
+  href?: string;
 }) {
-  return (
-    <Card variant="white" className={`flex items-center gap-3 p-4 ${className}`}>
+  const cardContent = (
+    <>
       {icon}
-      <div>
+      <div className="min-w-0">
         <p className="text-xs text-[#1A2238] font-cinzel">{label}</p>
         <p className="text-sm text-[#1A2238] font-medium font-cinzel">{value}</p>
       </div>
+      {href ? (
+        <ExternalLink size={14} className="ml-auto shrink-0 text-amber-700/60" aria-hidden="true" />
+      ) : null}
+    </>
+  );
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${label}: ${value} — view route on Google Maps`}
+        className={className}
+      >
+        <Card
+          variant="white"
+          className="flex h-full items-center gap-3 p-4 transition hover:border-[#A97B17]/50 hover:shadow-[0_18px_42px_rgba(169,123,23,0.1)]"
+        >
+          {cardContent}
+        </Card>
+      </a>
+    );
+  }
+
+  return (
+    <Card variant="white" className={`flex items-center gap-3 p-4 ${className}`}>
+      {cardContent}
     </Card>
   );
 }
 
 export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
   const routeLabel = pkg.route.join(" → ");
+  const routeMapsHref = buildGoogleMapsRouteUrl(pkg.route);
 
   return (
     <div className="bg-[#F8F4ED] min-h-screen">
@@ -48,7 +80,7 @@ export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
           <StatCard icon={<Clock size={18} className="text-amber-700" />} label="Duration" value={pkg.duration} />
           <StatCard icon={<Route size={18} className="text-amber-700" />} label="Distance" value={`${pkg.km} KM`} />
-          <StatCard icon={<MapPin size={18} className="text-amber-700" />} label="Route" value={routeLabel} className="col-span-2 sm:col-span-1" />
+          <StatCard icon={<MapPin size={18} className="text-amber-700" />} label="Route" value={routeLabel} className="col-span-2 sm:col-span-1" href={routeMapsHref ?? undefined} />
         </div>
 
         <section>
