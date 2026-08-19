@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, Compass, MapPin } from "lucide-react";
 import { routes } from "@/constants/routes";
 import { fetchDestinationBySlug } from "@/services/destinationService";
 import DestinationGuideBook from "@/features/destinations/DestinationGuideBook";
+import DestinationLocationMap from "@/features/destinations/DestinationLocationMap";
 
 const BASE_URL = "https://www.abaceylontours.com";
 const FALLBACK_IMAGE = "/images/heritage/sl-image.webp";
@@ -140,6 +141,8 @@ export default async function DestinationPage({ params }: Props) {
         whyVisit={destination.whyVisit}
         highlights={destination.highlights}
       />
+
+      <DestinationLocationMap key={destination.id} destination={destination} />
 
       {galleryImages.length > 0 ? (
         <section className="bg-white py-14 sm:py-20">

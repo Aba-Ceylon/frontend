@@ -101,7 +101,9 @@ export default function PlannerSummary({
                 <div>
                   <p className="font-cinzel text-lg text-[#182231]">Estimated Tour Distance</p>
                   <p className="mt-1 text-xs leading-5 text-[#6e7684]">
-                    Coordinate-based road estimate. The final itinerary may change the exact distance.
+                    {reviewData.routeEstimate.source === "google"
+                      ? "Google Maps road distance for your selected route."
+                      : "Road-distance estimate while Google Maps is unavailable."}
                   </p>
                 </div>
                 <p className="font-cinzel text-3xl text-[#8b6b1f]">

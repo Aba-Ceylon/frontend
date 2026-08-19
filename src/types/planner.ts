@@ -31,6 +31,7 @@ export interface PlannerRouteEstimate {
   legs: PlannerRouteLeg[];
   includesArrivalPickup: boolean;
   includesDepartureTransfer: boolean;
+  source?: "google" | "estimate";
 }
 
 export interface PlannerFormState extends PlannerTripDetails {
@@ -76,4 +77,5 @@ export interface PlannerWhatsAppContext {
   serviceIncluded: string;
   vehicleType: string;
   comfortLevel: ComfortLevel;
+  routeEstimate?: PlannerRouteEstimate;
 }

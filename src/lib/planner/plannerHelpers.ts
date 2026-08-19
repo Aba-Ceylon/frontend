@@ -34,7 +34,6 @@ export const COMFORT_LEVELS: Array<{
 ];
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
-const ROAD_DISTANCE_FACTOR = 1.25;
 const BANDARANAIKE_AIRPORT = {
   name: "Bandaranaike International Airport",
   coordinates: [79.8841, 7.1808] as [number, number],
@@ -245,7 +244,7 @@ export function calculatePlannerRouteEstimate(
     return {
       from: previous.name,
       to: point.name,
-      distanceKm: Math.max(1, Math.round(directDistance * ROAD_DISTANCE_FACTOR)),
+    distanceKm: Math.max(1, Math.round(directDistance * 1.25)),
     };
   });
 
@@ -254,6 +253,7 @@ export function calculatePlannerRouteEstimate(
     legs,
     includesArrivalPickup: options.vehicleFromArrival,
     includesDepartureTransfer: options.departureAirportTransfer,
+    source: "estimate",
   };
 }
 
@@ -590,7 +590,7 @@ export function buildPlannerWhatsAppMessage(context: PlannerWhatsAppContext) {
     context.tripDetails.arrivalDate,
     context.tripDetails.departureDate,
   );
-  const routeEstimate = calculatePlannerRouteEstimate(
+  const routeEstimate = context.routeEstimate ?? calculatePlannerRouteEstimate(
     context.selectedDestinations,
     {
       vehicleFromArrival: context.tripDetails.vehicleFromArrival,
@@ -641,7 +641,7 @@ Travel duration: ${context.tripDetails.travelDays} days
 Vehicle needed from arrival: ${context.tripDetails.vehicleFromArrival ? "Yes - airport pickup requested" : "No - start on tour date"}
 Departure airport transfer: ${context.tripDetails.departureAirportTransfer ? "Yes" : "No"}
 
-Estimated route distance: ${routeEstimate.totalDistanceKm} km (planning estimate; final road route to be confirmed)
+${routeEstimate.source === "google" ? "Google Maps road distance" : "Estimated route distance"}: ${routeEstimate.totalDistanceKm} km${routeEstimate.source === "google" ? "" : " (planning estimate; final road route to be confirmed)"}
 Route legs:
 ${routeLegLines}
 

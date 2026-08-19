@@ -98,11 +98,13 @@ export default function PlannerPage() {
         serviceIncluded: reviewData.serviceIncluded,
         vehicleType: form.vehicleType || "Not selected",
         comfortLevel: form.comfortLevel || "Essential",
+        routeEstimate: reviewData.routeEstimate,
       }),
     [
       form,
       reviewData.accommodationNote,
       reviewData.serviceIncluded,
+      reviewData.routeEstimate,
       selectedDestinations,
       selectedStayPlans,
       selectedVehicle,
@@ -508,14 +510,16 @@ export default function PlannerPage() {
                     <div className="border border-[#182231]/10 bg-[#182231] p-6 text-white">
                       <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
                         <div>
-                          <p className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-[#d5aa47]">Live route estimate</p>
+                          <p className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-[#d5aa47]">
+                            {reviewData.routeEstimate.source === "google" ? "Google Maps road distance" : "Calculating Google Maps route"}
+                          </p>
                           <p className="mt-2 text-sm leading-7 text-white/68">
                             Based on your selection order
                             {form.vehicleFromArrival ? ", including arrival pickup" : ""}
                             {form.departureAirportTransfer ? " and departure airport drop-off" : ""}.
                           </p>
                         </div>
-                        <p className="font-cinzel text-4xl text-[#f0c967]">~{reviewData.routeEstimate.totalDistanceKm} km</p>
+                        <p className="font-cinzel text-4xl text-[#f0c967]">{reviewData.routeEstimate.source === "google" ? "" : "~"}{reviewData.routeEstimate.totalDistanceKm} km</p>
                       </div>
                     </div>
                   ) : null}

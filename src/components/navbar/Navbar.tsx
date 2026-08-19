@@ -53,7 +53,7 @@ export default function NavBar() {
         >
           <div className="flex items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
             <Link href={routes.home} className="flex min-w-0 items-center gap-4">
-              <div className="relative h-11 w-14 overflow-hidden border border-[#182231]/10 bg-white sm:h-12 sm:w-16">
+              <div className="relative h-11 w-14 overflow-hidden rounded-full border border-[#182231]/10 bg-white sm:h-12 sm:w-16">
                 <Image
                   src="/LOGO.jpeg"
                   alt="Aba Ceylon Logo"

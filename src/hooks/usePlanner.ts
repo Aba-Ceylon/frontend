@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useReducer } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import {
   buildPlannerReviewData,
   COMFORT_LEVELS,
@@ -24,6 +24,7 @@ import type {
   PlannerFormState,
   PlannerStaySelection,
   RecommendedStay,
+  PlannerRouteEstimate,
 } from "@/types/planner";
 import type { Stay } from "@/types/stay";
 import type { FleetVehicle } from "@/types/vehicle";
@@ -174,6 +175,7 @@ function plannerReducer(state: PlannerState, action: PlannerAction): PlannerStat
 
 export function usePlanner() {
   const [state, dispatch] = useReducer(plannerReducer, INITIAL_STATE);
+  const [googleRouteEstimate, setGoogleRouteEstimate] = useState<PlannerRouteEstimate | null>(null);
   const { form, destinations, vehicles, stays, isLoading, loadingError, currentStep } = state;
 
   // Data loading — single batched dispatch
@@ -247,6 +249,57 @@ export function usePlanner() {
         selectedStayCount: selectedStayPlans.length,
       }),
     [form, selectedDestinations, selectedStayPlans.length],
+  );
+
+  const routePoints = useMemo(() => {
+    const points = selectedDestinations.map((destination) => ({
+      name: destination.name,
+      latitude: destination.coordinates[1],
+      longitude: destination.coordinates[0],
+    }));
+    const airport = { name: "Bandaranaike International Airport", latitude: 7.1808, longitude: 79.8841 };
+    if (form.vehicleFromArrival && points.length) points.unshift(airport);
+    if (form.departureAirportTransfer && points.length) points.push(airport);
+    return points;
+  }, [form.departureAirportTransfer, form.vehicleFromArrival, selectedDestinations]);
+
+  useEffect(() => {
+    let active = true;
+    if (routePoints.length < 2) {
+      setGoogleRouteEstimate(null);
+      return () => { active = false; };
+    }
+
+    setGoogleRouteEstimate(null);
+    fetch("/api/planner/route", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ points: routePoints }),
+    })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Route calculation failed");
+        return response.json() as Promise<Omit<PlannerRouteEstimate, "includesArrivalPickup" | "includesDepartureTransfer">>;
+      })
+      .then((route) => {
+        if (!active) return;
+        setGoogleRouteEstimate({
+          ...route,
+          includesArrivalPickup: form.vehicleFromArrival,
+          includesDepartureTransfer: form.departureAirportTransfer,
+          source: "google",
+        });
+      })
+      .catch(() => {
+        if (active) setGoogleRouteEstimate(null);
+      });
+
+    return () => { active = false; };
+  }, [form.departureAirportTransfer, form.vehicleFromArrival, routePoints]);
+
+  const routeEstimate = googleRouteEstimate ?? reviewData.routeEstimate;
+  const reviewDataWithRoute = useMemo(
+    () => ({ ...reviewData, routeEstimate }),
+    [reviewData, routeEstimate],
   );
 
   // Validations
@@ -340,7 +393,7 @@ export function usePlanner() {
     isVehicleStepValid,
     loadingError,
     recommendedStays,
-    reviewData,
+    reviewData: reviewDataWithRoute,
     selectedDestinations,
     selectedStayPlans,
     selectedVehicle,
