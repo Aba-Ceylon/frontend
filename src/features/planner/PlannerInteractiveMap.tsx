@@ -1,119 +1,20 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import maplibregl from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
 import {
   getMapLegendCategory,
   mapCategoryStyles,
   mapLegendItems,
 } from "@/components/interactiveSriLanka/mapCategoryUtils";
 import type { Destination } from "@/types/destination";
+import { loadGoogleMaps } from "@/lib/maps/loadGoogleMaps";
 
 const SRI_LANKA_CENTER: [number, number] = [80.7718, 7.8731];
-
-const OSM_STYLE: maplibregl.StyleSpecification = {
-  version: 8,
-  sources: {
-    "osm-tiles": {
-      type: "raster",
-      tiles: [
-        "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      ],
-      tileSize: 256,
-      attribution: "&copy; OpenStreetMap contributors",
-      maxzoom: 19,
-    },
-  },
-  layers: [
-    {
-      id: "background",
-      type: "background",
-      paint: {
-        "background-color": "#020617",
-      },
-    },
-    {
-      id: "osm-layer",
-      type: "raster",
-      source: "osm-tiles",
-      minzoom: 0,
-      maxzoom: 22,
-    },
-  ],
-};
 
 interface PlannerInteractiveMapProps {
   destinations: Destination[];
   onToggleDestination: (destinationId: string) => void;
   selectedDestinationIds: string[];
-}
-
-function renderPlannerMarkerMarkup(markerColor: string, isSelected: boolean) {
-  return `
-    <div
-      class="planner-map-marker-core"
-      style="
-        width: 18px;
-        height: 18px;
-        background: ${markerColor};
-        border: ${isSelected ? "3px" : "2px"} solid rgba(255,255,255,0.94);
-        box-shadow: ${
-          isSelected
-            ? "0 0 0 6px rgba(15,23,42,0.22), 0 14px 34px rgba(15,23,42,0.34)"
-            : "0 0 0 5px rgba(15,23,42,0.14), 0 10px 24px rgba(15,23,42,0.26)"
-        };
-        transition: transform 180ms ease, box-shadow 180ms ease;
-        transform-origin: center center;
-      "
-    ></div>
-  `;
-}
-
-function createMarkerElement(
-  destination: Destination,
-  isSelected: boolean,
-  onClick: () => void,
-) {
-  const displayCategory = getMapLegendCategory(destination);
-  const categoryStyle = mapCategoryStyles[displayCategory];
-  const marker = document.createElement("button");
-  marker.type = "button";
-  marker.className = "planner-map-marker";
-  marker.setAttribute("aria-label", `View ${destination.name} on map`);
-  marker.style.width = "50px";
-  marker.style.height = "50px";
-  marker.style.border = "0";
-  marker.style.padding = "0";
-  marker.style.background = "transparent";
-  marker.style.cursor = "pointer";
-
-  const markerPin = document.createElement("div");
-  markerPin.className = "planner-map-marker-pin";
-  markerPin.style.width = "50px";
-  markerPin.style.height = "50px";
-  markerPin.style.display = "flex";
-  markerPin.style.alignItems = "center";
-  markerPin.style.justifyContent = "center";
-  markerPin.style.transition = "transform 180ms ease, box-shadow 180ms ease";
-  markerPin.style.transform = isSelected ? "scale(1.14)" : "scale(1)";
-  markerPin.innerHTML = renderPlannerMarkerMarkup(
-    categoryStyle.markerColor,
-    isSelected,
-  );
-
-  marker.addEventListener("mouseenter", () => {
-    markerPin.style.transform = isSelected ? "scale(1.2)" : "scale(1.1)";
-  });
-  marker.addEventListener("mouseleave", () => {
-    markerPin.style.transform = isSelected ? "scale(1.14)" : "scale(1)";
-  });
-  marker.addEventListener("click", onClick);
-  marker.appendChild(markerPin);
-
-  return marker;
 }
 
 export default function PlannerInteractiveMap({
@@ -122,15 +23,15 @@ export default function PlannerInteractiveMap({
   selectedDestinationIds,
 }: PlannerInteractiveMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<maplibregl.Map | null>(null);
+  const mapRef = useRef<google.maps.Map | null>(null);
   const markersRef = useRef<
     Array<{
       destinationId: string;
-      marker: maplibregl.Marker;
-      element: HTMLButtonElement;
+      marker: google.maps.Marker;
     }>
   >([]);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const [mapError, setMapError] = useState(false);
   const [selectedMapDestinationState, setSelectedMapDestination] =
     useState<Destination | null>(null);
   const [legendExpanded, setLegendExpanded] = useState(false);
@@ -151,31 +52,31 @@ export default function PlannerInteractiveMap({
   );
 
   useEffect(() => {
-    if (!mapContainerRef.current || mapRef.current) {
-      return;
-    }
-
-    const map = new maplibregl.Map({
-      container: mapContainerRef.current,
-      style: OSM_STYLE,
-      center: SRI_LANKA_CENTER,
-      zoom: 7,
-      minZoom: 6.3,
-      maxZoom: 12.5,
-      cooperativeGestures: true,
-    });
-
-    mapRef.current = map;
-    map.addControl(new maplibregl.NavigationControl(), "top-right");
-
-    map.on("load", () => {
-      setIsMapLoaded(true);
-    });
+    let isActive = true;
+    void loadGoogleMaps()
+      .then(() => {
+        if (!isActive || !mapContainerRef.current || mapRef.current) return;
+        mapRef.current = new google.maps.Map(mapContainerRef.current, {
+          center: { lng: SRI_LANKA_CENTER[0], lat: SRI_LANKA_CENTER[1] },
+          zoom: 7,
+          minZoom: 6.3,
+          maxZoom: 12.5,
+          mapTypeControl: false,
+          streetViewControl: false,
+          fullscreenControl: true,
+          gestureHandling: "cooperative",
+        });
+        setIsMapLoaded(true);
+      })
+      .catch((error: unknown) => {
+        console.error("Unable to load Google Maps:", error);
+        if (isActive) setMapError(true);
+      });
 
     return () => {
-      markersRef.current.forEach(({ marker }) => marker.remove());
+      isActive = false;
+      markersRef.current.forEach(({ marker }) => marker.setMap(null));
       markersRef.current = [];
-      map.remove();
       mapRef.current = null;
     };
   }, []);
@@ -187,42 +88,42 @@ export default function PlannerInteractiveMap({
       return;
     }
 
-    markersRef.current.forEach(({ marker }) => marker.remove());
+    markersRef.current.forEach(({ marker }) => marker.setMap(null));
     markersRef.current = [];
 
     destinations.forEach((destination) => {
-      const markerElement = createMarkerElement(
-        destination,
-        selectedDestinationSet.has(destination.id),
-        () => {
-          setSelectedMapDestination(destination);
-          map.flyTo({
-            center: destination.coordinates,
-            zoom: 8.8,
-            duration: 1200,
-          });
+      const isSelected = selectedDestinationSet.has(destination.id);
+      const categoryStyle = mapCategoryStyles[getMapLegendCategory(destination)];
+      const marker = new google.maps.Marker({
+        map,
+        position: { lng: destination.coordinates[0], lat: destination.coordinates[1] },
+        title: destination.name,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: isSelected ? 9 : 7,
+          fillColor: categoryStyle.markerColor,
+          fillOpacity: 1,
+          strokeColor: "#ffffff",
+          strokeWeight: isSelected ? 3 : 2,
         },
-      );
-
-      const marker = new maplibregl.Marker({ element: markerElement })
-        .setLngLat(destination.coordinates)
-        .addTo(map);
+      });
+      marker.addListener("click", () => {
+          setSelectedMapDestination(destination);
+          map.panTo({ lng: destination.coordinates[0], lat: destination.coordinates[1] });
+          map.setZoom(8.8);
+        });
 
       markersRef.current.push({
         destinationId: destination.id,
         marker,
-        element: markerElement,
       });
     });
   }, [destinations, isMapLoaded, selectedDestinationSet]);
 
   const handleClosePanel = () => {
     setSelectedMapDestination(null);
-    mapRef.current?.flyTo({
-      center: SRI_LANKA_CENTER,
-      zoom: 7,
-      duration: 1200,
-    });
+    mapRef.current?.panTo({ lng: SRI_LANKA_CENTER[0], lat: SRI_LANKA_CENTER[1] });
+    mapRef.current?.setZoom(7);
   };
 
   const handlePlannerAction = () => {
@@ -268,7 +169,7 @@ export default function PlannerInteractiveMap({
             <div className="text-center">
               <div className="mx-auto mb-5 h-16 w-16 animate-spin rounded-full border-4 border-amber-400 border-t-transparent" />
               <p className="font-cinzel text-base tracking-[0.22em] text-amber-100 uppercase">
-                Loading Route Map
+                {mapError ? "Google Map is unavailable" : "Loading Google Map"}
               </p>
             </div>
           </div>

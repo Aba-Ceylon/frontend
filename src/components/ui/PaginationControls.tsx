@@ -30,8 +30,10 @@ export default function PaginationControls({
   return (
     <div className={`mt-10 flex items-center justify-center gap-2 sm:gap-3 flex-wrap ${className}`}>
       <button
+        type="button"
         onClick={goPrev}
         disabled={currentPage === 1}
+        aria-label="Previous page"
         className="border border-[#182231]/14 px-4 py-2 font-cinzel text-[#182231] transition hover:bg-[#182231] hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
       >
         Prev
@@ -43,6 +45,7 @@ export default function PaginationControls({
         return (
           <button
             key={page}
+            type="button"
             onClick={() => onPageChange(page)}
             aria-current={active ? "page" : undefined}
             className={`h-10 w-10 font-cinzel transition ${
@@ -57,8 +60,10 @@ export default function PaginationControls({
       })}
 
       <button
+        type="button"
         onClick={goNext}
         disabled={currentPage === totalPages}
+        aria-label="Next page"
         className="border border-[#182231]/14 px-4 py-2 font-cinzel text-[#182231] transition hover:bg-[#182231] hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
       >
         Next
