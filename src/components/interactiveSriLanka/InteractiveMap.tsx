@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import maplibregl from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { destinations as fallbackDestinations } from "@/data/destinations";
@@ -14,58 +12,12 @@ import {
   mapCategoryStyles,
   mapLegendItems,
 } from "./mapCategoryUtils";
+import { loadGoogleMaps } from "@/lib/maps/loadGoogleMaps";
 
 const SRI_LANKA_CENTER: [number, number] = [80.7718, 7.8731];
 
-const OSM_STYLE: maplibregl.StyleSpecification = {
-  version: 8,
-  sources: {
-    "osm-tiles": {
-      type: "raster",
-      tiles: [
-        "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      ],
-      tileSize: 256,
-      attribution: "&copy; OpenStreetMap contributors",
-      maxzoom: 19,
-    },
-  },
-  layers: [
-    {
-      id: "background",
-      type: "background",
-      paint: {
-        "background-color": "#000000",
-      },
-    },
-    {
-      id: "osm-layer",
-      type: "raster",
-      source: "osm-tiles",
-      minzoom: 0,
-      maxzoom: 22,
-    },
-  ],
-};
-
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
-}
-
-function renderMarkerMarkup(markerColor: string) {
-  return `
-    <div class="marker-pin" style="
-      width: 18px;
-      height: 18px;
-      background: ${markerColor};
-      border: 2px solid rgba(255,255,255,0.94);
-      box-shadow: 0 0 0 5px rgba(5,7,10,0.14), 0 12px 24px rgba(5,7,10,0.22);
-      transition: transform 0.24s ease, box-shadow 0.24s ease;
-      transform-origin: center center;
-    "></div>
-  `;
 }
 
 export default function InteractiveMap() {
@@ -73,13 +25,14 @@ export default function InteractiveMap() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const legendRef = useRef<HTMLDivElement>(null);
-  const map = useRef<maplibregl.Map | null>(null);
-  const markersRef = useRef<maplibregl.Marker[]>([]);
+  const map = useRef<google.maps.Map | null>(null);
+  const markersRef = useRef<google.maps.Marker[]>([]);
   const [destinations, setDestinations] =
     useState<Destination[]>(fallbackDestinations);
   const [selectedDestination, setSelectedDestination] =
     useState<Destination | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapError, setMapError] = useState(false);
   const [isLoadingDestinations, setIsLoadingDestinations] = useState(true);
   const [legendExpanded, setLegendExpanded] = useState(false);
   const hasDestinations = destinations.length > 0;
@@ -139,42 +92,34 @@ export default function InteractiveMap() {
   }, []);
 
   useEffect(() => {
-    if (!mapContainer.current || map.current) {
-      return;
-    }
+    let isActive = true;
 
-    try {
-      map.current = new maplibregl.Map({
-        container: mapContainer.current,
-        style: OSM_STYLE,
-        center: SRI_LANKA_CENTER,
-        zoom: 7,
-        minZoom: 6.5,
-        maxZoom: 12,
-        cooperativeGestures: true,
-      });
+    void loadGoogleMaps()
+      .then(() => {
+        if (!isActive || !mapContainer.current || map.current) return;
 
-      map.current.addControl(new maplibregl.NavigationControl(), "top-right");
-
-      map.current.on("error", (event) => {
-        console.error("Map error:", event);
-      });
-
-      map.current.on("load", () => {
+        map.current = new google.maps.Map(mapContainer.current, {
+          center: { lng: SRI_LANKA_CENTER[0], lat: SRI_LANKA_CENTER[1] },
+          zoom: 7,
+          minZoom: 6.5,
+          maxZoom: 12,
+          mapTypeControl: false,
+          streetViewControl: false,
+          fullscreenControl: true,
+          gestureHandling: "cooperative",
+        });
         setMapLoaded(true);
+      })
+      .catch((error: unknown) => {
+        console.error("Unable to load Google Maps:", error);
+        if (isActive) setMapError(true);
       });
-    } catch (error) {
-      console.error("Error initializing map:", error);
-    }
 
     return () => {
-      markersRef.current.forEach((marker) => marker.remove());
+      isActive = false;
+      markersRef.current.forEach((marker) => marker.setMap(null));
       markersRef.current = [];
-
-      if (map.current) {
-        map.current.remove();
-        map.current = null;
-      }
+      map.current = null;
     };
   }, []);
 
@@ -183,48 +128,30 @@ export default function InteractiveMap() {
       return;
     }
 
-    markersRef.current.forEach((marker) => marker.remove());
+    markersRef.current.forEach((marker) => marker.setMap(null));
     markersRef.current = [];
 
     destinations.forEach((destination) => {
       const categoryStyle =
         mapCategoryStyles[getMapLegendCategory(destination)];
-      const markerElement = document.createElement("div");
-      markerElement.className = "custom-marker";
-      markerElement.style.width = "18px";
-      markerElement.style.height = "18px";
-      markerElement.style.cursor = "pointer";
-      markerElement.innerHTML = renderMarkerMarkup(categoryStyle.markerColor);
-
-      markerElement.addEventListener("mouseenter", () => {
-        const pin = markerElement.querySelector(".marker-pin") as HTMLElement;
-        if (pin) {
-          pin.style.transform = "scale(1.22)";
-          pin.style.boxShadow =
-            "0 0 0 7px rgba(5,7,10,0.14), 0 18px 30px rgba(5,7,10,0.28)";
-        }
+      const marker = new google.maps.Marker({
+        map: map.current,
+        position: { lng: destination.coordinates[0], lat: destination.coordinates[1] },
+        title: destination.name,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 7,
+          fillColor: categoryStyle.markerColor,
+          fillOpacity: 1,
+          strokeColor: "#ffffff",
+          strokeWeight: 2,
+        },
       });
 
-      markerElement.addEventListener("mouseleave", () => {
-        const pin = markerElement.querySelector(".marker-pin") as HTMLElement;
-        if (pin) {
-          pin.style.transform = "scale(1)";
-          pin.style.boxShadow =
-            "0 0 0 5px rgba(5,7,10,0.14), 0 12px 24px rgba(5,7,10,0.22)";
-        }
-      });
-
-      const marker = new maplibregl.Marker({ element: markerElement })
-        .setLngLat(destination.coordinates)
-        .addTo(map.current!);
-
-      markerElement.addEventListener("click", () => {
+      marker.addListener("click", () => {
         setSelectedDestination(destination);
-        map.current?.flyTo({
-          center: destination.coordinates,
-          zoom: 9,
-          duration: 1500,
-        });
+        map.current?.panTo({ lng: destination.coordinates[0], lat: destination.coordinates[1] });
+        map.current?.setZoom(9);
       });
 
       markersRef.current.push(marker);
@@ -242,11 +169,8 @@ export default function InteractiveMap() {
   const handleClosePanel = () => {
     setSelectedDestination(null);
     if (map.current) {
-      map.current.flyTo({
-        center: SRI_LANKA_CENTER,
-        zoom: 7,
-        duration: 1500,
-      });
+      map.current.panTo({ lng: SRI_LANKA_CENTER[0], lat: SRI_LANKA_CENTER[1] });
+      map.current.setZoom(7);
     }
   };
 
@@ -267,7 +191,7 @@ export default function InteractiveMap() {
           <div className="text-center">
             <div className="mx-auto mb-6 h-20 w-20 animate-spin rounded-full border-4 border-amber-500 border-t-transparent" />
             <p className="font-cinzel text-lg tracking-wider text-amber-100">
-              Loading map...
+              {mapError ? "Google Map is unavailable" : "Loading Google Map..."}
             </p>
           </div>
         </div>

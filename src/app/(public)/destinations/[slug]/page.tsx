@@ -7,6 +7,7 @@ import { routes } from "@/constants/routes";
 import { fetchDestinationBySlug } from "@/services/destinationService";
 import DestinationGuideBook from "@/features/destinations/DestinationGuideBook";
 import { destinations } from "@/data/destinations";
+import GoogleLocationMap from "@/components/maps/GoogleLocationMap";
 
 const BASE_URL = "https://www.abaceylontours.com";
 const FALLBACK_IMAGE = "/images/heritage/sl-image.webp";
@@ -139,6 +140,32 @@ export default async function DestinationPage({ params }: Props) {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white py-14 sm:py-20">
+        <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
+          <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-end" data-reveal>
+            <div>
+              <p className="font-cinzel text-[10px] uppercase tracking-[0.24em] text-[#9b7422]">
+                Find your way
+              </p>
+              <h2 className="mt-3 font-cinzel text-3xl text-[#182231] sm:text-4xl">
+                {destination.name}, Sri Lanka
+              </h2>
+            </div>
+            <p className="max-w-md text-sm leading-6 text-[#182231]/62">
+              Explore the precise location before adding it to your route.
+            </p>
+          </div>
+          <div className="overflow-hidden border border-[#182231]/12 shadow-[0_20px_60px_rgba(15,23,42,0.10)]" data-reveal>
+            <GoogleLocationMap
+              coordinates={destination.coordinates}
+              title={destination.name}
+              zoom={11}
+              className="h-[340px] w-full sm:h-[460px]"
+            />
           </div>
         </div>
       </section>

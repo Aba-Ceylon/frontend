@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { Check, MapPin, Search, X } from "lucide-react";
 import Badge from "@/components/ui/Badge";
 import ValidationErrors from "@/components/ui/ValidationErrors";
 import StepHeader from "@/components/ui/StepHeader";
+import PaginationControls from "@/components/ui/PaginationControls";
 import PlannerInteractiveMap from "@/features/planner/PlannerInteractiveMap";
 import {
   ALL_DISTRICTS,
@@ -15,6 +16,7 @@ import {
 import type { Destination } from "@/types/destination";
 
 const FALLBACK_IMAGE = "/images/heritage/sl-image.webp";
+const DESTINATIONS_PER_PAGE = 9;
 
 interface DestinationSelectorProps {
   destinations: Destination[];
@@ -31,16 +33,43 @@ export default function DestinationSelector({
 }: DestinationSelectorProps) {
   const [query, setQuery] = useState("");
   const [district, setDistrict] = useState(ALL_DISTRICTS);
+  const [currentPage, setCurrentPage] = useState(1);
+  const destinationScrollerRef = useRef<HTMLDivElement>(null);
   const districts = useMemo(() => getDestinationDistricts(destinations), [destinations]);
   const filteredDestinations = useMemo(
     () => filterPlannerDestinations(destinations, district, query),
     [destinations, district, query],
   );
   const hasFilters = district !== ALL_DISTRICTS || query.trim().length > 0;
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredDestinations.length / DESTINATIONS_PER_PAGE),
+  );
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const firstDestinationIndex = (safeCurrentPage - 1) * DESTINATIONS_PER_PAGE;
+  const pageDestinations = filteredDestinations.slice(
+    firstDestinationIndex,
+    firstDestinationIndex + DESTINATIONS_PER_PAGE,
+  );
+
+  useEffect(() => {
+    destinationScrollerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  }, [safeCurrentPage]);
+
+  const handleQueryChange = (value: string) => {
+    setQuery(value);
+    setCurrentPage(1);
+  };
+
+  const handleDistrictChange = (value: string) => {
+    setDistrict(value);
+    setCurrentPage(1);
+  };
 
   const clearFilters = () => {
     setDistrict(ALL_DISTRICTS);
     setQuery("");
+    setCurrentPage(1);
   };
 
   return (
@@ -65,7 +94,7 @@ export default function DestinationSelector({
               <input
                 type="search"
                 value={query}
-                onChange={(event) => setQuery(event.target.value)}
+                onChange={(event) => handleQueryChange(event.target.value)}
                 placeholder="Search by place or location"
                 className="min-h-12 w-full border border-[#182231]/14 bg-white py-3 pl-11 pr-4 text-sm text-[#182231] outline-none transition placeholder:text-[#182231]/38 focus:border-[#9b7422] focus:ring-2 focus:ring-[#9b7422]/12"
               />
@@ -78,7 +107,7 @@ export default function DestinationSelector({
             </span>
             <select
               value={district}
-              onChange={(event) => setDistrict(event.target.value)}
+              onChange={(event) => handleDistrictChange(event.target.value)}
               className="min-h-12 w-full border border-[#182231]/14 bg-white px-4 py-3 text-sm text-[#182231] outline-none transition focus:border-[#9b7422] focus:ring-2 focus:ring-[#9b7422]/12"
             >
               <option value={ALL_DISTRICTS}>All districts</option>
@@ -111,8 +140,24 @@ export default function DestinationSelector({
       />
 
       {filteredDestinations.length > 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {filteredDestinations.map((destination) => {
+        <section aria-label="Destination results" className="space-y-5">
+          <div className="flex flex-col gap-2 border-b border-[#182231]/10 pb-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-[#182231]/64" aria-live="polite">
+              Destinations {firstDestinationIndex + 1}–{Math.min(firstDestinationIndex + DESTINATIONS_PER_PAGE, filteredDestinations.length)} of {filteredDestinations.length}
+            </p>
+            <p className="font-cinzel text-[10px] uppercase tracking-[0.18em] text-[#9b7422]">
+              Page {safeCurrentPage} of {totalPages}
+            </p>
+          </div>
+
+          <div
+            ref={destinationScrollerRef}
+            className="max-h-[680px] overflow-y-auto overscroll-contain pr-2 scroll-smooth"
+            tabIndex={0}
+            aria-label="Scrollable list of available destinations"
+          >
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {pageDestinations.map((destination) => {
             const isSelected = selectedDestinationIds.includes(destination.id);
             const image = destination.images?.[0] || FALLBACK_IMAGE;
 
@@ -154,8 +199,17 @@ export default function DestinationSelector({
                 </span>
               </button>
             );
-          })}
-        </div>
+              })}
+            </div>
+          </div>
+
+          <PaginationControls
+            currentPage={safeCurrentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            className="mt-0 border-t border-[#182231]/10 pt-5"
+          />
+        </section>
       ) : (
         <div className="border border-dashed border-[#182231]/20 px-6 py-14 text-center">
           <p className="font-cinzel text-xl text-[#182231]">No destinations found</p>

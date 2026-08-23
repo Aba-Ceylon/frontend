@@ -40,6 +40,17 @@ export default function NavBar() {
     };
   }, [isMobileMenuOpen]);
 
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, []);
+
   const shellClass = isScrolled || isAuthPage
     ? "lg:border-[#182231]/10 lg:bg-[rgba(251,248,242,0.92)] lg:shadow-[0_16px_36px_rgba(17,24,39,0.06)] lg:backdrop-blur-xl"
     : "lg:border-transparent lg:bg-[rgba(251,248,242,0.58)] lg:backdrop-blur-md";
@@ -53,7 +64,7 @@ export default function NavBar() {
         >
           <div className="flex items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
             <Link href={routes.home} className="flex min-w-0 items-center gap-4">
-              <div className="relative h-11 w-14 overflow-hidden border border-[#182231]/10 bg-white sm:h-12 sm:w-16">
+              <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-[#182231]/10 bg-white sm:h-12 sm:w-12">
                 <Image
                   src="/LOGO.jpeg"
                   alt="Aba Ceylon Logo"
@@ -135,7 +146,7 @@ export default function NavBar() {
               <button
                 type="button"
                 onClick={() => setIsMobileMenuOpen((value) => !value)}
-                className="inline-flex h-11 w-11 items-center justify-center border border-[#182231]/10 bg-white/70 text-[#182231] lg:hidden"
+                className="inline-flex h-11 w-11 items-center justify-center border border-[#182231]/10 bg-white/70 text-[#182231] xl:hidden"
                 aria-label="Toggle menu"
               >
                 {isMobileMenuOpen ? (
@@ -157,7 +168,7 @@ export default function NavBar() {
       </nav>
 
       {!isAuthPage && isMobileMenuOpen ? (
-        <div className="fixed inset-0 z-40 bg-[rgba(246,240,230,0.96)] px-6 pb-8 pt-28 backdrop-blur-xl lg:hidden">
+        <div className="fixed inset-0 z-40 bg-[rgba(246,240,230,0.96)] px-6 pb-8 pt-28 backdrop-blur-xl xl:hidden">
           <div className="mx-auto flex h-full max-w-md flex-col">
             <div className="luxury-divider mb-8 w-full" />
             <div className="flex flex-1 flex-col justify-between">
