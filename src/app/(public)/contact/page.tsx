@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import Button from "@/components/ui/Button";
+import { formatSriLankanPhoneNumber } from "@/lib/phone/sriLankanPhoneNumber";
 import { generateWhatsAppLink } from "@/lib/whatsapp/generateWhatsAppLink";
 
 const ADMIN_PHONE =
@@ -18,20 +19,6 @@ const ADMIN_EMAIL = "abaceylon@gmail.com";
 const SWITZER = {
   fontFamily: 'Switzer, system-ui, -apple-system, "Segoe UI", sans-serif',
 };
-
-function formatPhone(phone: string) {
-  const digits = phone.replace(/[^\d]/g, "");
-  if (digits.length === 10 && digits.startsWith("0")) {
-    return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
-  }
-  if (digits.length === 11 && digits.startsWith("94")) {
-    return `+${digits.slice(0, 2)} ${digits.slice(2, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`;
-  }
-  if (phone.startsWith("+")) {
-    return phone;
-  }
-  return `+${digits}`;
-}
 
 function buildMessage(data: {
   name: string;
@@ -82,7 +69,7 @@ export default function ContactPage() {
   const [form, dispatch] = useReducer(formReducer, INITIAL);
   const [error, setError] = useReducer((_: string, value: string) => value, "");
 
-  const formattedPhone = useMemo(() => formatPhone(ADMIN_PHONE), []);
+  const formattedPhone = useMemo(() => formatSriLankanPhoneNumber(ADMIN_PHONE), []);
   const whatsappHref = useMemo(
     () =>
       generateWhatsAppLink(

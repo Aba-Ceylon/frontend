@@ -7,7 +7,9 @@ import Badge from "@/components/ui/Badge";
 import PackageRequestButton from "@/features/packages/PackageRequestButton";
 import { buildGoogleMapsRouteUrl } from "@/lib/maps/buildRouteUrl";
 import { PackageItem } from "@/types/package";
+import { getPackageImages } from "@/lib/packages/packageImages";
 import PackageTimeline from "./PackageTimeline";
+import PackageImageCarousel from "./PackageImageCarousel";
 
 function StatCard({
   icon,
@@ -64,12 +66,13 @@ function StatCard({
 export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
   const routeLabel = pkg.route.join(" → ");
   const routeMapsHref = buildGoogleMapsRouteUrl(pkg.route);
+  const images = getPackageImages(pkg);
 
   return (
     <div className="bg-[#F8F4ED] min-h-screen">
       <div className="relative h-72 sm:h-96 w-full">
-        <Image src={pkg.image} alt={pkg.title} fill className="object-cover" priority />
-        <div className="absolute inset-0 bg-black/40" />
+        <PackageImageCarousel images={images} title={pkg.title} variant="hero" />
+        <div className="pointer-events-none absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-10 max-w-5xl mx-auto">
           <Badge variant="amber" className="mb-2 w-fit">{pkg.duration}</Badge>
           <h1 className="font-cinzel text-3xl sm:text-5xl text-white font-medium">{pkg.title}</h1>
@@ -86,6 +89,36 @@ export default function PackageDetails({ pkg }: { pkg: PackageItem }) {
         <section>
           <h2 className="font-cinzel text-2xl text-neutral-900 mb-4">Overview</h2>
           <p className="text-neutral-700 leading-7">{pkg.overview}</p>
+        </section>
+
+        <section aria-labelledby="package-gallery-title">
+          <div className="mb-5 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="font-cinzel text-[11px] uppercase tracking-[0.24em] text-[#A97B17]">Package images</p>
+              <h2 id="package-gallery-title" className="mt-1 font-cinzel text-2xl text-neutral-900">Journey gallery</h2>
+            </div>
+            <p className="text-sm text-neutral-600">
+              {images.length} {images.length === 1 ? "image" : "images"} in travel order
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {images.map((image, index) => (
+              <figure key={`${image}-${index}`} className="group relative aspect-[4/3] overflow-hidden bg-[#101A28]">
+                <Image
+                  src={image}
+                  alt={`${pkg.title} — gallery image ${index + 1} of ${images.length}`}
+                  fill
+                  sizes="(max-width: 639px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-[1.025]"
+                  loading="lazy"
+                />
+                <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent px-4 pb-4 pt-12 font-cinzel text-[11px] uppercase tracking-[0.2em] text-white">
+                  Image {String(index + 1).padStart(2, "0")}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </section>
 
         <section>

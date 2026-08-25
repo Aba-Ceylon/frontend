@@ -142,7 +142,7 @@ export default function ChatbotWidget() {
               }}
             >
               <Image
-                src="/abaceylon avatar.jpeg"
+                src="/abaKing.png"
                 alt="Aba"
                 width={36}
                 height={36}
@@ -222,7 +222,7 @@ export default function ChatbotWidget() {
                   }}
                 >
                   <Image
-                    src="/abaceylon avatar.jpeg"
+                    src="/abaKing.png"
                     alt="Aba"
                     width={24}
                     height={24}
@@ -308,7 +308,7 @@ export default function ChatbotWidget() {
                 }}
               >
                 <Image
-                  src="/abaceylon avatar.jpeg"
+                  src="/abaKing.png"
                   alt="Aba"
                   width={24}
                   height={24}
@@ -437,7 +437,7 @@ export default function ChatbotWidget() {
           <X size={22} color="#0a0a0a" strokeWidth={2.5} />
         ) : (
           <Image
-            src="/abaceylon avatar.jpeg"
+            src="/abaKing.png"
             alt="Aba Ceylon chat"
             width={56}
             height={56}
