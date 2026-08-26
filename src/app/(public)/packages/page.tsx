@@ -2,7 +2,10 @@ import PageHero from "@/components/ui/PageHero";
 import PackageCard from "@/features/packages/PackageCard";
 import { fetchPackages } from "@/services/packageService";
 
-export const revalidate = 3600;
+// Package data is maintained in the dashboard, so it must be read fresh for
+// each request instead of waiting for the previous one-hour cache to expire.
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function PackagesPage() {
   const packages = await fetchPackages();

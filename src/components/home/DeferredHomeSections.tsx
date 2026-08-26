@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import type { PackageItem } from "@/types/package";
 
 function SectionSkeleton({
   className = "bg-white",
@@ -88,11 +89,15 @@ const Testimonials = dynamic(
   { loading: () => <SectionSkeleton title="Loading testimonials" /> },
 );
 
-export default function DeferredHomeSections() {
+export default function DeferredHomeSections({
+  packages,
+}: {
+  packages: PackageItem[];
+}) {
   return (
     <>
       <WhoWeAre />
-      <TopPackagesCarousel />
+      <TopPackagesCarousel packages={packages} />
       <HowItWorks />
       <BuddhaLotus />
       <TrustBar />

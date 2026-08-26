@@ -5,17 +5,28 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ArrowUpRight, MapPin } from "lucide-react";
 import { routes } from "@/constants/routes";
-import { packages } from "@/data/packages";
 import { getTopPackages } from "@/lib/packages/getTopPackages";
 import { buildGoogleMapsRouteUrl } from "@/lib/maps/buildRouteUrl";
+import type { PackageItem } from "@/types/package";
 
-const topPackages = getTopPackages(packages, 6);
-
-export default function TopPackagesCarousel() {
+export default function TopPackagesCarousel({
+  packages,
+}: {
+  packages: PackageItem[];
+}) {
+  const topPackages = getTopPackages(packages, 6);
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // Clamp activeIndex at render time instead of inside an effect so we never
+  // trigger a cascading setState → re-render cycle.
+  const clampedIndex = topPackages.length
+    ? Math.min(activeIndex, topPackages.length - 1)
+    : 0;
+
   const goTo = useCallback((index: number) => {
+    if (!topPackages.length) return;
+
     const track = trackRef.current;
     if (!track) return;
 
@@ -28,7 +39,7 @@ export default function TopPackagesCarousel() {
       block: "nearest",
       inline: "start",
     });
-  }, []);
+  }, [topPackages.length]);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -49,6 +60,10 @@ export default function TopPackagesCarousel() {
     track.addEventListener("scroll", onScroll, { passive: true });
     return () => track.removeEventListener("scroll", onScroll);
   }, []);
+
+  if (!topPackages.length) {
+    return null;
+  }
 
   return (
     <section
@@ -159,13 +174,13 @@ export default function TopPackagesCarousel() {
 
         <div className="mt-3 flex items-center justify-between">
           <p className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-[#182231]/48" aria-live="polite">
-            {String(activeIndex + 1).padStart(2, "0")} / {String(topPackages.length).padStart(2, "0")}
+            {String(clampedIndex + 1).padStart(2, "0")} / {String(topPackages.length).padStart(2, "0")}
           </p>
           <div className="flex gap-2">
             <button
               type="button"
-              onClick={() => goTo(activeIndex - 1)}
-              disabled={activeIndex === 0}
+              onClick={() => goTo(clampedIndex - 1)}
+              disabled={clampedIndex === 0}
               aria-label="Previous package"
               className="inline-flex h-12 w-12 items-center justify-center border border-[#182231]/18 text-[#182231] transition hover:border-[#A97B17] hover:bg-white/55 hover:text-[#8B6719] disabled:cursor-not-allowed disabled:opacity-30"
             >
@@ -173,8 +188,8 @@ export default function TopPackagesCarousel() {
             </button>
             <button
               type="button"
-              onClick={() => goTo(activeIndex + 1)}
-              disabled={activeIndex === topPackages.length - 1}
+              onClick={() => goTo(clampedIndex + 1)}
+              disabled={clampedIndex === topPackages.length - 1}
               aria-label="Next package"
               className="inline-flex h-12 w-12 items-center justify-center border border-[#182231]/18 text-[#182231] transition hover:border-[#A97B17] hover:bg-white/55 hover:text-[#8B6719] disabled:cursor-not-allowed disabled:opacity-30"
             >
