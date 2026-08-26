@@ -5,17 +5,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ArrowUpRight, MapPin } from "lucide-react";
 import { routes } from "@/constants/routes";
-import { packages } from "@/data/packages";
 import { getTopPackages } from "@/lib/packages/getTopPackages";
 import { buildGoogleMapsRouteUrl } from "@/lib/maps/buildRouteUrl";
+import type { PackageItem } from "@/types/package";
 
-const topPackages = getTopPackages(packages, 6);
-
-export default function TopPackagesCarousel() {
+export default function TopPackagesCarousel({
+  packages,
+}: {
+  packages: PackageItem[];
+}) {
+  const topPackages = getTopPackages(packages, 6);
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const goTo = useCallback((index: number) => {
+    if (!topPackages.length) return;
+
     const track = trackRef.current;
     if (!track) return;
 
@@ -28,7 +33,7 @@ export default function TopPackagesCarousel() {
       block: "nearest",
       inline: "start",
     });
-  }, []);
+  }, [topPackages.length]);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -49,6 +54,16 @@ export default function TopPackagesCarousel() {
     track.addEventListener("scroll", onScroll, { passive: true });
     return () => track.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    setActiveIndex((currentIndex) =>
+      Math.min(currentIndex, Math.max(topPackages.length - 1, 0)),
+    );
+  }, [topPackages.length]);
+
+  if (!topPackages.length) {
+    return null;
+  }
 
   return (
     <section

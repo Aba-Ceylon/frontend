@@ -4,7 +4,9 @@ import PackageDetails from "@/features/packages/PackageDetails";
 import { fetchPackageBySlug } from "@/services/packageService";
 import { packages } from "@/data/packages";
 
-export const revalidate = 3600;
+// Keep package detail pages in sync with dashboard edits as well as the list.
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 // Prerender the same slugs the sitemap advertises so every submitted URL is a
 // static page rather than a per-request Supabase fetch.
