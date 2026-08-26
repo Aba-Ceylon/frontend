@@ -8,6 +8,8 @@ import { fetchDestinationBySlug } from "@/services/destinationService";
 import DestinationGuideBook from "@/features/destinations/DestinationGuideBook";
 import { destinations } from "@/data/destinations";
 import GoogleLocationMap from "@/components/maps/GoogleLocationMap";
+import { getGalleryImages } from "@/lib/packages/packageImages";
+import PackageImageCarousel from "@/features/packages/PackageImageCarousel";
 
 const BASE_URL = "https://www.abaceylontours.com";
 const FALLBACK_IMAGE = "/images/heritage/sl-image.webp";
@@ -53,24 +55,16 @@ export default async function DestinationPage({ params }: Props) {
   }
 
   const image = destination.images?.[0] || FALLBACK_IMAGE;
-  const galleryImages = destination.images?.slice(1) ?? [];
+  const galleryImages = getGalleryImages({ image, images: destination.images });
 
   return (
     <main className="min-h-screen bg-[#F5F2ED]">
       <section className="relative flex min-h-[76svh] items-end overflow-hidden bg-[#0F172A] pt-28 sm:min-h-[82svh]">
         <div className="absolute inset-0" data-parallax-root>
-          <Image
-            src={image}
-            alt={destination.name}
-            fill
-            sizes="100vw"
-            className="scale-[1.08] object-cover"
-            priority
-            data-parallax="5"
-          />
+          <PackageImageCarousel images={galleryImages} title={destination.name} variant="hero" entityLabel="destination" />
         </div>
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,7,10,0.22)_0%,rgba(5,7,10,0.02)_35%,rgba(5,7,10,0.18)_58%,rgba(5,7,10,0.88)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,7,10,0.28)_0%,transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(5,7,10,0.22)_0%,rgba(5,7,10,0.02)_35%,rgba(5,7,10,0.18)_58%,rgba(5,7,10,0.88)_100%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(5,7,10,0.28)_0%,transparent_55%)]" />
 
         <div className="relative mx-auto w-full max-w-[1360px] px-6 pb-10 sm:pb-14 lg:px-10 lg:pb-16" data-reveal>
           <Link
@@ -177,20 +171,19 @@ export default async function DestinationPage({ params }: Props) {
         highlights={destination.highlights}
       />
 
-      {galleryImages.length > 0 ? (
-        <section className="bg-white py-14 sm:py-20">
+      <section className="bg-white py-14 sm:py-20">
           <div className="mx-auto max-w-6xl px-6 lg:px-10">
             <div className="mb-8 flex flex-col justify-between gap-3 sm:flex-row sm:items-end" data-reveal>
               <div>
                 <p className="font-cinzel text-xs uppercase tracking-[0.24em] text-amber-700">
-                  See the destination
+                  Destination images
                 </p>
                 <h2 className="mt-3 font-cinzel text-3xl text-[#0F172A] sm:text-4xl">
-                  More from {destination.name}
+                  {destination.name} gallery
                 </h2>
               </div>
               <p className="text-sm text-[#0F172A]/55">
-                {galleryImages.length} additional {galleryImages.length === 1 ? "view" : "views"}
+                {galleryImages.length} {galleryImages.length === 1 ? "image" : "images"} in database order
               </p>
             </div>
 
@@ -207,17 +200,19 @@ export default async function DestinationPage({ params }: Props) {
                 >
                   <Image
                     src={galleryImage}
-                    alt={`${destination.name} view ${index + 2}`}
+                    alt={`${destination.name} — gallery image ${index + 1} of ${galleryImages.length}`}
                     fill
                     sizes={galleryImages.length === 1 ? "(max-width: 1200px) 100vw, 1100px" : "(max-width: 767px) 100vw, 50vw"}
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025]"
                   />
+                  <p className="pointer-events-none absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent px-4 pb-4 pt-12 font-cinzel text-[11px] uppercase tracking-[0.2em] text-white">
+                    Image {String(index + 1).padStart(2, "0")}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
-        </section>
-      ) : null}
+      </section>
 
       <section className="bg-[#F5F2ED] px-6 py-14 lg:px-10 lg:py-18">
         <div className="mx-auto max-w-6xl">

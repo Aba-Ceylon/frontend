@@ -168,7 +168,7 @@ export default function Footer() {
                     className="flex items-start gap-3 transition-colors hover:text-white"
                   >
                     <Phone size={16} className="shrink-0 text-[#C99A2B]/72" />
-                    072 255 4488
+                    +94 72 255 4488
                   </a>
                   <a
                     href="mailto:abaceylon@gmail.com"

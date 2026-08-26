@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Map } from "lucide-react";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
@@ -9,11 +8,14 @@ import PackageRequestButton from "@/features/packages/PackageRequestButton";
 import { buildGoogleMapsRouteUrl } from "@/lib/maps/buildRouteUrl";
 import { usePackageStore } from "@/store/PackageStore";
 import type { PackageItem } from "@/types/package";
+import { getPackageImages } from "@/lib/packages/packageImages";
+import PackageImageCarousel from "./PackageImageCarousel";
 
 export default function PackageCard({ pkg }: { pkg: PackageItem }) {
   const selectedPackage = usePackageStore((s) => s.selectedPackage);
   const isSelected = selectedPackage?.id === pkg.id;
   const routeMapsHref = buildGoogleMapsRouteUrl(pkg.route);
+  const images = getPackageImages(pkg);
 
   const packageLabel = pkg.packageId
     ? `Package ${String(pkg.packageId).padStart(2, "0")}`
@@ -27,15 +29,8 @@ export default function PackageCard({ pkg }: { pkg: PackageItem }) {
       }`}
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden sm:aspect-[5/4] lg:aspect-[6/5]">
-        <Image
-          src={pkg.image}
-          alt={pkg.title}
-          fill
-          sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
-          className="object-cover transition-transform duration-700 hover:scale-105"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-black/38 via-transparent to-transparent" />
+        <PackageImageCarousel images={images} title={pkg.title} variant="card" />
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/38 via-transparent to-transparent" />
       </div>
 
       <div className="p-5 sm:p-6">
