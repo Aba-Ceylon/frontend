@@ -49,9 +49,11 @@ export default function RequestBookingDialog({
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, [isOpen, onClose]);
 
@@ -60,16 +62,16 @@ export default function RequestBookingDialog({
   const title = subjectType === "package" ? "Request Package" : "Request Vehicle";
 
   return createPortal(
-    <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6">
+    <div className="fixed inset-0 z-[120] flex min-h-full items-center justify-center overflow-y-auto overscroll-contain p-3 sm:p-6">
       <button
         type="button"
-        className="absolute inset-0 bg-[#08111d]/68 backdrop-blur-sm"
+        className="fixed inset-0 bg-[#08111d]/68 backdrop-blur-sm"
         onClick={onClose}
         aria-label="Close dialog"
       />
 
-      <div className="relative z-10 w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/10 bg-[#0F172A] shadow-[0_30px_120px_rgba(0,0,0,0.45)]">
-        <div className="border-b border-white/10 px-5 py-4 sm:px-6">
+      <div className="relative z-10 my-auto flex max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-3rem)] w-full max-w-lg flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#0F172A] shadow-[0_30px_120px_rgba(0,0,0,0.45)]">
+        <div className="shrink-0 border-b border-white/10 px-5 py-4 sm:px-6">
           <p className="font-cinzel text-xs uppercase tracking-[0.28em] text-amber-300/80">
             Secure Booking
           </p>
@@ -77,7 +79,7 @@ export default function RequestBookingDialog({
           <p className="mt-2 text-sm leading-6 text-white/72">{subjectName}</p>
         </div>
 
-        <div className="space-y-5 px-5 py-5 sm:px-6 sm:py-6">
+        <div className="flex-1 overflow-y-auto overscroll-contain space-y-5 px-5 py-5 sm:px-6 sm:py-6">
           {!isLoaded ? (
             <p className="text-sm leading-6 text-white/72">Checking account status...</p>
           ) : !isSignedIn ? (
