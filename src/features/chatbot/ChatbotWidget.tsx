@@ -205,7 +205,7 @@ export default function ChatbotWidget() {
 
         {/* Messages */}
         <div
-          className="flex-1 overflow-y-auto px-4 py-3 space-y-3"
+          className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 space-y-3"
           style={{ scrollbarWidth: "thin", scrollbarColor: "#c99a2b #1a1a1a" }}
         >
           {messages.map((msg, i) => (

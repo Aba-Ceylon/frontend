@@ -75,9 +75,11 @@ export default function PackageRequestDialog(props: Props) {
     const onKey = (event: KeyboardEvent) => event.key === "Escape" && onClose();
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, [isOpen, onClose]);
 
@@ -91,10 +93,10 @@ export default function PackageRequestDialog(props: Props) {
     `border p-4 text-left transition ${selected ? "border-[#A97B17] bg-[#fbf7ed]" : "border-[#182231]/12 bg-white hover:border-[#A97B17]/50"}`;
 
   return createPortal(
-    <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-6">
-      <button type="button" className="absolute inset-0 bg-[#08111d]/62 backdrop-blur-sm" onClick={onClose} aria-label="Close package request" />
+    <div className="fixed inset-0 z-[120] flex min-h-full items-center justify-center overflow-y-auto overscroll-contain p-3 sm:p-6">
+      <button type="button" className="fixed inset-0 bg-[#08111d]/62 backdrop-blur-sm" onClick={onClose} aria-label="Close package request" />
 
-      <div role="dialog" aria-modal="true" aria-labelledby="package-request-title" className="relative z-10 flex max-h-[94svh] w-full max-w-4xl flex-col overflow-hidden border border-[#182231]/10 bg-[#f6f0e6] shadow-[0_30px_120px_rgba(0,0,0,0.35)]">
+      <div role="dialog" aria-modal="true" aria-labelledby="package-request-title" className="relative z-10 my-auto flex max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-3rem)] w-full max-w-4xl flex-col overflow-hidden border border-[#182231]/10 bg-[#f6f0e6] shadow-[0_30px_120px_rgba(0,0,0,0.35)]">
         <header className="flex items-start justify-between gap-6 border-b border-[#182231]/10 px-5 py-5 sm:px-8">
           <div>
             <p className="font-cinzel text-[10px] uppercase tracking-[0.24em] text-[#A97B17]">Package travel brief</p>
