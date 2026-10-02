@@ -34,11 +34,22 @@ export default function NavBar() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    }
     return () => {
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -168,8 +179,8 @@ export default function NavBar() {
       </nav>
 
       {!isAuthPage && isMobileMenuOpen ? (
-        <div className="fixed inset-0 z-40 bg-[rgba(246,240,230,0.96)] px-6 pb-8 pt-28 backdrop-blur-xl xl:hidden">
-          <div className="mx-auto flex h-full max-w-md flex-col">
+        <div className="fixed inset-0 z-40 overflow-y-auto overscroll-contain bg-[rgba(246,240,230,0.96)] px-6 pb-8 pt-28 backdrop-blur-xl xl:hidden">
+          <div className="mx-auto flex min-h-full max-w-md flex-col">
             <div className="luxury-divider mb-8 w-full" />
             <div className="flex flex-1 flex-col justify-between">
               <div className="space-y-5">
