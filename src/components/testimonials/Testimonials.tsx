@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import type { FeedbackRecord } from "@/types/feedback";
 import TestimonialsCarousel, { TestimonialItem } from "./TestimonialsCarousel";
+import { facebookReviews } from "@/data/facebookReviews";
+import { socialLinks } from "@/config/site";
 
 export default function Testimonials() {
   const [items, setItems] = useState<TestimonialItem[]>([]);
@@ -19,6 +21,7 @@ export default function Testimonials() {
             quote: row.message,
             name: row.user_name ?? "Guest",
             rating: row.rating ?? 5,
+            source: "site" as const,
           })),
         );
       })
@@ -33,7 +36,18 @@ export default function Testimonials() {
         </h2>
       </div>
 
-      <TestimonialsCarousel items={items} />
+      <TestimonialsCarousel items={[...items, ...facebookReviews]} />
+
+      <div className="mt-10 text-center" data-reveal>
+        <a
+          href={socialLinks.facebookReviews}
+          target="_blank"
+          rel="noreferrer"
+          className="editorial-link text-[#182231]"
+        >
+          See all reviews on Facebook
+        </a>
+      </div>
     </section>
   );
 }

@@ -10,6 +10,7 @@ import ChatbotWidget from "../features/chatbot/ChatbotWidget";
 import WhatsAppButton from "../features/whatsapp/WhatsAppButton";
 import SiteMotion from "../components/motion/SiteMotion";
 import CookieConsent from "../components/cookieConsent/CookieConsent";
+import { socialLinks } from "../config/site";
 
 /* ─── Base URL ─────────────────────────────────────────────────────────────── */
 const SITE_URL = "https://www.abaceylontours.com";
@@ -210,7 +211,7 @@ const organizationJsonLd = {
     },
   ],
   sameAs: [
-    "https://www.facebook.com/abaceylonaours",
+    socialLinks.facebook,
     "https://www.instagram.com/abaceylonaours",
     "https://www.tripadvisor.com/abaceylonaours",
     "https://www.linkedin.com/company/abaceylonaours",
