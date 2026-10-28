@@ -9,6 +9,7 @@ import GatedShell from "../components/home/GatedShell";
 import ChatbotWidget from "../features/chatbot/ChatbotWidget";
 import WhatsAppButton from "../features/whatsapp/WhatsAppButton";
 import SiteMotion from "../components/motion/SiteMotion";
+import CookieConsent from "../components/cookieConsent/CookieConsent";
 
 /* ─── Base URL ─────────────────────────────────────────────────────────────── */
 const SITE_URL = "https://www.abaceylontours.com";
@@ -314,6 +315,7 @@ export default function RootLayout({
             </GatedShell>
             <ChatbotWidget />
             <WhatsAppButton />
+            <CookieConsent />
           </LoaderGateProvider>
         </ClerkProvider>
       </body>
