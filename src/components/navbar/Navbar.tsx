@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserButton, useAuth } from "@clerk/nextjs";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight, ClipboardList, Map as MapIcon, Menu, UserRound, X } from "lucide-react";
 import { primaryNavLinks, routes } from "@/constants/routes";
 import FeedbackModal from "@/features/feedback/FeedbackModal";
 
@@ -30,6 +30,12 @@ const MENU_LINKS = [
   ...primaryNavLinks,
   { label: "Activities", href: routes.activities },
   { label: "Contact", href: routes.contact },
+];
+
+const ACCOUNT_LINKS = [
+  { label: "My Account", href: routes.account },
+  { label: "My Plans", href: routes.myPlans },
+  { label: "My Inquiries", href: routes.myInquiries },
 ];
 
 const LINK_CLASS =
@@ -107,28 +113,13 @@ export default function NavBar() {
         }`}
         style={{ fontFamily: 'Switzer, system-ui, -apple-system, "Segoe UI"' }}
       >
-        <div className="mx-auto grid h-[72px] max-w-[1440px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:h-20 sm:px-6 lg:px-10">
-          <div className="flex items-center gap-8">
-            <button
-              type="button"
-              onClick={() => setIsMenuOpen(true)}
-              className="inline-flex min-h-11 items-center gap-3 text-white"
-              aria-label="Open menu"
-              aria-expanded={isMenuOpen}
-              aria-controls="site-menu"
-            >
-              <Menu className="h-5 w-5" />
-              <span className="hidden font-cinzel text-[11px] uppercase tracking-[0.24em] sm:inline">
-                Menu
-              </span>
-            </button>
-            <div className="hidden items-center gap-8 lg:flex">
-              {MAIN_LINKS.map((link) => (
-                <Link key={link.href} href={link.href} className={LINK_CLASS}>
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+        <div className="mx-auto flex h-[72px] max-w-[1440px] items-center justify-between gap-3 px-4 sm:h-20 sm:px-6 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-4 lg:px-10">
+          <div className="hidden items-center gap-8 lg:flex">
+            {MAIN_LINKS.map((link) => (
+              <Link key={link.href} href={link.href} className={LINK_CLASS}>
+                {link.label}
+              </Link>
+            ))}
           </div>
 
           <Link href={routes.home} className="flex items-center gap-3" aria-label="Aba Ceylon home">
@@ -145,20 +136,42 @@ export default function NavBar() {
             </span>
           </Link>
 
-          <div className="flex items-center justify-end gap-4 sm:gap-6">
+          <div className="flex items-center justify-end gap-3 sm:gap-6">
             {isSignedIn ? (
-              <UserButton />
+              <UserButton>
+                <UserButton.MenuItems>
+                  <UserButton.Link label="My Account" labelIcon={<UserRound className="h-4 w-4" />} href={routes.account} />
+                  <UserButton.Link label="My Plans" labelIcon={<MapIcon className="h-4 w-4" />} href={routes.myPlans} />
+                  <UserButton.Link label="My Inquiries" labelIcon={<ClipboardList className="h-4 w-4" />} href={routes.myInquiries} />
+                </UserButton.MenuItems>
+              </UserButton>
             ) : (
-              <Link href={routes.signIn} className={`whitespace-nowrap ${LINK_CLASS}`}>
+              <Link
+                href={routes.signIn}
+                className={`whitespace-nowrap text-[10px] tracking-[0.14em] sm:text-[11px] sm:tracking-[0.2em] ${LINK_CLASS}`}
+              >
                 Sign In
               </Link>
             )}
             <Link
               href={routes.planner}
-              className="inline-flex min-h-11 items-center justify-center border border-white/70 px-4 py-2 font-cinzel text-[11px] uppercase tracking-[0.22em] text-white transition hover:bg-white hover:text-[#182231] sm:px-6"
+              className="inline-flex min-h-10 items-center justify-center whitespace-nowrap border border-white/70 px-3 py-2 font-cinzel text-[10px] uppercase tracking-[0.14em] text-white transition hover:bg-white hover:text-[#182231] sm:min-h-11 sm:px-6 sm:text-[11px] sm:tracking-[0.22em]"
             >
               Plan a Trip
             </Link>
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(true)}
+              className="inline-flex min-h-11 min-w-10 items-center justify-end gap-3 text-white"
+              aria-label="Open menu"
+              aria-expanded={isMenuOpen}
+              aria-controls="site-menu"
+            >
+              <span className="hidden font-cinzel text-[11px] uppercase tracking-[0.24em] sm:inline">
+                Menu
+              </span>
+              <Menu className="h-5 w-5" />
+            </button>
           </div>
         </div>
       </nav>
@@ -178,18 +191,18 @@ export default function NavBar() {
         aria-label="Site menu"
         aria-hidden={!isMenuOpen}
         inert={!isMenuOpen}
-        className={`fixed inset-y-0 left-0 z-[60] flex w-full max-w-md flex-col overflow-y-auto bg-[#182231] px-8 pb-10 pt-6 text-white transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isMenuOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed inset-y-0 right-0 z-[60] flex w-full max-w-md flex-col overflow-y-auto bg-[#182231] px-8 pb-10 pt-6 text-white transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <button
           type="button"
           onClick={() => setIsMenuOpen(false)}
-          className="inline-flex min-h-11 items-center gap-3 self-start text-white/80 transition-colors hover:text-white"
+          className="inline-flex min-h-11 items-center gap-3 self-end text-white/80 transition-colors hover:text-white"
           aria-label="Close menu"
         >
-          <X className="h-5 w-5" />
           <span className="font-cinzel text-[11px] uppercase tracking-[0.24em]">Close</span>
+          <X className="h-5 w-5" />
         </button>
 
         <nav className="mt-12 flex flex-col gap-5" aria-label="All pages">
@@ -205,9 +218,48 @@ export default function NavBar() {
               {link.label}
             </Link>
           ))}
+          {isSignedIn ? (
+            <button
+              type="button"
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsFeedbackOpen(true);
+              }}
+              className="text-left font-cinzel text-2xl text-white transition-colors hover:text-[#e2c27a]"
+            >
+              Feedback
+            </button>
+          ) : (
+            <Link
+              href={routes.feedback}
+              onClick={() => setIsMenuOpen(false)}
+              className={`font-cinzel text-2xl transition-colors hover:text-[#e2c27a] ${
+                pathname === routes.feedback ? "text-[#e2c27a]" : "text-white"
+              }`}
+            >
+              Feedback
+            </Link>
+          )}
         </nav>
 
         <div className="mt-auto space-y-4 border-t border-white/10 pt-8">
+          {isSignedIn ? (
+            <div className="pb-2">
+              <p className="text-[10px] uppercase tracking-[0.24em] text-white/45">Your account</p>
+              <div className="mt-3 flex flex-wrap gap-x-6 gap-y-3">
+                {ACCOUNT_LINKS.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={LINK_CLASS}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
           <Link
             href={routes.planner}
             onClick={() => setIsMenuOpen(false)}
@@ -216,18 +268,7 @@ export default function NavBar() {
             Plan a Trip
             <ArrowUpRight className="h-4 w-4" />
           </Link>
-          {isSignedIn ? (
-            <button
-              type="button"
-              className={`pt-2 ${LINK_CLASS}`}
-              onClick={() => {
-                setIsMenuOpen(false);
-                setIsFeedbackOpen(true);
-              }}
-            >
-              Feedback
-            </button>
-          ) : (
+          {!isSignedIn ? (
             <div className="flex gap-6 pt-2">
               <Link href={routes.signIn} onClick={() => setIsMenuOpen(false)} className={LINK_CLASS}>
                 Sign In
@@ -236,7 +277,7 @@ export default function NavBar() {
                 Sign Up
               </Link>
             </div>
-          )}
+          ) : null}
         </div>
       </aside>
 
