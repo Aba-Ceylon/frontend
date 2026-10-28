@@ -103,7 +103,9 @@ export default function TopPackagesCarousel({
               key={pkg.id}
               className="group relative w-[85%] shrink-0 snap-start overflow-hidden border border-white/12 bg-[#101925] sm:w-[68%] lg:w-[calc(50%-0.875rem)]"
             >
-              <div className="relative aspect-[4/5] min-h-[440px] sm:aspect-[16/11] lg:min-h-[560px]">
+              {/* Fixed heights, not aspect-ratio + min-height: that combination
+                  also forces a min-width wider than the card and clips the text. */}
+              <div className="relative h-[460px] w-full sm:h-[480px] lg:h-[560px]">
                 <Image
                   src={pkg.image}
                   alt={`${pkg.title} tour through ${pkg.route.join(", ")}`}
@@ -113,7 +115,7 @@ export default function TopPackagesCarousel({
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-[#07101D] via-[#07101D]/18 to-transparent" />
 
-                <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
+                <div className="absolute inset-x-0 bottom-0 min-w-0 p-5 text-white sm:p-8">
                   <p className="mb-3 text-xs uppercase tracking-[0.18em] text-[#F0D99F]">
                     {pkg.duration}
                   </p>
