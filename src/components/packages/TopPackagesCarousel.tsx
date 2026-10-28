@@ -101,9 +101,9 @@ export default function TopPackagesCarousel({
           {topPackages.map((pkg) => (
             <article
               key={pkg.id}
-              className="group relative min-w-[88%] snap-start overflow-hidden border border-white/12 bg-[#101925] sm:min-w-[68%] lg:min-w-[calc(50%-0.875rem)]"
+              className="group relative w-[85%] shrink-0 snap-start overflow-hidden border border-white/12 bg-[#101925] sm:w-[68%] lg:w-[calc(50%-0.875rem)]"
             >
-              <div className="relative aspect-[4/5] min-h-[470px] sm:aspect-[16/11] lg:min-h-[560px]">
+              <div className="relative aspect-[4/5] min-h-[440px] sm:aspect-[16/11] lg:min-h-[560px]">
                 <Image
                   src={pkg.image}
                   alt={`${pkg.title} tour through ${pkg.route.join(", ")}`}
@@ -118,7 +118,7 @@ export default function TopPackagesCarousel({
                     {pkg.duration}
                   </p>
 
-                  <h3 className="font-cinzel text-2xl leading-tight sm:text-3xl">
+                  <h3 className="font-cinzel text-2xl leading-tight [overflow-wrap:anywhere] sm:text-3xl">
                     {pkg.title}
                   </h3>
                   <p className="mt-3 line-clamp-2 max-w-xl text-sm leading-6 text-white/72 sm:text-base">
@@ -130,7 +130,7 @@ export default function TopPackagesCarousel({
                       const routeText = (
                         <>
                           <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#D8B45B]" aria-hidden="true" />
-                          <span>{pkg.route.slice(0, 3).join(" → ")}</span>
+                          <span className="min-w-0 [overflow-wrap:anywhere]">{pkg.route.slice(0, 3).join(" → ")}</span>
                         </>
                       );
 
