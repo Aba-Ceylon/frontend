@@ -49,9 +49,8 @@ export default function StaysPage() {
       <PageHero
         imageSrc="/staysbanner.png"
         imageAlt="Curated Heritage Stays"
-        eyebrow="Aba Ceylon Tours & Travels"
-        title="Curated Heritage Stays"
-        subtitle="Stay within the story of Sri Lanka, not outside it!"
+        title="Stays"
+        subtitle="Places with character, chosen for the route"
       />
       <div className="mx-auto max-w-[1360px] px-6 py-16 lg:px-10">
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
