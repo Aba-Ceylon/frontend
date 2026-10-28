@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   ArrowRight,
   Facebook,
-  Instagram,
   Mail,
   MapPin,
   Phone,
@@ -181,15 +180,6 @@ export default function Footer() {
                 </address>
 
                 <div className="mt-8 flex gap-5">
-                  <Link
-                    href={socialLinks.instagram}
-                    aria-label="Aba Ceylon on Instagram"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-white/40 transition-colors hover:text-[#C99A2B]"
-                  >
-                    <Instagram size={20} />
-                  </Link>
                   <Link
                     href={socialLinks.facebook}
                     aria-label="Aba Ceylon on Facebook"

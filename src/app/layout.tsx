@@ -210,12 +210,7 @@ const organizationJsonLd = {
       contactType: "customer support",
     },
   ],
-  sameAs: [
-    socialLinks.facebook,
-    "https://www.instagram.com/abaceylonaours",
-    "https://www.tripadvisor.com/abaceylonaours",
-    "https://www.linkedin.com/company/abaceylonaours",
-  ],
+  sameAs: [socialLinks.facebook],
   priceRange: "$$",
   currenciesAccepted: "USD, EUR, GBP, LKR",
   paymentAccepted: "Cash, Credit Card, Bank Transfer",
