@@ -80,10 +80,8 @@ export default function FleetPage() {
       <PageHero
         imageSrc="/images/fleet/fleets.png"
         imageAlt="Premium Fleet Vehicles"
-        eyebrow="Aba Ceylon Tours & Travels"
-        title="Explore Our Premium Fleet"
-        subtitle="Chauffeured vehicles designed for comfort, elegance, and seamless travel across Sri Lanka."
-        height="h-[52vh] sm:h-[58vh]"
+        title="Our Fleet"
+        subtitle="Private, chauffeur-driven vehicles"
       />
       <div className="mx-auto max-w-[1360px] px-4 py-12 sm:px-6 sm:py-16 lg:px-10">
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">

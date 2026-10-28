@@ -80,12 +80,8 @@ export default function TopPackagesCarousel({
               id="top-packages-title"
               className="mt-4 font-cinzel text-4xl leading-[1.08] sm:text-5xl lg:text-6xl"
             >
-              Journeys worth crossing the island for.
+              Journeys worth the trip.
             </h2>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-[#182231]/66">
-              Heritage cities, tea-country rails, wild parks, and slow coastal
-              days—each route is ready to enjoy as designed or tailor your way.
-            </p>
           </div>
 
           <Link
@@ -102,12 +98,14 @@ export default function TopPackagesCarousel({
           className="mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:gap-7"
           aria-label="Top tour packages"
         >
-          {topPackages.map((pkg, index) => (
+          {topPackages.map((pkg) => (
             <article
               key={pkg.id}
-              className="group relative min-w-[88%] snap-start overflow-hidden border border-white/12 bg-[#101925] sm:min-w-[68%] lg:min-w-[calc(50%-0.875rem)]"
+              className="group relative w-[85%] shrink-0 snap-start overflow-hidden border border-white/12 bg-[#101925] sm:w-[68%] lg:w-[calc(50%-0.875rem)]"
             >
-              <div className="relative aspect-[4/5] min-h-[470px] sm:aspect-[16/11] lg:min-h-[560px]">
+              {/* Fixed heights, not aspect-ratio + min-height: that combination
+                  also forces a min-width wider than the card and clips the text. */}
+              <div className="relative h-[460px] w-full sm:h-[480px] lg:h-[560px]">
                 <Image
                   src={pkg.image}
                   alt={`${pkg.title} tour through ${pkg.route.join(", ")}`}
@@ -117,20 +115,15 @@ export default function TopPackagesCarousel({
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-[#07101D] via-[#07101D]/18 to-transparent" />
 
-                <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
-                  <div className="mb-4 flex items-center justify-between gap-4">
-                    <span className="font-cinzel text-[10px] uppercase tracking-[0.22em] text-[#F0D99F]">
-                      Top pick {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <span className="border border-white/25 bg-[#07101D]/45 px-3 py-2 text-xs backdrop-blur-md">
-                      {pkg.duration} · {pkg.km} km
-                    </span>
-                  </div>
+                <div className="absolute inset-x-0 bottom-0 min-w-0 p-5 text-white sm:p-8">
+                  <p className="mb-3 text-xs uppercase tracking-[0.18em] text-[#F0D99F]">
+                    {pkg.duration}
+                  </p>
 
-                  <h3 className="font-cinzel text-2xl leading-tight sm:text-3xl">
+                  <h3 className="font-cinzel text-2xl leading-tight [overflow-wrap:anywhere] sm:text-3xl">
                     {pkg.title}
                   </h3>
-                  <p className="mt-3 max-w-xl text-sm leading-6 text-white/72 sm:text-base">
+                  <p className="mt-3 line-clamp-2 max-w-xl text-sm leading-6 text-white/72 sm:text-base">
                     {pkg.summary}
                   </p>
                   <div className="mt-5 flex flex-col gap-5 border-t border-white/16 pt-5 sm:flex-row sm:items-center sm:justify-between">
@@ -139,7 +132,7 @@ export default function TopPackagesCarousel({
                       const routeText = (
                         <>
                           <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#D8B45B]" aria-hidden="true" />
-                          <span>{pkg.route.slice(0, 3).join(" — ")}</span>
+                          <span className="min-w-0 [overflow-wrap:anywhere]">{pkg.route.slice(0, 3).join(" → ")}</span>
                         </>
                       );
 
@@ -172,10 +165,7 @@ export default function TopPackagesCarousel({
           ))}
         </div>
 
-        <div className="mt-3 flex items-center justify-between">
-          <p className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-[#182231]/48" aria-live="polite">
-            {String(clampedIndex + 1).padStart(2, "0")} / {String(topPackages.length).padStart(2, "0")}
-          </p>
+        <div className="mt-3 flex items-center justify-end">
           <div className="flex gap-2">
             <button
               type="button"

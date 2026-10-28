@@ -121,36 +121,13 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-white">
       <section className="border-b border-[#182231]/10 bg-white px-6 pb-16 pt-32 lg:px-10 lg:pt-36">
-        <div className="mx-auto grid max-w-[1360px] gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
-          <div data-reveal>
-            <p className="font-cinzel text-[11px] uppercase tracking-[0.2em] text-[#C99A2B]">
-              Travel concierge
-            </p>
-            <h1 className="mt-4 font-cinzel text-5xl leading-[1.02] text-[#182231] sm:text-6xl lg:text-[4.5rem]">
-              Start the conversation properly.
-            </h1>
-            <p
-              className="mt-6 max-w-2xl text-base leading-8 text-[#182231]/66"
-              style={SWITZER}
-            >
-              Send your dates, route ideas, and stay preferences. The enquiry is
-              structured to save time and open directly into a WhatsApp message
-              to the team.
-            </p>
-          </div>
-
-          <div className="border border-[#182231] bg-[#182231] px-6 py-7 text-white" data-reveal>
-            <p className="font-cinzel text-[11px] uppercase tracking-[0.18em] text-[#C99A2B]">
-              Typical response
-            </p>
-            <p className="mt-4 font-cinzel text-3xl text-white sm:text-4xl">
-              Within a few hours
-            </p>
-            <p className="mt-4 text-sm leading-7 text-white/72" style={SWITZER}>
-              Route questions, stay guidance, and planning advice are handled by
-              a local team, not a generic booking desk.
-            </p>
-          </div>
+        <div className="mx-auto max-w-[1360px]" data-reveal>
+          <h1 className="font-cinzel text-5xl leading-[1.05] text-[#182231] sm:text-6xl">
+            Get in touch.
+          </h1>
+          <p className="mt-5 max-w-xl text-base leading-8 text-[#182231]/66" style={SWITZER}>
+            Tell us your dates and ideas. We usually reply within a few hours.
+          </p>
         </div>
       </section>
 
@@ -215,7 +192,7 @@ export default function ContactPage() {
                   value={form.message}
                   onChange={handleChange}
                   rows={9}
-                  placeholder="Tell us about your dates, group size, route ideas, and the kind of journey you want."
+                  placeholder="Dates, group size and places you want to see."
                   className="w-full border border-[#182231]/14 bg-white px-5 py-4 text-[15px] text-[#182231] outline-none transition focus:border-[#C99A2B] focus:ring-2 focus:ring-[#C99A2B]/15"
                   style={SWITZER}
                 />
@@ -247,7 +224,7 @@ export default function ContactPage() {
                 Submit enquiry
               </Button>
               <p className="text-sm text-[#182231]/58" style={SWITZER}>
-                This opens as a pre-filled WhatsApp message.
+                Opens in WhatsApp.
               </p>
             </div>
           </form>
@@ -290,33 +267,19 @@ export default function ContactPage() {
                   </div>
                 </div>
               </div>
+              <Link
+                href={generateWhatsAppLink(
+                  ADMIN_PHONE,
+                  "Hello Aba Ceylon, I would like to enquire about planning my Sri Lanka trip.",
+                )}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-8 block border border-[#C99A2B] bg-[#C99A2B] px-5 py-3 text-center font-cinzel text-xs uppercase tracking-[0.14em] text-[#182231] transition hover:bg-[#ddb044]"
+              >
+                Chat on WhatsApp
+              </Link>
             </div>
 
-            <div className="border border-[#182231]/10 bg-white p-7" data-reveal>
-              <p className="font-cinzel text-[11px] uppercase tracking-[0.18em] text-[#C99A2B]">
-                Prefer a faster start?
-              </p>
-              <p className="mt-4 text-sm leading-7 text-[#182231]/66" style={SWITZER}>
-                Skip the form and open a direct WhatsApp conversation with your
-                basic travel details already filled in.
-              </p>
-              <div className="mt-6 flex flex-col gap-3">
-                <Link
-                  href={generateWhatsAppLink(
-                    ADMIN_PHONE,
-                    "Hello Aba Ceylon, I would like to enquire about planning my Sri Lanka trip.",
-                  )}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="border border-[#182231] bg-[#182231] px-5 py-3 text-center font-cinzel text-xs uppercase tracking-[0.14em] text-white transition hover:bg-[#243142]"
-                >
-                  Start on WhatsApp
-                </Link>
-                <Link href="/planner" className="editorial-link text-[#182231]">
-                  Open the planner
-                </Link>
-              </div>
-            </div>
           </div>
         </div>
       </section>

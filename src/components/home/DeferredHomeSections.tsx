@@ -39,24 +39,9 @@ const TopPackagesCarousel = dynamic(
   { loading: () => <SectionSkeleton className="bg-[#f6f0e6] text-[#182231]" title="Loading tour packages" /> },
 );
 
-const HowItWorks = dynamic(
-  () => import("@/components/howItWorks/HowItWorks"),
-  { loading: () => <SectionSkeleton title="Loading" /> },
-);
-
-const TrustBar = dynamic(
-  () => import("@/components/trustBar/TrustBar"),
-  { loading: () => <SectionSkeleton title="Loading" /> },
-);
-
 const InteractiveMap = dynamic(
   () => import("@/components/interactiveSriLanka/InteractiveMap"),
   { ssr: false, loading: () => <SectionSkeleton className="bg-[#182231] text-white" title="Loading interactive map" /> },
-);
-
-const WhyChooseUs = dynamic(
-  () => import("@/components/whyChooseUs/WhyChooseUs"),
-  { loading: () => <SectionSkeleton title="Loading" /> },
 );
 
 const PlanYourJourney = dynamic(
@@ -98,16 +83,13 @@ export default function DeferredHomeSections({
     <>
       <WhoWeAre />
       <TopPackagesCarousel packages={packages} />
-      <HowItWorks />
       <BuddhaLotus />
-      <TrustBar />
       <InteractiveMap />
-      <WhyChooseUs />
       <PlanYourJourney />
       <FeaturedStays />
       <FleetSection />
-      <FAQ />
       <Testimonials />
+      <FAQ />
     </>
   );
 }

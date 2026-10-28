@@ -35,6 +35,7 @@ export const footerLinkGroups = [
     title: "Curation",
     links: [
       { label: "Customize Journeys", href: routes.customizeJourneys },
+      { label: "Tour Packages", href: routes.packages },
       { label: "Stays & Retreats", href: routes.stays },
       { label: "Private Fleet", href: routes.fleet },
       { label: "Bespoke Activities", href: routes.activities },

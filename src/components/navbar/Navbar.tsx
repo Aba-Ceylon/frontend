@@ -4,16 +4,57 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Show, UserButton } from "@clerk/nextjs";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { UserButton, useAuth } from "@clerk/nextjs";
+import { ArrowUpRight, ClipboardList, Map as MapIcon, Menu, UserRound, X } from "lucide-react";
 import { primaryNavLinks, routes } from "@/constants/routes";
 import FeedbackModal from "@/features/feedback/FeedbackModal";
 
+// Pages that open on a full-bleed dark hero, so the bar can start transparent.
+const DARK_HERO_ROUTES = [
+  routes.customizeJourneys,
+  "/about",
+  "/activities",
+  "/destinations",
+  "/fleet",
+  "/packages",
+  "/stays",
+];
+
+// Always visible on desktop; everything else lives in the menu panel.
+const MAIN_LINKS = [
+  { label: "Tour Packages", href: routes.packages },
+  { label: "Destinations", href: routes.destinations },
+];
+
+const MENU_LINKS = [
+  ...primaryNavLinks,
+  { label: "Activities", href: routes.activities },
+  { label: "Contact", href: routes.contact },
+];
+
+const ACCOUNT_LINKS = [
+  { label: "My Account", href: routes.account },
+  { label: "My Plans", href: routes.myPlans },
+  { label: "My Inquiries", href: routes.myInquiries },
+];
+
+const LINK_CLASS =
+  "font-cinzel text-[11px] uppercase tracking-[0.2em] text-white/85 transition-colors hover:text-[#e2c27a]";
+
 export default function NavBar() {
   const pathname = usePathname();
+  // Undefined while Clerk loads (or if it fails), so Sign In still shows.
+  const { isSignedIn } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [lastPathname, setLastPathname] = useState(pathname);
+
+  // Close the menu on navigation without a setState-in-effect cascade.
+  if (pathname !== lastPathname) {
+    setLastPathname(pathname);
+    setIsMenuOpen(false);
+  }
 
   const isAuthPage =
     pathname.startsWith("/sign-in") ||
@@ -27,34 +68,27 @@ export default function NavBar() {
       setIsScrolled(window.scrollY > 24);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
-    }
+    const value = isMenuOpen ? "hidden" : "";
+    document.body.style.overflow = value;
+    document.documentElement.style.overflow = value;
     return () => {
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
     };
-  }, [isMobileMenuOpen]);
-
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
+  }, [isMenuOpen]);
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsMobileMenuOpen(false);
+        setIsMenuOpen(false);
       }
     };
 
@@ -62,195 +96,190 @@ export default function NavBar() {
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, []);
 
-  const shellClass = isScrolled || isAuthPage
-    ? "lg:border-[#182231]/10 lg:bg-[rgba(251,248,242,0.92)] lg:shadow-[0_16px_36px_rgba(17,24,39,0.06)] lg:backdrop-blur-xl"
-    : "lg:border-transparent lg:bg-[rgba(251,248,242,0.58)] lg:backdrop-blur-md";
+  const hasDarkHero =
+    pathname === routes.home ||
+    DARK_HERO_ROUTES.some(
+      (route) => pathname === route || pathname.startsWith(`${route}/`),
+    );
+  const isSolid = isScrolled || isAuthPage || !hasDarkHero;
 
   return (
     <>
-      <nav className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 lg:px-8">
-        <div
-          className={`mx-auto max-w-[1360px] border border-transparent bg-transparent shadow-none backdrop-blur-none transition-all duration-500 ${shellClass}`}
-          style={{ fontFamily: 'Switzer, system-ui, -apple-system, "Segoe UI"' }}
-        >
-          <div className="flex items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-            <Link href={routes.home} className="flex min-w-0 items-center gap-4">
-              <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-[#182231]/10 bg-white sm:h-12 sm:w-12">
-                <Image
-                  src="/LOGO.jpeg"
-                  alt="Aba Ceylon Logo"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-              <div className="min-w-0">
-                <p className="font-cinzel text-sm tracking-[0.18em] text-[#182231] sm:text-base">
-                  Aba Ceylon
-                </p>
-                <p className="truncate text-[10px] uppercase tracking-[0.22em] text-[#4a5565] sm:text-[11px]">
-                  Tours & Travels
-                </p>
-              </div>
-            </Link>
+      <nav
+        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
+          isSolid
+            ? "bg-[rgba(24,34,49,0.96)] shadow-[0_12px_30px_rgba(10,15,24,0.18)] backdrop-blur-xl"
+            : "bg-transparent"
+        }`}
+        style={{ fontFamily: 'Switzer, system-ui, -apple-system, "Segoe UI"' }}
+      >
+        <div className="mx-auto flex h-[72px] max-w-[1440px] items-center justify-between gap-3 px-4 sm:h-20 sm:px-6 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-4 lg:px-10">
+          <div className="hidden items-center gap-8 lg:flex">
+            {MAIN_LINKS.map((link) => (
+              <Link key={link.href} href={link.href} className={LINK_CLASS}>
+                {link.label}
+              </Link>
+            ))}
+          </div>
 
-            {!isAuthPage ? (
-              <div className="hidden min-w-0 flex-1 items-center justify-center gap-7 px-5 xl:flex 2xl:gap-8">
-                {primaryNavLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="whitespace-nowrap font-cinzel text-[10px] uppercase tracking-[0.16em] text-[#314055] transition-colors duration-300 hover:text-[#8b6b1f] 2xl:text-[11px] 2xl:tracking-[0.18em]"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            ) : <div className="hidden xl:block" />}
+          <Link href={routes.home} className="flex items-center gap-3" aria-label="Aba Ceylon home">
+            <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-white sm:h-11 sm:w-11">
+              <Image src="/LOGO.jpeg" alt="" fill className="object-cover" priority />
+            </span>
+            <span className="hidden text-left sm:block">
+              <span className="block font-cinzel text-sm tracking-[0.18em] text-white sm:text-base">
+                Aba Ceylon
+              </span>
+              <span className="block text-[10px] uppercase tracking-[0.22em] text-white/70">
+                Tours & Travels
+              </span>
+            </span>
+          </Link>
 
-            <div className="hidden items-center gap-3 xl:flex">
-              {!isAuthPage ? (
-                <>
-                  <Link
-                    href={routes.contact}
-                    className="inline-flex min-h-11 items-center justify-center border border-[#182231]/14 px-4 py-2 font-cinzel text-[11px] uppercase tracking-[0.22em] text-[#182231] transition hover:bg-white"
-                  >
-                    Enquire
-                  </Link>
-                  <Link
-                    href={routes.planner}
-                    className="inline-flex min-h-11 items-center justify-center bg-[#182231] px-5 py-2 font-cinzel text-[11px] uppercase tracking-[0.22em] text-white transition hover:bg-[#243142]"
-                  >
-                    Planner
-                  </Link>
-                  <Show when="signed-out">
-                    <Link
-                      href={routes.signIn}
-                      className="font-cinzel text-[11px] uppercase tracking-[0.22em] text-[#4a5565] transition-colors hover:text-[#182231]"
-                    >
-                      Sign In
-                    </Link>
-                  </Show>
-                  <Show when="signed-in">
-                    <button
-                      type="button"
-                      className="font-cinzel text-[11px] uppercase tracking-[0.22em] text-[#4a5565] transition-colors hover:text-[#182231]"
-                      onClick={() => setIsFeedbackOpen(true)}
-                    >
-                      Feedback
-                    </button>
-                    <UserButton />
-                  </Show>
-                </>
-              ) : (
-                <Link
-                  href={routes.contact}
-                  className="inline-flex min-h-11 items-center gap-2 border border-[#182231]/14 px-4 py-2 font-cinzel text-[11px] uppercase tracking-[0.22em] text-[#182231]"
-                >
-                  Need help
-                  <ArrowUpRight className="h-3.5 w-3.5 text-[#8b6b1f]" />
-                </Link>
-              )}
-            </div>
-
-            {!isAuthPage ? (
-              <button
-                type="button"
-                onClick={() => setIsMobileMenuOpen((value) => !value)}
-                className="inline-flex h-11 w-11 items-center justify-center border border-[#182231]/10 bg-white/70 text-[#182231] xl:hidden"
-                aria-label="Toggle menu"
-              >
-                {isMobileMenuOpen ? (
-                  <X className="h-5 w-5" />
-                ) : (
-                  <Menu className="h-5 w-5" />
-                )}
-              </button>
+          <div className="flex items-center justify-end gap-3 sm:gap-6">
+            {isSignedIn ? (
+              <UserButton>
+                <UserButton.MenuItems>
+                  <UserButton.Link label="My Account" labelIcon={<UserRound className="h-4 w-4" />} href={routes.account} />
+                  <UserButton.Link label="My Plans" labelIcon={<MapIcon className="h-4 w-4" />} href={routes.myPlans} />
+                  <UserButton.Link label="My Inquiries" labelIcon={<ClipboardList className="h-4 w-4" />} href={routes.myInquiries} />
+                </UserButton.MenuItems>
+              </UserButton>
             ) : (
               <Link
-                href={routes.contact}
-                className="inline-flex min-h-11 items-center gap-2 border border-[#182231]/10 px-3 py-2 font-cinzel text-[11px] uppercase tracking-[0.22em] text-[#182231] lg:hidden"
+                href={routes.signIn}
+                className={`whitespace-nowrap text-[10px] tracking-[0.14em] sm:text-[11px] sm:tracking-[0.2em] ${LINK_CLASS}`}
               >
-                Contact
+                Sign In
               </Link>
             )}
+            <Link
+              href={routes.planner}
+              className="inline-flex min-h-10 items-center justify-center whitespace-nowrap border border-white/70 px-3 py-2 font-cinzel text-[10px] uppercase tracking-[0.14em] text-white transition hover:bg-white hover:text-[#182231] sm:min-h-11 sm:px-6 sm:text-[11px] sm:tracking-[0.22em]"
+            >
+              Plan a Trip
+            </Link>
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(true)}
+              className="inline-flex min-h-11 min-w-10 items-center justify-end gap-3 text-white"
+              aria-label="Open menu"
+              aria-expanded={isMenuOpen}
+              aria-controls="site-menu"
+            >
+              <span className="hidden font-cinzel text-[11px] uppercase tracking-[0.24em] sm:inline">
+                Menu
+              </span>
+              <Menu className="h-5 w-5" />
+            </button>
           </div>
         </div>
       </nav>
 
-      {!isAuthPage && isMobileMenuOpen ? (
-        <div className="fixed inset-0 z-40 overflow-y-auto overscroll-contain bg-[rgba(246,240,230,0.96)] px-6 pb-8 pt-28 backdrop-blur-xl xl:hidden">
-          <div className="mx-auto flex min-h-full max-w-md flex-col">
-            <div className="luxury-divider mb-8 w-full" />
-            <div className="flex flex-1 flex-col justify-between">
-              <div className="space-y-5">
-                {primaryNavLinks.map((link) => (
+      <div
+        className={`fixed inset-0 z-[55] bg-[#0a0f18]/50 backdrop-blur-sm transition-opacity duration-500 ${
+          isMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        onClick={() => setIsMenuOpen(false)}
+        aria-hidden="true"
+      />
+
+      <aside
+        id="site-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site menu"
+        aria-hidden={!isMenuOpen}
+        inert={!isMenuOpen}
+        className={`fixed inset-y-0 right-0 z-[60] flex w-full max-w-md flex-col overflow-y-auto bg-[#182231] px-8 pb-10 pt-6 text-white transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <button
+          type="button"
+          onClick={() => setIsMenuOpen(false)}
+          className="inline-flex min-h-11 items-center gap-3 self-end text-white/80 transition-colors hover:text-white"
+          aria-label="Close menu"
+        >
+          <span className="font-cinzel text-[11px] uppercase tracking-[0.24em]">Close</span>
+          <X className="h-5 w-5" />
+        </button>
+
+        <nav className="mt-12 flex flex-col gap-5" aria-label="All pages">
+          {MENU_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setIsMenuOpen(false)}
+              className={`font-cinzel text-2xl transition-colors hover:text-[#e2c27a] ${
+                pathname === link.href ? "text-[#e2c27a]" : "text-white"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+          {isSignedIn ? (
+            <button
+              type="button"
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsFeedbackOpen(true);
+              }}
+              className="text-left font-cinzel text-2xl text-white transition-colors hover:text-[#e2c27a]"
+            >
+              Feedback
+            </button>
+          ) : (
+            <Link
+              href={routes.feedback}
+              onClick={() => setIsMenuOpen(false)}
+              className={`font-cinzel text-2xl transition-colors hover:text-[#e2c27a] ${
+                pathname === routes.feedback ? "text-[#e2c27a]" : "text-white"
+              }`}
+            >
+              Feedback
+            </Link>
+          )}
+        </nav>
+
+        <div className="mt-auto space-y-4 border-t border-white/10 pt-8">
+          {isSignedIn ? (
+            <div className="pb-2">
+              <p className="text-[10px] uppercase tracking-[0.24em] text-white/45">Your account</p>
+              <div className="mt-3 flex flex-wrap gap-x-6 gap-y-3">
+                {ACCOUNT_LINKS.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="block font-cinzel text-2xl text-[#182231] transition-colors hover:text-[#8b6b1f]"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={LINK_CLASS}
                   >
                     {link.label}
                   </Link>
                 ))}
               </div>
-
-              <div className="mt-10 space-y-4 border border-[#182231]/8 bg-white/70 p-6">
-                <Link
-                  href={routes.planner}
-                  className="flex items-center justify-between bg-[#182231] px-5 py-4 font-cinzel text-[11px] uppercase tracking-[0.22em] text-white"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Open planner
-                  <ArrowUpRight className="h-4 w-4" />
-                </Link>
-
-                <Link
-                  href={routes.contact}
-                  className="flex items-center justify-between border border-[#182231]/12 px-5 py-4 font-cinzel text-[11px] uppercase tracking-[0.22em] text-[#182231]"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Enquire now
-                  <ArrowUpRight className="h-4 w-4 text-[#8b6b1f]" />
-                </Link>
-
-                <Show when="signed-out">
-                  <Link
-                    href={routes.signIn}
-                    className="block font-cinzel text-[12px] uppercase tracking-[0.18em] text-[#445062]"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href={routes.signUp}
-                    className="block font-cinzel text-[12px] uppercase tracking-[0.18em] text-[#445062]"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Sign Up
-                  </Link>
-                </Show>
-                <Show when="signed-in">
-                  <button
-                    type="button"
-                    className="font-cinzel text-[12px] uppercase tracking-[0.18em] text-[#445062]"
-                    onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      setIsFeedbackOpen(true);
-                    }}
-                  >
-                    Feedback
-                  </button>
-                  <div className="py-2">
-                    <UserButton />
-                  </div>
-                </Show>
-              </div>
             </div>
-          </div>
+          ) : null}
+          <Link
+            href={routes.planner}
+            onClick={() => setIsMenuOpen(false)}
+            className="flex items-center justify-between bg-[#C99A2B] px-5 py-4 font-cinzel text-[11px] uppercase tracking-[0.22em] text-[#182231] transition hover:bg-[#ddb044]"
+          >
+            Plan a Trip
+            <ArrowUpRight className="h-4 w-4" />
+          </Link>
+          {!isSignedIn ? (
+            <div className="flex gap-6 pt-2">
+              <Link href={routes.signIn} onClick={() => setIsMenuOpen(false)} className={LINK_CLASS}>
+                Sign In
+              </Link>
+              <Link href={routes.signUp} onClick={() => setIsMenuOpen(false)} className={LINK_CLASS}>
+                Sign Up
+              </Link>
+            </div>
+          ) : null}
         </div>
-      ) : null}
+      </aside>
 
       {isFeedbackOpen ? (
         <FeedbackModal onClose={() => setIsFeedbackOpen(false)} />

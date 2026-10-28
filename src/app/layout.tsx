@@ -9,6 +9,8 @@ import GatedShell from "../components/home/GatedShell";
 import ChatbotWidget from "../features/chatbot/ChatbotWidget";
 import WhatsAppButton from "../features/whatsapp/WhatsAppButton";
 import SiteMotion from "../components/motion/SiteMotion";
+import CookieConsent from "../components/cookieConsent/CookieConsent";
+import { socialLinks } from "../config/site";
 
 /* ─── Base URL ─────────────────────────────────────────────────────────────── */
 const SITE_URL = "https://www.abaceylontours.com";
@@ -208,12 +210,7 @@ const organizationJsonLd = {
       contactType: "customer support",
     },
   ],
-  sameAs: [
-    "https://www.facebook.com/abaceylonaours",
-    "https://www.instagram.com/abaceylonaours",
-    "https://www.tripadvisor.com/abaceylonaours",
-    "https://www.linkedin.com/company/abaceylonaours",
-  ],
+  sameAs: [socialLinks.facebook],
   priceRange: "$$",
   currenciesAccepted: "USD, EUR, GBP, LKR",
   paymentAccepted: "Cash, Credit Card, Bank Transfer",
@@ -314,6 +311,7 @@ export default function RootLayout({
             </GatedShell>
             <ChatbotWidget />
             <WhatsAppButton />
+            <CookieConsent />
           </LoaderGateProvider>
         </ClerkProvider>
       </body>

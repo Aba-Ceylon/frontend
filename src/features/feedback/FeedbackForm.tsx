@@ -39,7 +39,7 @@ export default function FeedbackForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (rating === 0) { dispatch({ type: "SET_STATUS", status: "idle", errorMsg: "Please select a rating" }); return; }
-    if (message.trim().length < 20) { dispatch({ type: "SET_STATUS", status: "idle", errorMsg: "Message must be at least 20 characters" }); return; }
+    if (!message.trim()) { dispatch({ type: "SET_STATUS", status: "idle", errorMsg: "Please write a short note" }); return; }
 
     dispatch({ type: "SET_STATUS", status: "loading" });
     const result = await submitFeedback({
@@ -194,7 +194,7 @@ export default function FeedbackForm() {
                 />
                 <div className="mt-3 flex items-center justify-between gap-4">
                   <p className="text-xs leading-5 text-[#6B7280]">
-                    Minimum 20 characters. Clear, honest detail helps most.
+                    Clear, honest detail helps most.
                   </p>
                   <p className="text-xs uppercase tracking-[0.16em] text-[#6B7280]">
                     {message.length}/600

@@ -456,3 +456,19 @@ img {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Destination panel: bottom sheet on mobile, right drawer on desktop. */
+@keyframes panel-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes panel-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes panel-left {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}

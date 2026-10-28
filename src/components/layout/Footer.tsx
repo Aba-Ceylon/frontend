@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   ArrowRight,
   Facebook,
-  Instagram,
   Mail,
   MapPin,
   Phone,
@@ -13,6 +12,7 @@ import {
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { footerLinkGroups, routes } from "@/constants/routes";
+import { socialLinks } from "@/config/site";
 import { generateWhatsAppLink } from "@/lib/whatsapp/generateWhatsAppLink";
 
 export default function Footer() {
@@ -181,15 +181,8 @@ export default function Footer() {
 
                 <div className="mt-8 flex gap-5">
                   <Link
-                    href="https://www.instagram.com/abaceylontours"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-white/40 transition-colors hover:text-[#C99A2B]"
-                  >
-                    <Instagram size={20} />
-                  </Link>
-                  <Link
-                    href="https://www.facebook.com/abaceylontours"
+                    href={socialLinks.facebook}
+                    aria-label="Aba Ceylon on Facebook"
                     target="_blank"
                     rel="noreferrer"
                     className="text-white/40 transition-colors hover:text-[#C99A2B]"

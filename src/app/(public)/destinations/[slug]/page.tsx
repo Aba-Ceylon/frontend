@@ -7,7 +7,7 @@ import { routes } from "@/constants/routes";
 import { fetchDestinationBySlug } from "@/services/destinationService";
 import DestinationGuideBook from "@/features/destinations/DestinationGuideBook";
 import { destinations } from "@/data/destinations";
-import GoogleLocationMap from "@/components/maps/GoogleLocationMap";
+import LocationMap from "@/components/maps/LocationMap";
 import { getGalleryImages } from "@/lib/packages/packageImages";
 import PackageImageCarousel from "@/features/packages/PackageImageCarousel";
 
@@ -154,7 +154,7 @@ export default async function DestinationPage({ params }: Props) {
             </p>
           </div>
           <div className="overflow-hidden border border-[#182231]/12 shadow-[0_20px_60px_rgba(15,23,42,0.10)]" data-reveal>
-            <GoogleLocationMap
+            <LocationMap
               coordinates={destination.coordinates}
               title={destination.name}
               zoom={11}

@@ -44,12 +44,9 @@ export default function FeaturedStays() {
         <div className="grid gap-8 lg:grid-cols-[320px_minmax(0,1fr)] lg:items-end lg:gap-10">
           <div data-reveal>
             <SectionHeader
-              eyebrow="Accommodation"
               align="left"
-              title="Places that hold the mood of the island."
-              description="Boutique stays, heritage houses, and retreat-style escapes selected for atmosphere, location, and how they fit the route."
-              titleClassName="font-cinzel text-4xl font-medium leading-tight text-[#182231] sm:text-5xl lg:text-[3.45rem]"
-              descriptionClassName="mx-auto max-w-2xl text-base leading-8 text-[#445062] sm:text-lg"
+              title="Stays with character."
+              titleClassName="font-cinzel text-4xl font-medium leading-tight text-[#182231] sm:text-5xl"
               className="mb-0"
             />
 
