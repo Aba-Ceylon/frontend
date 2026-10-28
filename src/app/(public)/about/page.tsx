@@ -52,13 +52,20 @@ export default function AboutPage() {
           </div>
 
           <div data-reveal>
-            <h2 className="font-cinzel text-4xl leading-[1.08] text-[#182231] sm:text-5xl">
-              Planned by someone who knows the roads.
+            <p className="font-cinzel text-[11px] uppercase tracking-[0.24em] text-[#9b7422]">
+              A word from the founder
+            </p>
+            <h2 className="mt-4 font-cinzel text-4xl leading-[1.08] text-[#182231] sm:text-5xl">
+              You speak to the person who knows the roads.
             </h2>
             <p className="mt-6 max-w-[52ch] text-base leading-8 text-[#182231]/68" style={SWITZER}>
-              Aba Ceylon was started to give travellers a direct line to local
-              knowledge. When you write to us, you speak to the people who plan
-              and run your trip.
+              Aba Ceylon exists because I wanted travelers to reach the real
+              island through direct local guidance, not through a booking
+              engine. When you write to us, you are speaking to the team that
+              actually plans and runs the route.
+            </p>
+            <p className="mt-6 font-cinzel text-sm tracking-[0.06em] text-[#182231]">
+              Founder, Aba Ceylon Tours &amp; Travels
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-6">
               <Link
