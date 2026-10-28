@@ -37,10 +37,10 @@ export async function submitFeedback(
       };
     }
 
-    if (message.length < 20) {
+    if (!message) {
       return {
         success: false,
-        error: "Please write at least 20 characters about your experience.",
+        error: "Please write a short note about your experience.",
       };
     }
 
