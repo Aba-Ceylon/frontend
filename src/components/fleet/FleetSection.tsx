@@ -39,9 +39,8 @@ export default function FleetSection() {
       <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
         <SectionHeader
           align="left"
-          eyebrow="On-road comfort"
-          title="Vehicles chosen to suit the route, not fill a brochure."
-          description="Private transport options for couples, families, and longer island routes, matched around comfort, luggage, and travel rhythm."
+          eyebrow="Private chauffeur"
+          title="Travel in comfort."
         />
 
         <div className="flex items-center gap-4">

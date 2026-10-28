@@ -172,23 +172,10 @@ export default function FAQ() {
   return (
     <section className="bg-white py-20 sm:py-28 overflow-hidden">
       <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
-        <div className="mb-12 grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-end">
-          <div data-reveal>
-            <p className="font-cinzel text-[11px] uppercase tracking-[0.22em] text-[#C99A2B]">
-              Frequently asked questions
-            </p>
-            <h2 className="mt-4 font-cinzel text-4xl leading-[1.08] text-[#182231] sm:text-5xl lg:text-[3.3rem]">
-              Clear answers before the trip begins.
-            </h2>
-          </div>
-          <p
-            className="text-base leading-8 text-[#182231]/66"
-            style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
-            data-reveal
-          >
-            The aim is to reduce uncertainty, not decorate it. If your question
-            is not covered here, message the team directly.
-          </p>
+        <div className="mb-10" data-reveal>
+          <h2 className="font-cinzel text-4xl leading-[1.08] text-[#182231] sm:text-5xl">
+            Questions, answered.
+          </h2>
         </div>
 
         <div className="mb-10 flex flex-wrap gap-2" data-reveal>
@@ -211,39 +198,10 @@ export default function FAQ() {
           ))}
         </div>
 
-        <div className="grid gap-10 lg:grid-cols-[320px_minmax(0,1fr)] lg:items-start">
-          <div className="space-y-6 lg:sticky lg:top-28" data-reveal>
-            <div className="border border-[#182231]/10 bg-white p-7">
-              <p className="font-cinzel text-sm uppercase tracking-[0.14em] text-[#C99A2B]">
-                {currentCategory.label}
-              </p>
-              <p
-                className="mt-4 text-sm leading-7 text-[#182231]/66"
-                style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
-              >
-                {currentCategory.summary}
-              </p>
-              <div className="mt-6 border-t border-[#182231]/10 pt-5">
-                <p
-                  className="text-xs uppercase tracking-[0.14em] text-[#182231]/48"
-                  style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
-                >
-                  {currentCategory.items.length} questions in this section
-                </p>
-              </div>
-            </div>
-
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
+          <div className="lg:sticky lg:top-28 lg:order-last" data-reveal>
             <div className="border border-[#182231] bg-[#182231] p-7 text-white">
-              <p className="font-cinzel text-sm uppercase tracking-[0.14em] text-[#C99A2B]">
-                Still need help?
-              </p>
-              <p
-                className="mt-4 text-sm leading-7 text-white/72"
-                style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
-              >
-                Contact the team directly if you want a fast answer about dates,
-                route pacing, stays, or transport.
-              </p>
+              <p className="font-cinzel text-xl">Still have a question?</p>
               <div className="mt-6 flex flex-col gap-3">
                 <Link
                   href={waLink}
