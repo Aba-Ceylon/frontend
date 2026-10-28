@@ -220,10 +220,15 @@ export default function InteractiveMap() {
 
       markerElement.addEventListener("click", () => {
         setSelectedDestination(destination);
+        // Keep the marker visible beside the drawer (desktop) or above the sheet (mobile).
+        const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
         map.current?.flyTo({
           center: destination.coordinates,
           zoom: 9,
           duration: 1500,
+          padding: isDesktop
+            ? { top: 0, bottom: 0, left: 0, right: 460 }
+            : { top: 0, bottom: Math.round(window.innerHeight * 0.6), left: 0, right: 0 },
         });
       });
 
@@ -246,6 +251,7 @@ export default function InteractiveMap() {
         center: SRI_LANKA_CENTER,
         zoom: 7,
         duration: 1500,
+        padding: { top: 0, bottom: 0, left: 0, right: 0 },
       });
     }
   };
