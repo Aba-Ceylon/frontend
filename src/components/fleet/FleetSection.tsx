@@ -31,24 +31,26 @@ export default function FleetSection() {
     return () => { active = false; };
   }, []);
 
-  const { stripRef, containerRef, cloned, dotIndex, cardWidth, gap, slideTo, onPointerDown, onPointerUp } =
-    useCarousel({ items: fleetVehicles, gap: 24, autoPlayMs: 5200 });
+  const { stripRef, containerRef, cloned, dotIndex, cardWidth, gap, slideTo, onPointerDown, onPointerUp, onClickCapture } =
+    useCarousel({ items: fleetVehicles, gap: 24, autoPlayMs: 5200, maxVisible: 2 });
 
   return (
-    <section id="fleet" className="overflow-hidden bg-white py-24">
+    <section id="fleet" className="overflow-hidden bg-[var(--ivory)] py-20 sm:py-28">
       <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
         <SectionHeader
           align="left"
           eyebrow="Private chauffeur"
           title="Travel in comfort."
+          description="Air-conditioned cars, SUVs and vans, each with an English-speaking driver who stays with you for the whole trip."
         />
 
         <div className="flex items-center gap-4">
           <button
             onClick={() => slideTo(-1)}
             disabled={fleetVehicles.length <= 1}
-            className="hidden h-10 w-10 shrink-0 cursor-pointer items-center justify-center border border-[#182231]/14 text-[#182231] transition hover:bg-[#182231] hover:text-white disabled:opacity-40 md:flex"
-            aria-label="Previous"
+            className="round-btn round-btn-light hidden md:inline-flex"
+            type="button"
+            aria-label="Previous vehicle"
           >
             <LucideArrowLeft size={16} />
           </button>
@@ -58,6 +60,7 @@ export default function FleetSection() {
             className="relative overflow-hidden flex-1 cursor-grab active:cursor-grabbing select-none"
             onPointerDown={onPointerDown}
             onPointerUp={onPointerUp}
+              onClickCapture={onClickCapture}
           >
             <div ref={stripRef} className="flex" style={{ gap, willChange: "transform" }}>
               {cloned.map((v, i) => (
@@ -71,8 +74,9 @@ export default function FleetSection() {
           <button
             onClick={() => slideTo(1)}
             disabled={fleetVehicles.length <= 1}
-            className="hidden h-10 w-10 shrink-0 cursor-pointer items-center justify-center border border-[#182231]/14 text-[#182231] transition hover:bg-[#182231] hover:text-white disabled:opacity-40 md:flex"
-            aria-label="Next"
+            className="round-btn round-btn-light hidden md:inline-flex"
+            type="button"
+            aria-label="Next vehicle"
           >
             <LucideArrowRight size={16} />
           </button>
@@ -86,12 +90,12 @@ export default function FleetSection() {
 
         <div className="flex justify-center gap-2 mt-6">
           {fleetVehicles.map((_, i) => (
-            <span key={i} className={`h-2.5 transition-all ${i === dotIndex ? "w-8 bg-[#182231]" : "w-2.5 bg-[#182231]/16"}`} />
+            <span key={i} className={`h-1.5 rounded-full transition-all ${i === dotIndex ? "w-8 bg-[#c99a2b]" : "w-1.5 bg-[#182231]/20"}`} />
           ))}
         </div>
 
         <div className="text-center mt-8">
-          <Link href="/fleet" className="editorial-link text-[#182231]">
+          <Link href="/fleet" className="editorial-link text-[#9b7422] hover:text-[#182231]">
             Explore Full Fleet
           </Link>
         </div>

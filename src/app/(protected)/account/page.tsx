@@ -2,6 +2,7 @@ import Link from "next/link";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { routes } from "@/constants/routes";
+import { SectionKicker } from "@/components/ui/Teardrop";
 
 export const metadata = { title: "Account | Aba Ceylon" };
 
@@ -38,16 +39,14 @@ export default async function AccountPage() {
   ];
 
   return (
-    <main
-      className="min-h-screen bg-white px-4 py-24"
+    <div
+      className="min-h-screen bg-[var(--ivory)] px-4 pb-24 pt-32 sm:px-6"
       style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
     >
       <div className="mx-auto max-w-6xl">
-        <div className="border border-[#182231] bg-[#182231] px-8 py-10 text-white shadow-[0_24px_80px_rgba(15,23,42,0.14)] sm:px-10">
-          <p className="font-cinzel text-xs uppercase tracking-[0.18em] text-[#C99A2B]">
-            Signed-in traveller
-          </p>
-          <h1 className="mt-3 font-cinzel text-4xl sm:text-5xl">
+        <div className="relative overflow-hidden bg-[var(--navy-deep)] px-8 py-12 text-white shadow-[0_30px_70px_-30px_rgba(13,20,30,0.6)] sm:px-12 sm:py-14">
+          <SectionKicker tone="dark">Signed-in traveller</SectionKicker>
+          <h1 className="mt-5 font-cinzel text-4xl sm:text-5xl">
             My Account
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-white/82">
@@ -81,7 +80,7 @@ export default async function AccountPage() {
             <Link
               key={item.href}
               href={item.href}
-              className="border border-[#182231]/10 bg-white p-6 shadow-[0_16px_40px_rgba(15,23,42,0.04)] transition-transform duration-300 hover:-translate-y-1"
+              className="card-lift relative overflow-hidden border border-[#182231]/10 bg-white p-7 hover:border-[#c99a2b]/50" data-spotlight
             >
               <p className="font-cinzel text-2xl text-[#182231]">
                 {item.title}
@@ -97,6 +96,6 @@ export default async function AccountPage() {
           ))}
         </div>
       </div>
-    </main>
+    </div>
   );
 }

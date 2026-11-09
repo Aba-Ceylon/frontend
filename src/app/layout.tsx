@@ -9,6 +9,7 @@ import GatedShell from "../components/home/GatedShell";
 import ChatbotWidget from "../features/chatbot/ChatbotWidget";
 import WhatsAppButton from "../features/whatsapp/WhatsAppButton";
 import SiteMotion from "../components/motion/SiteMotion";
+import ScrollProgress from "../components/motion/ScrollProgress";
 import CookieConsent from "../components/cookieConsent/CookieConsent";
 import { socialLinks } from "../config/site";
 
@@ -306,6 +307,7 @@ export default function RootLayout({
         <ClerkProvider>
           <LoaderGateProvider>
             <SiteMotion />
+            <ScrollProgress />
             <GatedShell navbar={<NavBar />} footer={<Footer />}>
               {children}
             </GatedShell>

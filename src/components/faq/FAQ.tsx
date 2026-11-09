@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { generateWhatsAppLink } from "@/lib/whatsapp/generateWhatsAppLink";
+import { SectionKicker, TeardropWatermark } from "@/components/ui/Teardrop";
 
 const WHATSAPP_NUMBER =
   process.env.NEXT_PUBLIC_ADMIN_WHATSAPP_NUMBER || "+94722554488";
@@ -118,11 +119,11 @@ function AccordionItem({
         className="group flex w-full items-start justify-between gap-4 py-5 text-left"
         aria-expanded={isOpen}
       >
-        <span className="font-cinzel text-sm leading-relaxed text-[#182231] transition-colors group-hover:text-[#C99A2B] sm:text-base">
+        <span className="font-cinzel text-sm leading-relaxed text-[#182231] transition-colors group-hover:text-[#9b7422] sm:text-base">
           {item.q}
         </span>
         <span
-          className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center border transition-all duration-300 ${
+          className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
             isOpen
               ? "border-[#C99A2B] bg-[#C99A2B]/12 text-[#182231]"
               : "border-[#182231]/14 bg-white text-[#182231]"
@@ -170,10 +171,11 @@ export default function FAQ() {
   const currentCategory = FAQ_CATEGORIES[activeCategory];
 
   return (
-    <section className="bg-white py-20 sm:py-28 overflow-hidden">
+    <section className="overflow-hidden bg-[var(--ivory)] py-20 sm:py-28">
       <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
         <div className="mb-10" data-reveal>
-          <h2 className="font-cinzel text-4xl leading-[1.08] text-[#182231] sm:text-5xl">
+          <SectionKicker className="mb-5">Before you travel</SectionKicker>
+          <h2 className="font-cinzel text-4xl leading-[1.1] text-[#182231] sm:text-5xl">
             Questions, answered.
           </h2>
         </div>
@@ -187,10 +189,10 @@ export default function FAQ() {
                 setActiveCategory(index);
                 setOpenIndex(0);
               }}
-              className={`border px-5 py-3 font-cinzel text-xs uppercase tracking-[0.14em] transition-colors ${
+              className={`rounded-full border px-5 py-2.5 font-cinzel text-xs uppercase tracking-[0.14em] transition-colors ${
                 activeCategory === index
                   ? "border-[#182231] bg-[#182231] text-white"
-                  : "border-[#182231]/12 bg-white text-[#182231]/72 hover:border-[#C99A2B] hover:text-[#182231]"
+                  : "border-[#182231]/15 bg-transparent text-[#182231]/72 hover:border-[#9b7422] hover:text-[#182231]"
               }`}
             >
               {category.label}
@@ -200,20 +202,24 @@ export default function FAQ() {
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
           <div className="lg:sticky lg:top-28 lg:order-last" data-reveal>
-            <div className="border border-[#182231] bg-[#182231] p-7 text-white">
-              <p className="font-cinzel text-xl">Still have a question?</p>
-              <div className="mt-6 flex flex-col gap-3">
+            <div className="relative overflow-hidden bg-[var(--navy-deep)] p-7 text-white">
+              <TeardropWatermark className="absolute -bottom-16 -right-12 w-[200px] text-[#e2c27a]/10" />
+              <p className="relative font-cinzel text-xl">Still have a question?</p>
+              <p className="relative mt-3 text-sm leading-6 text-white/65">
+                Message the team directly. A planner, not a call centre, will reply.
+              </p>
+              <div className="relative mt-6 flex flex-col gap-3">
                 <Link
                   href={waLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="border border-[#C99A2B] bg-[#C99A2B] px-5 py-3 text-center font-cinzel text-xs uppercase tracking-[0.14em] text-[#182231] transition hover:brightness-105"
+                  className="border border-[#e2c27a] bg-[#e2c27a] px-5 py-3 text-center font-cinzel text-xs uppercase tracking-[0.14em] text-[#0d141e] transition hover:bg-white hover:border-white"
                 >
                   WhatsApp us
                 </Link>
                 <Link
                   href="/contact"
-                  className="border border-white/12 px-5 py-3 text-center font-cinzel text-xs uppercase tracking-[0.14em] text-white transition hover:border-[#C99A2B] hover:text-[#C99A2B]"
+                  className="border border-white/25 px-5 py-3 text-center font-cinzel text-xs uppercase tracking-[0.14em] text-white transition hover:border-[#e2c27a] hover:text-[#e2c27a]"
                 >
                   Contact form
                 </Link>
@@ -221,7 +227,7 @@ export default function FAQ() {
             </div>
           </div>
 
-          <div className="border border-[#182231]/10 bg-white px-7 py-2" data-reveal>
+          <div className="border border-[#182231]/10 bg-white px-7 py-2 shadow-[0_24px_60px_rgba(24,34,49,0.06)]" data-reveal>
             {currentCategory.items.map((item, index) => (
               <AccordionItem
                 key={`${currentCategory.label}-${index}`}

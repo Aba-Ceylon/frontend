@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import PageHero from "@/components/ui/PageHero";
+import { SectionKicker, TeardropWatermark } from "@/components/ui/Teardrop";
 import { generateWhatsAppLink } from "@/lib/whatsapp/generateWhatsAppLink";
 
 export const metadata: Metadata = {
@@ -31,31 +32,36 @@ export default function AboutPage() {
   );
 
   return (
-    <main className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--ivory)]">
       <PageHero
         imageSrc="/beach.jpg"
         imageAlt="About Aba Ceylon Tours"
+        eyebrow="Our story"
         title="About Us"
-        subtitle="A local team, start to finish"
+        subtitle="A local team that plans, drives and stays with you, start to finish."
       />
 
       <section className="py-20 sm:py-28">
-        <div className="mx-auto grid max-w-[1360px] gap-12 px-6 lg:grid-cols-[400px_minmax(0,1fr)] lg:items-center lg:gap-20 lg:px-10">
-          <div className="relative aspect-[4/5] overflow-hidden" data-reveal>
+        <div className="mx-auto grid max-w-[1360px] gap-12 px-6 lg:grid-cols-[420px_minmax(0,1fr)] lg:items-center lg:gap-24 lg:px-10">
+          <div className="relative mx-auto w-full max-w-[420px]" data-reveal>
+            <div
+              className="absolute inset-0 translate-x-4 translate-y-4 rounded-t-full border border-[#c99a2b]/50 sm:translate-x-6 sm:translate-y-6"
+              aria-hidden="true"
+            />
+            <div className="relative aspect-[4/5] overflow-hidden rounded-t-full bg-[#182231]">
             <Image
               src="/Founder.png"
               alt="Founder of Aba Ceylon Tours and Travels"
               fill
               className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 400px"
+              sizes="(max-width: 1024px) 100vw, 420px"
             />
+            </div>
           </div>
 
           <div data-reveal>
-            <p className="font-cinzel text-[11px] uppercase tracking-[0.24em] text-[#9b7422]">
-              A word from the founder
-            </p>
-            <h2 className="mt-4 font-cinzel text-4xl leading-[1.08] text-[#182231] sm:text-5xl">
+            <SectionKicker>A word from the founder</SectionKicker>
+            <h2 className="mt-5 font-cinzel text-4xl leading-[1.08] text-[#182231] sm:text-5xl">
               You speak to the person who knows the roads.
             </h2>
             <p className="mt-6 max-w-[52ch] text-base leading-8 text-[#182231]/68" style={SWITZER}>
@@ -72,11 +78,11 @@ export default function AboutPage() {
                 href={waLink}
                 target="_blank"
                 rel="noreferrer"
-                className="border border-[#182231] bg-[#182231] px-6 py-3 font-cinzel text-xs uppercase tracking-[0.14em] text-white transition hover:bg-[#243142]"
+                className="border border-[#182231] bg-[#182231] px-7 py-3.5 font-cinzel text-xs uppercase tracking-[0.2em] text-white transition hover:border-[#9b7422] hover:bg-[#9b7422]"
               >
                 Message us
               </Link>
-              <Link href="/planner" className="editorial-link text-[#182231]">
+              <Link href="/planner" className="editorial-link text-[#9b7422] hover:text-[#182231]">
                 Open the planner
               </Link>
             </div>
@@ -84,16 +90,27 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-[#182231] py-20 text-white sm:py-24">
-        <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
-          <h2 className="font-cinzel text-4xl leading-[1.08] sm:text-5xl" data-reveal>
-            What we stand for
-          </h2>
-          <div className="mt-12 grid gap-x-16 gap-y-10 sm:grid-cols-2">
-            {VALUES.map((value) => (
-              <div key={value.title} className="border-t border-white/15 pt-6" data-reveal>
-                <h3 className="font-cinzel text-xl text-[#e2c27a]">{value.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-white/72" style={SWITZER}>
+      <section className="relative overflow-hidden bg-[var(--navy-deep)] py-20 text-white sm:py-28">
+        <TeardropWatermark className="absolute -right-16 top-10 w-[320px] text-[#e2c27a]/[0.07] sm:w-[400px]" />
+        <div className="relative mx-auto max-w-[1360px] px-6 lg:px-10">
+          <div data-reveal>
+            <SectionKicker tone="dark">Our values</SectionKicker>
+            <h2 className="mt-5 font-cinzel text-4xl leading-[1.1] sm:text-5xl">
+              What we stand for
+            </h2>
+          </div>
+          <div className="mt-14 grid gap-6 sm:grid-cols-2" data-reveal-stagger>
+            {VALUES.map((value, index) => (
+              <div
+                key={value.title}
+                className="card-lift relative overflow-hidden border border-white/10 bg-white/[0.03] p-8 hover:border-[#e2c27a]/40 sm:p-10"
+                data-spotlight
+              >
+                <p className="font-cinzel text-sm tracking-[0.2em] text-[#e2c27a]">
+                  {String(index + 1).padStart(2, "0")}
+                </p>
+                <h3 className="mt-4 font-cinzel text-2xl text-white">{value.title}</h3>
+                <p className="mt-3 text-[15px] leading-7 text-white/70" style={SWITZER}>
                   {value.description}
                 </p>
               </div>
@@ -101,6 +118,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

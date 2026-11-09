@@ -35,7 +35,7 @@ function Stars({ count }: { count: number }) {
           key={i}
           className="h-3.5 w-3.5"
           viewBox="0 0 20 20"
-          fill={i < count ? "#C99A2B" : "rgba(24,34,49,0.14)"}
+          fill={i < count ? "#e2c27a" : "rgba(255,255,255,0.16)"}
           aria-hidden="true"
         >
           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.95a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.447a1 1 0 00-.364 1.118l1.287 3.95c.3.921-.755 1.688-1.54 1.118l-3.37-2.447a1 1 0 00-1.176 0l-3.37 2.447c-.785.57-1.84-.197-1.54-1.118l1.287-3.95a1 1 0 00-.364-1.118L2.06 9.377c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.287-3.95z" />
@@ -50,13 +50,13 @@ function TestimonialCard({ item }: { item: TestimonialItem }) {
 
   return (
     <article
-      className="flex shrink-0 flex-col justify-between border border-[#182231]/10 bg-white p-7"
-      style={{ width: "clamp(280px, 30vw, 400px)" }}
+      className="flex shrink-0 flex-col justify-between border border-white/10 bg-white/[0.04] p-8 sm:p-9 transition-colors duration-300 hover:border-[#e2c27a]/40"
+      style={{ width: "clamp(300px, 36vw, 480px)" }}
     >
       <div>
         <div className="flex items-start justify-between gap-4">
           <span
-            className="font-cinzel text-6xl leading-none text-[#C99A2B]/25"
+            className="font-cinzel text-6xl leading-none text-[#e2c27a]/40"
             aria-hidden="true"
           >
             &ldquo;
@@ -64,34 +64,34 @@ function TestimonialCard({ item }: { item: TestimonialItem }) {
           {isFacebook ? null : <Stars count={item.rating ?? 5} />}
         </div>
         <blockquote
-          className="mt-2 line-clamp-4 text-[15px] leading-7 text-[#182231]/75"
+          className="mt-2 line-clamp-5 text-base leading-8 text-white/80"
           style={{ fontFamily: "Switzer, system-ui, sans-serif" }}
         >
           {item.quote.replace(/^"|"$/g, "")}
         </blockquote>
       </div>
 
-      <div className="mt-8 flex items-center gap-3 border-t border-[#182231]/10 pt-5">
+      <div className="mt-8 flex items-center gap-3 border-t border-white/10 pt-5">
         <span
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#182231] font-cinzel text-sm text-[#e2c27a]"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#e2c27a]/40 bg-[#182231] font-cinzel text-sm text-[#e2c27a]"
           aria-hidden="true"
         >
           {initials(item.name)}
         </span>
         <div className="min-w-0" style={{ fontFamily: "Switzer, system-ui, sans-serif" }}>
-          <p className="truncate font-cinzel text-sm text-[#182231]">{item.name}</p>
+          <p className="truncate font-cinzel text-sm text-white">{item.name}</p>
           {isFacebook ? (
             <a
               href={socialLinks.facebookReviews}
               target="_blank"
               rel="noreferrer"
-              className="mt-1 inline-flex items-center gap-1.5 text-xs text-[#182231]/55 transition-colors hover:text-[#1877F2]"
+              className="mt-1 inline-flex items-center gap-1.5 text-xs text-white/55 transition-colors hover:text-white"
             >
               <FacebookMark />
               Recommends on Facebook
             </a>
           ) : (
-            <p className="mt-1 text-xs text-[#182231]/55">
+            <p className="mt-1 text-xs text-white/55">
               {item.location ?? "Aba Ceylon traveller"}
             </p>
           )}

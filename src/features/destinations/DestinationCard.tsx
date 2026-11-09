@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, MapPin } from "lucide-react";
 import type { Destination } from "@/types/destination";
 import { routes } from "@/constants/routes";
 import { getGalleryImages } from "@/lib/packages/packageImages";
@@ -18,35 +18,37 @@ export default function DestinationCard({
   });
 
   return (
-    <article className="group relative border-b border-[#182231]/14 pb-7">
+    <article className="card-lift card-zoom group relative flex h-full flex-col overflow-hidden border border-[#182231]/10 bg-white hover:border-[#c99a2b]/50" data-spotlight>
+      {/* Whole-card link sits underneath; carousel buttons stay clickable above it. */}
       <Link
         href={`${routes.destinations}/${destination.slug}`}
-        className="absolute inset-0 z-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C99A2B]"
+        className="absolute inset-0 z-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c99a2b]"
         aria-label={`Explore ${destination.name}`}
       />
-      <div className="relative aspect-[4/3] overflow-hidden bg-[#e9e3d9]">
+
+      <div className="pointer-events-none relative aspect-[5/4] overflow-hidden bg-[#182231]">
         <PackageImageCarousel images={images} title={destination.name} variant="card" entityLabel="destination" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0F172A]/36 via-transparent to-transparent" />
-        <p className="pointer-events-none absolute bottom-4 left-4 bg-[#182231]/82 px-3 py-1.5 font-cinzel text-[10px] uppercase tracking-[0.2em] text-white backdrop-blur-sm">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0d141e]/80 via-transparent to-transparent" />
+        <p className="absolute left-5 top-5 z-10 rounded-full border border-white/25 bg-[#0d141e]/45 px-3.5 py-1.5 font-cinzel text-[10px] uppercase tracking-[0.18em] text-white backdrop-blur-md">
           {destination.category}
         </p>
-      </div>
-
-      <div className="pointer-events-none pt-5">
-        <p className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-[#9b7422]">
-          {destination.region}
-        </p>
-        <div className="mt-2 flex items-start justify-between gap-5">
-          <h3 className="font-cinzel text-2xl leading-tight text-[#182231] sm:text-[1.7rem]">
+        <div className="absolute inset-x-0 bottom-0 z-10 p-6 sm:p-8">
+          <p className="inline-flex items-center gap-1.5 font-cinzel text-[11px] uppercase tracking-[0.22em] text-[#e2c27a]">
+            <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+            {destination.region}
+          </p>
+          <h3 className="mt-2 font-cinzel text-3xl leading-tight text-white sm:text-4xl">
             {destination.name}
           </h3>
-          <ArrowUpRight className="mt-1 h-5 w-5 shrink-0 text-[#182231] transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-[#9b7422]" />
         </div>
-        <p className="mt-3 line-clamp-2 text-sm leading-6 text-[#182231]/64">
+      </div>
+
+      <div className="pointer-events-none flex flex-1 items-end justify-between gap-6 p-6 sm:p-8">
+        <p className="line-clamp-2 text-[15px] leading-7 text-[#182231]/68">
           {destination.summary}
         </p>
-        <span className="mt-5 inline-block font-cinzel text-[10px] uppercase tracking-[0.18em] text-[#182231] underline decoration-[#C99A2B] decoration-1 underline-offset-4">
-          Explore destination
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#182231]/15 text-[#182231] transition-colors duration-300 group-hover:border-[#182231] group-hover:bg-[#182231] group-hover:text-white">
+          <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
         </span>
       </div>
     </article>

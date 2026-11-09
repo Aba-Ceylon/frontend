@@ -55,7 +55,9 @@ body {
   color: var(--foreground);
   font-family: "Switzer", system-ui, -apple-system, "Segoe UI", sans-serif;
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  /* `clip`, not `hidden`: hidden turns body into a scroll container and
+     silently breaks every position: sticky element on the site. */
+  overflow-x: clip;
   text-rendering: optimizeLegibility;
 }
 
@@ -444,6 +446,330 @@ img {
 
 .swipe-chevron-3 {
   animation: swipeChevron 1.4s ease-in-out 0.4s infinite;
+}
+
+/* ─── Home rhythm: deep navy and warm ivory sections, gold accents ─── */
+:root {
+  --navy-deep: #0d141e;
+  --ivory: #f7f2e9;
+  --gold-soft: #e2c27a;
+  --gold-ink: #9b7422;
+}
+
+/* Round arrow / icon buttons, matching the hero's play control. */
+.round-btn {
+  display: inline-flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid;
+  transition:
+    color 200ms ease,
+    border-color 200ms ease,
+    background-color 200ms ease,
+    opacity 200ms ease;
+}
+
+.round-btn:disabled {
+  cursor: default;
+  opacity: 0.3;
+}
+
+.round-btn-light {
+  color: #182231;
+  border-color: rgba(24, 34, 49, 0.2);
+}
+
+.round-btn-light:not(:disabled):hover {
+  color: var(--gold-ink);
+  border-color: var(--gold-ink);
+}
+
+.round-btn-dark {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.round-btn-dark:not(:disabled):hover {
+  color: var(--gold-soft);
+  border-color: var(--gold-soft);
+}
+
+/* ─── Interaction layer (see components/motion/SiteMotion.tsx) ─── */
+
+/* Scroll reveal. Uses `translate`, not `transform`, so it never fights GSAP. */
+.reveal-pending {
+  opacity: 0;
+  translate: 0 32px;
+}
+
+.reveal-run {
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    translate 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Cards: lift, deepen shadow and slowly zoom the photo on hover. */
+.card-lift {
+  transition:
+    translate 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.5s ease;
+}
+
+@media (hover: hover) {
+  .card-lift:hover {
+    translate: 0 -6px;
+    box-shadow: 0 34px 70px -28px rgba(13, 20, 30, 0.45);
+  }
+}
+
+.card-zoom img {
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (hover: hover) {
+  .card-zoom:hover img {
+    transform: scale(1.06);
+  }
+}
+
+/* Soft gold glow that follows the pointer across a card. */
+[data-spotlight]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(226, 194, 122, 0.16),
+    transparent 62%
+  );
+  transition: opacity 0.4s ease;
+}
+
+@media (hover: hover) {
+  [data-spotlight]:hover::after {
+    opacity: 1;
+  }
+}
+
+/* Arrow inside a button/link nudges forward on hover. */
+.nudge-arrow svg {
+  transition: translate 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nudge-arrow:hover svg {
+  translate: 4px 0;
+}
+
+/* Gold reading-progress line under the navbar. */
+.scroll-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 60;
+  height: 2px;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, #c99a2b, #e2c27a);
+  pointer-events: none;
+}
+
+/* Route change: content fades in. Opacity only, so fixed and pinned
+   children (modals, GSAP pins) keep the viewport as their container. */
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.page-enter {
+  animation: pageEnter 0.55s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-pending {
+    opacity: 1;
+    translate: none;
+  }
+
+  .card-lift:hover,
+  .nudge-arrow:hover svg {
+    translate: none;
+  }
+
+  .card-zoom:hover img {
+    transform: none;
+  }
+}
+
+/* ─── Aba, the chat companion (features/chatbot) ─── */
+
+/* Idle: a slow breath. */
+@keyframes abaBreathe {
+  0%, 100% { scale: 1; }
+  50% { scale: 1.035; }
+}
+
+/* Gold ring that glows softly, or turns while Aba is thinking. */
+.aba-avatar-ring {
+  background: conic-gradient(from 0deg, #e2c27a, #9b7422, #e2c27a);
+  opacity: 0.85;
+  transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+.aba-avatar[data-mood="warm"] .aba-avatar-face,
+.aba-avatar[data-mood="curious"] .aba-avatar-face {
+  animation: abaBreathe 4.2s ease-in-out infinite;
+}
+
+@keyframes abaSpin {
+  to { rotate: 360deg; }
+}
+
+.aba-avatar[data-mood="thinking"] .aba-avatar-ring {
+  background: conic-gradient(from 0deg, transparent 0 55%, #e2c27a 85%, #fff4d6);
+  opacity: 1;
+  animation: abaSpin 1.1s linear infinite;
+}
+
+/* Excited: a happy little hop and a brighter glow. */
+@keyframes abaHop {
+  0%, 100% { translate: 0 0; }
+  30% { translate: 0 -3px; }
+  55% { translate: 0 0; }
+  70% { translate: 0 -1.5px; }
+}
+
+.aba-avatar[data-mood="excited"] {
+  animation: abaHop 0.9s ease-out 1;
+}
+
+.aba-avatar[data-mood="excited"] .aba-avatar-ring {
+  opacity: 1;
+  filter: drop-shadow(0 0 6px rgba(226, 194, 122, 0.7));
+}
+
+/* Curious: a gentle head tilt. */
+@keyframes abaTilt {
+  0%, 100% { rotate: 0deg; }
+  40% { rotate: -7deg; }
+}
+
+.aba-avatar[data-mood="curious"] {
+  animation: abaTilt 1.2s ease-in-out 1;
+}
+
+/* Sorry: the glow dims. */
+.aba-avatar[data-mood="sorry"] .aba-avatar-ring {
+  opacity: 0.35;
+  filter: grayscale(0.6);
+}
+
+/* Launcher: soft pulse so Aba feels present without nagging. */
+@keyframes abaPulse {
+  0% { box-shadow: 0 0 0 0 rgba(226, 194, 122, 0.45); }
+  80%, 100% { box-shadow: 0 0 0 14px rgba(226, 194, 122, 0); }
+}
+
+.aba-launcher > .aba-avatar {
+  border-radius: 9999px;
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6);
+  animation: abaPulse 3.2s ease-out infinite;
+}
+
+/* Messages pop in. */
+@keyframes abaPop {
+  from { opacity: 0; translate: 0 8px; scale: 0.97; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
+}
+
+.aba-pop {
+  animation: abaPop 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes abaTyping {
+  0%, 60%, 100% { translate: 0 0; opacity: 0.5; }
+  30% { translate: 0 -4px; opacity: 1; }
+}
+
+.aba-typing-dot {
+  animation: abaTyping 1.1s ease-in-out infinite;
+}
+
+@keyframes abaPanelIn {
+  from { opacity: 0; translate: 0 16px; scale: 0.98; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
+}
+
+.aba-panel {
+  transform-origin: bottom right;
+  animation: abaPanelIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.aba-teaser {
+  transform-origin: bottom right;
+  animation: abaPanelIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aba-avatar,
+  .aba-avatar-face,
+  .aba-avatar-ring,
+  .aba-launcher > .aba-avatar,
+  .aba-pop,
+  .aba-typing-dot,
+  .aba-panel,
+  .aba-teaser {
+    animation: none !important;
+  }
+}
+
+/* Hero entrance: pure CSS so it runs from first paint with no flash of
+   un-animated copy before hydration. Stagger via inline animation-delay. */
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-rise {
+  animation: heroRise 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes heroScrollCue {
+  /* Vertical only: Tailwind's centring uses the separate `translate` property. */
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+.hero-scroll-cue {
+  animation: heroScrollCue 2.4s ease-in-out 1.6s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rise,
+  .hero-scroll-cue {
+    animation: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

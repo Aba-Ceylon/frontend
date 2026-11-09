@@ -5,6 +5,7 @@ import type { FeedbackRecord } from "@/types/feedback";
 import TestimonialsCarousel, { TestimonialItem } from "./TestimonialsCarousel";
 import { facebookReviews } from "@/data/facebookReviews";
 import { socialLinks } from "@/config/site";
+import { SectionKicker, TeardropWatermark } from "@/components/ui/Teardrop";
 
 export default function Testimonials() {
   const [items, setItems] = useState<TestimonialItem[]>([]);
@@ -29,9 +30,11 @@ export default function Testimonials() {
   }, []);
 
   return (
-    <section className="bg-white py-20 sm:py-28 overflow-hidden">
-      <div className="mx-auto mb-12 max-w-[1360px] px-6 text-center lg:px-10" data-reveal>
-        <h2 className="font-cinzel text-4xl leading-[1.08] text-[#182231] sm:text-5xl">
+    <section className="relative overflow-hidden bg-[var(--navy-deep)] py-20 text-white sm:py-28">
+      <TeardropWatermark className="absolute -right-16 -top-10 w-[300px] text-[#e2c27a]/[0.07] sm:w-[380px]" />
+      <div className="relative mx-auto mb-12 max-w-[1360px] px-6 text-center lg:px-10" data-reveal>
+        <SectionKicker tone="dark" align="center" className="mb-5">In their words</SectionKicker>
+        <h2 className="font-cinzel text-4xl leading-[1.1] text-white sm:text-5xl">
           What travellers say.
         </h2>
       </div>
@@ -43,7 +46,7 @@ export default function Testimonials() {
           href={socialLinks.facebookReviews}
           target="_blank"
           rel="noreferrer"
-          className="editorial-link text-[#182231]"
+          className="editorial-link text-[#e2c27a] hover:text-white"
         >
           See all reviews on Facebook
         </a>

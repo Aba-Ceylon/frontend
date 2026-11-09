@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Map } from "lucide-react";
-import Card from "@/components/ui/Card";
-import Badge from "@/components/ui/Badge";
+import { ArrowUpRight, Clock, Map, Route } from "lucide-react";
 import PackageRequestButton from "@/features/packages/PackageRequestButton";
 import { buildGoogleMapsRouteUrl } from "@/lib/maps/buildRouteUrl";
 import { usePackageStore } from "@/store/PackageStore";
@@ -16,74 +14,79 @@ export default function PackageCard({ pkg }: { pkg: PackageItem }) {
   const isSelected = selectedPackage?.id === pkg.id;
   const routeMapsHref = buildGoogleMapsRouteUrl(pkg.route);
   const images = getPackageImages(pkg);
+  const detailHref = `/packages/${pkg.id}`;
 
   const packageLabel = pkg.packageId
-    ? `Package ${String(pkg.packageId).padStart(2, "0")}`
-    : "Curated Package";
+    ? `Journey ${String(pkg.packageId).padStart(2, "0")}`
+    : "Curated journey";
 
   return (
-    <Card
-      variant="white"
-      className={`overflow-hidden border-[#101A28]/8 bg-[#fffdf8] transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(7,15,28,0.08)] ${
-        isSelected ? "border-[#101A28]/70 ring-2 ring-[#101A28]/90" : ""
+    <article
+      className={`card-lift card-zoom group flex h-full flex-col overflow-hidden border bg-white ${
+        isSelected ? "border-[#182231] ring-2 ring-[#182231]" : "border-[#182231]/10 hover:border-[#c99a2b]/50"
       }`}
     >
-      <div className="relative aspect-[4/3] w-full overflow-hidden sm:aspect-[5/4] lg:aspect-[6/5]">
+      <div className="relative aspect-[16/11] w-full overflow-hidden bg-[#182231]" data-spotlight>
         <PackageImageCarousel images={images} title={pkg.title} variant="card" />
-        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/38 via-transparent to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-[#0d141e]/85 via-[#0d141e]/10 to-transparent" />
+
+        <p className="pointer-events-none absolute left-5 top-5 z-10 inline-flex items-center gap-2 rounded-full border border-white/25 bg-[#0d141e]/45 px-3.5 py-1.5 font-cinzel text-[10px] uppercase tracking-[0.18em] text-white backdrop-blur-md">
+          <Clock className="h-3 w-3 text-[#e2c27a]" aria-hidden="true" />
+          {pkg.duration}
+        </p>
+
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-6 sm:p-8">
+          <p className="font-cinzel text-[11px] uppercase tracking-[0.24em] text-[#e2c27a]">
+            {packageLabel}
+          </p>
+          <h3 className="mt-2 font-cinzel text-2xl leading-tight text-white [text-wrap:balance] sm:text-3xl">
+            {pkg.title}
+          </h3>
+        </div>
       </div>
 
-      <div className="p-5 sm:p-6">
-        <div className="mb-3 flex flex-wrap items-center gap-2">
-          <Badge variant="amber">{packageLabel}</Badge>
-          <Badge
-            variant="amber"
-            className="border-amber-200 bg-amber-50 text-amber-700"
-          >
-            {pkg.duration}
-          </Badge>
-        </div>
-
-        <h3 className="font-cinzel text-xl leading-snug text-[#101A28]">
-          {pkg.title}
-        </h3>
+      <div className="flex flex-1 flex-col p-6 sm:p-8">
         {routeMapsHref ? (
           <a
             href={routeMapsHref}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={(event) => event.stopPropagation()}
-            className="mt-2 inline-flex items-center gap-1.5 text-sm uppercase tracking-[0.18em] text-[#A97B17]/90 transition hover:text-[#101A28]"
+            className="inline-flex items-start gap-2 text-xs uppercase leading-6 tracking-[0.18em] text-[#9b7422] transition hover:text-[#182231]"
           >
-            <Map size={13} className="shrink-0" aria-hidden="true" />
-            {pkg.route.join(" | ")}
+            <Map size={14} className="mt-1 shrink-0" aria-hidden="true" />
+            <span>{pkg.route.join(" · ")}</span>
           </a>
         ) : (
-          <p className="mt-2 text-sm uppercase tracking-[0.18em] text-[#A97B17]/90">
-            {pkg.route.join(" | ")}
+          <p className="text-xs uppercase leading-6 tracking-[0.18em] text-[#9b7422]">
+            {pkg.route.join(" · ")}
           </p>
         )}
-        <p className="mt-4 text-sm leading-7 text-[#3B4654]">{pkg.summary}</p>
 
-        <div className="mt-5 flex items-center justify-between border-t border-[#101A28]/8 pt-4">
-          <p className="font-cinzel text-sm tracking-[0.08em] text-[#101A28]">
-            {pkg.km} KM route
-          </p>
-          <Link
-            href={`/packages/${pkg.id}`}
-            className="font-cinzel text-[11px] uppercase tracking-[0.2em] text-[#A97B17] transition-colors hover:text-[#101A28]"
-          >
-            View package
-          </Link>
-        </div>
+        <p className="mt-4 line-clamp-3 text-[15px] leading-7 text-[#182231]/70">{pkg.summary}</p>
 
-        <div className="mt-5">
+        <div className="mt-auto pt-7">
+          <div className="flex items-center justify-between border-t border-[#182231]/10 pt-5">
+            <p className="inline-flex items-center gap-2 text-sm text-[#182231]/70">
+              <Route className="h-4 w-4 text-[#9b7422]" aria-hidden="true" />
+              {pkg.km} km route
+            </p>
+            <Link
+              href={detailHref}
+              className="inline-flex items-center gap-3 font-cinzel text-[11px] uppercase tracking-[0.2em] text-[#182231] transition-colors hover:text-[#9b7422]"
+            >
+              View journey
+              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[#182231]/15 transition-colors duration-300 group-hover:border-[#182231] group-hover:bg-[#182231] group-hover:text-white">
+                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              </span>
+            </Link>
+          </div>
+
           <PackageRequestButton
             pkg={pkg}
-            className="w-full cursor-pointer bg-[#101A28] px-4 py-3 text-[11px] font-cinzel uppercase tracking-[0.2em] text-white transition hover:bg-[#1A2A40]"
+            className="mt-5 w-full cursor-pointer bg-[#182231] px-4 py-3.5 font-cinzel text-[11px] uppercase tracking-[0.22em] text-white transition hover:bg-[#9b7422]"
           />
         </div>
       </div>
-    </Card>
+    </article>
   );
 }

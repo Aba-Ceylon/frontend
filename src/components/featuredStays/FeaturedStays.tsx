@@ -36,32 +36,37 @@ export default function FeaturedStays() {
     slideTo,
     onPointerDown,
     onPointerUp,
-  } = useCarousel({ items: stayItems, gap: 24, autoPlayMs: 3500 });
+    onClickCapture,
+  } = useCarousel({ items: stayItems, gap: 24, autoPlayMs: 3500, maxVisible: 2 });
 
   return (
-    <section className="ink-grid py-20 sm:py-28">
+    <section className="overflow-hidden bg-[var(--navy-deep)] py-20 text-white sm:py-28">
       <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
         <div className="grid gap-8 lg:grid-cols-[320px_minmax(0,1fr)] lg:items-end lg:gap-10">
           <div data-reveal>
             <SectionHeader
               align="left"
+              tone="dark"
+              eyebrow="Where you'll rest"
               title="Stays with character."
-              titleClassName="font-cinzel text-4xl font-medium leading-tight text-[#182231] sm:text-5xl"
+              description="Eco lodges, boutique villas and heritage hotels we have stayed in ourselves."
               className="mb-0"
             />
 
             <div className="mt-8 flex items-center gap-3">
               <button
                 onClick={() => slideTo(-1)}
-                className="flex h-11 w-11 items-center justify-center border border-[#182231]/12 text-[#182231] transition hover:bg-[#182231] hover:text-white"
-                aria-label="Previous"
+                className="round-btn round-btn-dark"
+                type="button"
+                aria-label="Previous stay"
               >
                 <LucideArrowLeft size={16} />
               </button>
               <button
                 onClick={() => slideTo(1)}
-                className="flex h-11 w-11 items-center justify-center border border-[#182231]/12 text-[#182231] transition hover:bg-[#182231] hover:text-white"
-                aria-label="Next"
+                className="round-btn round-btn-dark"
+                type="button"
+                aria-label="Next stay"
               >
                 <LucideArrowRight size={16} />
               </button>
@@ -74,6 +79,7 @@ export default function FeaturedStays() {
               className="relative overflow-hidden cursor-grab select-none active:cursor-grabbing"
               onPointerDown={onPointerDown}
               onPointerUp={onPointerUp}
+              onClickCapture={onClickCapture}
             >
               <div ref={stripRef} className="flex" style={{ gap, willChange: "transform" }}>
                 {cloned.map((stay, i) => (
@@ -93,14 +99,14 @@ export default function FeaturedStays() {
                 {stayItems.map((stay, i) => (
                   <span
                     key={stay.id}
-                    className={`h-2.5 transition-all ${
-                      i === dotIndex ? "w-8 bg-[#C99A2B]" : "w-2.5 bg-[#182231]/18"
+                    className={`h-1.5 rounded-full transition-all ${
+                      i === dotIndex ? "w-8 bg-[#e2c27a]" : "w-1.5 bg-white/25"
                     }`}
                   />
                 ))}
               </div>
 
-              <Link href="/stays" className="editorial-link text-[#182231]">
+              <Link href="/stays" className="editorial-link text-[#e2c27a] hover:text-white">
                 Discover all stays
               </Link>
             </div>

@@ -1,5 +1,7 @@
 "use client";
 
+import { SectionKicker } from "@/components/ui/Teardrop";
+
 interface SectionHeaderProps {
   title: string;
   description?: string;
@@ -8,36 +10,42 @@ interface SectionHeaderProps {
   className?: string;
   eyebrow?: string;
   align?: "left" | "center";
+  /** "dark" for navy sections: light title and soft-gold label. */
+  tone?: "light" | "dark";
 }
 
 export default function SectionHeader({
   title,
   description,
-  titleClassName = "font-cinzel text-4xl font-medium leading-tight text-[#101A28] sm:text-5xl lg:text-[3.45rem]",
-  descriptionClassName = "mx-auto max-w-2xl text-base leading-8 text-[#3B4654] sm:text-lg",
+  titleClassName,
+  descriptionClassName,
   className = "",
   eyebrow,
   align = "center",
+  tone = "light",
 }: SectionHeaderProps) {
+  const isDark = tone === "dark";
   const alignClass = align === "left" ? "text-left" : "text-center";
+  const titleClasses =
+    titleClassName ??
+    `font-cinzel text-4xl leading-[1.1] sm:text-5xl ${isDark ? "text-white" : "text-[#182231]"}`;
+  const descriptionClasses =
+    descriptionClassName ??
+    `max-w-2xl text-base leading-8 ${isDark ? "text-white/68" : "text-[#182231]/68"}`;
 
   return (
     <div className={`mb-12 ${alignClass} ${className}`} data-reveal>
       {eyebrow ? (
-        <p className="mb-4 font-cinzel text-[11px] uppercase tracking-[0.32em] text-[#A97B17]">
+        <SectionKicker tone={tone} align={align} className="mb-5">
           {eyebrow}
-        </p>
+        </SectionKicker>
       ) : null}
-      <h2 className={`mb-4 ${titleClassName}`}>{title}</h2>
+      <h2 className={titleClasses}>{title}</h2>
       {description ? (
-        <p className={`${align === "left" ? "mx-0" : "mx-auto"} ${descriptionClassName}`}>
+        <p className={`mt-5 ${align === "left" ? "mx-0" : "mx-auto"} ${descriptionClasses}`}>
           {description}
         </p>
       ) : null}
-      <div
-        className={`mt-6 h-px w-20 bg-linear-to-r from-[#C99A2B] to-transparent ${align === "left" ? "" : "mx-auto"}`}
-        data-draw-line
-      />
     </div>
   );
 }

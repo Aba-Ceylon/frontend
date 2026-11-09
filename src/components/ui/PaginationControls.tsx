@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 type PaginationControlsProps = {
   currentPage: number;
@@ -28,15 +29,18 @@ export default function PaginationControls({
   if (totalPages <= 1) return null;
 
   return (
-    <div className={`mt-10 flex items-center justify-center gap-2 sm:gap-3 flex-wrap ${className}`}>
+    <nav
+      aria-label="Pagination"
+      className={`mt-14 flex flex-wrap items-center justify-center gap-3 ${className}`}
+    >
       <button
         type="button"
         onClick={goPrev}
         disabled={currentPage === 1}
         aria-label="Previous page"
-        className="border border-[#182231]/14 px-4 py-2 font-cinzel text-[#182231] transition hover:bg-[#182231] hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
+        className="round-btn round-btn-light"
       >
-        Prev
+        <ArrowLeft className="h-4 w-4" />
       </button>
 
       {Array.from({ length: totalPages }, (_, i) => {
@@ -48,10 +52,11 @@ export default function PaginationControls({
             type="button"
             onClick={() => onPageChange(page)}
             aria-current={active ? "page" : undefined}
-            className={`h-10 w-10 font-cinzel transition ${
+            aria-label={`Page ${page}`}
+            className={`h-11 w-11 rounded-full font-cinzel text-sm transition-colors ${
               active
                 ? "bg-[#182231] text-white"
-                : "border border-[#182231]/14 text-[#182231] hover:bg-[#182231] hover:text-white"
+                : "text-[#182231]/70 hover:bg-[#182231]/8 hover:text-[#182231]"
             }`}
           >
             {page}
@@ -64,10 +69,10 @@ export default function PaginationControls({
         onClick={goNext}
         disabled={currentPage === totalPages}
         aria-label="Next page"
-        className="border border-[#182231]/14 px-4 py-2 font-cinzel text-[#182231] transition hover:bg-[#182231] hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
+        className="round-btn round-btn-light"
       >
-        Next
+        <ArrowRight className="h-4 w-4" />
       </button>
-    </div>
+    </nav>
   );
 }

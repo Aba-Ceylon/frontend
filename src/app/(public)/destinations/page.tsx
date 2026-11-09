@@ -16,17 +16,18 @@ export default async function DestinationsPage() {
   const destinations = await fetchDestinations();
 
   return (
-    <main className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--ivory)]">
       <PageHero
         imageSrc="/images/heritage/sl-image.webp"
         imageAlt="Sri Lanka destinations across heritage sites, hills, and coastline"
+        eyebrow="The teardrop isle"
         title="Destinations"
-        subtitle="Heritage, hills, coast and wildlife"
+        subtitle="Ancient cities, misty hills, wild parks and golden coasts, all within a few hours of each other."
       />
 
-      <section className="mx-auto max-w-[1360px] px-6 py-14 lg:px-10 lg:py-18">
+      <section className="mx-auto max-w-[1360px] px-6 py-16 lg:px-10 lg:py-24">
         <DestinationGrid destinations={destinations} />
       </section>
-    </main>
+    </div>
   );
 }

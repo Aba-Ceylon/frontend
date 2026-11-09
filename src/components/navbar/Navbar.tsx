@@ -18,6 +18,7 @@ const DARK_HERO_ROUTES = [
   "/fleet",
   "/packages",
   "/stays",
+  "/contact",
 ];
 
 // Always visible on desktop; everything else lives in the menu panel.
@@ -124,7 +125,7 @@ export default function NavBar() {
 
           <Link href={routes.home} className="flex items-center gap-3" aria-label="Aba Ceylon home">
             <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-white sm:h-11 sm:w-11">
-              <Image src="/LOGO.jpeg" alt="" fill className="object-cover" priority />
+              <Image src="/LOGO.jpeg" alt="" fill sizes="44px" className="object-cover" priority />
             </span>
             <span className="hidden text-left sm:block">
               <span className="block font-cinzel text-sm tracking-[0.18em] text-white sm:text-base">

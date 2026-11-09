@@ -8,6 +8,7 @@ import { routes } from "@/constants/routes";
 import { getTopPackages } from "@/lib/packages/getTopPackages";
 import { buildGoogleMapsRouteUrl } from "@/lib/maps/buildRouteUrl";
 import type { PackageItem } from "@/types/package";
+import { SectionKicker } from "@/components/ui/Teardrop";
 
 export default function TopPackagesCarousel({
   packages,
@@ -67,26 +68,28 @@ export default function TopPackagesCarousel({
 
   return (
     <section
-      className="section-wash overflow-hidden bg-[#f6f0e6] py-20 text-[#182231] lg:py-28"
+      className="overflow-hidden bg-[var(--navy-deep)] py-20 text-white lg:py-28"
       aria-labelledby="top-packages-title"
     >
       <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
-        <div className="flex flex-col gap-8 border-b border-[#182231]/12 pb-9 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-8 border-b border-white/12 pb-9 md:flex-row md:items-end md:justify-between">
           <div className="max-w-3xl">
-            <p className="font-cinzel text-[11px] uppercase tracking-[0.24em] text-[#A97B17]">
-              Explore top picks
-            </p>
+            <SectionKicker tone="dark">Signature journeys</SectionKicker>
             <h2
               id="top-packages-title"
-              className="mt-4 font-cinzel text-4xl leading-[1.08] sm:text-5xl lg:text-6xl"
+              className="mt-5 font-cinzel text-4xl leading-[1.08] sm:text-5xl lg:text-6xl"
             >
               Journeys worth the trip.
             </h2>
+            <p className="mt-5 max-w-[52ch] text-base leading-8 text-white/68">
+              Our most-loved routes, ready as they are or reshaped around your
+              dates and pace.
+            </p>
           </div>
 
           <Link
             href={routes.packages}
-            className="inline-flex min-h-11 w-fit items-center gap-3 border-b border-[#A97B17]/70 pb-2 font-cinzel text-[11px] uppercase tracking-[0.2em] text-[#8B6719] transition-colors hover:text-[#182231]"
+            className="inline-flex min-h-11 w-fit items-center gap-3 border-b border-[#e2c27a]/60 pb-2 font-cinzel text-[11px] uppercase tracking-[0.2em] text-[#e2c27a] transition-colors hover:text-white"
           >
             View all packages
             <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
@@ -101,8 +104,8 @@ export default function TopPackagesCarousel({
           {topPackages.map((pkg) => (
             <article
               key={pkg.id}
-              className="group relative w-[85%] shrink-0 snap-start overflow-hidden border border-white/12 bg-[#101925] sm:w-[68%] lg:w-[calc(50%-0.875rem)]"
-            >
+              className="group relative w-[85%] shrink-0 snap-start overflow-hidden border border-white/10 bg-[#101925] transition-colors duration-500 hover:border-[#e2c27a]/40 sm:w-[68%] lg:w-[calc(50%-0.875rem)]"
+             data-spotlight>
               {/* Fixed heights, not aspect-ratio + min-height: that combination
                   also forces a min-width wider than the card and clips the text. */}
               <div className="relative h-[460px] w-full sm:h-[480px] lg:h-[560px]">
@@ -165,14 +168,14 @@ export default function TopPackagesCarousel({
           ))}
         </div>
 
-        <div className="mt-3 flex items-center justify-end">
-          <div className="flex gap-2">
+        <div className="mt-6 flex items-center justify-end">
+          <div className="flex gap-3">
             <button
               type="button"
               onClick={() => goTo(clampedIndex - 1)}
               disabled={clampedIndex === 0}
               aria-label="Previous package"
-              className="inline-flex h-12 w-12 items-center justify-center border border-[#182231]/18 text-[#182231] transition hover:border-[#A97B17] hover:bg-white/55 hover:text-[#8B6719] disabled:cursor-not-allowed disabled:opacity-30"
+              className="round-btn round-btn-dark"
             >
               <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             </button>
@@ -181,7 +184,7 @@ export default function TopPackagesCarousel({
               onClick={() => goTo(clampedIndex + 1)}
               disabled={clampedIndex === topPackages.length - 1}
               aria-label="Next package"
-              className="inline-flex h-12 w-12 items-center justify-center border border-[#182231]/18 text-[#182231] transition hover:border-[#A97B17] hover:bg-white/55 hover:text-[#8B6719] disabled:cursor-not-allowed disabled:opacity-30"
+              className="round-btn round-btn-dark"
             >
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </button>
