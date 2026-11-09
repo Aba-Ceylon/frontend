@@ -14,6 +14,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { footerLinkGroups, routes } from "@/constants/routes";
 import { socialLinks } from "@/config/site";
 import { generateWhatsAppLink } from "@/lib/whatsapp/generateWhatsAppLink";
+import { SectionKicker, TeardropWatermark } from "@/components/ui/Teardrop";
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
@@ -52,7 +53,7 @@ export default function Footer() {
   return (
     <footer
       ref={footerRef}
-      className="relative overflow-hidden border-t border-[#182231]/10 bg-[#05070A] pb-8 pt-16 text-white md:pt-24"
+      className="relative overflow-hidden bg-[#05070A] pb-8 pt-16 text-white md:pt-24"
     >
       <div
         ref={bigTextRef}
@@ -67,19 +68,18 @@ export default function Footer() {
 
       <div className="relative mx-auto max-w-[1360px] px-6 lg:px-10">
         <div
-          className="mb-14 border border-white/10 bg-white px-8 py-8 text-[#182231] shadow-[0_24px_70px_rgba(0,0,0,0.18)] sm:px-10 sm:py-10 lg:px-12 lg:py-12"
+          className="relative mb-14 overflow-hidden border border-[#e2c27a]/25 bg-[var(--navy-deep)] px-8 py-10 text-white shadow-[0_24px_70px_rgba(0,0,0,0.3)] sm:px-10 sm:py-12 lg:px-14 lg:py-14"
           data-reveal
         >
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_340px] lg:items-end">
+          <TeardropWatermark className="absolute -right-10 -top-16 hidden w-[320px] text-[#e2c27a]/10 md:block" />
+          <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_340px] lg:items-end">
             <div>
-              <p className="font-cinzel text-[11px] uppercase tracking-[0.24em] text-[#C99A2B]">
-                Tailor-made island itineraries
-              </p>
-              <h3 className="mt-4 font-cinzel text-3xl leading-[1.05] text-[#182231] sm:text-5xl lg:text-6xl">
+              <SectionKicker tone="dark">Tailor-made island itineraries</SectionKicker>
+              <h3 className="mt-5 font-cinzel text-3xl leading-[1.08] text-white sm:text-5xl lg:text-6xl">
                 Trust the trip to
                 <br className="hidden sm:block" /> the team on the island.
               </h3>
-              <p className="mt-5 max-w-2xl text-base leading-8 text-[#182231]/68">
+              <p className="mt-5 max-w-2xl text-base leading-8 text-white/68">
                 Message Aba Ceylon directly for a privately planned Sri Lanka
                 route with curated stays, chauffeur transport, and local support
                 that stays with you throughout the journey.
@@ -89,7 +89,7 @@ export default function Footer() {
             <div className="space-y-4">
               <Link
                 href={routes.planner}
-                className="flex items-center justify-between border border-[#182231] bg-[#182231] px-6 py-4 font-cinzel text-[11px] uppercase tracking-[0.18em] text-white transition hover:bg-[#243142]"
+                className="flex items-center justify-between border border-[#e2c27a] bg-[#e2c27a] px-6 py-4 font-cinzel text-[11px] uppercase tracking-[0.18em] text-[#0d141e] transition hover:border-white hover:bg-white"
               >
                 Build My Itinerary
                 <ArrowRight className="h-4 w-4" />
@@ -98,7 +98,7 @@ export default function Footer() {
                 href={whatsappHref}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center justify-between border border-[#182231]/14 bg-white px-6 py-4 font-cinzel text-[11px] uppercase tracking-[0.18em] text-[#182231] transition hover:border-[#C99A2B] hover:text-[#C99A2B]"
+                className="flex items-center justify-between border border-white/30 px-6 py-4 font-cinzel text-[11px] uppercase tracking-[0.18em] text-white transition hover:border-[#e2c27a] hover:text-[#e2c27a]"
               >
                 Start on WhatsApp
                 <ArrowRight className="h-4 w-4" />
@@ -197,7 +197,7 @@ export default function Footer() {
 
         <div className="mt-8 flex flex-col items-center justify-between gap-4 px-4 py-4 text-center md:flex-row md:gap-6">
           <div className="text-[11px] leading-5 tracking-[0.06em] text-white/82">
-            &copy; 2026.Abaceylontours.com All Rights Reserved.
+            &copy; 2026 Abaceylontours.com. All rights reserved.
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] leading-5 tracking-[0.06em] text-white/82 md:gap-x-8">

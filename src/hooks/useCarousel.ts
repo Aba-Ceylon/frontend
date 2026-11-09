@@ -1,27 +1,32 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 
-function getVisible() {
-  if (typeof window === "undefined") return 3;
-  if (window.innerWidth < 820) return 1;
-  if (window.innerWidth < 1180) return 2;
-  return 3;
+function getVisible(maxVisible: number) {
+  if (typeof window === "undefined") return maxVisible;
+  if (window.innerWidth < 760) return 1;
+  if (window.innerWidth < 1180) return Math.min(2, maxVisible);
+  return maxVisible;
 }
 
 interface UseCarouselOptions<T> {
   items: T[];
   gap?: number;
   autoPlayMs?: number;
+  /** Most cards shown at once on wide screens. Fewer means bigger cards. */
+  maxVisible?: number;
 }
 
-export function useCarousel<T>({ items, gap = 32, autoPlayMs = 3000 }: UseCarouselOptions<T>) {
+export function useCarousel<T>({ items, gap = 32, autoPlayMs = 3000, maxVisible = 3 }: UseCarouselOptions<T>) {
   const stripRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const offset = useRef(items.length);
   const animating = useRef(false);
   const dragStartX = useRef<number | null>(null);
+  // Set when a drag just happened, so the release doesn't also "click" a card.
+  const suppressClick = useRef(false);
+  const paused = useRef(false);
   const [dotIndex, setDotIndex] = useState(0);
-  const [visible, setVisible] = useState(() => getVisible());
+  const [visible, setVisible] = useState(() => getVisible(maxVisible));
 
   const total = items.length;
   const cloned = useMemo(() => [...items, ...items, ...items], [items]);
@@ -77,11 +82,11 @@ export function useCarousel<T>({ items, gap = 32, autoPlayMs = 3000 }: UseCarous
     }
 
     const raf = requestAnimationFrame(() => {
-      setVisible(getVisible());
+      setVisible(getVisible(maxVisible));
       snapToOffset(offset.current);
     });
     const onResize = () => {
-      setVisible(getVisible());
+      setVisible(getVisible(maxVisible));
       snapToOffset(offset.current);
     };
     window.addEventListener("resize", onResize);
@@ -89,13 +94,33 @@ export function useCarousel<T>({ items, gap = 32, autoPlayMs = 3000 }: UseCarous
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
     };
-  }, [snapToOffset]);
+  }, [maxVisible, snapToOffset]);
 
   // Autoplay
+  // Autoplay: off for reduced motion; paused while hovered, focused or hidden.
   useEffect(() => {
     if (!total) return;
-    const timer = setInterval(() => slideTo(1), autoPlayMs);
-    return () => clearInterval(timer);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const container = containerRef.current;
+    const pause = () => { paused.current = true; };
+    const resume = () => { paused.current = false; };
+    container?.addEventListener("pointerenter", pause);
+    container?.addEventListener("pointerleave", resume);
+    container?.addEventListener("focusin", pause);
+    container?.addEventListener("focusout", resume);
+
+    const timer = setInterval(() => {
+      if (!paused.current && document.visibilityState === "visible") slideTo(1);
+    }, autoPlayMs);
+
+    return () => {
+      clearInterval(timer);
+      container?.removeEventListener("pointerenter", pause);
+      container?.removeEventListener("pointerleave", resume);
+      container?.removeEventListener("focusin", pause);
+      container?.removeEventListener("focusout", resume);
+    };
   }, [autoPlayMs, slideTo, total]);
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
@@ -107,10 +132,18 @@ export function useCarousel<T>({ items, gap = 32, autoPlayMs = 3000 }: UseCarous
       if (dragStartX.current === null) return;
       const diff = dragStartX.current - e.clientX;
       dragStartX.current = null;
+      if (Math.abs(diff) > 10) suppressClick.current = true;
       if (Math.abs(diff) > 50) slideTo(diff > 0 ? 1 : -1);
     },
     [slideTo],
   );
+
+  const onClickCapture = useCallback((e: React.MouseEvent) => {
+    if (!suppressClick.current) return;
+    suppressClick.current = false;
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
 
   const cardWidth = `calc((100% - ${effectiveGap * (visible - 1)}px) / ${visible})`;
 
@@ -124,5 +157,6 @@ export function useCarousel<T>({ items, gap = 32, autoPlayMs = 3000 }: UseCarous
     slideTo,
     onPointerDown,
     onPointerUp,
+    onClickCapture,
   };
 }

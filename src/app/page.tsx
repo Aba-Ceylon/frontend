@@ -1,4 +1,5 @@
 import HeroSection from "@/components/hero/HeroSection";
+import IslandMoments from "@/components/islandMoments/IslandMoments";
 import DeferredHomeSections from "@/components/home/DeferredHomeSections";
 import { fetchPackages } from "@/services/packageService";
 
@@ -12,6 +13,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-white">
       <HeroSection />
+      <IslandMoments />
       <DeferredHomeSections packages={packages} />
     </div>
   );

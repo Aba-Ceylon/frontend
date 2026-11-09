@@ -48,7 +48,7 @@ export default function PackageImageCarousel({
             ? "100vw"
             : "(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
         }
-        className="object-cover transition-transform duration-700"
+        className="object-cover"
       />
 
       {hasMultipleImages ? (
@@ -58,7 +58,7 @@ export default function PackageImageCarousel({
             onClick={() => goTo(activeIndex - 1)}
             aria-label={`Show previous ${entityLabel} image`}
             className={`pointer-events-auto absolute left-3 top-1/2 z-10 inline-flex -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-[#101A28]/55 text-white backdrop-blur-sm transition hover:bg-[#101A28]/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${
-              isHero ? "h-11 w-11 sm:left-6 sm:h-12 sm:w-12" : "h-9 w-9"
+              isHero ? "h-11 w-11 sm:left-6 sm:h-12 sm:w-12" : "h-9 w-9 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 focus-visible:opacity-100"
             }`}
           >
             <ChevronLeft className={isHero ? "h-5 w-5" : "h-4 w-4"} aria-hidden="true" />
@@ -68,18 +68,24 @@ export default function PackageImageCarousel({
             onClick={() => goTo(activeIndex + 1)}
             aria-label={`Show next ${entityLabel} image`}
             className={`pointer-events-auto absolute right-3 top-1/2 z-10 inline-flex -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-[#101A28]/55 text-white backdrop-blur-sm transition hover:bg-[#101A28]/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${
-              isHero ? "h-11 w-11 sm:right-6 sm:h-12 sm:w-12" : "h-9 w-9"
+              isHero ? "h-11 w-11 sm:right-6 sm:h-12 sm:w-12" : "h-9 w-9 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 focus-visible:opacity-100"
             }`}
           >
             <ChevronRight className={isHero ? "h-5 w-5" : "h-4 w-4"} aria-hidden="true" />
           </button>
 
+          {/* Cards keep their own title overlay at the bottom, so their dots sit top-right. */}
           <div
-            className={`pointer-events-none absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between gap-3 bg-linear-to-t from-black/60 to-transparent ${
-              isHero ? "px-6 pb-5 pt-14 sm:px-10 sm:pb-7" : "px-4 pb-3 pt-10"
+            className={`pointer-events-none absolute z-10 flex items-center gap-3 ${
+              isHero
+                ? "bottom-0 left-0 right-0 justify-between bg-linear-to-t from-black/60 to-transparent px-6 pb-5 pt-14 sm:px-10 sm:pb-7"
+                : "right-4 top-5"
             }`}
           >
-            <p className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-white/90" aria-live="polite">
+            <p
+              className={`font-cinzel text-[10px] uppercase tracking-[0.2em] text-white/90 ${isHero ? "" : "sr-only"}`}
+              aria-live="polite"
+            >
               {String(activeIndex + 1).padStart(2, "0")} / {String(imageCount).padStart(2, "0")}
             </p>
             <div className="flex items-center gap-1.5" aria-label={`Choose ${entityLabel} image`}>

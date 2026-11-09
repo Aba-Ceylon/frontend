@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Stay } from "@/types/stay";
+import { SectionKicker } from "@/components/ui/Teardrop";
 
 const OSM_STYLE: maplibregl.StyleSpecification = {
   version: 8,
@@ -132,28 +133,24 @@ export default function StayLocationMap({ stay }: { stay: Stay }) {
   const { latitude, longitude } = stay.coordinates;
 
   return (
-    <section>
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-4">
+    <section data-reveal>
+      <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="font-cinzel text-2xl text-neutral-900 mb-1">
-            Location
+          <SectionKicker>Location</SectionKicker>
+          <h2 className="mt-4 font-cinzel text-3xl leading-tight text-[#182231] sm:text-4xl">
+            Where you&rsquo;ll be
           </h2>
-          <p className="text-sm text-neutral-600">
-            {stay.name} is located in {stay.location}
+          <p className="mt-2 text-[15px] text-[#182231]/65">
+            {stay.name} is in {stay.location}.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <span className="rounded-full bg-white border border-neutral-200 px-3 py-1 text-xs font-cinzel text-neutral-700">
-            {stay.category}
-          </span>
-          <span className="rounded-full bg-white border border-neutral-200 px-3 py-1 text-xs font-cinzel text-neutral-700">
-            {formatCoordinate(latitude)}, {formatCoordinate(longitude)}
-          </span>
-        </div>
+        <span className="w-fit rounded-full border border-[#182231]/12 bg-white px-4 py-2 text-xs tracking-[0.08em] text-[#182231]/70">
+          {formatCoordinate(latitude)}, {formatCoordinate(longitude)}
+        </span>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
-        <div ref={mapContainerRef} className="h-[320px] sm:h-[400px] w-full" />
+      <div className="overflow-hidden border border-[#182231]/10 bg-white shadow-[0_24px_60px_-30px_rgba(13,20,30,0.35)]">
+        <div ref={mapContainerRef} className="h-[340px] w-full sm:h-[440px]" />
       </div>
     </section>
   );

@@ -9,6 +9,7 @@ import { destinations as fallbackDestinations } from "@/data/destinations";
 import { fetchDestinations } from "@/services/destinationService";
 import type { Destination } from "@/types/destination";
 import DestinationPanel from "./DestinationPanel";
+import { SectionKicker } from "@/components/ui/Teardrop";
 import {
   getMapLegendCategory,
   mapCategoryStyles,
@@ -260,7 +261,7 @@ export default function InteractiveMap() {
     <section
       ref={sectionRef}
       id="map"
-      className="relative h-[100svh] min-h-[680px] w-full bg-slate-50"
+      className="relative h-[100svh] min-h-[680px] w-full bg-[var(--navy-deep)]"
     >
       <div
         ref={mapContainer}
@@ -269,9 +270,9 @@ export default function InteractiveMap() {
       />
 
       {!mapLoaded && (
-        <div className="absolute inset-0 z-5 flex items-center justify-center bg-linear-to-br from-slate-900 to-slate-800">
+        <div className="absolute inset-0 z-5 flex items-center justify-center bg-linear-to-br from-[#0d141e] to-[#182231]">
           <div className="text-center">
-            <div className="mx-auto mb-6 h-20 w-20 animate-spin rounded-full border-4 border-amber-500 border-t-transparent" />
+            <div className="mx-auto mb-6 h-20 w-20 animate-spin rounded-full border-2 border-[#e2c27a] border-t-transparent" />
             <p className="font-cinzel text-lg tracking-wider text-amber-100">
               Loading map...
             </p>
@@ -281,15 +282,15 @@ export default function InteractiveMap() {
 
       <div
         ref={headerRef}
-        className="pointer-events-none absolute left-0 right-0 top-0 z-10 bg-linear-to-b from-black/70 via-black/50 to-transparent p-4 sm:p-6 md:p-12"
+        className="pointer-events-none absolute left-0 right-0 top-0 z-10 bg-linear-to-b from-[#0d141e]/90 via-[#0d141e]/55 to-transparent p-4 pt-24 sm:p-6 sm:pt-28 md:p-12 md:pt-32"
       >
-        <div className="mx-auto max-w-7xl">
-
-          <h2 className="mb-3 font-cinzel text-3xl font-medium tracking-wide text-amber-100 drop-shadow-2xl sm:text-4xl md:mb-4 md:text-6xl">
-            Explore the island
+        <div className="mx-auto max-w-[1360px] lg:px-4">
+          <SectionKicker tone="dark">Interactive map</SectionKicker>
+          <h2 className="mb-3 mt-4 font-cinzel text-3xl leading-[1.1] text-white drop-shadow-2xl sm:text-4xl md:mb-4 md:text-5xl">
+            Explore the teardrop isle
           </h2>
-          <p className="max-w-2xl pr-4 text-sm font-light leading-6 tracking-wide text-amber-50/90 sm:pr-0 sm:text-base md:text-xl md:leading-relaxed">
-            Tap a destination to see what is there.
+          <p className="max-w-xl pr-4 text-sm leading-6 text-white/80 sm:pr-0 sm:text-base md:leading-8">
+            Tap a destination to see what is there, then add it to your route.
           </p>
 
           {isLoadingDestinations ? (
@@ -311,7 +312,7 @@ export default function InteractiveMap() {
             type="button"
             onClick={() => setLegendExpanded(true)}
             aria-label="Show map categories"
-            className="flex h-12 w-12 items-center justify-center border border-amber-400/30 bg-slate-900/95 shadow-2xl backdrop-blur-md transition-transform hover:scale-105 active:scale-95 sm:h-14 sm:w-14"
+            className="flex h-12 w-12 items-center justify-center border border-amber-400/30 bg-[#0d141e]/95 shadow-2xl backdrop-blur-md transition-transform hover:scale-105 active:scale-95 sm:h-14 sm:w-14"
           >
             <svg
               className="h-5 w-5 text-amber-400 sm:h-6 sm:w-6"
@@ -335,7 +336,7 @@ export default function InteractiveMap() {
         )}
 
         {legendExpanded && (
-          <div className="w-[calc(100vw-2rem)] max-w-xs border border-amber-400/20 bg-slate-900/95 p-4 shadow-2xl backdrop-blur-md sm:w-72 sm:p-5">
+          <div className="w-[calc(100vw-2rem)] max-w-xs border border-amber-400/20 bg-[#0d141e]/95 p-4 shadow-2xl backdrop-blur-md sm:w-72 sm:p-5">
             <div className="mb-3 flex items-center justify-between">
               <h3 className="font-cinzel text-sm font-medium tracking-wider text-amber-400 sm:text-base">
                 Categories
@@ -395,7 +396,7 @@ export default function InteractiveMap() {
 
       {mapLoaded && !isLoadingDestinations && !hasDestinations ? (
         <div className="absolute inset-x-4 top-1/2 z-10 -translate-y-1/2 sm:left-1/2 sm:max-w-xl sm:-translate-x-1/2">
-          <div className="border border-white/10 bg-slate-900/88 p-6 text-center shadow-2xl backdrop-blur-md sm:p-8">
+          <div className="border border-white/10 bg-[#0d141e]/90 p-6 text-center shadow-2xl backdrop-blur-md sm:p-8">
             <p className="font-cinzel text-xs uppercase tracking-[0.32em] text-amber-400">
               Discover
             </p>

@@ -12,8 +12,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
-  primary: "bg-[#182231] text-white hover:bg-[#243142] disabled:opacity-40",
-  secondary: "bg-[#C99A2B] text-[#101823] hover:brightness-105 disabled:opacity-40",
+  primary: "bg-[#182231] text-white hover:bg-[#9b7422] disabled:opacity-40",
+  secondary: "bg-[#c99a2b] text-[#0d141e] hover:bg-[#182231] hover:text-white disabled:opacity-40",
   outline:
     "border border-[#182231]/16 text-[#182231] hover:bg-[#182231] hover:text-white",
   ghost: "border border-[#182231]/10 bg-white/70 text-[#182231] hover:bg-white",
@@ -37,7 +37,7 @@ export default function Button({
   return (
     <button
       {...props}
-      className={`inline-flex items-center justify-center rounded-sm font-cinzel uppercase tracking-[0.2em] transition-all duration-300 disabled:cursor-not-allowed
+      className={`inline-flex items-center justify-center rounded-sm font-cinzel uppercase tracking-[0.2em] transition-all duration-300 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100
         ${VARIANT_CLASSES[variant]}
         ${SIZE_CLASSES[size]}
         ${fullWidth ? "w-full" : ""}

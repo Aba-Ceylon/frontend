@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Compass, MapPin } from "lucide-react";
@@ -10,6 +9,8 @@ import { destinations } from "@/data/destinations";
 import LocationMap from "@/components/maps/LocationMap";
 import { getGalleryImages } from "@/lib/packages/packageImages";
 import PackageImageCarousel from "@/features/packages/PackageImageCarousel";
+import { SectionKicker } from "@/components/ui/Teardrop";
+import { DetailSection, GalleryGrid } from "@/components/ui/DetailLayout";
 
 const BASE_URL = "https://www.abaceylontours.com";
 const FALLBACK_IMAGE = "/images/heritage/sl-image.webp";
@@ -58,25 +59,25 @@ export default async function DestinationPage({ params }: Props) {
   const galleryImages = getGalleryImages({ image, images: destination.images });
 
   return (
-    <main className="min-h-screen bg-[#F5F2ED]">
-      <section className="relative flex min-h-[76svh] items-end overflow-hidden bg-[#0F172A] pt-28 sm:min-h-[82svh]">
+    <div className="min-h-screen bg-[var(--ivory)]">
+      <section className="relative flex min-h-[86svh] items-end overflow-hidden bg-[var(--navy-deep)] pt-28">
         <div className="absolute inset-0" data-parallax-root>
           <PackageImageCarousel images={galleryImages} title={destination.name} variant="hero" entityLabel="destination" />
         </div>
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(5,7,10,0.22)_0%,rgba(5,7,10,0.02)_35%,rgba(5,7,10,0.18)_58%,rgba(5,7,10,0.88)_100%)]" />
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(5,7,10,0.28)_0%,transparent_55%)]" />
 
-        <div className="relative mx-auto w-full max-w-[1360px] px-6 pb-10 sm:pb-14 lg:px-10 lg:pb-16" data-reveal>
+        <div className="pointer-events-none relative mx-auto w-full max-w-[1360px] px-6 pb-24 sm:pb-28 lg:px-10">
           <Link
             href={routes.destinations}
-            className="inline-flex items-center gap-2 font-cinzel text-[10px] uppercase tracking-[0.2em] text-white/78 transition hover:text-[#f0c967]"
+            className="pointer-events-auto inline-flex items-center gap-2 font-cinzel text-[10px] uppercase tracking-[0.2em] text-white/80 transition hover:text-[#e2c27a]"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             All destinations
           </Link>
-          <p className="mt-8 font-cinzel text-[11px] uppercase tracking-[0.3em] text-[#f0c967]">
+          <SectionKicker tone="dark" className="mt-8">
             {destination.category} · Sri Lanka
-          </p>
+          </SectionKicker>
           <h1 className="mt-3 max-w-5xl font-cinzel text-[clamp(2.9rem,8vw,7.5rem)] leading-[0.92] text-white [text-wrap:balance]">
             {destination.name}
           </h1>
@@ -86,13 +87,11 @@ export default async function DestinationPage({ params }: Props) {
         </div>
       </section>
 
-      <section className="relative bg-[#f8f5ef]">
+      <section className="relative bg-[var(--ivory)]">
         <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
           <div className="grid border-b border-[#182231]/12 lg:grid-cols-[minmax(0,1.35fr)_minmax(360px,0.65fr)]">
             <div className="py-12 sm:py-16 lg:border-r lg:border-[#182231]/12 lg:pr-14" data-reveal>
-              <p className="font-cinzel text-[10px] uppercase tracking-[0.24em] text-[#9b7422]">
-                Know before you go
-              </p>
+              <SectionKicker>Know before you go</SectionKicker>
               <h2 className="mt-4 max-w-3xl font-cinzel text-3xl leading-[1.12] text-[#182231] sm:text-4xl">
                 A closer look at {destination.name}
               </h2>
@@ -103,14 +102,14 @@ export default async function DestinationPage({ params }: Props) {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href={routes.planner}
-                  className="inline-flex min-h-12 items-center justify-center gap-3 bg-[#182231] px-6 py-3 font-cinzel text-[10px] uppercase tracking-[0.18em] text-white transition hover:bg-[#283548]"
+                  className="nudge-arrow inline-flex min-h-12 items-center justify-center gap-3 bg-[#182231] px-7 py-3 font-cinzel text-[11px] uppercase tracking-[0.2em] text-white transition hover:bg-[#9b7422]"
                 >
                   Add to my journey
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   href={routes.contact}
-                  className="inline-flex min-h-12 items-center justify-center border border-[#182231]/18 px-6 py-3 font-cinzel text-[10px] uppercase tracking-[0.18em] text-[#182231] transition hover:border-[#9b7422] hover:text-[#9b7422]"
+                  className="inline-flex min-h-12 items-center justify-center border border-[#182231]/20 px-7 py-3 font-cinzel text-[11px] uppercase tracking-[0.2em] text-[#182231] transition hover:border-[#9b7422] hover:text-[#9b7422]"
                 >
                   Ask a local planner
                 </Link>
@@ -138,14 +137,12 @@ export default async function DestinationPage({ params }: Props) {
         </div>
       </section>
 
-      <section className="bg-white py-14 sm:py-20">
+      <section className="bg-white py-16 sm:py-24">
         <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
           <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-end" data-reveal>
             <div>
-              <p className="font-cinzel text-[10px] uppercase tracking-[0.24em] text-[#9b7422]">
-                Find your way
-              </p>
-              <h2 className="mt-3 font-cinzel text-3xl text-[#182231] sm:text-4xl">
+              <SectionKicker>Find your way</SectionKicker>
+              <h2 className="mt-4 font-cinzel text-3xl text-[#182231] sm:text-4xl">
                 {destination.name}, Sri Lanka
               </h2>
             </div>
@@ -171,70 +168,37 @@ export default async function DestinationPage({ params }: Props) {
         highlights={destination.highlights}
       />
 
-      <section className="bg-white py-14 sm:py-20">
-          <div className="mx-auto max-w-6xl px-6 lg:px-10">
-            <div className="mb-8 flex flex-col justify-between gap-3 sm:flex-row sm:items-end" data-reveal>
-              <div>
-                <p className="font-cinzel text-xs uppercase tracking-[0.24em] text-amber-700">
-                  Destination images
-                </p>
-                <h2 className="mt-3 font-cinzel text-3xl text-[#0F172A] sm:text-4xl">
-                  {destination.name} gallery
-                </h2>
-              </div>
-              <p className="text-sm text-[#0F172A]/55">
-                {galleryImages.length} {galleryImages.length === 1 ? "image" : "images"} in database order
-              </p>
-            </div>
-
-            <div className={`grid gap-4 ${galleryImages.length > 1 ? "md:grid-cols-2" : ""}`}>
-              {galleryImages.map((galleryImage, index) => (
-                <div
-                  key={`${galleryImage}-${index}`}
-                  className={`group relative overflow-hidden bg-[#e9e3d9] ${
-                    galleryImages.length === 1 || (index === 0 && galleryImages.length % 2 === 1)
-                      ? "aspect-[16/9] md:col-span-2"
-                      : "aspect-[4/3]"
-                  }`}
-                  data-reveal
-                >
-                  <Image
-                    src={galleryImage}
-                    alt={`${destination.name} — gallery image ${index + 1} of ${galleryImages.length}`}
-                    fill
-                    sizes={galleryImages.length === 1 ? "(max-width: 1200px) 100vw, 1100px" : "(max-width: 767px) 100vw, 50vw"}
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025]"
-                  />
-                  <p className="pointer-events-none absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent px-4 pb-4 pt-12 font-cinzel text-[11px] uppercase tracking-[0.2em] text-white">
-                    Image {String(index + 1).padStart(2, "0")}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
+      <section className="bg-[var(--ivory)] py-16 sm:py-24">
+        <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
+          <DetailSection
+            kicker="Gallery"
+            title={`${destination.name} in pictures`}
+            aside={<p className="text-sm text-[#182231]/55">{galleryImages.length} photos</p>}
+          >
+            <GalleryGrid images={galleryImages} title={destination.name} />
+          </DetailSection>
+        </div>
       </section>
 
-      <section className="bg-[#F5F2ED] px-6 py-14 lg:px-10 lg:py-18">
-        <div className="mx-auto max-w-6xl">
-            <div className="border border-[#0F172A]/10 bg-[#0F172A] p-7 text-white shadow-[0_20px_60px_rgba(15,23,42,0.16)] sm:p-9">
-              <p className="font-cinzel text-xs uppercase tracking-[0.24em] text-amber-300">
-                Route planning note
-              </p>
-              <p className="mt-4 text-sm leading-7 text-white/82">
+      <section className="bg-[var(--ivory)] px-6 pb-20 lg:px-10 lg:pb-28">
+        <div className="mx-auto max-w-[1360px]">
+            <div className="bg-[var(--navy-deep)] p-8 text-white shadow-[0_30px_70px_-30px_rgba(13,20,30,0.6)] sm:p-12" data-reveal>
+              <SectionKicker tone="dark">Route planning note</SectionKicker>
+              <p className="mt-5 max-w-3xl font-cinzel text-xl leading-9 text-white/90 sm:text-2xl sm:leading-10">
                 The best version of {destination.name} depends on what surrounds
                 it. We use this stop as part of a paced private route, not as an
                 isolated checklist item.
               </p>
               <Link
                 href={routes.destinations}
-                className="mt-6 inline-flex items-center gap-2 font-cinzel text-xs uppercase tracking-[0.2em] text-amber-300 transition hover:text-amber-200"
+                className="nudge-arrow mt-8 inline-flex items-center gap-2 font-cinzel text-xs uppercase tracking-[0.2em] text-[#e2c27a] transition hover:text-white"
               >
                 Back to all destinations
-                <span aria-hidden="true">-&gt;</span>
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

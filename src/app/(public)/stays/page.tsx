@@ -1,21 +1,18 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import PageHero from "@/components/ui/PageHero";
+import ListingIntro, { ResultCount } from "@/components/ui/ListingIntro";
 import StayCard from "@/features/stays/StayCard";
 import PaginationControls from "@/components/ui/PaginationControls";
 import { stays as fallbackStays } from "@/data/stays";
 import { fetchStays } from "@/services/stayService";
 import type { Stay } from "@/types/stay";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const ITEMS_PER_PAGE = 6;
 
 export default function StaysPage() {
-  const gridRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLElement>(null);
   const [page, setPage] = useState(1);
   const [stayItems, setStayItems] = useState<Stay[]>(fallbackStays);
 
@@ -36,30 +33,34 @@ export default function StaysPage() {
     return () => { active = false; };
   }, []);
 
-  useEffect(() => {
-    const cards = gridRef.current ? Array.from(gridRef.current.children) : [];
-    if (!cards.length) return;
-    gsap.fromTo(cards, { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" });
-  }, [paginatedStays]);
-
-  const handlePageChange = useCallback((p: number) => setPage(p), []);
+  const handlePageChange = useCallback((p: number) => {
+    setPage(p);
+    gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
 
   return (
-    <div className="bg-noise min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--ivory)]">
       <PageHero
         imageSrc="/staysbanner.png"
-        imageAlt="Curated Heritage Stays"
+        imageAlt="Curated heritage stays in Sri Lanka"
+        eyebrow="Where you'll rest"
         title="Stays"
-        subtitle="Places with character, chosen for the route"
+        subtitle="Eco lodges, boutique villas and heritage hotels, chosen to suit the route."
       />
-      <div className="mx-auto max-w-[1360px] px-6 py-16 lg:px-10">
-        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section ref={gridRef} className="mx-auto max-w-[1360px] scroll-mt-24 px-6 py-16 lg:px-10 lg:py-24">
+        <ListingIntro
+          kicker="Hand-picked"
+          title="Places with character."
+          description="We stay in these ourselves before we recommend them. Open one to see photos, amenities and where it sits on the map."
+          aside={<ResultCount count={stayItems.length} noun="stay" />}
+        />
+        <div key={currentPage} className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-10" data-reveal-stagger>
           {paginatedStays.map((stay) => (
             <StayCard key={stay.id} stay={stay} />
           ))}
         </div>
         <PaginationControls currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-      </div>
+      </section>
     </div>
   );
 }

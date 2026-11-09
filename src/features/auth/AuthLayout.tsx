@@ -38,7 +38,7 @@ export default function AuthLayout({
   children: ReactNode;
 }) {
   return (
-    <main className="relative flex min-h-dvh w-full flex-col items-center justify-center overflow-hidden bg-[#182231] px-4 pb-16 pt-28 sm:pt-32">
+    <div className="relative flex min-h-dvh w-full flex-col items-center justify-center overflow-hidden bg-[#182231] px-4 pb-16 pt-28 sm:pt-32">
       <Image
         src="/images/heritage/sigiriya-login.webp"
         alt=""
@@ -60,6 +60,6 @@ export default function AuthLayout({
 
         {children}
       </div>
-    </main>
+    </div>
   );
 }

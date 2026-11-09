@@ -1,4 +1,5 @@
 import { stays as fallbackStays } from "@/data/stays";
+import { destinations } from "@/data/destinations";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import type { Stay, SupabaseAccommodationRow } from "@/types/stay";
 
@@ -44,8 +45,32 @@ function formatCoordinate(value: number) {
   return Number(value).toFixed(4);
 }
 
+function distanceKm(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+  return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+/**
+ * The database only stores coordinates, so name the stay after the nearest
+ * known destination ("Near Kandy") instead of showing raw numbers.
+ */
 function buildLocation(latitude: number, longitude: number) {
-  return `${formatCoordinate(latitude)}, ${formatCoordinate(longitude)}`;
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return "Sri Lanka";
+  let nearest: { name: string; district: string; km: number } | null = null;
+  for (const place of destinations) {
+    const [placeLon, placeLat] = place.coordinates;
+    const km = distanceKm(latitude, longitude, placeLat, placeLon);
+    if (!nearest || km < nearest.km) nearest = { name: place.name, district: place.district, km };
+  }
+  if (!nearest) return `${formatCoordinate(latitude)}, ${formatCoordinate(longitude)}`;
+  if (nearest.km <= 25) {
+    const district = nearest.district && !nearest.name.includes(nearest.district) ? `, ${nearest.district}` : "";
+    return `Near ${nearest.name}${district}`;
+  }
+  return nearest.district ? `${nearest.district} District` : "Sri Lanka";
 }
 
 function parseAmenities(value: string | null) {

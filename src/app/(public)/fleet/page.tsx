@@ -1,24 +1,34 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import PageHero from "@/components/ui/PageHero";
+import ListingIntro, { ResultCount } from "@/components/ui/ListingIntro";
 import VehicleCard from "@/features/fleet/VehicleCard";
 import PaginationControls from "@/components/ui/PaginationControls";
 import type { FleetVehicle } from "@/types/vehicle";
 import { fetchVehiclesPage } from "@/services/fleetService";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const ITEMS_PER_PAGE = 6;
 
+function VehicleSkeleton() {
+  return (
+    <div className="animate-pulse border border-[#182231]/10 bg-white" aria-hidden="true">
+      <div className="aspect-[16/10] bg-[#182231]/8" />
+      <div className="space-y-4 p-8">
+        <div className="h-3 w-32 bg-[#182231]/10" />
+        <div className="h-7 w-56 bg-[#182231]/10" />
+        <div className="h-8 w-48 rounded-full bg-[#182231]/8" />
+      </div>
+    </div>
+  );
+}
+
 export default function FleetPage() {
-  const gridRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLElement>(null);
   const [page, setPage] = useState(1);
   const [fleetVehicles, setFleetVehicles] = useState<FleetVehicle[]>([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / ITEMS_PER_PAGE));
@@ -45,55 +55,44 @@ export default function FleetPage() {
     return () => { active = false; };
   }, [page]);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const cards = gridRef.current
-        ? Array.from(gridRef.current.querySelectorAll("[data-fleet-card]"))
-        : [];
-      const cleanup: Array<() => void> = [];
-      if (cards.length) {
-        gsap.fromTo(cards, { opacity: 0, y: 32 }, {
-          opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power2.out",
-          scrollTrigger: { trigger: gridRef.current, start: "top 85%", toggleActions: "play none none none" },
-        });
-        cards.forEach((el) => {
-          const img = el.querySelector(".fleet-card-image") as HTMLElement | null;
-          const tl = gsap.timeline({ paused: true });
-          tl.to(el, { y: -6, boxShadow: "0 20px 36px rgba(11,37,69,0.18)", duration: 0.24, ease: "power2.out" }, 0);
-          if (img) tl.to(img, { scale: 1.08, duration: 0.42, ease: "power2.out" }, 0);
-          const onEnter = () => tl.play();
-          const onLeave = () => tl.reverse();
-          el.addEventListener("mouseenter", onEnter);
-          el.addEventListener("mouseleave", onLeave);
-          cleanup.push(() => { el.removeEventListener("mouseenter", onEnter); el.removeEventListener("mouseleave", onLeave); tl.kill(); });
-        });
-      }
-      return () => cleanup.forEach((fn) => fn());
-    }, gridRef);
-    return () => ctx.revert();
-  }, [fleetVehicles]);
-
-  const handlePageChange = useCallback((p: number) => setPage(p), []);
+  const handlePageChange = useCallback((p: number) => {
+    setPage(p);
+    gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
 
   return (
-    <div className="bg-noise min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--ivory)]">
       <PageHero
         imageSrc="/images/fleet/fleets.png"
-        imageAlt="Premium Fleet Vehicles"
+        imageAlt="Aba Ceylon chauffeur-driven fleet vehicles"
+        eyebrow="Private chauffeur"
         title="Our Fleet"
-        subtitle="Private, chauffeur-driven vehicles"
+        subtitle="Air-conditioned cars, SUVs and vans, each with an English-speaking driver."
       />
-      <div className="mx-auto max-w-[1360px] px-4 py-12 sm:px-6 sm:py-16 lg:px-10">
-        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {fleetVehicles.map((v) => <VehicleCard key={v.id} vehicle={v} />)}
-        </div>
+      <section ref={gridRef} className="mx-auto max-w-[1360px] scroll-mt-24 px-6 py-16 lg:px-10 lg:py-24">
+        <ListingIntro
+          kicker="Travel in comfort"
+          title="A vehicle for every group."
+          description="From couples to large families, we match the vehicle to your group size and luggage. Open one to request it."
+          aside={totalCount ? <ResultCount count={totalCount} noun="vehicle" /> : null}
+        />
+
+        {isLoading ? (
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-10">
+            {Array.from({ length: 4 }, (_, i) => <VehicleSkeleton key={i} />)}
+          </div>
+        ) : (
+          <div key={page} className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-10" data-reveal-stagger>
+            {fleetVehicles.map((v) => <VehicleCard key={v.id} vehicle={v} />)}
+          </div>
+        )}
+
         {!isLoading && error && <p className="mt-8 text-center text-sm text-red-700">{error}</p>}
         {!isLoading && !error && fleetVehicles.length === 0 && (
-          <p className="mt-8 text-center text-sm text-neutral-700">No fleet vehicles available right now.</p>
+          <p className="mt-8 text-center text-sm text-[#182231]/70">No fleet vehicles available right now.</p>
         )}
-        {isLoading && <p className="mt-8 text-center text-sm text-neutral-700">Loading fleet vehicles...</p>}
         <PaginationControls currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
-      </div>
+      </section>
     </div>
   );
 }

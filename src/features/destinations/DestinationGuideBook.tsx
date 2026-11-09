@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { ArrowLeft, ArrowRight, CalendarDays, Sparkles, Star } from "lucide-react";
+import { SectionKicker } from "@/components/ui/Teardrop";
 
 type GuidePage = {
   label: string;
@@ -136,10 +137,10 @@ export default function DestinationGuideBook({
   const contentProps = { destinationName, bestTimeToVisit, whyVisit, highlights };
 
   return (
-    <section className="overflow-hidden bg-[#182231] py-20 text-white sm:py-28">
+    <section className="overflow-hidden bg-[var(--navy-deep)] py-20 text-white sm:py-28">
       <div className="mx-auto max-w-6xl px-6 lg:px-10">
         <div className="mb-10 max-w-2xl" data-reveal>
-          <p className="font-cinzel text-[10px] uppercase tracking-[0.26em] text-[#d5aa47]">Turn the page</p>
+          <SectionKicker tone="dark">Turn the page</SectionKicker>
           <h2 className="mt-4 font-cinzel text-4xl leading-[1.06] sm:text-5xl">A field guide to {destinationName}</h2>
           <p className="mt-5 text-sm leading-7 text-white/62 sm:text-base">Three essential notes, collected as pages. Use the controls or your keyboard arrows to explore them.</p>
         </div>

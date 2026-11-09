@@ -18,6 +18,7 @@ import StaySelector from "@/features/planner/StaySelector";
 import VehicleSelector from "@/features/planner/VehicleSelector";
 import { usePlanner } from "@/hooks/usePlanner";
 import { useWhatsApp } from "@/hooks/useWhatsApp";
+import { SectionKicker } from "@/components/ui/Teardrop";
 import {
   buildPlannerWhatsAppMessage,
   plannerDateHelpers,
@@ -221,7 +222,7 @@ export default function PlannerPage() {
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,248,240,0.36),rgba(245,242,237,0.5),rgba(234,228,219,0.64))]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.18),transparent_42%),radial-gradient(circle_at_bottom,rgba(15,23,42,0.08),transparent_36%)]" />
 
-      <div className="relative max-w-7xl mx-auto px-6 py-12 sm:py-16">
+      <div className="relative mx-auto max-w-7xl px-6 pb-16 pt-28 sm:pt-32">
         <div
           ref={heroRef}
           className="overflow-hidden border border-[#182231]/8 bg-[#f8f3ea] shadow-[0_24px_70px_rgba(17,24,39,0.06)]"
@@ -239,29 +240,23 @@ export default function PlannerPage() {
               className="relative flex min-h-[440px] sm:min-h-[500px] items-end px-6 py-12 sm:px-10 sm:py-14"
             >
               <div className="max-w-4xl">
-                <div className="mb-8 flex items-center gap-4">
-                  <div className="h-px w-14 bg-gradient-to-r from-transparent to-amber-300" />
-                  <span className="font-cinzel text-xs uppercase tracking-[0.34em] text-amber-700">
-                    Protected Journey Planner
-                  </span>
-                  <div className="h-px w-14 bg-gradient-to-l from-transparent to-amber-300" />
-                </div>
+                <SectionKicker className="mb-6">Journey planner</SectionKicker>
                 <h1 className="font-cinzel text-4xl sm:text-6xl text-[#182231] leading-tight">
-                  Curate A Fully Custom Sri Lanka Journey
+                  Curate a fully custom Sri Lanka journey
                 </h1>
                 <p className="mt-5 max-w-2xl text-[#445062] text-base sm:text-lg leading-8">
                   Build your own route, match it with the right chauffeur
                   vehicle, decide how accommodation should work, and send the
-                  full request straight to the ABA Ceylon team through WhatsApp.
+                  full request straight to the Aba Ceylon team through WhatsApp.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <span className="border border-[#182231]/8 bg-[rgba(255,253,248,0.84)] px-4 py-2 text-sm text-[#445062]">
+                  <span className="rounded-full border border-[#182231]/10 bg-white/85 px-4 py-2 text-sm text-[#182231]/75 backdrop-blur-sm">
                     Signed-in planner access
                   </span>
-                  <span className="border border-[#182231]/8 bg-[rgba(255,253,248,0.84)] px-4 py-2 text-sm text-[#445062]">
+                  <span className="rounded-full border border-[#182231]/10 bg-white/85 px-4 py-2 text-sm text-[#182231]/75 backdrop-blur-sm">
                     Multi-destination custom route
                   </span>
-                  <span className="border border-[#182231]/8 bg-[rgba(255,253,248,0.84)] px-4 py-2 text-sm text-[#445062]">
+                  <span className="rounded-full border border-[#182231]/10 bg-white/85 px-4 py-2 text-sm text-[#182231]/75 backdrop-blur-sm">
                     WhatsApp-ready request summary
                   </span>
                 </div>

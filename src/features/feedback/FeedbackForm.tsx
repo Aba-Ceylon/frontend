@@ -152,7 +152,7 @@ export default function FeedbackForm() {
                         onMouseEnter={() => dispatch({ type: "SET_HOVERED", value: star })}
                         onMouseLeave={() => dispatch({ type: "SET_HOVERED", value: 0 })}
                         aria-label={`${star} star${star > 1 ? "s" : ""}`}
-                        className={`inline-flex h-12 w-12 items-center justify-center border transition-colors focus:outline-none focus:ring-2 focus:ring-[#C99A2B]/40 ${
+                        className={`inline-flex h-12 w-12 items-center justify-center rounded-full border transition-colors focus:outline-none focus:ring-2 focus:ring-[#C99A2B]/40 ${
                           isActive
                             ? "border-[#C99A2B] bg-[#182231] text-[#C99A2B]"
                             : "border-[#182231]/12 bg-white text-[#8D96A2] hover:border-[#C99A2B]/50 hover:text-[#8B6B1F]"
